@@ -3,20 +3,15 @@
 import BCHJS from '@psf/bch-js'
 
 // REST API servers.
-const BCHN_MAINNET = 'https://bchn.fullstack.cash/v5/'
-
-// const runtimeConfig = useRuntimeConfig()
-// const jwtAuthToken = runtimeConfig.public.PSF_JWT_AUTH_TOKEN
+// NOTE: bchn.fullstack.cash/v5 was RETIRED; bch-js is used
+//       here for LOCAL cryptography ONLY (no REST calls).
 
 const balances = ref(null)
 const cashAddress = ref(null)
 const utxos = ref(null)
 
 // Instantiate bch-js based on the network.
-const bchjs = new BCHJS({
-    restURL: BCHN_MAINNET,
-    // apiToken: jwtAuthToken,
-})
+const bchjs = new BCHJS()
 // console.log('bchjs', bchjs)
 
 

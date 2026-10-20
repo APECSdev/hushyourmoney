@@ -23,12 +23,11 @@ import _startFusion from './wallet/startFusion.ts'
 const HUSH_PROTOCOL_ID = 0x48555348
 
 // REST API servers.
-const BCHN_MAINNET = 'https://bchn.fullstack.cash/v5/'
+// NOTE: bchn.fullstack.cash/v5 was RETIRED; bch-js is used
+//       here for LOCAL cryptography ONLY (no REST calls).
 
 // Instantiate bch-js based on the network.
-const bchjs = new BCHJS({
-    restURL: BCHN_MAINNET,
-})
+const bchjs = new BCHJS()
 
 /* Set constants. */
 // const UPDATE_UTXOS_INTERVAL = 8000 // Allows for ~7 (REST) requests per minute.

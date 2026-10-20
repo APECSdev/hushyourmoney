@@ -4,19 +4,12 @@ import BCHJS from '@psf/bch-js'
 import { Wallet } from '@nexajs/wallet'
 
 // REST API servers.
-const BCHN_MAINNET = 'https://bchn.fullstack.cash/v5/'
-
-const runtimeConfig = useRuntimeConfig()
-// const jwtAuthToken = runtimeConfig.public.PSF_JWT_AUTH_TOKEN
-const jwtAuthToken = runtimeConfig.PSF_JWT_AUTH_TOKEN
-// console.log('jwtAuthToken', jwtAuthToken)
+// NOTE: bchn.fullstack.cash/v5 was RETIRED; bch-js is used
+//       here for LOCAL cryptography ONLY (no REST calls).
 
 // Instantiate bch-js based on the network.
 // FIXME https://github.com/Permissionless-Software-Foundation/jwt-bch-demo/blob/master/lib/fullstack-jwt.js
-const bchjs = new BCHJS({
-    restURL: BCHN_MAINNET,
-    apiToken: jwtAuthToken,
-})
+const bchjs = new BCHJS()
 // console.log('bchjs', bchjs)
 
 /* Initialize globals. */

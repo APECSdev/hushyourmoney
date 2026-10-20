@@ -76,10 +76,11 @@ export default defineNuxtConfig({
     },
 
     runtimeConfig: {
-        PSF_JWT_AUTH_TOKEN: process.env.PSF_JWT_AUTH_TOKEN,
-        // public: {
-        //     PSF_JWT_AUTH_TOKEN: process.env.PSF_JWT_AUTH_TOKEN,
-        // },
+        public: {
+            /* Base URL for the (psf-bch-api v6) blockchain REST API. */
+            // NOTE: Override at runtime with NUXT_PUBLIC_PSF_API_URL.
+            psfApiUrl: process.env.NUXT_PUBLIC_PSF_API_URL || 'https://bch.fullstack.cash',
+        },
     },
 
     // FIXME Polyfills to support `@psf/bch-js` node dependencies.
