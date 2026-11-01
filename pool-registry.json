@@ -1,0 +1,24 @@
+{
+  "$schema": "https://hushyourmoney.com/schemas/pool-registry-v1.json",
+  "version": 1,
+  "network": "chipnet",
+  "updated": "2026-11-01",
+  "pools": [
+    {
+      "name": "gate3-demo-pool",
+      "network": "chipnet",
+      "poolCategory": "98690dba09831a8099613ba2eb4cbe12fffa53739bdfce4978e311032a85b153",
+      "poolLocking": "aa207c0c15fbdc14dda43fb0540846e065a1bbd4076e7ab64720e64c3ecd3515208087",
+      "treeRootLE": "2c0f533600a77df705b7a23481a16bbc2baa9e9abb6a2943857931faa3f44525",
+      "notes": "Gate 3 fresh deployment (Path A lifecycle proof). Deployed 2026-11-01, block 330438. Covenant bytecode identical for any asset category (category is a constructor param). First op s1 = shield 1,000,000 units (tx f5927a0bb67d4688976f98483828259057bd399522a587e66e3b1099a2ab7426)."
+    },
+    {
+      "name": "gate6-multi-pool",
+      "network": "chipnet",
+      "poolCategory": "d85ba98a8185106edd087a78bac3c5b6ba75aa0a9bfa72860dd8ed582386b70a",
+      "poolLocking": "aa20175470b9d5f5ade49873c008de362cd352d2ff33c5420c4720a43d90a3f7238e87",
+      "treeRootLE": "6fefb09c15f2c479f68c48ce73a37fb295473eb33ae94cd685bae3f508377e20",
+      "notes": "Gate 6: FIRST multi-asset shielded pool (variant b Poseidon(6) circuit, 186,007 constraints, 1-of-1 chipnet setup). Deployed 2026-11-01, block 330459. State UTXO carries tokenAmount 0; per-category holdings UTXOs sit on the same covenant bytecode. First op s1 = shield-spawn 500,000 units of asset 98690dba09831a8099613ba2eb4cbe12fffa53739bdfce4978e311032a85b153 (tx fc585fc9bf6499024c89c73a2bcb945de2ec212fb36f8ffc5acb617b6636912f, 37,212 B). Category-agnostic zero leaf = Poseidon(6)(0,0,0,0,0,0)."
+    }
+  ]
+}
