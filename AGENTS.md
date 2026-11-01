@@ -16,7 +16,7 @@
 
 ## Project identity
 - Repo path: `/Workspace/apecsdev/hushyourmoney`.
-- Git remote: `git@github.com:nyusternie/hushyourmoney.git`; branch: `master`.
+- Git remote: `git@github.com:APECSdev/hushyourmoney.git`; branch: `master` (moved from `nyusternie/hushyourmoney` — GitHub redirect noticed on push 2026-11-01; old URL still redirects).
 - Code migration commit from this session: `9c6db6f95897b379c3af16ddcfc52fc62efda836` (`Migrate off retired bchn.fullstack.cash/v5 REST API`).
 - App: Nuxt 3 in `web/`; production server runs `node .output/server/index.mjs` on port `3000` (source: `web/Dockerfile`; smoke test this session).
 - Site title: `Hush Your Money — Spend Privately. Fearlessly!` (source: `web/nuxt.config.ts`; live homepage check this session).
