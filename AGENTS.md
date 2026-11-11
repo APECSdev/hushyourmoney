@@ -52,6 +52,9 @@
   - `electroncash.de:50002` did not connect.
 - Live Flux check through `https://hushyourmoney.com/api/electrum`: one transient 500 said available clients `1` were below required confidence `2`; later `blockchain.scripthash.listunspent` returned 3/3 and `blockchain.scripthash.get_history` returned 3/3 with real chain data. Re-probe before editing the server list.
 
+### Release log
+- **2026-11-11 — homepage facelift release**: source commit `4ce0002` (pushed to `origin/master`): full rewrite of `web/pages/index.vue` (dark cypherpunk design; Unbounded/Space Grotesk/Space Mono via Google Fonts; new `web/tailwind.config.ts`; aurora/marquee/scroll-reveal/pulse animations; 6 SEO sections + FAQ JSON-LD; expanded OG/Twitter meta pointing at `/poster.jpg`). Image `nyusternie/hushyourmoney:latest` rebuilt (Nuxt build OK inside Docker), smoke-tested on host port 3100 — all gates passed: `/` 200, `/api/wallet` 200, exact title ×8, new-design markers present. Pushed at ~02:17 UTC; Hub digest changed `sha256:e4bb2f4a…` (2026-10-20) → `sha256:01adf57c…` (`2026-11-11T02:17:48Z`). **Flux rollout PENDING** — live `https://hushyourmoney.com/` still served the old homepage at last check (~02:30 UTC, markers=0 across 7 polls). Do not declare live until markers ≥2. A `flux-publish` pi skill now exists at `~/.pi/agent/skills/flux-publish/SKILL.md` encoding this pipeline.
+
 ## Build, release, and sync rules
 - Build from `web/`: `cd web && docker build -t nyusternie/hushyourmoney:latest .`
 - Use `--no-cache` when a new digest is required from unchanged source.
