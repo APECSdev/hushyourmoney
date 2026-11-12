@@ -95,22 +95,22 @@ onMounted(() => {
 
 <template>
     <main class="max-w-5xl mx-auto py-5 flex flex-col gap-4">
-        <h1 class="text-5xl font-medium">
+        <h1 class="font-display text-3xl font-bold text-white sm:text-4xl">
             Liquidity Provider
         </h1>
 
         <section class="mt-5 w-full lg:w-2/3 flex flex-col gap-4">
-            <h2 class="text-fuchsia-500 text-4xl font-light italic tracking-tight">
+            <h2 class="text-cyan-300 text-2xl font-light italic sm:text-4xl tracking-tight">
                 What does an LP do?
             </h2>
 
-            <p class="text-fuchsia-800 text-2xl font-light leading-8 italic">
+            <p class="text-violet-200 text-xl font-light leading-8 italic sm:text-2xl">
                 If this was a playground, LPs would be the ones turning the double dutch ropes for everyone else to enjoy a great time!
             </p>
 
-            <p class="text-gray-600 text-lg font-light leading-7">
-                Liquidity is spread across ALL <NuxtLink to="/help/tiers" class="text-blue-500 font-normal hover:underline">Tiers</NuxtLink> to maximize its utility to the greatest number of active <NuxtLink to="/help/guests" class="text-blue-500 font-normal hover:underline">Club Guests</NuxtLink>.
-                The Hush Protocol, powered by a community of independently operated Hush Your Money (HYM) Clubs, is engineered <em>(i.e. financially incentivized)</em> to offer sub 15-seconds <NuxtLink to="/help/coinjoin" class="text-blue-500 font-normal hover:underline">CoinJoins</NuxtLink>, consistently!
+            <p class="text-slate-400 text-base font-light leading-7 sm:text-lg">
+                Liquidity is spread across ALL <NuxtLink to="/help/tiers" class="text-cyan-300 font-normal underline decoration-cyan-300/40 underline-offset-4 hover:decoration-cyan-300">Tiers</NuxtLink> to maximize its utility to the greatest number of active <NuxtLink to="/help/guests" class="text-cyan-300 font-normal underline decoration-cyan-300/40 underline-offset-4 hover:decoration-cyan-300">Club Guests</NuxtLink>.
+                The Hush Protocol, powered by a community of independently operated Hush Your Money (HYM) Clubs, is engineered <em>(i.e. financially incentivized)</em> to offer sub 15-seconds <NuxtLink to="/help/coinjoin" class="text-cyan-300 font-normal underline decoration-cyan-300/40 underline-offset-4 hover:decoration-cyan-300">CoinJoins</NuxtLink>, consistently!
             </p>
         </section>
 

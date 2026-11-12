@@ -83,7 +83,7 @@ onBeforeUnmount(() => {
 </script>
 
 <template>
-    <main>
+    <main class="min-h-screen bg-[#060a10] font-sans text-slate-200 antialiased">
         <!-- Off-canvas menu for mobile, show/hide based on off-canvas menu state. -->
         <div v-if="isShowingMobileMenu" class="relative z-50 lg:hidden" role="dialog" aria-modal="true">
             <!--
@@ -133,7 +133,7 @@ onBeforeUnmount(() => {
                     </div>
 
                     <!-- Sidebar component, swap this element with another sidebar if you like -->
-                    <div class="flex grow flex-col gap-y-5 overflow-y-auto bg-gray-900 px-6 pb-4 ring-1 ring-white/10">
+                    <div class="flex grow flex-col gap-y-5 overflow-y-auto bg-[#0a0f17] px-6 pb-4 ring-1 ring-white/10">
                         <NuxtLink to="/" class="flex h-16 shrink-0 items-center">
                             <img class="h-12 w-auto" src="~/assets/icon.png" alt="Nexa Logo" />
                         </NuxtLink>
@@ -144,7 +144,7 @@ onBeforeUnmount(() => {
                                     <ul role="list" class="-mx-2 space-y-1">
                                         <li>
                                             <!-- Current: "bg-gray-800 text-white", Default: "text-gray-400 hover:text-white hover:bg-gray-800" -->
-                                            <NuxtLink to="/admin" @click="isShowingMobileMenu = false" class="bg-gray-800 text-white group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold">
+                                            <NuxtLink to="/admin" @click="isShowingMobileMenu = false" class="bg-white/10 text-white group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold">
                                                 <svg class="h-6 w-6 shrink-0" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true">
                                                     <path
                                                         stroke-linecap="round"
@@ -157,7 +157,7 @@ onBeforeUnmount(() => {
                                         </li>
 
                                         <li>
-                                            <NuxtLink to="/admin/liquidity" @click="isShowingMobileMenu = false" class="text-gray-400 hover:text-white hover:bg-gray-800 group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold">
+                                            <NuxtLink to="/admin/liquidity" @click="isShowingMobileMenu = false" class="text-slate-400 hover:text-white hover:bg-white/5 group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold">
                                                 <svg class="h-6 w-6 shrink-0" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true">
                                                     <path
                                                         stroke-linecap="round"
@@ -170,7 +170,7 @@ onBeforeUnmount(() => {
                                         </li>
 
                                         <li>
-                                            <NuxtLink to="/admin/insights" @click="isShowingMobileMenu = false" class="text-gray-400 hover:text-white hover:bg-gray-800 group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold">
+                                            <NuxtLink to="/admin/insights" @click="isShowingMobileMenu = false" class="text-slate-400 hover:text-white hover:bg-white/5 group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold">
                                                 <svg class="h-6 w-6 shrink-0" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true">
                                                     <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 6a7.5 7.5 0 107.5 7.5h-7.5V6z" />
                                                     <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 10.5H21A7.5 7.5 0 0013.5 3v7.5z" />
@@ -182,7 +182,7 @@ onBeforeUnmount(() => {
                                 </li>
 
                                 <li>
-                                    <div class="text-xs font-semibold leading-6 text-gray-400">
+                                    <div class="font-mono text-[0.65rem] font-semibold uppercase tracking-[0.3em] text-lime-300/70">
                                         Resource Center
                                     </div>
 
@@ -190,15 +190,15 @@ onBeforeUnmount(() => {
 
                                         <li>
                                             <!-- Current: "bg-gray-800 text-white", Default: "text-gray-400 hover:text-white hover:bg-gray-800" -->
-                                            <NuxtLink to="https://cashfusion.org" target="_blank" @click="isShowingMobileMenu = false" class="text-gray-400 hover:text-white hover:bg-gray-800 group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold">
-                                                <span class="flex h-6 w-6 shrink-0 items-center justify-center rounded-lg border border-gray-700 bg-gray-800 text-[0.625rem] font-medium text-gray-400 group-hover:text-white">CF</span>
+                                            <NuxtLink to="https://cashfusion.org" target="_blank" @click="isShowingMobileMenu = false" class="text-slate-400 hover:text-white hover:bg-white/5 group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold">
+                                                <span class="flex h-6 w-6 shrink-0 items-center justify-center rounded-lg border border-white/10 bg-white/5 text-[0.625rem] font-medium text-gray-400 group-hover:text-white">CF</span>
                                                 <span class="truncate">CashFusion</span>
                                             </NuxtLink>
                                         </li>
 
                                         <li>
-                                            <NuxtLink to="https://runonflux.io" target="_blank" @click="isShowingMobileMenu = false" class="text-gray-400 hover:text-white hover:bg-gray-800 group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold">
-                                                <span class="flex h-6 w-6 shrink-0 items-center justify-center rounded-lg border border-gray-700 bg-gray-800 text-[0.625rem] font-medium text-gray-400 group-hover:text-white">FC</span>
+                                            <NuxtLink to="https://runonflux.io" target="_blank" @click="isShowingMobileMenu = false" class="text-slate-400 hover:text-white hover:bg-white/5 group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold">
+                                                <span class="flex h-6 w-6 shrink-0 items-center justify-center rounded-lg border border-white/10 bg-white/5 text-[0.625rem] font-medium text-gray-400 group-hover:text-white">FC</span>
                                                 <span class="truncate">Flux Cloud</span>
                                             </NuxtLink>
                                         </li>
@@ -207,7 +207,7 @@ onBeforeUnmount(() => {
                                 </li>
 
                                 <li class="mt-auto">
-                                    <NuxtLink to="/admin/settings" @click="isShowingMobileMenu = false" class="group -mx-2 flex gap-x-3 rounded-md p-2 text-sm font-semibold leading-6 text-gray-400 hover:bg-gray-800 hover:text-white">
+                                    <NuxtLink to="/admin/settings" @click="isShowingMobileMenu = false" class="group -mx-2 flex gap-x-3 rounded-md p-2 text-sm font-semibold leading-6 text-slate-400 hover:bg-white/5 hover:text-white">
                                         <svg class="h-6 w-6 shrink-0" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true">
                                             <path
                                                 stroke-linecap="round"
@@ -230,7 +230,7 @@ onBeforeUnmount(() => {
         <!-- Static sidebar for desktop -->
         <div class="hidden lg:fixed lg:inset-y-0 lg:z-50 lg:flex lg:w-72 lg:flex-col">
             <!-- Sidebar component, swap this element with another sidebar if you like -->
-            <div class="flex grow flex-col gap-y-5 overflow-y-auto bg-gray-900 px-6 pb-4">
+            <div class="flex grow flex-col gap-y-5 overflow-y-auto bg-[#0a0f17] px-6 pb-4">
                 <NuxtLink to="/" class="flex h-16 shrink-0 items-center">
                     <img class="h-12 w-auto" src="~/assets/icon.png" alt="Nexa Logo" />
                 </NuxtLink>
@@ -241,7 +241,7 @@ onBeforeUnmount(() => {
                             <ul role="list" class="-mx-2 space-y-1">
                                 <li>
                                     <!-- Current: "bg-gray-800 text-white", Default: "text-gray-400 hover:text-white hover:bg-gray-800" -->
-                                    <NuxtLink to="/admin" class="bg-gray-800 text-white group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold">
+                                    <NuxtLink to="/admin" class="bg-white/10 text-white group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold">
                                         <svg class="h-6 w-6 shrink-0" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true">
                                             <path
                                                 stroke-linecap="round"
@@ -254,7 +254,7 @@ onBeforeUnmount(() => {
                                 </li>
 
                                 <li>
-                                    <NuxtLink to="/admin/liquidity" class="text-gray-400 hover:text-white hover:bg-gray-800 group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold">
+                                    <NuxtLink to="/admin/liquidity" class="text-slate-400 hover:text-white hover:bg-white/5 group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold">
                                         <svg class="h-6 w-6 shrink-0" data-slot="icon" fill="none" stroke-width="1.5" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
                                             <path stroke-linecap="round" stroke-linejoin="round" d="M21 11.25v8.25a1.5 1.5 0 0 1-1.5 1.5H5.25a1.5 1.5 0 0 1-1.5-1.5v-8.25M12 4.875A2.625 2.625 0 1 0 9.375 7.5H12m0-2.625V7.5m0-2.625A2.625 2.625 0 1 1 14.625 7.5H12m0 0V21m-8.625-9.75h18c.621 0 1.125-.504 1.125-1.125v-1.5c0-.621-.504-1.125-1.125-1.125h-18c-.621 0-1.125.504-1.125 1.125v1.5c0 .621.504 1.125 1.125 1.125Z"></path>
                                         </svg>
@@ -263,7 +263,7 @@ onBeforeUnmount(() => {
                                 </li>
 
                                 <li>
-                                    <NuxtLink to="/admin/insights" class="text-gray-400 hover:text-white hover:bg-gray-800 group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold">
+                                    <NuxtLink to="/admin/insights" class="text-slate-400 hover:text-white hover:bg-white/5 group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold">
                                         <svg class="h-6 w-6 shrink-0" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
                                             <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 3v11.25A2.25 2.25 0 006 16.5h2.25M3.75 3h-1.5m1.5 0h16.5m0 0h1.5m-1.5 0v11.25A2.25 2.25 0 0118 16.5h-2.25m-7.5 0h7.5m-7.5 0l-1 3m8.5-3l1 3m0 0l.5 1.5m-.5-1.5h-9.5m0 0l-.5 1.5m.75-9l3-3 2.148 2.148A12.061 12.061 0 0116.5 7.605"></path>
                                         </svg>
@@ -274,13 +274,13 @@ onBeforeUnmount(() => {
                         </li>
 
                         <li>
-                            <div class="text-xs font-semibold leading-6 text-gray-400">
+                            <div class="font-mono text-[0.65rem] font-semibold uppercase tracking-[0.3em] text-lime-300/70">
                                 Club Networks
                             </div>
 
                             <ul role="list" class="-mx-2 space-y-1">
                                 <li>
-                                    <NuxtLink to="/admin/network/btc" class="text-gray-400 hover:text-white hover:bg-gray-800 group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold">
+                                    <NuxtLink to="/admin/network/btc" class="text-slate-400 hover:text-white hover:bg-white/5 group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold">
                                         <svg class="h-6 w-6 shrink-0" data-slot="icon" fill="none" stroke-width="1.5" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
                                             <path stroke-linecap="round" stroke-linejoin="round" d="M5.25 14.25h13.5m-13.5 0a3 3 0 0 1-3-3m3 3a3 3 0 1 0 0 6h13.5a3 3 0 1 0 0-6m-16.5-3a3 3 0 0 1 3-3h13.5a3 3 0 0 1 3 3m-19.5 0a4.5 4.5 0 0 1 .9-2.7L5.737 5.1a3.375 3.375 0 0 1 2.7-1.35h7.126c1.062 0 2.062.5 2.7 1.35l2.587 3.45a4.5 4.5 0 0 1 .9 2.7m0 0a3 3 0 0 1-3 3m0 3h.008v.008h-.008v-.008Zm0-6h.008v.008h-.008v-.008Zm-3 6h.008v.008h-.008v-.008Zm0-6h.008v.008h-.008v-.008Z"></path>
                                         </svg>
@@ -289,7 +289,7 @@ onBeforeUnmount(() => {
                                 </li>
 
                                 <li>
-                                    <NuxtLink to="/admin/network/bch" class="text-gray-400 hover:text-white hover:bg-gray-800 group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold">
+                                    <NuxtLink to="/admin/network/bch" class="text-slate-400 hover:text-white hover:bg-white/5 group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold">
                                         <svg class="h-6 w-6 shrink-0" data-slot="icon" fill="none" stroke-width="1.5" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
                                             <path stroke-linecap="round" stroke-linejoin="round" d="M5.25 14.25h13.5m-13.5 0a3 3 0 0 1-3-3m3 3a3 3 0 1 0 0 6h13.5a3 3 0 1 0 0-6m-16.5-3a3 3 0 0 1 3-3h13.5a3 3 0 0 1 3 3m-19.5 0a4.5 4.5 0 0 1 .9-2.7L5.737 5.1a3.375 3.375 0 0 1 2.7-1.35h7.126c1.062 0 2.062.5 2.7 1.35l2.587 3.45a4.5 4.5 0 0 1 .9 2.7m0 0a3 3 0 0 1-3 3m0 3h.008v.008h-.008v-.008Zm0-6h.008v.008h-.008v-.008Zm-3 6h.008v.008h-.008v-.008Zm0-6h.008v.008h-.008v-.008Z"></path>
                                         </svg>
@@ -298,7 +298,7 @@ onBeforeUnmount(() => {
                                 </li>
 
                                 <li>
-                                    <NuxtLink to="/admin/network/nexa" class="text-gray-400 hover:text-white hover:bg-gray-800 group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold">
+                                    <NuxtLink to="/admin/network/nexa" class="text-slate-400 hover:text-white hover:bg-white/5 group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold">
                                         <svg class="h-6 w-6 shrink-0" data-slot="icon" fill="none" stroke-width="1.5" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
                                             <path stroke-linecap="round" stroke-linejoin="round" d="M5.25 14.25h13.5m-13.5 0a3 3 0 0 1-3-3m3 3a3 3 0 1 0 0 6h13.5a3 3 0 1 0 0-6m-16.5-3a3 3 0 0 1 3-3h13.5a3 3 0 0 1 3 3m-19.5 0a4.5 4.5 0 0 1 .9-2.7L5.737 5.1a3.375 3.375 0 0 1 2.7-1.35h7.126c1.062 0 2.062.5 2.7 1.35l2.587 3.45a4.5 4.5 0 0 1 .9 2.7m0 0a3 3 0 0 1-3 3m0 3h.008v.008h-.008v-.008Zm0-6h.008v.008h-.008v-.008Zm-3 6h.008v.008h-.008v-.008Zm0-6h.008v.008h-.008v-.008Z"></path>
                                         </svg>
@@ -310,22 +310,22 @@ onBeforeUnmount(() => {
                         </li>
 
                         <li>
-                            <div class="text-xs font-semibold leading-6 text-gray-400">
+                            <div class="font-mono text-[0.65rem] font-semibold uppercase tracking-[0.3em] text-lime-300/70">
                                 Resource Center
                             </div>
 
                             <ul role="list" class="-mx-2 mt-2 space-y-1">
                                 <li>
                                     <!-- Current: "bg-gray-800 text-white", Default: "text-gray-400 hover:text-white hover:bg-gray-800" -->
-                                    <NuxtLink to="https://cashfusion.org" target="_blank" @click="isShowingMobileMenu = false" class="text-gray-400 hover:text-white hover:bg-gray-800 group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold">
-                                        <span class="flex h-6 w-6 shrink-0 items-center justify-center rounded-lg border border-gray-700 bg-gray-800 text-[0.625rem] font-medium text-gray-400 group-hover:text-white">CF</span>
+                                    <NuxtLink to="https://cashfusion.org" target="_blank" @click="isShowingMobileMenu = false" class="text-slate-400 hover:text-white hover:bg-white/5 group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold">
+                                        <span class="flex h-6 w-6 shrink-0 items-center justify-center rounded-lg border border-white/10 bg-white/5 text-[0.625rem] font-medium text-gray-400 group-hover:text-white">CF</span>
                                         <span class="truncate">CashFusion</span>
                                     </NuxtLink>
                                 </li>
 
                                 <li>
-                                    <NuxtLink to="https://runonflux.io" target="_blank" @click="isShowingMobileMenu = false" class="text-gray-400 hover:text-white hover:bg-gray-800 group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold">
-                                        <span class="flex h-6 w-6 shrink-0 items-center justify-center rounded-lg border border-gray-700 bg-gray-800 text-[0.625rem] font-medium text-gray-400 group-hover:text-white">FC</span>
+                                    <NuxtLink to="https://runonflux.io" target="_blank" @click="isShowingMobileMenu = false" class="text-slate-400 hover:text-white hover:bg-white/5 group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold">
+                                        <span class="flex h-6 w-6 shrink-0 items-center justify-center rounded-lg border border-white/10 bg-white/5 text-[0.625rem] font-medium text-gray-400 group-hover:text-white">FC</span>
                                         <span class="truncate">Flux Cloud</span>
                                     </NuxtLink>
                                 </li>
@@ -334,7 +334,7 @@ onBeforeUnmount(() => {
                         </li>
 
                         <li class="mt-auto">
-                            <NuxtLink to="/admin/settings" class="group -mx-2 flex gap-x-3 rounded-md p-2 text-sm font-semibold leading-6 text-gray-400 hover:bg-gray-800 hover:text-white">
+                            <NuxtLink to="/admin/settings" class="group -mx-2 flex gap-x-3 rounded-md p-2 text-sm font-semibold leading-6 text-slate-400 hover:bg-white/5 hover:text-white">
                                 <svg class="h-6 w-6 shrink-0" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true">
                                     <path
                                         stroke-linecap="round"
@@ -352,10 +352,10 @@ onBeforeUnmount(() => {
         </div>
 
         <div class="lg:pl-72">
-            <div class="sticky top-0 z-40 flex h-16 shrink-0 items-center gap-x-4 border-b border-gray-200 bg-white px-4 shadow-sm sm:gap-x-6 sm:px-6 lg:px-8">
+            <div class="sticky top-0 z-40 flex h-16 shrink-0 items-center gap-x-4 border-b border-white/10 bg-[#0a0f17] px-4 shadow-sm sm:gap-x-6 sm:px-6 lg:px-8">
                 <button
                     @click="isShowingMobileMenu = true"
-                    type="button" class="-m-2.5 p-2.5 text-gray-700 lg:hidden"
+                    type="button" class="-m-2.5 p-2.5 text-slate-300 lg:hidden"
                 >
                     <span class="sr-only">Open sidebar</span>
                     <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true">
@@ -364,7 +364,7 @@ onBeforeUnmount(() => {
                 </button>
 
                 <!-- Separator -->
-                <div class="h-6 w-px bg-gray-900/10 lg:hidden" aria-hidden="true"></div>
+                <div class="h-6 w-px bg-white/10 lg:hidden" aria-hidden="true"></div>
 
                 <div class="flex flex-1 gap-x-4 self-stretch lg:gap-x-6">
                     <form class="relative flex flex-1" action="javascript://" method="GET">
@@ -372,11 +372,11 @@ onBeforeUnmount(() => {
                         <svg class="pointer-events-none absolute inset-y-0 left-0 h-full w-5 text-gray-400" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
                             <path fill-rule="evenodd" d="M9 3.5a5.5 5.5 0 100 11 5.5 5.5 0 000-11zM2 9a7 7 0 1112.452 4.391l3.328 3.329a.75.75 0 11-1.06 1.06l-3.329-3.328A7 7 0 012 9z" clip-rule="evenodd" />
                         </svg>
-                        <input id="search-field" class="block h-full w-full border-0 py-0 pl-8 pr-0 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm" placeholder="Search..." type="search" name="search" />
+                        <input id="search-field" class="block h-full w-full border-0 py-0 pl-8 pr-0 text-slate-200 placeholder:text-slate-500 focus:ring-0 sm:text-sm" placeholder="Search..." type="search" name="search" />
                     </form>
 
                     <div class="flex items-center gap-x-4 lg:gap-x-6">
-                        <button type="button" class="-m-2.5 p-2.5 text-gray-400 hover:text-gray-500">
+                        <button type="button" class="-m-2.5 p-2.5 text-slate-400 hover:text-slate-300">
                             <span class="sr-only">View notifications</span>
                             <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true">
                                 <path
@@ -388,7 +388,7 @@ onBeforeUnmount(() => {
                         </button>
 
                         <!-- Separator -->
-                        <div class="hidden lg:block lg:h-6 lg:w-px lg:bg-gray-900/10" aria-hidden="true"></div>
+                        <div class="hidden lg:block lg:h-6 lg:w-px lg:bg-white/10" aria-hidden="true"></div>
 
                         <!-- Profile dropdown -->
                         <div class="relative">
@@ -401,12 +401,12 @@ onBeforeUnmount(() => {
                             >
                                 <span class="sr-only">Open user menu</span>
                                 <img
-                                    class="h-8 w-8 rounded-full bg-gray-50"
+                                    class="h-8 w-8 rounded-full bg-slate-700"
                                     src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
                                     alt=""
                                 />
                                 <span class="hidden lg:flex lg:items-center">
-                                    <span class="ml-4 text-sm font-semibold leading-6 text-gray-900" aria-hidden="true">Satoshi Nakamoto</span>
+                                    <span class="ml-4 text-sm font-semibold leading-6 text-slate-200" aria-hidden="true">Satoshi Nakamoto</span>
                                     <svg class="ml-2 h-5 w-5 text-gray-400" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
                                         <path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z" clip-rule="evenodd" />
                                     </svg>
@@ -425,22 +425,22 @@ onBeforeUnmount(() => {
                 -->
                             <div
                                 v-if="isShowingProfileMenu"
-                                class="absolute right-0 z-10 mt-2.5 w-32 origin-top-right rounded-md bg-white py-2 shadow-lg ring-1 ring-gray-900/5 focus:outline-none"
+                                class="absolute right-0 z-10 mt-2.5 w-32 origin-top-right rounded-md bg-[#0a0f17] py-2 shadow-lg ring-1 ring-white/10 focus:outline-none"
                                 role="menu"
                                 aria-orientation="vertical"
                                 aria-labelledby="user-menu-button"
                                 tabindex="-1"
                             >
                                 <!-- Active: "bg-gray-50", Not Active: "" -->
-                                <a href="javascript://" class="block px-3 py-1 text-sm leading-6 text-gray-900" role="menuitem" tabindex="-1" id="user-menu-item-0">
+                                <a href="javascript://" class="block px-3 py-1 text-sm leading-6 text-slate-300" role="menuitem" tabindex="-1" id="user-menu-item-0">
                                     My Profile
                                 </a>
 
-                                <a href="javascript://" class="block px-3 py-1 text-sm leading-6 text-gray-900" role="menuitem" tabindex="-1" id="user-menu-item-0">
+                                <a href="javascript://" class="block px-3 py-1 text-sm leading-6 text-slate-300" role="menuitem" tabindex="-1" id="user-menu-item-0">
                                     My Team
                                 </a>
 
-                                <a href="javascript://" class="block px-3 py-1 text-sm leading-6 text-gray-900" role="menuitem" tabindex="-1" id="user-menu-item-1">
+                                <a href="javascript://" class="block px-3 py-1 text-sm leading-6 text-slate-300" role="menuitem" tabindex="-1" id="user-menu-item-1">
                                     Sign Out
                                 </a>
                             </div>

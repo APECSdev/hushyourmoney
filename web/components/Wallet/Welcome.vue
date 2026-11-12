@@ -103,7 +103,7 @@ onMounted(() => {
 
 <template>
     <main>
-        <h2 class="text-6xl font-light text-gray-600">
+        <h2 class="font-display text-4xl font-bold text-white sm:text-5xl">
             LP Wallets
         </h2>
 
@@ -118,7 +118,7 @@ onMounted(() => {
                         Bitcoin Cash Address
                     </h2>
 
-                    <NuxtLink v-if="props.cashAddress" :to="'https://explorer.melroy.org/address/' + props.cashAddress.slice(12)" target="_blank" class="col-span-2 text-base sm:text-xl text-blue-500 truncate hover:underline">
+                    <NuxtLink v-if="props.cashAddress" :to="'https://explorer.melroy.org/address/' + props.cashAddress.slice(12)" target="_blank" class="col-span-2 text-base sm:text-xl text-cyan-300 truncate hover:underline">
                         {{props.cashAddress.slice(12)}}
                     </NuxtLink>
 
@@ -135,7 +135,7 @@ onMounted(() => {
                 <div v-for="(address, index) of hushAddresses" :key="address" class="text-xs">
                     <div class="grid grid-cols-4 items-center gap-3">
                         <span class="text-right">Hush #{{(index + 1)}}</span>
-                        <NuxtLink :to="'https://explorer.melroy.org/address/' + address.slice(12)" target="_blank" class="col-span-3 text-blue-500 hover:underline">{{address}}</NuxtLink>
+                        <NuxtLink :to="'https://explorer.melroy.org/address/' + address.slice(12)" target="_blank" class="col-span-3 text-cyan-300 hover:underline">{{address}}</NuxtLink>
                     </div>
                 </div>
             </div>
@@ -146,7 +146,7 @@ onMounted(() => {
                         Nexa Address
                     </h2>
 
-                    <NuxtLink :to="'https://explorer.nexa.org/address/' + Wallet.address" target="_blank" class="col-span-2 text-base sm:text-xl text-blue-500 truncate hover:underline">
+                    <NuxtLink :to="'https://explorer.nexa.org/address/' + Wallet.address" target="_blank" class="col-span-2 text-base sm:text-xl text-cyan-300 truncate hover:underline">
                         {{Wallet.address.slice(5)}}
                     </NuxtLink>
 
@@ -162,7 +162,7 @@ onMounted(() => {
                 <!-- <div v-for="(address, index) of hushAddresses" :key="address" class="text-xs">
                     <div class="grid grid-cols-4 items-center gap-3">
                         <span class="text-right">Hush #{{(index + 1)}}</span>
-                        <NuxtLink :to="'https://explorer.melroy.org/address/' + address.slice(12)" target="_blank" class="col-span-3 text-blue-500 hover:underline">{{address}}</NuxtLink>
+                        <NuxtLink :to="'https://explorer.melroy.org/address/' + address.slice(12)" target="_blank" class="col-span-3 text-cyan-300 hover:underline">{{address}}</NuxtLink>
                     </div>
                 </div> -->
             </div>
@@ -185,9 +185,9 @@ onMounted(() => {
 
         </div>
 
-        <ul role="list" class="mt-6 grid grid-cols-1 gap-6 border-b border-t border-gray-200 py-6 sm:grid-cols-2">
+        <ul role="list" class="mt-6 grid grid-cols-1 gap-6 border-b border-t border-white/10 py-6 sm:grid-cols-2">
             <li class="flow-root">
-                <div class="relative -m-2 flex items-center space-x-4 rounded-xl p-2 focus-within:ring-2 focus-within:ring-indigo-500 hover:bg-gray-50">
+                <div class="relative -m-2 flex items-center space-x-4 rounded-xl p-2 focus-within:ring-2 focus-within:ring-lime-300 hover:bg-white/5">
                     <div class="flex h-16 w-16 flex-shrink-0 items-center justify-center rounded-lg bg-pink-500">
                         <svg class="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 5.25h16.5m-16.5 4.5h16.5m-16.5 4.5h16.5m-16.5 4.5h16.5" />
@@ -195,7 +195,7 @@ onMounted(() => {
                     </div>
 
                     <div>
-                        <h3 class="text-2xl font-medium text-gray-900">
+                        <h3 class="text-2xl font-medium text-slate-200">
                             <a href="javascript://" class="focus:outline-none">
                                 <span class="absolute inset-0" aria-hidden="true"></span>
                                 <span>Bitcoin</span>
@@ -203,7 +203,7 @@ onMounted(() => {
                             </a>
                         </h3>
 
-                        <p class="mt-1 text-sm text-gray-500">
+                        <p class="mt-1 text-sm text-slate-400">
                             Another to-do system you’ll try but eventually give up on.
                         </p>
                     </div>
@@ -211,7 +211,7 @@ onMounted(() => {
             </li>
 
             <li class="flow-root">
-                <div class="relative -m-2 flex items-center space-x-4 rounded-xl p-2 focus-within:ring-2 focus-within:ring-indigo-500 hover:bg-gray-50">
+                <div class="relative -m-2 flex items-center space-x-4 rounded-xl p-2 focus-within:ring-2 focus-within:ring-lime-300 hover:bg-white/5">
                     <div class="flex h-16 w-16 flex-shrink-0 items-center justify-center rounded-lg bg-yellow-500">
                         <svg class="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true">
                             <path
@@ -223,20 +223,20 @@ onMounted(() => {
                     </div>
 
                     <div>
-                        <h3 class="text-2xl font-medium text-gray-900">
+                        <h3 class="text-2xl font-medium text-slate-200">
                             <a href="javascript://" class="focus:outline-none">
                                 <span class="absolute inset-0" aria-hidden="true"></span>
                                 <span>Bitcoin Cash</span>
                                 <span aria-hidden="true"> &rarr;</span>
                             </a>
                         </h3>
-                        <p class="mt-1 text-sm text-gray-500">Stay on top of your deadlines, or don’t — it’s up to you.</p>
+                        <p class="mt-1 text-sm text-slate-400">Stay on top of your deadlines, or don’t — it’s up to you.</p>
                     </div>
                 </div>
             </li>
 
             <li class="flow-root">
-                <div class="relative -m-2 flex items-center space-x-4 rounded-xl p-2 focus-within:ring-2 focus-within:ring-indigo-500 hover:bg-gray-50">
+                <div class="relative -m-2 flex items-center space-x-4 rounded-xl p-2 focus-within:ring-2 focus-within:ring-lime-300 hover:bg-white/5">
                     <div class="flex h-16 w-16 flex-shrink-0 items-center justify-center rounded-lg bg-green-500">
                         <svg class="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true">
                             <path
@@ -247,21 +247,21 @@ onMounted(() => {
                         </svg>
                     </div>
                     <div>
-                        <h3 class="text-2xl font-medium text-gray-900">
+                        <h3 class="text-2xl font-medium text-slate-200">
                             <a href="javascript://" class="focus:outline-none">
                                 <span class="absolute inset-0" aria-hidden="true"></span>
                                 <span>Nexa</span>
                                 <span aria-hidden="true"> &rarr;</span>
                             </a>
                         </h3>
-                        <p class="mt-1 text-sm text-gray-500">Great for mood boards and inspiration.</p>
+                        <p class="mt-1 text-sm text-slate-400">Great for mood boards and inspiration.</p>
                     </div>
                 </div>
             </li>
 
             <li class="flow-root">
-                <div class="relative -m-2 flex items-center space-x-4 rounded-xl p-2 focus-within:ring-2 focus-within:ring-indigo-500 hover:bg-gray-50">
-                    <div class="flex h-16 w-16 flex-shrink-0 items-center justify-center rounded-lg bg-blue-500">
+                <div class="relative -m-2 flex items-center space-x-4 rounded-xl p-2 focus-within:ring-2 focus-within:ring-lime-300 hover:bg-white/5">
+                    <div class="flex h-16 w-16 flex-shrink-0 items-center justify-center rounded-lg bg-cyan-300/10">
                         <svg class="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true">
                             <path
                                 stroke-linecap="round"
@@ -271,20 +271,20 @@ onMounted(() => {
                         </svg>
                     </div>
                     <div>
-                        <h3 class="text-2xl font-medium text-gray-900">
+                        <h3 class="text-2xl font-medium text-slate-200">
                             <a href="javascript://" class="focus:outline-none">
                                 <span class="absolute inset-0" aria-hidden="true"></span>
                                 <span>Litecoin</span>
                                 <span aria-hidden="true"> &rarr;</span>
                             </a>
                         </h3>
-                        <p class="mt-1 text-sm text-gray-500">Track tasks in different stages of your project.</p>
+                        <p class="mt-1 text-sm text-slate-400">Track tasks in different stages of your project.</p>
                     </div>
                 </div>
             </li>
 
             <li class="flow-root">
-                <div class="relative -m-2 flex items-center space-x-4 rounded-xl p-2 focus-within:ring-2 focus-within:ring-indigo-500 hover:bg-gray-50">
+                <div class="relative -m-2 flex items-center space-x-4 rounded-xl p-2 focus-within:ring-2 focus-within:ring-lime-300 hover:bg-white/5">
                     <div class="flex h-16 w-16 flex-shrink-0 items-center justify-center rounded-lg bg-indigo-500">
                         <svg class="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true">
                             <path
@@ -295,34 +295,34 @@ onMounted(() => {
                         </svg>
                     </div>
                     <div>
-                        <h3 class="text-2xl font-medium text-gray-900">
+                        <h3 class="text-2xl font-medium text-slate-200">
                             <a href="javascript://" class="focus:outline-none">
                                 <span class="absolute inset-0" aria-hidden="true"></span>
                                 <span>Flux</span>
                                 <span aria-hidden="true"> &rarr;</span>
                             </a>
                         </h3>
-                        <p class="mt-1 text-sm text-gray-500">Lots of numbers and things — good for nerds.</p>
+                        <p class="mt-1 text-sm text-slate-400">Lots of numbers and things — good for nerds.</p>
                     </div>
                 </div>
             </li>
 
             <li class="flow-root">
-                <div class="relative -m-2 flex items-center space-x-4 rounded-xl p-2 focus-within:ring-2 focus-within:ring-indigo-500 hover:bg-gray-50">
+                <div class="relative -m-2 flex items-center space-x-4 rounded-xl p-2 focus-within:ring-2 focus-within:ring-lime-300 hover:bg-white/5">
                     <div class="flex h-16 w-16 flex-shrink-0 items-center justify-center rounded-lg bg-purple-500">
                         <svg class="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z" />
                         </svg>
                     </div>
                     <div>
-                        <h3 class="text-2xl font-medium text-gray-900">
+                        <h3 class="text-2xl font-medium text-slate-200">
                             <a href="javascript://" class="focus:outline-none">
                                 <span class="absolute inset-0" aria-hidden="true"></span>
                                 <span>eCash</span>
                                 <span aria-hidden="true"> &rarr;</span>
                             </a>
                         </h3>
-                        <p class="mt-1 text-sm text-gray-500">Get a birds-eye-view of your procrastination.</p>
+                        <p class="mt-1 text-sm text-slate-400">Get a birds-eye-view of your procrastination.</p>
                     </div>
                 </div>
             </li>

@@ -41,28 +41,28 @@ const importWallet = () => {
 
 <template>
     <section class="flex flex-col gap-5">
-        <p class="px-3 py-2 bg-yellow-100 text-base font-medium border-2 border-yellow-200 rounded-lg shadow-md">
+        <p class="px-3 py-2 border border-lime-300/30 bg-lime-300/10 text-base font-medium text-lime-200 rounded-lg shadow-md">
             Welcome to your Hush Your Money wallet.
             Click the button below to create a new wallet and begin trading.
         </p>
 
-        <div @click="createWallet" class="cursor-pointer px-3 py-2 text-2xl text-blue-100 font-medium bg-blue-500 border-2 border-blue-700 rounded-lg shadow hover:bg-blue-400">
+        <div @click="createWallet" class="cursor-pointer px-3 py-2 w-full cursor-pointer rounded-full bg-lime-300 px-4 py-3 text-center font-mono text-sm font-bold uppercase tracking-[0.15em] text-[#131a05] transition-colors hover:bg-lime-200">
             Create New Wallet
         </div>
 
         <hr />
 
-        <p class="px-3 py-2 bg-yellow-100 text-base font-medium border-2 border-yellow-200 rounded-lg shadow-md">
+        <p class="px-3 py-2 border border-lime-300/30 bg-lime-300/10 text-base font-medium text-lime-200 rounded-lg shadow-md">
             Import your existing wallet into Hush Your Money.
         </p>
 
         <textarea
             placeholder="Seed #1 Seed #2 Seed #3 ..."
             v-model="mnemonic"
-            class="px-3 py-2 border-2 border-amber-500 rounded-lg shadow"
+            class="px-3 py-2 border border-white/15 rounded-lg bg-white/[0.04] font-mono text-slate-200 placeholder:text-slate-600 focus:border-lime-300/50"
         />
 
-        <div @click="importWallet" class="cursor-pointer px-3 py-2 text-2xl text-blue-100 font-medium bg-blue-500 border-2 border-blue-700 rounded-lg shadow hover:bg-blue-400">
+        <div @click="importWallet" class="cursor-pointer px-3 py-2 w-full cursor-pointer rounded-full bg-lime-300 px-4 py-3 text-center font-mono text-sm font-bold uppercase tracking-[0.15em] text-[#131a05] transition-colors hover:bg-lime-200">
             Import Existing Wallet
         </div>
     </section>

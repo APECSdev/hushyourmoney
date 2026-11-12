@@ -35,14 +35,14 @@ onMounted(() => {
 
 <template>
     <main class="max-w-5xl mx-auto py-5 flex flex-col gap-4">
-        <h1 class="text-5xl font-medium">
+        <h1 class="font-display text-3xl font-bold text-white sm:text-4xl">
             Vaults
         </h1>
 
-        <p>
+        <p class="leading-relaxed text-slate-300">
             Instantly and permissionlessly exchange between $HUSH and $NITO tokens.
         </p>
 
-        <pre v-if="vaults">{{vaults}}</pre>
+        <pre v-if="$1" class="w-fit max-w-full overflow-x-auto rounded-2xl border border-white/10 bg-white/[0.03] p-4 font-mono text-xs text-lime-200/90">{{vaults}}</pre>
     </main>
 </template>
