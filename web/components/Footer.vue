@@ -185,7 +185,7 @@ const props = defineProps({
 
             <div class="mt-4 sm:mt-20 lg:mt-24 flex flex-col sm:flex-row justify-between gap-4 border-t border-gray-900/10 pt-8">
                 <p class="leading-5 text-gray-300 text-center sm:text-left text-sm lg:text-base">
-                    <span class="px-1 block sm:inline">&copy; 2020-2024 The Hush DAO</span>
+                    <span class="px-1 block sm:inline">&copy; 2020-2026 The Hush DAO</span>
                     <span class="hidden lg:inline">—</span>
                     <span class="hidden sm:block lg:hidden"></span>
                     <span class="px-1 block sm:inline">All rights reserved.</span>

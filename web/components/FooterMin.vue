@@ -24,7 +24,7 @@ const props = defineProps({
             <div class="border-t border-white/10 pt-8 text-center text-sm text-slate-500 sm:text-left">
                 <div class="flex flex-col lg:flex-row justify-between">
                     <div>
-                        <span class="px-1 block sm:inline">&copy; 2020-2024 The Hush DAO</span>
+                        <span class="px-1 block sm:inline">&copy; 2020-2026 The Hush DAO</span>
                         <span class="hidden lg:inline">—</span>
                         <span class="px-1 block sm:inline">All rights reserved.</span>
                     </div>
