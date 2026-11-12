@@ -20,12 +20,12 @@ const props = defineProps({
 
 <template>
     <main class="flex flex-col gap-5">
-        <h2 class="text-3xl font-bold text-fuchsia-700">
+        <h2 class="font-display text-3xl font-bold text-white">
             Mineable $HUSH
         </h2>
 
         <p>
-            At least <span class="text-lg font-bold"><span class="text-xl text-rose-500">50%</span> of the Total Supply of $HUSH</span> will be available for PoW token mining (or melted).
+            At least <span class="text-lg font-bold"><span class="text-xl text-rose-400">50%</span> of the Total Supply of $HUSH</span> will be available for PoW token mining (or melted).
         </p>
     </main>
 </template>

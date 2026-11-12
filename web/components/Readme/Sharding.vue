@@ -20,7 +20,7 @@ const props = defineProps({
 
 <template>
     <main class="flex flex-col gap-5">
-        <h2 class="text-3xl font-bold text-fuchsia-700">
+        <h2 class="font-display text-3xl font-bold text-white">
             Sharding: A 256-bit Scaling Solution
         </h2>
 
@@ -30,7 +30,7 @@ const props = defineProps({
 
         <p>
             There are at least 2,048 (sharded) CCs deployed across the network to offer maximum scalability on the host's
-            <NuxtLink to="https://nexa.wiki/supernet" target="_blank" class="text-blue-500 font-bold hover:underline">
+            <NuxtLink to="https://nexa.wiki/supernet" target="_blank" class="text-cyan-300 font-bold hover:underline">
                 Supernet
 
                 <svg class="inline h-5 w-auto" data-slot="icon" fill="none" stroke-width="1.5" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">

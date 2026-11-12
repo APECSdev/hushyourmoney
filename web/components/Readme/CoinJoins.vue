@@ -20,7 +20,7 @@ const props = defineProps({
 
 <template>
     <main class="flex flex-col gap-5">
-        <h2 class="text-3xl font-bold text-fuchsia-700">
+        <h2 class="font-display text-3xl font-bold text-white">
             CoinJoins: à la CashFusion
         </h2>
 
@@ -30,7 +30,7 @@ const props = defineProps({
 
         <p>
             Not every UTXO-based network can/will offer
-            <NuxtLink to="https://nexa.wiki/supernet" target="_blank" class="text-blue-500 font-bold hover:underline">
+            <NuxtLink to="https://nexa.wiki/supernet" target="_blank" class="text-cyan-300 font-bold hover:underline">
                 Supernet
 
                 <svg class="inline h-5 w-auto" data-slot="icon" fill="none" stroke-width="1.5" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
@@ -45,7 +45,7 @@ const props = defineProps({
         </p>
 
         <section>
-            <h3 class="text-xl text-red-500 font-bold uppercase">
+            <h3 class="text-xl text-rose-400 font-bold uppercase">
                 Please Note
             </h3>
 

@@ -20,11 +20,11 @@ const props = defineProps({
 
 <template>
     <main class="flex flex-col gap-5">
-        <h2 class="text-3xl font-bold text-fuchsia-700">
+        <h2 class="font-display text-3xl font-bold text-white">
             You NEVER Go FULL Privacy
         </h2>
 
-        <NuxtLink to="https://z.cash/zcashs-privacy-is-normal-goes-viral/" target="_blank" class="pl-5 flex flex-row gap-2 items-baseline text-xl text-blue-500 font-bold hover:underline">
+        <NuxtLink to="https://z.cash/zcashs-privacy-is-normal-goes-viral/" target="_blank" class="pl-5 flex flex-row gap-2 items-baseline text-xl text-cyan-300 font-bold hover:underline">
             Because <span class="text-2xl">Censorship is REAL!</span>
 
             <svg class="h-5 w-auto" data-slot="icon" fill="none" stroke-width="1.5" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
@@ -40,7 +40,7 @@ const props = defineProps({
 
         <p>
             The #1 benefit of a non-TOTAL approach is that Incognito
-            <NuxtLink to="https://nexa.wiki/supernet" target="_blank" class="text-blue-500 font-bold hover:underline">
+            <NuxtLink to="https://nexa.wiki/supernet" target="_blank" class="text-cyan-300 font-bold hover:underline">
                 Supernet
 
                 <svg class="inline h-5 w-auto" data-slot="icon" fill="none" stroke-width="1.5" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
@@ -49,7 +49,7 @@ const props = defineProps({
             </NuxtLink> assets CANNOT be banned by Centralized Exchanges (CEXs);
             as it would require banning the Host asset as well.
             100% of Incognito
-            <NuxtLink to="https://nexa.wiki/supernet" target="_blank" class="text-blue-500 font-bold hover:underline">
+            <NuxtLink to="https://nexa.wiki/supernet" target="_blank" class="text-cyan-300 font-bold hover:underline">
                 Supernet
 
                 <svg class="inline h-5 w-auto" data-slot="icon" fill="none" stroke-width="1.5" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">

@@ -20,7 +20,7 @@ const props = defineProps({
 
 <template>
     <main class="flex flex-col gap-5">
-        <h2 class="text-3xl font-bold text-fuchsia-700">
+        <h2 class="font-display text-3xl font-bold text-white">
             Table of Contents
         </h2>
 
