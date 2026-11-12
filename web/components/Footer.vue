@@ -21,7 +21,7 @@
             <div class="flex flex-wrap items-center justify-center gap-x-4 gap-y-2 font-mono text-xs text-slate-500">
                 <a href="https://cloud.runonflux.io" target="_blank" rel="noopener" class="footer-link">running on flux cloud</a>
                 <span class="text-slate-700">|</span>
-                <span class="text-slate-600">© 2020-2026 The Hush DAO — All rights reserved.</span>
+                <span class="text-slate-600">© 2020-2026 The Hush DAO</span>
                 <span class="text-slate-700">|</span>
                 <CcBadge />
             </div>
