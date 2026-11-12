@@ -68,8 +68,8 @@ const init = () => {
     if (typeof props.cashAddress === 'undefined' || !props.cashAddress || props.cashAddress === '') {
         console.log('RELOAD PAGE FOR CASH ADDRESS!!')
         const router = useRouter()
-        // router.push({ path: "/admin/liquidity?setup-complete" })
-        router.push({ path: "/admin" })
+        // router.push({ path: "/toolbox/liquidity?setup-complete" })
+        router.push({ path: "/toolbox" })
         return
     }
 

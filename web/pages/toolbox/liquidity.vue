@@ -16,7 +16,7 @@ const bchjs = new BCHJS()
 
 
 definePageMeta({
-    layout: 'admin',
+    layout: 'toolbox',
 })
 
 useHead({

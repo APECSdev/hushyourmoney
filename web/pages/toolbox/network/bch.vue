@@ -1,10 +1,10 @@
 <script setup lang="ts">
 definePageMeta({
-    layout: 'admin',
+    layout: 'toolbox',
 })
 
 useHead({
-    title: `Nexa (NEXA) — Hush Your Money`,
+    title: `Bitcoin Cash (BCH) — Hush Your Money`,
     meta: [
         { name: 'description', content: `Hush Your Money makes spending safu.` }
     ],
@@ -28,7 +28,7 @@ const System = useSystemStore()
 <template>
     <main class="max-w-5xl mx-auto py-5 flex flex-col gap-4">
         <h1 class="font-display text-3xl font-bold text-white sm:text-4xl">
-            Nexa (NEXA)
+            Bitcoin Cash (BCH)
         </h1>
 
         <p class="leading-relaxed text-slate-300">

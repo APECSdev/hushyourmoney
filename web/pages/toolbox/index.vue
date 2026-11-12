@@ -3,7 +3,7 @@
 import moment from 'moment'
 
 definePageMeta({
-    layout: 'admin',
+    layout: 'toolbox',
 })
 
 useHead({
@@ -146,7 +146,7 @@ onMounted(() => {
         </h1>
 
         <p class="leading-relaxed text-slate-300">
-            Welcome to the Hush Your Money Administration Area.
+            Welcome to the Hush Your Money Toolbox.
         </p>
 
         <div class="grid grid-cols-2 gap-6">
