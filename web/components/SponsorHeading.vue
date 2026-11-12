@@ -19,7 +19,7 @@ const props = defineProps({
 </script>
 
 <template>
-    <main class="mt-4 lg:mt-12 -mb-8 w-full h-32 bg-gray-800 rounded-2xl border-2 border-amber-400">
+    <main class="mt-4 lg:mt-12 -mb-8 w-full h-32 rounded-2xl border-2 border-lime-300/30 bg-gradient-to-r from-lime-300/10 via-transparent to-cyan-300/10">
         <!-- Banner Goes Here -->
     </main>
 </template>

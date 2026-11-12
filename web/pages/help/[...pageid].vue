@@ -1,4 +1,8 @@
 <script setup lang="ts">
+definePageMeta({
+    layout: 'fullscreen',
+})
+
 useHead({
     title: `Help — Hush Your Money`,
     meta: [
@@ -37,14 +41,22 @@ onMounted(() => {
 
 // onBeforeUnmount(() => {
 //     console.log('Before Unmount!')
-//     // Now is the time to perform all cleanup operations.
+//     // Now it's safe to perform setup operations.
 // })
 </script>
 
 <template>
-    <main class="max-w-5xl mx-auto py-5 flex flex-col gap-4">
-        <pre>DEBUG: {{ networkid }} — {{ guideid }}</pre>
+    <DocsShell>
+        <main class="flex flex-col gap-6">
+            <h1 class="font-display text-4xl font-bold text-white sm:text-5xl">
+                Guides
+            </h1>
 
-        <HelpBCHWalletIntegration />
-    </main>
+            <pre class="w-fit rounded-xl border border-white/10 bg-white/[0.03] p-4 font-mono text-sm text-lime-300">DEBUG: {{ networkid }} — {{ guideid }}</pre>
+
+            <div class="rounded-2xl border border-white/10 bg-white/[0.03] p-6">
+                <HelpBCHWalletIntegration />
+            </div>
+        </main>
+    </DocsShell>
 </template>

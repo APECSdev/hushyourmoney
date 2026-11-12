@@ -1,4 +1,8 @@
 <script setup lang="ts">
+definePageMeta({
+    layout: 'fullscreen',
+})
+
 useHead({
     title: `Sponsors — Hush Your Money`,
     meta: [
@@ -136,17 +140,18 @@ onMounted(() => {
 </script>
 
 <template>
-    <main class="max-w-5xl mx-auto py-5 flex flex-col gap-4">
-        <h1 class="text-5xl font-medium">
+    <DocsShell>
+        <main class="flex flex-col gap-6">
+        <h1 class="font-display text-4xl font-bold text-white sm:text-5xl">
             Sponsors for {{networkTitle}}
         </h1>
 
-        <h2 class="text-5xl font-light italic">
+        <h2 class="font-display text-3xl font-light italic text-cyan-200">
             {{campaignTitle}}
         </h2>
 
         <section class="flex flex-col gap-4">
-            <h2 class="text-rose-500 text-2xl font-bold uppercase">
+            <h2 class="text-rose-400 text-2xl font-bold uppercase">
                 Do Not Send From ANY Exchange
             </h2>
 
@@ -176,12 +181,12 @@ onMounted(() => {
             Lorem, ipsum dolor sit amet consectetur adipisicing elit. Id eius voluptatem minus natus at eveniet dolorum eos mollitia, maxime animi excepturi harum omnis illum odit recusandae pariatur! Unde, explicabo molestias.
         </p>
 
-        <NuxtLink :to="donationAddress" v-if="campaigns" class="p-5 flex flex-col gap-3 bg-sky-100 border-4 border-sky-300 rounded-3xl shadow">
-            <h3 class="text-gray-500 text-3xl font-light tracking-widest">
+        <NuxtLink :to="donationAddress" v-if="campaigns" class="p-5 flex flex-col gap-3 bg-white/[0.04] border-4 border-lime-300/30 rounded-3xl shadow">
+            <h3 class="text-slate-400 text-3xl font-light tracking-widest">
                 {{networkTitle}}
             </h3>
 
-            <h3 class="font-medium tracking-tight">
+            <h3 class="font-mono text-sm tracking-tight text-lime-300 break-all">
                 {{donationAddress}}
             </h3>
         </NuxtLink>
@@ -246,4 +251,5 @@ onMounted(() => {
             </h3>
         </section>
     </main>
+    </DocsShell>
 </template>

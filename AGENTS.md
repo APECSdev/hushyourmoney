@@ -20,7 +20,10 @@
 - Code migration commit from this session: `9c6db6f95897b379c3af16ddcfc52fc62efda836` (`Migrate off retired bchn.fullstack.cash/v5 REST API`).
 - App: Nuxt 3 in `web/`; production server runs `node .output/server/index.mjs` on port `3000` (source: `web/Dockerfile`; smoke test this session).
 - Site title: `Hush Your Money — Spend Privately. Fearlessly!` (source: `web/nuxt.config.ts`; live homepage check this session).
-- Live URLs from `README.md`: `https://hushyourmoney.com`, `https://hushyourmoney.app.runonflux.io`, `https://shuffle.cash` redirect, `https://blender.cash` redirect.
+- Live URLs from `README.md`: `https://hushyourmoney.com`, `https://hushyourmoney.app.runonflux.io`. The `shuffle.cash` and `blender.cash` redirects are NO LONGER VALID — removed from README + security page 2026-11-12 (user directive).
+- **PENDING (user directive 2026-11-12): IPFS deployment of the app — deferred to a NEXT session, AFTER the full makeover is complete.** README already carries the `ipfs://XXX` placeholder; security.vue already lists IPFS self-hosted (Brave, Kubo) and trusted (Dweb, Cloudflare) gateway sections.
+- Site repositioning (user directive 2026-11-12): **a UTXO privacy toolkit, no longer BCH-exclusive.** BCH appears only as fact ("CoinJoin on Bitcoin Cash today"); ZK pool research covers UTXO-based tokens.
+- Makeover state (2026-11-12): phases 1–3 committed & pushed (verbiage 0373ea7 → phase 2 0313891 → phase 3 120d7ed); homepage/welcome/readme/legal dark-facelifted; Readme/* + Help/BCH/SponsorHeading components dark-restyled; DocsShell.vue shared dark shell added for legacy pages. Docker Hub image NOT yet pushed with this work; Flux rollout pending. Local instance: `docker run --name hush-local -p 127.0.0.1:3100:3000 nyusternie/hushyourmoney:latest`.
 
 ## Flux and DNS state verified this session
 - Flux app name: `hushyourmoney`; owner: `1JmYudcWEfTPNURBQZ2vDaxMKwNNVnexxR`; image: `nyusternie/hushyourmoney:latest`; ports `31337` to `3000`; 3 instances; spec v8.

@@ -1,4 +1,8 @@
 <script setup lang="ts">
+definePageMeta({
+    layout: 'fullscreen',
+})
+
 useHead({
     title: `Support Center — Hush Your Money`,
     meta: [
@@ -30,8 +34,9 @@ faqs.push({
 </script>
 
 <template>
-    <main class="flex flex-col gap-4">
-        <h1 class="text-sky-500 text-5xl font-light italic">
+    <DocsShell>
+        <main class="flex flex-col gap-8">
+        <h1 class="font-display text-4xl font-bold text-white sm:text-5xl">
             Support Center
         </h1>
 
@@ -57,24 +62,24 @@ faqs.push({
 
         <hr />
 
-        <h2 class="text-gray-500 text-4xl font-bold">
+        <h2 class="font-display text-3xl font-bold text-white">
             Guides and Tutorials
         </h2>
 
-        <NuxtLink to="/help/bch/wallet-integration" class="text-blue-500 text-xl font-medium hover:text-blue-400 hover:underline">
+        <NuxtLink to="/help/bch/wallet-integration" class="text-cyan-300 text-xl font-medium underline decoration-cyan-300/40 underline-offset-4 hover:decoration-cyan-300">
             Bitcoin Cash Wallet Integration
         </NuxtLink>
 
-        <section class="bg-white">
-            <div class="mx-auto max-w-7xl px-6 py-24 sm:py-32 lg:px-8 lg:py-40">
-                <div class="mx-auto max-w-4xl divide-y divide-gray-900/10">
-                    <h2 class="text-2xl font-bold leading-10 tracking-tight text-gray-900">Frequently asked questions</h2>
-                    <dl class="mt-10 space-y-6 divide-y divide-gray-900/10">
+        <section class="rounded-3xl border border-white/10 bg-white/[0.03] p-6 sm:p-10">
+            <div class="py-4">
+                <div class="mx-auto max-w-4xl divide-y divide-white/10">
+                    <h2 class="text-2xl font-bold leading-10 tracking-tight text-slate-200">Frequently asked questions</h2>
+                    <dl class="mt-10 space-y-6 divide-y divide-white/10">
 
                         <div v-for="faq of faqs" :key="faq.question" class="pt-6">
                             <dt>
                                 <!-- Expand/collapse question button -->
-                                <button type="button" class="flex w-full items-start justify-between text-left text-gray-900" aria-controls="faq-0" aria-expanded="false">
+                                <button type="button" class="flex w-full items-start justify-between text-left text-slate-200" aria-controls="faq-0" aria-expanded="false">
                                     <span class="text-base font-semibold leading-7">{{faq.question}}</span>
                                     <span class="ml-6 flex h-7 items-center">
                                         <!--
@@ -97,14 +102,14 @@ faqs.push({
                                 </button>
                             </dt>
                             <dd class="mt-2 pr-12" id="faq-0">
-                                <p class="text-base leading-7 text-gray-600">{{faq.answer}}</p>
+                                <p class="text-base leading-7 text-slate-400">{{faq.answer}}</p>
                             </dd>
                         </div>
 
                         <div class="pt-6">
                             <dt>
                                 <!-- Expand/collapse question button -->
-                                <button type="button" class="flex w-full items-start justify-between text-left text-gray-900" aria-controls="faq-0" aria-expanded="false">
+                                <button type="button" class="flex w-full items-start justify-between text-left text-slate-200" aria-controls="faq-0" aria-expanded="false">
                                     <span class="text-base font-semibold leading-7">What&#039;s the best thing about Switzerland?</span>
                                     <span class="ml-6 flex h-7 items-center">
                                         <!--
@@ -127,14 +132,14 @@ faqs.push({
                                 </button>
                             </dt>
                             <dd class="mt-2 pr-12" id="faq-0">
-                                <p class="text-base leading-7 text-gray-600">I don&#039;t know, but the flag is a big plus. Lorem ipsum dolor sit amet consectetur adipisicing elit. Quas cupiditate laboriosam fugiat.</p>
+                                <p class="text-base leading-7 text-slate-400">I don&#039;t know, but the flag is a big plus. Lorem ipsum dolor sit amet consectetur adipisicing elit. Quas cupiditate laboriosam fugiat.</p>
                             </dd>
                         </div>
 
                         <div class="pt-6">
                             <dt>
                                 <!-- Expand/collapse question button -->
-                                <button type="button" class="flex w-full items-start justify-between text-left text-gray-900" aria-controls="faq-0" aria-expanded="false">
+                                <button type="button" class="flex w-full items-start justify-between text-left text-slate-200" aria-controls="faq-0" aria-expanded="false">
                                     <span class="text-base font-semibold leading-7">How do you make holy water?</span>
                                     <span class="ml-6 flex h-7 items-center">
                                         <!--
@@ -157,7 +162,7 @@ faqs.push({
                                 </button>
                             </dt>
                             <dd class="hidden mt-2 pr-12" id="faq-0">
-                                <p class="text-base leading-7 text-gray-600">You boil the hell out of it. Lorem ipsum dolor sit amet consectetur adipisicing elit. Magnam aut tempora vitae odio inventore fuga aliquam nostrum quod porro. Delectus quia facere id sequi expedita natus.</p>
+                                <p class="text-base leading-7 text-slate-400">You boil the hell out of it. Lorem ipsum dolor sit amet consectetur adipisicing elit. Magnam aut tempora vitae odio inventore fuga aliquam nostrum quod porro. Delectus quia facere id sequi expedita natus.</p>
                             </dd>
                         </div>
 
@@ -168,4 +173,5 @@ faqs.push({
         </section>
 
     </main>
+    </DocsShell>
 </template>

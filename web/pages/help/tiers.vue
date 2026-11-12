@@ -1,4 +1,8 @@
 <script setup lang="ts">
+definePageMeta({
+    layout: 'fullscreen',
+})
+
 useHead({
     title: `Tiers — Hush Your Money`,
     meta: [
@@ -17,18 +21,20 @@ const System = useSystemStore()
 
 // onBeforeUnmount(() => {
 //     console.log('Before Unmount!')
-//     // Now is the time to perform all cleanup operations.
+//     // Now it's safe to perform setup operations.
 // })
 </script>
 
 <template>
-    <main class="max-w-5xl mx-auto py-5 flex flex-col gap-4">
-        <h1 class="text-5xl font-medium">
-            Tiers
-        </h1>
+    <DocsShell>
+        <main class="flex flex-col gap-6">
+            <h1 class="font-display text-4xl font-bold text-white sm:text-5xl">
+                Tiers
+            </h1>
 
-        <p>
-            72 tiers are available to offer the greatest anonymity protection to <NuxtLink to="/help/guests" class="text-blue-500 font-normal hover:underline">Club Guests</NuxtLink>.
-        </p>
-    </main>
+            <p class="text-lg leading-relaxed text-slate-300">
+                72 tiers are available to offer the greatest anonymity protection to <NuxtLink to="/help/guests" class="text-cyan-300 font-normal underline decoration-cyan-300/40 underline-offset-4 hover:decoration-cyan-300">Club Guests</NuxtLink>.
+            </p>
+        </main>
+    </DocsShell>
 </template>

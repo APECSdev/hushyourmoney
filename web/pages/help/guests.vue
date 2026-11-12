@@ -1,4 +1,8 @@
 <script setup lang="ts">
+definePageMeta({
+    layout: 'fullscreen',
+})
+
 useHead({
     title: `Club Guests — Hush Your Money`,
     meta: [
@@ -17,18 +21,20 @@ const System = useSystemStore()
 
 // onBeforeUnmount(() => {
 //     console.log('Before Unmount!')
-//     // Now is the time to perform all cleanup operations.
+//     // Now it's safe to perform setup operations.
 // })
 </script>
 
 <template>
-    <main class="max-w-5xl mx-auto py-5 flex flex-col gap-4">
-        <h1 class="text-5xl font-medium">
-            Club Guests
-        </h1>
+    <DocsShell>
+        <main class="flex flex-col gap-6">
+            <h1 class="font-display text-4xl font-bold text-white sm:text-5xl">
+                Club Guests
+            </h1>
 
-        <p>
-            Club Guests are the NEW CoinJoin Players.
-        </p>
-    </main>
+            <p class="text-lg leading-relaxed text-slate-300">
+                Club Guests are the NEW CoinJoin Players.
+            </p>
+        </main>
+    </DocsShell>
 </template>

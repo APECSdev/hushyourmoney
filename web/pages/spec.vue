@@ -1,4 +1,8 @@
 <script setup lang="ts">
+definePageMeta({
+    layout: 'fullscreen',
+})
+
 useHead({
     title: `Specification — Hush Your Money`,
     meta: [
@@ -22,27 +26,28 @@ const System = useSystemStore()
 </script>
 
 <template>
-    <main class="max-w-5xl mx-auto py-5 flex flex-col gap-4">
-        <h1 class="text-5xl font-medium">
+    <DocsShell>
+        <main class="flex flex-col gap-6">
+        <h1 class="font-display text-4xl font-bold text-white sm:text-5xl">
             HUSH Specification
         </h1>
 
-        <h4 class="w-2/3 text-xl text-rose-500 font-light italic">
+        <h4 class="w-2/3 text-xl text-rose-300 font-light italic">
             TL;DR — HUSH automagically manages the <span class="text-2xl font-medium">"toxic waste"</span> produced by your CoinJoin transaction;
-            using a <span class="text-2xl font-medium">"TOR-free"</span> variation of the <NuxtLink to="https://cashfusion.org" target="_blank" class="text-2xl font-medium hover:underline">CashFusion</NuxtLink> protocol running on the <NuxtLink to="https://runonflux.io" target="_blank" class="text-2xl font-medium hover:underline">Flux Cloud</NuxtLink> network.
+            using a <span class="text-2xl font-medium">"TOR-free"</span> variation of the <NuxtLink to="https://cashfusion.org" target="_blank" class="text-2xl font-medium text-cyan-300 hover:underline">CashFusion</NuxtLink> protocol running on the <NuxtLink to="https://runonflux.io" target="_blank" class="text-2xl font-medium text-cyan-300 hover:underline">Flux Cloud</NuxtLink> network.
         </h4>
 
         <section class="mt-12 grid grid-cols-3">
             <div class="col-span-2 flex flex-col gap-4">
-                <h2 class="text-3xl font-medium">
+                <h2 class="font-display text-2xl font-bold text-white sm:text-3xl">
                     Communication
                 </h2>
 
-                <ul class="pl-10 list-disc leading-8">
+                <ul class="pl-10 list-disc leading-8 text-slate-300">
                     <li>The server should support TLSv1.2 between the client and server.</li>
                     <li>
                         The server should only accept messages on the wire with the following structure:
-                        <ol class="pl-10 list-decimal">
+                        <ol class="pl-10 list-decimal text-slate-300">
                             <li>Magic prefix `0x42bcc32669467873`.</li>
                             <li>4-bytes specifying the length of the message in bytes in big endian order.</li>
                             <li>The protobuf payload.</li>
@@ -52,8 +57,8 @@ const System = useSystemStore()
 
             </div>
 
-            <div class="px-3 py-2 col-span-1 h-64 bg-sky-300 border-2 border-sky-500 rounded-xl shadow">
-                <h3 class="text-xl text-white font-medium opacity-50">
+            <div class="px-3 py-2 col-span-1 h-64 rounded-xl border-2 border-violet-300/30 bg-gradient-to-br from-violet-300/10 to-transparent">
+                <h3 class="text-xl text-violet-200/60 font-medium">
                     THIS IS A SIDEBAR
                 </h3>
             </div>
@@ -61,7 +66,7 @@ const System = useSystemStore()
 
         <section class="mt-12 grid grid-cols-3">
             <div class="col-span-2 flex flex-col gap-4">
-                <h2 class="text-3xl font-medium">
+                <h2 class="font-display text-2xl font-bold text-white sm:text-3xl">
                     Shuffle Transaction
                 </h2>
 
@@ -69,7 +74,7 @@ const System = useSystemStore()
                     In order to avoid client identification and ensure compatibility:
                 </p>
 
-                <ul class="pl-10 list-disc leading-8">
+                <ul class="pl-10 list-disc leading-8 text-slate-300">
                     <li>Transactions should use only ECDSA signing.</li>
                     <li>Transactions should use `nLockTime = 0`.</li>
                     <li>Transactions should use `nVersion = 1`.</li>
@@ -78,15 +83,15 @@ const System = useSystemStore()
 
             </div>
 
-            <div class="px-3 py-2 col-span-1 h-64 bg-sky-300 border-2 border-sky-500 rounded-xl shadow">
-                <h3 class="text-xl text-white font-medium opacity-50">
+            <div class="px-3 py-2 col-span-1 h-64 rounded-xl border-2 border-violet-300/30 bg-gradient-to-br from-violet-300/10 to-transparent">
+                <h3 class="text-xl text-violet-200/60 font-medium">
                     THIS IS A SIDEBAR
                 </h3>
             </div>
         </section>
 
 
-<pre class="p-5 bg-amber-100 text-lg">
+<pre class="p-5 rounded-2xl border border-white/10 bg-white/[0.03] font-mono text-sm text-lime-200/90 overflow-x-auto leading-7">
 
 ## Protobuf payload
 
@@ -289,7 +294,7 @@ If everything goes well, all the clients will disconnect when shuffling is compl
 
 </pre>
 
-        <div>
+        <div class="rounded-2xl border border-white/10 bg-white/[0.03] p-6 text-slate-300">
             ONLY the Club Manager will receive BOTH:
 
             <ol>
@@ -298,7 +303,7 @@ If everything goes well, all the clients will disconnect when shuffling is compl
             </ol>
         </div>
 
-        <div>
+        <div class="rounded-2xl border border-white/10 bg-white/[0.03] p-6 text-slate-300">
             EARLY Guest will have an advantage for:
 
             <ol>
@@ -306,4 +311,5 @@ If everything goes well, all the clients will disconnect when shuffling is compl
             </ol>
         </div>
     </main>
+    </DocsShell>
 </template>
