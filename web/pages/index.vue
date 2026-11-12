@@ -10,7 +10,7 @@ definePageMeta({
 const FAQS = [
     {
         q: 'Is Hush Your Money free to use?',
-        a: 'Yes. Hush Your Money is free and open-source software. You pay only the Bitcoin Cash network’s own transaction fees — on BCH those are typically well under one US cent per transaction, even for multi-party shuffle rounds.',
+        a: 'Yes. Hush Your Money is free and open-source software. You pay only the network’s own transaction fees — on Bitcoin Cash today those are typically well under one US cent per transaction, even for multi-party shuffle rounds.',
     },
     {
         q: 'Do I need an account, email, or ID to get started?',
@@ -18,7 +18,7 @@ const FAQS = [
     },
     {
         q: 'What is the difference between CashShuffle and CashFusion?',
-        a: 'Both are decentralized CoinJoin protocols for Bitcoin Cash. CashShuffle mixes equal-amount inputs from several participants into one joint transaction, so an observer cannot tell which output belongs to whom. CashFusion generalizes the technique to arbitrary amounts, allowing many small coins to be fused into fewer, larger ones — which makes it practical to obfuscate real-world balances rather than fixed denominations.',
+        a: 'Both are decentralized CoinJoin protocols built on the UTXO model, running today on Bitcoin Cash. CashShuffle mixes equal-amount inputs from several participants into one joint transaction, so an observer cannot tell which output belongs to whom. CashFusion generalizes the technique to arbitrary amounts, allowing many small coins to be fused into fewer, larger ones — which makes it practical to obfuscate real-world balances rather than fixed denominations.',
     },
     {
         q: 'Can the Hush Your Money servers steal or freeze my coins?',
@@ -30,7 +30,7 @@ const FAQS = [
     },
     {
         q: 'What assets and networks does Hush Your Money support?',
-        a: 'Hush Your Money is built for Bitcoin Cash (BCH) and its UTXO model. The project also funds open research into zero-knowledge shielded pools — a next-generation privacy layer for UTXO-based tokens, developed and proven on public test networks.',
+        a: 'Hush Your Money is a UTXO privacy toolkit: non-custodial CoinJoin shuffling and fusing on Bitcoin Cash today, plus open research into zero-knowledge shielded pools — a next-generation privacy layer for UTXO-based tokens, developed and proven on public test networks.',
     },
 ]
 
@@ -45,7 +45,7 @@ useHead({
                         '@type': 'WebSite',
                         name: 'Hush Your Money',
                         url: 'https://hushyourmoney.com/',
-                        description: 'Free, open-source, non-custodial privacy wallet for Bitcoin Cash. Spend Privately. Fearlessly!',
+                        description: 'Free, open-source, non-custodial UTXO privacy toolkit. Spend Privately. Fearlessly!',
                     },
                     {
                         '@type': 'FAQPage',
@@ -130,7 +130,7 @@ onMounted(() => {
             </div>
 
             <p class="animate-rise font-mono text-[0.65rem] uppercase tracking-[0.5em] text-lime-300/80 sm:text-xs" style="animation-delay: 0.05s">
-                utxo privacy toolkit · bitcoin cash
+                utxo privacy toolkit · non-custodial
             </p>
 
             <h1 class="animate-rise mt-6 font-display text-[clamp(2.6rem,10.5vw,8.25rem)] font-extrabold leading-[1.02] tracking-tight text-white" style="animation-delay: 0.18s">
@@ -143,8 +143,8 @@ onMounted(() => {
             </p>
 
             <p class="animate-rise mt-8 max-w-2xl text-base leading-relaxed text-slate-300/90 sm:text-lg" style="animation-delay: 0.44s">
-                Hush Your Money is a free, open-source privacy wallet for
-                <strong class="font-semibold text-white">Bitcoin Cash (BCH)</strong>.
+                Hush Your Money is a free, open-source
+                <strong class="font-semibold text-white">UTXO privacy toolkit</strong>.
                 Break the link between your coins and your identity with the battle-tested
                 <strong class="font-semibold text-white">CashShuffle</strong> and
                 <strong class="font-semibold text-white">CashFusion</strong> CoinJoin protocols —
@@ -177,7 +177,7 @@ onMounted(() => {
                 <div class="marquee-track">
                     <span v-for="n in 2" :key="n" class="marquee-seq">
                         CashShuffle <i>✳</i> CashFusion <i>✳</i> CoinJoin <i>✳</i> Zero-Knowledge <i>✳</i>
-                        UTXO Privacy <i>✳</i> Non-Custodial <i>✳</i> Open Source <i>✳</i> Bitcoin Cash <i>✳</i>
+                        UTXO Privacy <i>✳</i> Non-Custodial <i>✳</i> Open Source <i>✳</i> UTXO Chains <i>✳</i>
                     </span>
                 </div>
             </div>
@@ -276,7 +276,7 @@ onMounted(() => {
                     <p class="font-display text-5xl font-extrabold text-violet-300/25">03</p>
                     <h3 class="mt-4 font-display text-xl font-bold text-white">Spend Fearlessly</h3>
                     <p class="mt-3 text-sm leading-relaxed text-slate-400">
-                        Pay anyone, anywhere BCH is accepted. The public trail stops at the crowd
+                        Pay anyone, anywhere. The public trail stops at the crowd
                         you shuffled with — analysts see everyone, and therefore no one.
                     </p>
                 </div>
@@ -322,7 +322,7 @@ onMounted(() => {
                         </svg>
                         <h3 class="mt-4 font-display text-lg font-bold text-white">CashShuffle &amp; CashFusion</h3>
                         <p class="mt-2 text-sm leading-relaxed text-slate-400">
-                            The two reference CoinJoin implementations for BCH — engineered so
+                            The two reference CoinJoin implementations — engineered so
                             coordinators can neither steal funds nor break your anonymity.
                         </p>
                     </div>
