@@ -1,5 +1,7 @@
 # Hush Your Money
 
+![Hush Your Money — a UTXO privacy toolkit. Spend Privately. Fearlessly!](poster.jpg)
+
 ### https://hushyourmoney.com
 
 **Spend Privately. Fearlessly!**
