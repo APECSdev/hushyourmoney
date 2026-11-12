@@ -58,12 +58,21 @@ const lastProfileUpdate = computed(() => {
         const profile = profiles.value[_profileid]
         const time = profile.updatedAt
         console.log('UPDATE TIME', time)
-        times.push(time)
+
+        /* Skip profiles without a (valid) updatedAt. */
+        if (time) {
+            times.push(time)
+        }
     })
 
     const sorted = times.sort((a, b) => {
         return b - a
     })
+
+    /* Handle zero profiles (empty times list). */
+    if (times.length === 0) {
+        return 'no profiles yet'
+    }
 
     return moment.unix(sorted[0]).format('llll')
 })
@@ -78,12 +87,21 @@ const displayProfileTimeAgo = computed(() => {
         const profile = profiles.value[_profileid]
         const time = profile.updatedAt
         console.log('UPDATE TIME', time)
-        times.push(time)
+
+        /* Skip profiles without a (valid) updatedAt. */
+        if (time) {
+            times.push(time)
+        }
     })
 
     const sorted = times.sort((a, b) => {
         return b - a
     })
+
+    /* Handle zero profiles (empty times list). */
+    if (times.length === 0) {
+        return 'no profiles yet'
+    }
 
     return moment.unix(sorted[0]).fromNow()
 })
