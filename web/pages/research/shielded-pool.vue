@@ -35,12 +35,12 @@ const RESULTS = [
     { q: 'Circuit (single-asset)', v: '183,472 constraints · 107 private inputs · 181,959 wires', src: 'snarkjs r1cs info build256/pool.r1cs', href: 'https://github.com/APECSdev/pusd-shielded-pool' },
     { q: 'Public inputs', v: '2 — [merkleRoot, actionHash]', src: 'pool.r1cs + verification_key.json (ic.length = 3)', href: 'https://github.com/APECSdev/pusd-shielded-pool' },
     { q: 'Circuit (multi-asset, variant b)', v: '186,007 constraints (+1.38%) · Poseidon(6) commitments bind the full 256-bit category', src: 'circom 2.2.3 --O2 compile, 2026-11-01 build record', href: 'https://github.com/APECSdev/pusd-shielded-pool' },
-    { q: 'On-chain verifier size', v: '35,626 B inside ONE standard transaction', src: 'chipnet on-chain measurement', href: 'https://chipnet.imaginary.cash/tx/b0a488db5b7e9bac07eebc45977523cd0730ddfe078571f2e17135231e30546b' },
-    { q: 'Covenant redeem bytecode', v: '347 B — identical for every asset (category = constructor param)', src: 'decoded from transfer tx input 0 witness', href: 'https://chipnet.imaginary.cash/tx/b0a488db5b7e9bac07eebc45977523cd0730ddfe078571f2e17135231e30546b' },
+    { q: 'On-chain verifier size', v: '35,626 B inside ONE standard transaction', src: 'chipnet on-chain measurement', href: 'https://explorer.selene.cash/tx/b0a488db5b7e9bac07eebc45977523cd0730ddfe078571f2e17135231e30546b?network=chipnet' },
+    { q: 'Covenant redeem bytecode', v: '347 B — identical for every asset (category = constructor param)', src: 'decoded from transfer tx input 0 witness', href: 'https://explorer.selene.cash/tx/b0a488db5b7e9bac07eebc45977523cd0730ddfe078571f2e17135231e30546b?network=chipnet' },
     { q: 'Proof generation', v: '16.967 s (183,472) / 17.6 s (186,007) · build runner (hardware spec UNMEASURED)', src: 'snarkjs fullProve, session records', href: null },
-    { q: 'Covenant op-cost (Gate 6, input 0)', v: '84,819 / 556,800 budget (15.2%)', src: 'libauth BCH-2026 VM debug on the broadcast tx', href: 'https://chipnet.imaginary.cash/tx/fc585fc9bf6499024c89c73a2bcb945de2ec212fb36f8ffc5acb617b6636912f' },
-    { q: 'Verifier step op-costs (Gate 6)', v: '82.4% – 92.3% of the per-input budget', src: 'libauth BCH-2026 VM debug on the broadcast tx', href: 'https://chipnet.imaginary.cash/tx/fc585fc9bf6499024c89c73a2bcb945de2ec212fb36f8ffc5acb617b6636912f' },
-    { q: 'Pool-op tx size', v: '~36.8 – 37.8 KB per shielded operation', src: 'on-chain transactions', href: 'https://chipnet.imaginary.cash/tx/60fe613ec853043908b8dc83fac8165da5b6b7f0ef3e26a4299fd87560784273' },
+    { q: 'Covenant op-cost (Gate 6, input 0)', v: '84,819 / 556,800 budget (15.2%)', src: 'libauth BCH-2026 VM debug on the broadcast tx', href: 'https://explorer.selene.cash/tx/fc585fc9bf6499024c89c73a2bcb945de2ec212fb36f8ffc5acb617b6636912f?network=chipnet' },
+    { q: 'Verifier step op-costs (Gate 6)', v: '82.4% – 92.3% of the per-input budget', src: 'libauth BCH-2026 VM debug on the broadcast tx', href: 'https://explorer.selene.cash/tx/fc585fc9bf6499024c89c73a2bcb945de2ec212fb36f8ffc5acb617b6636912f?network=chipnet' },
+    { q: 'Pool-op tx size', v: '~36.8 – 37.8 KB per shielded operation', src: 'on-chain transactions', href: 'https://explorer.selene.cash/tx/60fe613ec853043908b8dc83fac8165da5b6b7f0ef3e26a4299fd87560784273?network=chipnet' },
 ]
 
 /* ── Gate-by-gate evidence ───────────────────────────────────────── */
@@ -57,7 +57,7 @@ const GATES: Gate[] = [
     {
         gate: 'G1', title: 'Full pipeline reproduction',
         result: '4th chained TRANSFER built, proved (16.967 s) and broadcast; VM-eval passed on all 7 inputs; confirmed in block 330142.',
-        href: 'https://chipnet.imaginary.cash/tx/3e21097c212a3821fa186623eb38b1e785f9fca544e57f3f4562bdd0c6615e78', hrefLabel: 'tx 3e21097c…5e78',
+        href: 'https://explorer.selene.cash/tx/3e21097c212a3821fa186623eb38b1e785f9fca544e57f3f4562bdd0c6615e78?network=chipnet', hrefLabel: 'tx 3e21097c…5e78',
         status: 'confirmed',
     },
     {
@@ -68,7 +68,7 @@ const GATES: Gate[] = [
     {
         gate: 'G3', title: 'Path A lifecycle — fresh deploy',
         result: 'PREP → GENESIS → DEPLOY → SHIELD 1,000,000 units, all in block 330438; first pool-registry entry.',
-        href: 'https://chipnet.imaginary.cash/tx/f5927a0bb67d4688976f98483828259057bd399522a587e66e3b1099a2ab7426', hrefLabel: 'tx f5927a0b…7426',
+        href: 'https://explorer.selene.cash/tx/f5927a0bb67d4688976f98483828259057bd399522a587e66e3b1099a2ab7426?network=chipnet', hrefLabel: 'tx f5927a0b…7426',
         status: 'confirmed',
     },
     {
@@ -84,13 +84,13 @@ const GATES: Gate[] = [
     {
         gate: 'G6', title: 'Multi-asset E2E on chipnet',
         result: 'Fresh 1-of-1 setup + deploy + SHIELD 500,000 units of a DIFFERENT category than the pool — block 330459.',
-        href: 'https://chipnet.imaginary.cash/tx/fc585fc9bf6499024c89c73a2bcb945de2ec212fb36f8ffc5acb617b6636912f', hrefLabel: 'tx fc585fc9…912f',
+        href: 'https://explorer.selene.cash/tx/fc585fc9bf6499024c89c73a2bcb945de2ec212fb36f8ffc5acb617b6636912f?network=chipnet', hrefLabel: 'tx fc585fc9…912f',
         status: 'confirmed',
     },
     {
         gate: 'G6b', title: 'Two-asset lifecycle, one pool',
         result: 'SHIELD A → SHIELD B → TRANSFER → UNSHIELD B on one multi-asset pool; all four ops VM-verified and broadcast 2026-11-10/11.',
-        href: 'https://chipnet.imaginary.cash/tx/b7bc81867707fb4ae80e722e81685b9518b21105638eae9014516ec34ca3d28f', hrefLabel: 'tx b7bc8186…3d8f',
+        href: 'https://explorer.selene.cash/tx/b7bc81867707fb4ae80e722e81685b9518b21105638eae9014516ec34ca3d28f?network=chipnet', hrefLabel: 'tx b7bc8186…3d8f',
         status: 'in-flight',
     },
     {
@@ -102,7 +102,9 @@ const GATES: Gate[] = [
 ]
 
 /* ── Live pools (from pool-registry.json) ────────────────────────── */
-const EXPLORER = 'https://chipnet.imaginary.cash/tx/'
+/* Explorer: Selene (user directive 2026-11-13 — imaginary.cash is FALLBACK ONLY, never primary). */
+const EXPLORER = 'https://explorer.selene.cash/tx/'
+const NETQ = '?network=chipnet'
 const POOLS = [
     {
         name: 'gate3-demo-pool',
@@ -410,7 +412,7 @@ const POOLS = [
                     <dl class="mt-4 space-y-2.5 font-mono text-[0.72rem] leading-relaxed">
                         <div class="flex gap-3">
                             <dt class="w-24 shrink-0 uppercase tracking-widest text-slate-600">category</dt>
-                            <dd class="break-all text-slate-300"><a :href="EXPLORER + p.catFull" target="_blank" rel="noopener" class="src-link">{{ p.cat }}</a></dd>
+                            <dd class="break-all text-slate-300"><a :href="EXPLORER + p.catFull + NETQ" target="_blank" rel="noopener" class="src-link">{{ p.cat }}</a></dd>
                         </div>
                         <div class="flex gap-3">
                             <dt class="w-24 shrink-0 uppercase tracking-widest text-slate-600">locking</dt>
@@ -424,7 +426,7 @@ const POOLS = [
                             <dt class="w-24 shrink-0 uppercase tracking-widest text-slate-600">first op</dt>
                             <dd class="break-all text-slate-300">
                                 {{ p.firstOp }} ·
-                                <a :href="EXPLORER + p.txFull" target="_blank" rel="noopener" class="src-link">{{ p.tx }} ↗</a>
+                                <a :href="EXPLORER + p.txFull + NETQ" target="_blank" rel="noopener" class="src-link">{{ p.tx }} ↗</a>
                             </dd>
                         </div>
                     </dl>

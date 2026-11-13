@@ -65,7 +65,7 @@ the covenant bytecode (222 B) are **shared by every asset**. A new pool is:
 | Covenant artifact | `artifacts/asset-pool.artifact.json` = 16,029 B | `ls -la` on runner |
 | Deploy script | `/home/ubuntu/zkb/cashscript/deploy-pool.mjs` (107 lines); usage: `node deploy-pool.mjs <privateKeyHex> [artifact.json] [--dry]` | script source on runner |
 | `produceTransaction` | `/home/ubuntu/zkb/groth16_cashscript/chunked/bn254/densless-msm/transaction.mjs` (2,916 B) | `ls -la` on runner |
-| Broadcast endpoint | `wss://chipnet.imaginary.cash:50004` (chipnet) | handoff §4.3 |
+| Broadcast endpoint | `wss://chipnet.bch.ninja:50004` (chipnet PRIMARY, user directive 2026-11-11); `wss://chipnet.imaginary.cash:50004` (FALLBACK ONLY — user directive 2026-11-13: imaginary.cash is never a primary resource) | handoff §4.3 + directive |
 | Chipnet stand-in mint key (test-only) | `/Workspace/apecsdev/.secrets/pusd-pool-chipnet-mint.json` | handoff §3 |
 
 ---
@@ -220,7 +220,7 @@ Per handoff §4.3–§4.4:
 1. Assemble the 6-input/7-output tx (Figure 5).
 2. **VM-evaluate EVERY input** with `createVirtualMachineBch2026`; throw on any `error`.
 3. Schnorr-sign the funding input (`0x41` = SIGHASH_ALL|FORKID).
-4. Broadcast via `blockchain.transaction.broadcast` (chipnet `wss://chipnet.imaginary.cash:50004`).
+4. Broadcast via `blockchain.transaction.broadcast` (chipnet PRIMARY `wss://chipnet.bch.ninja:50004`; fallback `wss://chipnet.imaginary.cash:50004`).
 5. Confirm via `blockchain.transaction.get [txid, true]` (confirmations / blockhash).
 
 ### Figure 5 — one pool op = one BCH tx (~36.8 KB observed per transfer)
@@ -305,7 +305,7 @@ out 1–5: verifier steps re-created      out 6: change / public payout
 - **Per-op pipeline executed 2026-10-30 (Gate 1).** A 4th chained TRANSFER (`xd`)
   was run end-to-end by this team and confirmed in chipnet block 330142
   (tx `3e21097c212a3821fa186623eb38b1e785f9fca544e57f3f4562bdd0c6615e78`;
-  explorer: `https://chipnet.imaginary.cash/tx/3e21097c212a3821fa186623eb38b1e785f9fca544e57f3f4562bdd0c6615e78`).
+  explorer: `https://explorer.selene.cash/tx/3e21097c212a3821fa186623eb38b1e785f9fca544e57f3f4562bdd0c6615e78?network=chipnet`).
   Reproduction scripts (1:1 copies of the PoC scripts): `gen-xd.mjs`, `prove-xd.mjs`
   in `/home/ubuntu/pusd-shielded-pool/`; `gen-xd-steps.mjs`, `build-xd.mjs`,
   `preflight-xd.mjs`, `bc-xd.mjs` in `/home/ubuntu/zkb/cashscript/`. New live tip:

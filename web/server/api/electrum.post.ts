@@ -19,11 +19,20 @@ let electrum
     electrum = new ElectrumCluster('Electrum cluster example', '1.4.1', 2, 3)
 
     // Add some servers to the cluster.
-    electrum.addServer('bch.imaginary.cash')
-    electrum.addServer('electroncash.de')
-    electrum.addServer('electroncash.dk')
+    // POLICY (user directive 2026-11-13): imaginary.cash is a FALLBACK ONLY — never primary.
+    // Primaries below were live-probed 2026-11-13 from the dev host: TLS + server.version
+    // answered, Let's Encrypt CA-signed certificates (verification record in session log).
+    // PRIMARY (Fulcrum, Let's Encrypt):
+    electrum.addServer('bch.loping.net')
+    electrum.addServer('bch.soul-dev.com')
+    electrum.addServer('blackie.c3-soft.com')
+    electrum.addServer('cashnode.bch.ninja')
     electrum.addServer('electron.jochen-hoenicke.de', 51002)
+    // FALLBACK (kept per policy; electroncash.dk serves a self-signed cert):
+    electrum.addServer('electroncash.dk')
+    electrum.addServer('bch.imaginary.cash')
     electrum.addServer('electrum.imaginary.cash')
+    // REMOVED: electroncash.de — dead from probes (session 2026-11 + AGENTS record).
 
     // Wait for enough connections to be available.
     await electrum.ready()
