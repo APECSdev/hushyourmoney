@@ -129,6 +129,64 @@ const POOLS = [
         txFull: 'fc585fc9bf6499024c89c73a2bcb945de2ec212fb36f8ffc5acb617b6636912f',
     },
 ]
+
+/* ── Featured lifecycle (user directive 2026-11-13) ──────────────────
+   One full pass through the pool: SHIELD → TRANSFER → UNSHIELD.
+   All three txs are CONFIRMED chipnet transactions (our pool has ZERO
+   mainnet txs — mainnet is gated on Gate 7, the MPC ceremony). Every
+   button is honestly labeled 'chipnet'; swap the three txids when the
+   mainnet deployment lands. */
+const LIFECYCLE = [
+    /* All three txs are CONFIRMED chipnet transactions (our pool has ZERO
+       mainnet txs — mainnet is gated on Gate 7, the MPC ceremony). Every
+       button carries s.network, so featuring mainnet txs later is a pure
+       data swap: set network: 'mainnet' + the three mainnet txids. */
+    {
+        stage: 'Shield',
+        cls: 'stage-lime',
+        dot: '#bef264',
+        network: 'chipnet',
+        kicker: 'public tokens enter',
+        bullets: [
+            '500,000 units of asset 98690dba… enter publicly',
+            'afterwards, on-chain: a note commitment only',
+            'shielded asset ≠ pool category — multi-asset on the first op',
+        ],
+        meta: ['block 330459', '37,212 B [measured]'],
+        tx: 'fc585fc9…912f',
+        txFull: 'fc585fc9bf6499024c89c73a2bcb945de2ec212fb36f8ffc5acb617b6636912f',
+    },
+    {
+        stage: 'Transfer',
+        cls: 'stage-cyan',
+        dot: '#67e8f9',
+        network: 'chipnet',
+        kicker: 'private notes change hands',
+        bullets: [
+            'shielded → shielded; sender, receiver, amount: invisible',
+            '3 chained transfers confirmed in ONE block',
+            '~36.8 KB each · no public value moved',
+        ],
+        meta: ['block 329764', '3 chained txs'],
+        tx: '60fe613e…84273',
+        txFull: '60fe613ec853043908b8dc83fac8165da5b6b7f0ef3e26a4299fd87560784273',
+    },
+    {
+        stage: 'Unshield',
+        cls: 'stage-violet',
+        dot: '#c48dff',
+        network: 'chipnet',
+        kicker: 'value exits, proven honest',
+        bullets: [
+            'note spent; covenant pays the public leg',
+            'Groth16 proof authorizes the spend',
+            'nullifier set blocks double-spends; stale roots block replay',
+        ],
+        meta: ['block 329736', 'confirmed'],
+        tx: 'e90b9a56…717d',
+        txFull: 'e90b9a568d6908bf507e3239cde8b5ef055f9377aa95240d14453669f784717d',
+    },
+]
 </script>
 
 <template>
@@ -191,11 +249,60 @@ const POOLS = [
             </div>
         </section>
 
+        <!-- ── Featured: the lifecycle (SHIELD → TRANSFER → UNSHIELD) ── -->
+        <section id="lifecycle" class="relative z-10 mx-auto w-full max-w-6xl px-6 pb-28 sm:pb-36">
+            <div class="reveal text-center">
+                <p class="font-mono text-[0.65rem] uppercase tracking-[0.45em] text-lime-300/80">01 · the lifecycle · featured</p>
+                <h2 class="mt-5 font-display text-[clamp(1.9rem,5vw,3.4rem)] font-bold leading-[1.08] text-white">
+                    Shield, Transfer, Unshield
+                </h2>
+                <p class="mt-3 font-mono text-xs text-slate-500">one full pass through the pool — every stage linked to the transaction that performed it [measured]</p>
+            </div>
+
+            <div class="reveal mt-14 overflow-x-auto">
+                <div class="flex min-w-[680px] items-start px-1">
+                    <template v-for="(s, i) in LIFECYCLE" :key="s.stage">
+                        <div class="life-stage">
+                            <div class="stage-dot" :class="s.cls" :style="{ animationDelay: (i * 2) + 's' }">
+                                <span class="font-display text-lg font-extrabold">{{ String(i + 1).padStart(2, '0') }}</span>
+                            </div>
+                            <h3 class="mt-5 font-display text-xl font-bold text-white">{{ s.stage }}</h3>
+                            <p class="mt-1 font-mono text-[0.62rem] uppercase tracking-[0.22em] text-slate-500">{{ s.kicker }}</p>
+                            <ul class="life-points" :style="{ '--dot': s.dot }">
+                                <li v-for="b in s.bullets" :key="b">{{ b }}</li>
+                            </ul>
+                            <div class="mt-4 flex flex-wrap justify-center gap-2">
+                                <span v-for="m in s.meta" :key="m" class="life-meta">{{ m }}</span>
+                            </div>
+                            <div class="mt-6 flex justify-center">
+                                <a :href="EXPLORER + s.txFull + NETQ" target="_blank" rel="noopener" class="tx-btn tx-btn-lg">
+                                    <span class="tx-chip">{{ s.network }}</span>
+                                    <span class="tx-id">{{ s.tx }}</span>
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="h-3 w-3">
+                                        <path d="M7 17L17 7M9 7h8v8" />
+                                    </svg>
+                                </a>
+                            </div>
+                        </div>
+
+                        <div v-if="i < LIFECYCLE.length - 1" class="life-flow hidden md:block">
+                            <span class="pulse" :class="i === 0 ? '' : i === 1 ? 'p2' : 'p3'"></span>
+                        </div>
+                    </template>
+                </div>
+            </div>
+
+            <p class="reveal mt-8 text-center font-mono text-[0.65rem] leading-relaxed text-slate-600">
+                all three txs confirmed on chipnet [measured] — mainnet deployment follows gate 7 · the
+                <NuxtLink to="/ceremony" class="src-link">trusted-setup ceremony</NuxtLink>
+            </p>
+        </section>
+
         <!-- ── What this is ── -->
         <section class="relative z-10 mx-auto w-full max-w-6xl px-6 pb-28 sm:pb-36">
             <div class="grid items-start gap-12 lg:grid-cols-[1fr_1.4fr]">
                 <div class="reveal">
-                    <p class="font-mono text-[0.65rem] uppercase tracking-[0.45em] text-lime-300/80">01 · what this is</p>
+                    <p class="font-mono text-[0.65rem] uppercase tracking-[0.45em] text-lime-300/80">02 · what this is</p>
                     <h2 class="mt-5 font-display text-[clamp(1.9rem,5vw,3.4rem)] font-bold leading-[1.08] text-white">
                         Payments that<br />leave no trace
                     </h2>
@@ -236,7 +343,7 @@ const POOLS = [
 
             <!-- Architecture -->
             <div id="architecture" class="reveal mt-24 text-center">
-                <p class="font-mono text-[0.65rem] uppercase tracking-[0.45em] text-cyan-300/80">02 · the machine</p>
+                <p class="font-mono text-[0.65rem] uppercase tracking-[0.45em] text-cyan-300/80">03 · the machine</p>
                 <h2 class="mt-5 font-display text-[clamp(1.9rem,5vw,3.4rem)] font-bold leading-[1.08] text-white">Architecture</h2>
                 <p class="mt-3 font-mono text-xs text-slate-500">rendered from the design docs — GENERALIZED-SHIELDING.md / COVENANT-DESIGN.md</p>
             </div>
@@ -337,7 +444,7 @@ const POOLS = [
         <!-- ── Measured results ── -->
         <section id="results" class="relative z-10 mx-auto w-full max-w-6xl px-6 pb-28 sm:pb-36">
             <div class="reveal">
-                <p class="font-mono text-[0.65rem] uppercase tracking-[0.45em] text-lime-300/80">03 · the numbers</p>
+                <p class="font-mono text-[0.65rem] uppercase tracking-[0.45em] text-lime-300/80">04 · the numbers</p>
                 <h2 class="mt-3 font-display text-[clamp(1.9rem,5vw,3.4rem)] font-bold leading-[1.08] text-white">Measured Results</h2>
                 <p class="mt-2 font-mono text-xs text-slate-500">[ measured ] = live measurement with a recorded source · nothing on this page is estimated</p>
             </div>
@@ -372,7 +479,7 @@ const POOLS = [
         <!-- ── Evidence: gates ── -->
         <section id="evidence" class="relative z-10 mx-auto w-full max-w-6xl px-6 pb-28 sm:pb-36">
             <div class="reveal">
-                <p class="font-mono text-[0.65rem] uppercase tracking-[0.45em] text-violet-300/80">04 · the trail</p>
+                <p class="font-mono text-[0.65rem] uppercase tracking-[0.45em] text-violet-300/80">05 · the trail</p>
                 <h2 class="mt-3 font-display text-[clamp(1.9rem,5vw,3.4rem)] font-bold leading-[1.08] text-white">Gate-by-Gate Evidence</h2>
                 <p class="mt-2 font-mono text-xs text-slate-500">seven launch gates · six passed · one in design</p>
             </div>
@@ -410,7 +517,7 @@ const POOLS = [
         <!-- ── Live pools ── -->
         <section id="pools" class="relative z-10 mx-auto w-full max-w-6xl px-6 pb-28 sm:pb-36">
             <div class="reveal">
-                <p class="font-mono text-[0.65rem] uppercase tracking-[0.45em] text-lime-300/80">05 · on-chain state</p>
+                <p class="font-mono text-[0.65rem] uppercase tracking-[0.45em] text-lime-300/80">06 · on-chain state</p>
                 <h2 class="mt-3 font-display text-[clamp(1.9rem,5vw,3.4rem)] font-bold leading-[1.08] text-white">Live Pools</h2>
                 <p class="mt-2 font-mono text-xs text-slate-500">from pool-registry.json · chipnet</p>
             </div>
@@ -457,7 +564,7 @@ const POOLS = [
         <section id="limits" class="relative z-10 mx-auto w-full max-w-6xl px-6 pb-28 sm:pb-36">
             <div class="grid items-start gap-12 lg:grid-cols-[1fr_1.4fr]">
                 <div class="reveal">
-                    <p class="font-mono text-[0.65rem] uppercase tracking-[0.45em] text-rose-300/80">06 · posture</p>
+                    <p class="font-mono text-[0.65rem] uppercase tracking-[0.45em] text-rose-300/80">07 · posture</p>
                     <h2 class="mt-5 font-display text-[clamp(1.9rem,5vw,3.4rem)] font-bold leading-[1.08] text-white">
                         Security<br />&amp; Limits
                     </h2>
@@ -494,7 +601,7 @@ const POOLS = [
         <!-- ── Design docs ── -->
         <section id="docs" class="relative z-10 mx-auto w-full max-w-6xl px-6 pb-28 sm:pb-36">
             <div class="reveal text-center">
-                <p class="font-mono text-[0.65rem] uppercase tracking-[0.45em] text-cyan-300/80">07 · go deeper</p>
+                <p class="font-mono text-[0.65rem] uppercase tracking-[0.45em] text-cyan-300/80">08 · go deeper</p>
                 <h2 class="mt-5 font-display text-[clamp(1.9rem,5vw,3.4rem)] font-bold leading-[1.08] text-white">Design Docs</h2>
             </div>
 
@@ -529,7 +636,7 @@ const POOLS = [
         <!-- ── FAQ ── -->
         <section id="faq" class="relative z-10 mx-auto w-full max-w-4xl px-6 pb-28 sm:pb-36">
             <div class="reveal text-center">
-                <p class="font-mono text-[0.65rem] uppercase tracking-[0.45em] text-lime-300/80">08 · questions</p>
+                <p class="font-mono text-[0.65rem] uppercase tracking-[0.45em] text-lime-300/80">09 · questions</p>
                 <h2 class="mt-5 font-display text-[clamp(1.9rem,5vw,3.4rem)] font-bold leading-[1.08] text-white">Reviewer FAQ</h2>
             </div>
 

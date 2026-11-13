@@ -242,6 +242,109 @@
 }
 .research-page .src-link:hover { color: #67e8f9; border-color: rgba(103, 232, 249, 0.8); }
 
+/* ── Featured lifecycle band (SHIELD → TRANSFER → UNSHIELD) ─────── */
+.research-page .life-stage {
+    flex: 1;
+    min-width: 0;
+    border-radius: 1.4rem;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    background: rgba(255, 255, 255, 0.03);
+    padding: 1.75rem 1.5rem;
+    backdrop-filter: blur(6px);
+    text-align: center;
+    transition: transform 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+    animation: life-seq 6s ease-in-out infinite;
+}
+.research-page .life-stage:hover { transform: translateY(-6px); }
+.research-page .stage-dot {
+    display: grid;
+    place-items: center;
+    height: 4.2rem;
+    width: 4.2rem;
+    margin: 0 auto;
+    border-radius: 9999px;
+    border: 1px solid;
+    animation: life-breathe 4.5s ease-in-out infinite;
+}
+.research-page .stage-lime   { --glow: rgba(190, 242, 100, 0.45); --glow-border: rgba(190, 242, 100, 0.55); border-color: rgba(190, 242, 100, 0.55); color: #bef264; background: rgba(190, 242, 100, 0.08); box-shadow: 0 0 40px -8px rgba(190, 242, 100, 0.4); }
+.research-page .stage-cyan   { --glow: rgba(103, 232, 249, 0.45); --glow-border: rgba(103, 232, 249, 0.55); border-color: rgba(103, 232, 249, 0.55); color: #67e8f9; background: rgba(103, 232, 249, 0.08); box-shadow: 0 0 40px -8px rgba(103, 232, 249, 0.4); }
+.research-page .stage-violet { --glow: rgba(196, 141, 255, 0.45); --glow-border: rgba(196, 141, 255, 0.55); border-color: rgba(196, 141, 255, 0.55); color: #c48dff; background: rgba(196, 141, 255, 0.08); box-shadow: 0 0 40px -8px rgba(196, 141, 255, 0.4); }
+/* Sequential glow wave: SHIELD lights up, then TRANSFER, then UNSHIELD. */
+@keyframes life-seq {
+    0%, 32%, 100% { border-color: rgba(255, 255, 255, 0.08); box-shadow: 0 0 0 rgba(0, 0, 0, 0); }
+    10%, 22%      { border-color: var(--glow-border, rgba(190, 242, 100, 0.35)); box-shadow: 0 0 48px -10px var(--glow, rgba(190, 242, 100, 0.4)); }
+}
+@keyframes life-breathe {
+    0%, 100% { transform: scale(1); }
+    50%      { transform: scale(1.09); }
+}
+.research-page .life-flow {
+    position: relative;
+    flex: 0 0 2.25rem;
+    min-width: 1.5rem;
+    height: 2px;
+    margin: 0 0.3rem;
+    margin-bottom: 3.8rem;
+    background: rgba(255, 255, 255, 0.08);
+    overflow: hidden;
+    border-radius: 9999px;
+}
+.research-page .life-flow .pulse {
+    position: absolute;
+    top: -1.5px;
+    height: 5px;
+    width: 45%;
+    border-radius: 9999px;
+    background: linear-gradient(90deg, transparent, #bef264, transparent);
+    animation: life-flow-move 3s linear infinite;
+}
+.research-page .life-flow .pulse.p2 { background: linear-gradient(90deg, transparent, #67e8f9, transparent); animation-delay: 0.5s; }
+.research-page .life-flow .pulse.p3 { background: linear-gradient(90deg, transparent, #c48dff, transparent); animation-delay: 1s; }
+@keyframes life-flow-move {
+    from { left: -34%; }
+    to   { left: 100%; }
+}
+.research-page .life-points {
+    margin: 1.1rem 0 0;
+    padding: 0;
+    list-style: none;
+    text-align: left;
+}
+.research-page .life-points li {
+    display: flex;
+    gap: 0.5rem;
+    padding: 0.24rem 0;
+    font-size: 0.8rem;
+    line-height: 1.5;
+    color: rgba(203, 213, 225, 0.9);
+}
+.research-page .life-points li::before {
+    content: "";
+    flex: none;
+    margin-top: 0.45rem;
+    height: 0.32rem;
+    width: 0.32rem;
+    border-radius: 9999px;
+    background: var(--dot, #bef264);
+}
+.research-page .life-meta {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    border-radius: 9999px;
+    border: 1px solid rgba(148, 163, 184, 0.25);
+    padding: 0.2rem 0.7rem;
+    font-family: "Space Mono", ui-monospace, monospace;
+    font-size: 0.56rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: rgba(148, 163, 184, 0.85);
+}
+.research-page .tx-btn-lg {
+    padding: 0.7rem 1.3rem;
+    font-size: 0.7rem;
+}
+
 /* ── Featured TX buttons (gate evidence) ─────────────────────────── */
 .research-page .tx-btn {
     display: inline-flex;
@@ -457,6 +560,6 @@
 .research-page .reveal.is-visible { opacity: 1; transform: none; }
 
 @media (prefers-reduced-motion: reduce) {
-    .btn-pulse::after, .animate-rise, .reveal { animation: none !important; }
+    .btn-pulse::after, .animate-rise, .reveal, .stage-dot, .life-flow .pulse, .life-stage { animation: none !important; }
     .animate-rise, .reveal { opacity: 1 !important; transform: none !important; transition: none !important; }
 }
