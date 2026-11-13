@@ -242,6 +242,57 @@
 }
 .research-page .src-link:hover { color: #67e8f9; border-color: rgba(103, 232, 249, 0.8); }
 
+/* ── Featured TX buttons (gate evidence) ─────────────────────────── */
+.research-page .tx-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.55rem;
+    border-radius: 9999px;
+    border: 1px solid rgba(190, 242, 100, 0.45);
+    background: linear-gradient(92deg, rgba(190, 242, 100, 0.12), rgba(103, 232, 249, 0.10));
+    padding: 0.55rem 1.1rem;
+    font-family: "Space Mono", ui-monospace, monospace;
+    font-size: 0.66rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: #bef264;
+    text-decoration: none;
+    transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.3s, border-color 0.3s;
+}
+.research-page .tx-btn:hover {
+    transform: translateY(-2px);
+    border-color: rgba(190, 242, 100, 0.8);
+    box-shadow: 0 12px 30px -12px rgba(190, 242, 100, 0.45);
+}
+.research-page .tx-chip {
+    display: inline-grid;
+    place-items: center;
+    height: 1.15rem;
+    padding: 0 0.45rem;
+    border-radius: 9999px;
+    background: rgba(190, 242, 100, 0.18);
+    color: #bef264;
+    font-size: 0.55rem;
+    letter-spacing: 0.2em;
+}
+.research-page .tx-id {
+    color: rgba(226, 232, 240, 0.95);
+    letter-spacing: 0.08em;
+}
+.research-page .tx-btn svg { color: #bef264; transition: transform 0.3s; }
+.research-page .tx-btn:hover svg { transform: translate(2px, -2px); }
+.research-page .tx-btn-ghost {
+    border-color: rgba(103, 232, 249, 0.4);
+    color: #67e8f9;
+    background: rgba(103, 232, 249, 0.07);
+}
+.research-page .tx-btn-ghost:hover {
+    border-color: rgba(103, 232, 249, 0.8);
+    box-shadow: 0 12px 30px -12px rgba(103, 232, 249, 0.45);
+}
+.research-page .tx-btn-ghost svg, .research-page .tx-btn-ghost .tx-chip { color: #67e8f9; }
+.research-page .tx-btn-ghost .tx-chip { background: rgba(103, 232, 249, 0.15); }
+
 /* ── Gate cards ──────────────────────────────────────────────────── */
 .research-page .gate-card {
     border-radius: 1.2rem;

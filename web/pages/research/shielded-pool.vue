@@ -57,7 +57,7 @@ const GATES: Gate[] = [
     {
         gate: 'G1', title: 'Full pipeline reproduction',
         result: '4th chained TRANSFER built, proved (16.967 s) and broadcast; VM-eval passed on all 7 inputs; confirmed in block 330142.',
-        href: 'https://explorer.selene.cash/tx/3e21097c212a3821fa186623eb38b1e785f9fca544e57f3f4562bdd0c6615e78?network=chipnet', hrefLabel: 'tx 3e21097c…5e78',
+        href: 'https://explorer.selene.cash/tx/3e21097c212a3821fa186623eb38b1e785f9fca544e57f3f4562bdd0c6615e78?network=chipnet', hrefLabel: '3e21097c…5e78',
         status: 'confirmed',
     },
     {
@@ -68,7 +68,7 @@ const GATES: Gate[] = [
     {
         gate: 'G3', title: 'Path A lifecycle — fresh deploy',
         result: 'PREP → GENESIS → DEPLOY → SHIELD 1,000,000 units, all in block 330438; first pool-registry entry.',
-        href: 'https://explorer.selene.cash/tx/f5927a0bb67d4688976f98483828259057bd399522a587e66e3b1099a2ab7426?network=chipnet', hrefLabel: 'tx f5927a0b…7426',
+        href: 'https://explorer.selene.cash/tx/f5927a0bb67d4688976f98483828259057bd399522a587e66e3b1099a2ab7426?network=chipnet', hrefLabel: 'f5927a0b…7426',
         status: 'confirmed',
     },
     {
@@ -84,13 +84,13 @@ const GATES: Gate[] = [
     {
         gate: 'G6', title: 'Multi-asset E2E on chipnet',
         result: 'Fresh 1-of-1 setup + deploy + SHIELD 500,000 units of a DIFFERENT category than the pool — block 330459.',
-        href: 'https://explorer.selene.cash/tx/fc585fc9bf6499024c89c73a2bcb945de2ec212fb36f8ffc5acb617b6636912f?network=chipnet', hrefLabel: 'tx fc585fc9…912f',
+        href: 'https://explorer.selene.cash/tx/fc585fc9bf6499024c89c73a2bcb945de2ec212fb36f8ffc5acb617b6636912f?network=chipnet', hrefLabel: 'fc585fc9…912f',
         status: 'confirmed',
     },
     {
         gate: 'G6b', title: 'Two-asset lifecycle, one pool',
         result: 'SHIELD A → SHIELD B → TRANSFER → UNSHIELD B on one multi-asset pool; all four ops VM-verified and broadcast 2026-11-10/11.',
-        href: 'https://explorer.selene.cash/tx/b7bc81867707fb4ae80e722e81685b9518b21105638eae9014516ec34ca3d28f?network=chipnet', hrefLabel: 'tx b7bc8186…3d8f',
+        href: 'https://explorer.selene.cash/tx/b7bc81867707fb4ae80e722e81685b9518b21105638eae9014516ec34ca3d28f?network=chipnet', hrefLabel: 'b7bc8186…3d8f',
         status: 'in-flight',
     },
     {
@@ -387,9 +387,21 @@ const POOLS = [
                         </span>
                     </div>
                     <p class="mt-3 text-sm leading-relaxed text-slate-400">{{ g.result }}</p>
-                    <div class="mt-3 flex flex-wrap gap-3 font-mono text-[0.68rem]">
-                        <a v-if="g.href" :href="g.href" target="_blank" rel="noopener" class="src-link">{{ g.hrefLabel }} ↗</a>
-                        <NuxtLink v-if="g.to" :to="g.to" class="src-link">{{ g.to === '/ceremony' ? '/ceremony — the Hush Ceremony' : g.to }} →</NuxtLink>
+                    <div class="mt-4 flex flex-wrap gap-3">
+                        <a v-if="g.href" :href="g.href" target="_blank" rel="noopener" class="tx-btn">
+                            <span class="tx-chip">tx</span>
+                            <span class="tx-id">{{ g.hrefLabel }}</span>
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="h-3 w-3">
+                                <path d="M7 17L17 7M9 7h8v8" />
+                            </svg>
+                        </a>
+                        <NuxtLink v-if="g.to" :to="g.to" class="tx-btn tx-btn-ghost">
+                            <span class="tx-chip">gate 7</span>
+                            <span class="tx-id">the Hush Ceremony</span>
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="h-3 w-3">
+                                <path d="M5 12h14M13 6l6 6-6 6" />
+                            </svg>
+                        </NuxtLink>
                     </div>
                 </div>
             </div>
