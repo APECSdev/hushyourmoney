@@ -1,0 +1,411 @@
+/* web/assets/css/research.css — shared styles for the /research suite
+   (index + shielded-pool + shielded-addresses + coinjoin + cashfusion).
+   Imported NON-scoped by web/layouts/research.vue and fully namespaced
+   under `.research-page` (scoped layout styles cannot reach slot content). */
+
+/* ── Hero entrance ───────────────────────────────────────────────── */
+.research-page .animate-rise {
+    opacity: 0;
+    transform: translateY(30px);
+    animation: rise 0.9s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+@keyframes rise { to { opacity: 1; transform: none; } }
+
+.research-page .text-gradient {
+    background: linear-gradient(92deg, #bef264 5%, #67e8f9 55%, #c48dff 95%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+}
+
+/* ── Breadcrumb (subpages) ───────────────────────────────────────── */
+.research-page .crumb {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.7rem;
+    font-family: "Space Mono", ui-monospace, monospace;
+    font-size: 0.62rem;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: rgba(148, 163, 184, 0.75);
+    text-decoration: none;
+    transition: color 0.3s;
+}
+.research-page .crumb:hover { color: #bef264; }
+.research-page .crumb .sep { color: rgba(148, 163, 184, 0.4); }
+
+/* ── Buttons ─────────────────────────────────────────────────────── */
+.research-page .btn-primary {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+    padding: 1rem 2rem;
+    border-radius: 9999px;
+    background: linear-gradient(92deg, #bef264, #a3e635);
+    color: #131a05;
+    font-family: "Space Mono", ui-monospace, monospace;
+    font-size: 0.78rem;
+    font-weight: 700;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.35s;
+}
+.research-page .btn-primary:hover {
+    transform: translateY(-3px) scale(1.02);
+    box-shadow: 0 18px 50px -12px rgba(190, 242, 100, 0.45);
+}
+.research-page .btn-primary svg { transition: transform 0.35s; }
+.research-page .btn-primary:hover svg { transform: translateX(4px); }
+
+.research-page .btn-pulse::after {
+    content: "";
+    position: absolute;
+    inset: -4px;
+    border-radius: 9999px;
+    border: 2px solid rgba(190, 242, 100, 0.45);
+    animation: pulse-ring 2.4s cubic-bezier(0.22, 1, 0.36, 1) infinite;
+    pointer-events: none;
+}
+@keyframes pulse-ring {
+    0%   { transform: scale(0.97); opacity: 0.9; }
+    100% { transform: scale(1.14); opacity: 0; }
+}
+
+.research-page .btn-ghost {
+    display: inline-flex;
+    align-items: center;
+    padding: 1rem 2rem;
+    border-radius: 9999px;
+    border: 1px solid rgba(255, 255, 255, 0.14);
+    color: rgba(226, 232, 240, 0.85);
+    font-family: "Space Mono", ui-monospace, monospace;
+    font-size: 0.78rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1), border-color 0.35s, background 0.35s;
+}
+.research-page .btn-ghost:hover {
+    transform: translateY(-3px);
+    border-color: rgba(103, 232, 249, 0.5);
+    background: rgba(103, 232, 249, 0.06);
+}
+
+/* ── Status chips (hero) ─────────────────────────────────────────── */
+.research-page .status-chip {
+    display: inline-flex;
+    align-items: center;
+    border-radius: 9999px;
+    border: 1px solid;
+    padding: 0.45rem 1rem;
+    font-family: "Space Mono", ui-monospace, monospace;
+    font-size: 0.62rem;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+}
+.research-page .status-lime   { border-color: rgba(190, 242, 100, 0.4);  color: #bef264; background: rgba(190, 242, 100, 0.06); }
+.research-page .status-cyan   { border-color: rgba(103, 232, 249, 0.4);  color: #67e8f9; background: rgba(103, 232, 249, 0.06); }
+.research-page .status-violet { border-color: rgba(196, 141, 255, 0.4);  color: #c48dff; background: rgba(196, 141, 255, 0.06); }
+
+/* ── Topic cards (index) ─────────────────────────────────────────── */
+.research-page .topic-card {
+    display: flex;
+    flex-direction: column;
+    border-radius: 1.4rem;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    background: rgba(255, 255, 255, 0.03);
+    padding: 1.6rem;
+    backdrop-filter: blur(6px);
+    text-decoration: none;
+    transition: transform 0.4s cubic-bezier(0.22, 1, 0.36, 1), border-color 0.4s, box-shadow 0.4s;
+}
+.research-page .topic-card:hover {
+    transform: translateY(-6px);
+    border-color: rgba(190, 242, 100, 0.35);
+    box-shadow: 0 24px 60px -24px rgba(190, 242, 100, 0.22);
+}
+.research-page .topic-num {
+    display: inline-grid;
+    place-items: center;
+    height: 2.4rem;
+    width: 2.4rem;
+    border-radius: 0.8rem;
+    border: 1px solid;
+    font-family: "Space Mono", ui-monospace, monospace;
+    font-size: 0.78rem;
+    font-weight: 700;
+}
+.research-page .topic-lime   { border-color: rgba(190, 242, 100, 0.45); color: #bef264; background: rgba(190, 242, 100, 0.07); }
+.research-page .topic-cyan   { border-color: rgba(103, 232, 249, 0.45); color: #67e8f9; background: rgba(103, 232, 249, 0.07); }
+.research-page .topic-violet { border-color: rgba(196, 141, 255, 0.45); color: #c48dff; background: rgba(196, 141, 255, 0.07); }
+.research-page .topic-white  { border-color: rgba(226, 232, 240, 0.4);  color: #e2e8f0; background: rgba(226, 232, 240, 0.06); }
+.research-page .topic-go {
+    margin-top: auto;
+    padding-top: 1rem;
+    font-family: "Space Mono", ui-monospace, monospace;
+    font-size: 0.62rem;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: rgba(148, 163, 184, 0.7);
+    transition: color 0.3s;
+}
+.research-page .topic-card:hover .topic-go { color: #bef264; }
+
+.research-page .badge {
+    border-radius: 9999px;
+    border: 1px solid;
+    padding: 0.15rem 0.65rem;
+    font-family: "Space Mono", ui-monospace, monospace;
+    font-size: 0.6rem;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    white-space: nowrap;
+}
+.research-page .badge-done { border-color: rgba(190, 242, 100, 0.4); color: #bef264; }
+.research-page .badge-live { border-color: rgba(103, 232, 249, 0.5); color: #67e8f9; }
+.research-page .badge-mid  { border-color: rgba(196, 141, 255, 0.4); color: #c48dff; }
+.research-page .badge-wait { border-color: rgba(148, 163, 184, 0.3); color: rgba(148, 163, 184, 0.8); }
+
+/* ── Stat cards ──────────────────────────────────────────────────── */
+.research-page .stat-card {
+    border-radius: 1.2rem;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    background: rgba(255, 255, 255, 0.03);
+    padding: 1.4rem;
+    backdrop-filter: blur(6px);
+    text-align: center;
+    transition: border-color 0.4s, box-shadow 0.4s;
+}
+.research-page .stat-card:hover {
+    border-color: rgba(190, 242, 100, 0.3);
+    box-shadow: 0 20px 50px -28px rgba(190, 242, 100, 0.25);
+}
+
+/* ── Step cards ──────────────────────────────────────────────────── */
+.research-page .step-card {
+    border-radius: 1.4rem;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    background: rgba(255, 255, 255, 0.03);
+    padding: 1.75rem;
+    backdrop-filter: blur(6px);
+    transition: transform 0.4s cubic-bezier(0.22, 1, 0.36, 1), border-color 0.4s, box-shadow 0.4s;
+}
+.research-page .step-card:hover {
+    transform: translateY(-6px);
+    border-color: rgba(190, 242, 100, 0.35);
+    box-shadow: 0 24px 60px -24px rgba(190, 242, 100, 0.22);
+}
+.research-page .step-num {
+    display: grid;
+    place-items: center;
+    height: 2.6rem;
+    width: 2.6rem;
+    border-radius: 0.9rem;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    background: rgba(255, 255, 255, 0.04);
+    font-family: "Space Mono", ui-monospace, monospace;
+    font-weight: 700;
+}
+
+/* ── Data table ──────────────────────────────────────────────────── */
+.research-page .data-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.82rem;
+    text-align: left;
+}
+.research-page .data-table th {
+    padding: 0.9rem 1.1rem;
+    font-family: "Space Mono", ui-monospace, monospace;
+    font-size: 0.6rem;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: rgba(148, 163, 184, 0.75);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    white-space: nowrap;
+}
+.research-page .data-table td {
+    padding: 0.85rem 1.1rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+    vertical-align: top;
+    line-height: 1.6;
+}
+.research-page .data-table tbody tr:last-child td { border-bottom: none; }
+.research-page .data-table tbody tr { transition: background 0.3s; }
+.research-page .data-table tbody tr:hover { background: rgba(190, 242, 100, 0.035); }
+
+.research-page .src-link {
+    color: rgba(103, 232, 249, 0.85);
+    text-decoration: none;
+    border-bottom: 1px dotted rgba(103, 232, 249, 0.35);
+    transition: color 0.3s, border-color 0.3s;
+}
+.research-page .src-link:hover { color: #67e8f9; border-color: rgba(103, 232, 249, 0.8); }
+
+/* ── Gate cards ──────────────────────────────────────────────────── */
+.research-page .gate-card {
+    border-radius: 1.2rem;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    background: rgba(255, 255, 255, 0.03);
+    padding: 1.4rem 1.6rem;
+    backdrop-filter: blur(6px);
+    transition: border-color 0.4s, box-shadow 0.4s;
+}
+.research-page .gate-card:hover {
+    border-color: rgba(103, 232, 249, 0.3);
+    box-shadow: 0 20px 50px -28px rgba(103, 232, 249, 0.22);
+}
+.research-page .gate-chip {
+    display: inline-grid;
+    place-items: center;
+    height: 2rem;
+    min-width: 3.2rem;
+    border-radius: 0.7rem;
+    border: 1px solid;
+    padding: 0 0.5rem;
+    font-family: "Space Mono", ui-monospace, monospace;
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+}
+.research-page .gate-done { border-color: rgba(190, 242, 100, 0.45); color: #bef264; background: rgba(190, 242, 100, 0.07); }
+.research-page .gate-live { border-color: rgba(103, 232, 249, 0.5);  color: #67e8f9; background: rgba(103, 232, 249, 0.07); }
+.research-page .gate-wait { border-color: rgba(148, 163, 184, 0.35); color: rgba(148, 163, 184, 0.85); background: rgba(148, 163, 184, 0.06); }
+
+/* ── Pool cards ──────────────────────────────────────────────────── */
+.research-page .pool-card {
+    border-radius: 1.4rem;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    background: rgba(255, 255, 255, 0.03);
+    padding: 1.6rem 1.7rem;
+    backdrop-filter: blur(6px);
+    transition: border-color 0.4s, box-shadow 0.4s;
+}
+.research-page .pool-card:hover {
+    border-color: rgba(190, 242, 100, 0.3);
+    box-shadow: 0 20px 50px -28px rgba(190, 242, 100, 0.22);
+}
+
+/* ── Fact cards ──────────────────────────────────────────────────── */
+.research-page .fact-card {
+    border-radius: 1.4rem;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    background: rgba(255, 255, 255, 0.03);
+    padding: 1.6rem 1.7rem;
+    backdrop-filter: blur(6px);
+    transition: border-color 0.4s, box-shadow 0.4s;
+}
+.research-page .fact-card:hover {
+    border-color: rgba(103, 232, 249, 0.3);
+    box-shadow: 0 20px 50px -28px rgba(103, 232, 249, 0.22);
+}
+
+/* ── Thread rows ─────────────────────────────────────────────────── */
+.research-page .thread-row {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 0.9rem 1.2rem;
+    text-decoration: none;
+    transition: background 0.3s;
+}
+.research-page .thread-row:first-child { border-radius: 2rem 2rem 0 0; }
+.research-page .thread-row:last-child  { border-radius: 0 0 2rem 2rem; }
+.research-page .thread-row:hover { background: rgba(103, 232, 249, 0.045); }
+
+/* ── Doc cards ───────────────────────────────────────────────────── */
+.research-page .doc-card {
+    display: block;
+    border-radius: 1.4rem;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    background: rgba(255, 255, 255, 0.03);
+    padding: 1.6rem;
+    backdrop-filter: blur(6px);
+    text-decoration: none;
+    transition: transform 0.4s cubic-bezier(0.22, 1, 0.36, 1), border-color 0.4s, box-shadow 0.4s;
+}
+.research-page .doc-card:hover {
+    transform: translateY(-6px);
+    border-color: rgba(103, 232, 249, 0.35);
+    box-shadow: 0 24px 60px -24px rgba(103, 232, 249, 0.2);
+}
+
+/* ── Pager (prev/next topic) ─────────────────────────────────────── */
+.research-page .pager {
+    display: grid;
+    gap: 1rem;
+    grid-template-columns: 1fr 1fr;
+}
+.research-page .pager-link {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+    border-radius: 1.2rem;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    background: rgba(255, 255, 255, 0.03);
+    padding: 1.2rem 1.5rem;
+    text-decoration: none;
+    transition: border-color 0.4s, background 0.4s;
+}
+.research-page .pager-link:hover {
+    border-color: rgba(190, 242, 100, 0.35);
+    background: rgba(190, 242, 100, 0.04);
+}
+.research-page .pager-link.right { text-align: right; align-items: flex-end; }
+.research-page .pager-dir {
+    font-family: "Space Mono", ui-monospace, monospace;
+    font-size: 0.6rem;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: rgba(148, 163, 184, 0.6);
+}
+.research-page .pager-title { font-weight: 700; color: #fff; font-size: 0.95rem; }
+.research-page .pager-link:hover .pager-title { color: #bef264; }
+
+/* ── FAQ ─────────────────────────────────────────────────────────── */
+.research-page .faq-card {
+    border-radius: 1.1rem;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    background: rgba(255, 255, 255, 0.03);
+    transition: border-color 0.4s, background 0.4s;
+}
+.research-page .faq-card[open] {
+    border-color: rgba(103, 232, 249, 0.35);
+    background: rgba(103, 232, 249, 0.04);
+}
+.research-page .faq-card summary {
+    cursor: pointer;
+    list-style: none;
+    padding: 1.1rem 1.4rem;
+    font-weight: 600;
+    color: rgba(241, 245, 249, 0.95);
+}
+.research-page .faq-card summary::-webkit-details-marker { display: none; }
+.research-page .faq-card summary::after {
+    content: "+";
+    float: right;
+    font-family: "Space Mono", ui-monospace, monospace;
+    color: #67e8f9;
+    transition: transform 0.3s;
+}
+.research-page .faq-card[open] summary::after { content: "–"; }
+.research-page .faq-card p { padding: 0 1.4rem 1.2rem; color: rgba(203, 213, 225, 0.85); line-height: 1.75; }
+.research-page .faq-card p a { text-decoration: none; }
+
+/* ── CTA glow ────────────────────────────────────────────────────── */
+.research-page .cta-glow {
+    border: 1px solid rgba(190, 242, 100, 0.2);
+}
+
+/* ── Scroll reveal ───────────────────────────────────────────────── */
+.research-page .reveal {
+    opacity: 0;
+    transform: translateY(26px);
+    transition: opacity 0.85s cubic-bezier(0.22, 1, 0.36, 1), transform 0.85s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.research-page .reveal.is-visible { opacity: 1; transform: none; }
+
+@media (prefers-reduced-motion: reduce) {
+    .btn-pulse::after, .animate-rise, .reveal { animation: none !important; }
+    .animate-rise, .reveal { opacity: 1 !important; transform: none !important; transition: none !important; }
+}

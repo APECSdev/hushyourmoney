@@ -6,11 +6,14 @@ definePageMeta({
     layout: 'fullscreen',
 })
 
-useHead({
-    title: `Ceremony — Hush Your Money`,
-    meta: [
-        { name: 'description', content: `The Hush Ceremony: a perpetual Powers-of-Tau trusted setup for the Hush zero-knowledge shielded pools. Bring your entropy — break the link, keep the privacy.` }
-    ],
+/* OpenGraph + Twitter + canonical (shared composable; per-page poster — user directive 2026-11-13: OG on ALL pages). */
+useOg({
+    title: `The Hush Ceremony — Hush Your Money`,
+    description: `The Hush Ceremony: a perpetual Powers-of-Tau trusted setup for the Hush zero-knowledge shielded pools. Bring your entropy — break the link, keep the privacy.`,
+    path: '/ceremony',
+    image: '/posters/ceremony.jpg',
+    type: 'website',
+    imageAlt: `The Hush Ceremony — perpetual Powers-of-Tau trusted setup, open participation`,
 })
 
 /* Scroll-reveal (shared composable). */
