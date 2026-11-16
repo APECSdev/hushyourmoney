@@ -594,6 +594,23 @@ const LIFECYCLE = [
                     <div class="rounded-2xl border border-rose-300/25 bg-rose-300/5 px-5 py-4 font-mono text-xs leading-relaxed text-rose-200/90">
                         testnet only · 1-of-1 trusted setup · no audits yet · /ceremony is the path to mainnet
                     </div>
+                    <p>
+                        <span class="font-mono text-xs text-slate-500">[cited · third-party]</span> — the pool
+                        sits inside an active research conversation, and we place it there deliberately.
+                        Confidential-transaction designs pursue amount-hiding at the protocol level
+                        (topic 1724, continued as topic 2028); this pool is the complementary opt-in
+                        covenant route — no consensus change required. The community's Verifier.cash
+                        initiative (topic 1896) explores the same on-chain Groth16-verifier design
+                        space; our measured verifier sizes and op-costs are inputs for exactly those
+                        discussions. What the pool does not touch: network-layer metadata — IP-linked
+                        transaction propagation is a separate research axis (topic 1524).
+                    </p>
+                    <div class="flex flex-wrap gap-3 font-mono text-[0.68rem]">
+                        <a href="https://bitcoincashresearch.org/t/optimized-groth16-verifier-contract-for-bch-verifier-cash-initiative/1896" target="_blank" rel="noopener" class="src-link">Verifier.cash — Groth16 verifier initiative ↗</a>
+                        <a href="https://bitcoincashresearch.org/t/confidential-transactions/1724" target="_blank" rel="noopener" class="src-link">Confidential Transactions ↗</a>
+                        <a href="https://bitcoincashresearch.org/t/proofnote-apnt-phase-3-public-evidence-current-limits-and-the-next-experiment/2028" target="_blank" rel="noopener" class="src-link">Proofnote / APNT (continuation) ↗</a>
+                        <a href="https://bitcoincashresearch.org/t/network-layer-privacy-on-bitcoin-cash/1524" target="_blank" rel="noopener" class="src-link">Network-layer privacy ↗</a>
+                    </div>
                 </div>
             </div>
         </section>

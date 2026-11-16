@@ -76,6 +76,14 @@ useReveal()
                 heuristic resistance. The shielded pool goes further: amounts,
                 owners and history are hidden inside zero-knowledge proofs. The two
                 approaches compose — CoinJoin for transparent BCH, the pool for shielded balances.
+                <p class="mt-4">
+                    <span class="font-mono text-xs text-slate-500">[cited · third-party]</span> — the
+                    coordination model is its own design axis: a central coordinator, a blind-signing
+                    coordinator, or no coordinator at all. An early-stage experiment announced on
+                    the research forum (topic 1773) coordinates rounds peer-to-peer over Nostr with
+                    onion-wrapped outputs — pre-mainnet, cited as a data point.
+                    <a href="https://github.com/00-Protocol/BCH-Stealth-Protocol" target="_blank" rel="noopener" class="src-link ml-2">P2P fusion over Nostr (third-party) ↗</a>
+                </p>
                 <div class="mt-3 flex flex-wrap gap-3 font-mono text-[0.68rem]">
                     <NuxtLink to="/research/cashfusion" class="src-link">CashFusion — the BCH implementation →</NuxtLink>
                     <NuxtLink to="/research/shielded-pool" class="src-link">the zero-knowledge layer →</NuxtLink>

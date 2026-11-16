@@ -28,14 +28,16 @@ const TOPICS = [
     { n: '05', title: 'Trusted Setup', blurb: 'The ceremony: a multi-party Powers-of-Tau setup gating any mainnet deployment of the pool.', chip: 'gate 7 · in design', chipClass: 'topic-white', badgeClass: 'badge-wait', to: '/ceremony' },
 ]
 
-/* ── Related discussions (all topics verified live 2026-11-13) ───── */
+/* ── Related discussions (all topics verified live 2026-11-13/16) ───── */
 const THREADS = [
     { id: 1773, slug: 'ecdh-stealth-addresses-on-bitcoin-cash-implementation-code', title: 'ECDH Stealth Addresses on Bitcoin Cash — Implementation & Code', date: '2026-03' },
     { id: 1637, slug: 'silent-reusable-payment-addresses-srpa', title: 'Silent Reusable Payment Addresses (SRPA)', date: '2025-07' },
     { id: 752, slug: '94-percent-of-all-bch-transacted-since-july-2020-is-now-a-descendant-of-a-cashfusion-transaction', title: '94 percent of all BCH transacted since July 2020 is now a descendant of a CashFusion transaction', date: '2022-03' },
     { id: 525, slug: 'is-there-interest-in-a-red-team-analysis-of-cashfusion', title: 'Is there interest in a Red Team analysis of CashFusion?', date: '2021-08' },
     { id: 1854, slug: 'ways-to-improve-ux-tech-of-cashfusion', title: 'Ways to improve UX / tech of CashFusion', date: '2026-06' },
+    { id: 1896, slug: 'optimized-groth16-verifier-contract-for-bch-verifier-cash-initiative', title: 'Optimized Groth16 verifier contract for BCH (Verifier.cash initiative)', date: '2026-06' },
     { id: 1724, slug: 'confidential-transactions', title: 'Confidential Transactions', date: '2026-01' },
+    { id: 2028, slug: 'proofnote-apnt-phase-3-public-evidence-current-limits-and-the-next-experiment', title: 'Proofnote / APNT Phase 3: public evidence, current limits, and the next experiment', date: '2026-08' },
     { id: 1570, slug: 'chip-2025-05-native-elliptic-curve-arithmetic-operations', title: 'CHIP-2025-05 Native Elliptic Curve Arithmetic Operations', date: '2025-05' },
     { id: 1524, slug: 'network-layer-privacy-on-bitcoin-cash', title: 'Network-Layer Privacy on Bitcoin Cash', date: '2025-03' },
     { id: 1472, slug: 'chip-2025-01-dandelion-integration-for-bitcoin-cash', title: 'CHIP-2025-01: Dandelion++ Integration for Bitcoin Cash', date: '2025-01' },

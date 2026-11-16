@@ -136,6 +136,7 @@ const STEALTH_FACTS = [
                     </p>
                     <div class="mt-4 flex flex-wrap gap-3 font-mono text-[0.68rem]">
                         <a href="https://bitcoincashresearch.org/t/silent-reusable-payment-addresses-srpa/1637" target="_blank" rel="noopener" class="src-link">related: SRPA thread ↗</a>
+                        <a href="https://bitcoincashresearch.org/t/new-chip-2026-paths-the-derivation-type/1831" target="_blank" rel="noopener" class="src-link">derivation-path CHIP (2026-paths) ↗</a>
                         <NuxtLink to="/research/shielded-pool" class="src-link">our pool layer →</NuxtLink>
                     </div>
                 </div>

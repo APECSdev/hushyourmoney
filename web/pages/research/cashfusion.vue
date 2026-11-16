@@ -70,7 +70,7 @@ useReveal()
                 </p>
             </div>
 
-            <div class="mt-12 grid gap-6 md:grid-cols-3">
+            <div class="mt-12 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
                 <a href="https://bitcoincashresearch.org/t/94-percent-of-all-bch-transacted-since-july-2020-is-now-a-descendant-of-a-cashfusion-transaction/752" target="_blank" rel="noopener" class="doc-card reveal">
                     <h3 class="font-mono text-sm text-lime-300">the 94% analysis</h3>
                     <p class="mt-2 text-sm leading-relaxed text-slate-400">"94 percent of all BCH transacted since July 2020 is now a descendant of a CashFusion transaction" — the adoption record, third-party.</p>
@@ -82,6 +82,14 @@ useReveal()
                 <a href="https://fusionstats.redteam.cash/" target="_blank" rel="noopener" class="doc-card reveal" style="transition-delay: 0.16s">
                     <h3 class="font-mono text-sm text-violet-300">fusion statistics</h3>
                     <p class="mt-2 text-sm leading-relaxed text-slate-400">Live fusion-statistics dashboard (fusionstats.redteam.cash) and its open-source app (Rucknium/CashFusionStats on GitHub).</p>
+                </a>
+                <a href="https://bitcoincashresearch.org/t/ways-to-improve-ux-tech-of-cashfusion/1854" target="_blank" rel="noopener" class="doc-card reveal" style="transition-delay: 0.24s">
+                    <h3 class="font-mono text-sm text-lime-300">UX / tech improvement thread</h3>
+                    <p class="mt-2 text-sm leading-relaxed text-slate-400">"Ways to improve UX / tech of CashFusion" — the standing community thread on where the implementation should go next.</p>
+                </a>
+                <a href="https://github.com/00-Protocol/BCH-Stealth-Protocol" target="_blank" rel="noopener" class="doc-card reveal" style="transition-delay: 0.32s">
+                    <h3 class="font-mono text-sm text-cyan-300">P2P fusion over Nostr</h3>
+                    <p class="mt-2 text-sm leading-relaxed text-slate-400">Serverless CoinJoin coordinated over Nostr with onion-wrapped outputs (the 00-Protocol experiment, announced in topic 1773) — a different coordination model, cited for completeness. <span class="font-mono text-[0.62rem] text-slate-500">[third-party · pre-mainnet · no LICENSE file]</span></p>
                 </a>
             </div>
         </section>
