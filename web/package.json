@@ -13,6 +13,9 @@
     "postinstall": "nuxt prepare"
   },
   "dependencies": {
+    "@noble/ciphers": "^2.4.0",
+    "@noble/curves": "^2.4.0",
+    "@noble/hashes": "^2.4.0",
     "@nexajs/crypto": "24.9.5",
     "@nexajs/privacy": "24.9.22",
     "@nexajs/rostrum": "24.6.23",

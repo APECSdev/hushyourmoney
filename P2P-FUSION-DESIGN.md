@@ -176,7 +176,7 @@ P1        P2        P3(coordinator)   relays/chain
 
 | gate | criterion | measurable |
 |---|---|---|
-| G1 | relay + NIP-59 + onion roundtrip in-repo unit test | 2 peers, 100% unwrap |
+| G1 | relay + NIP-59 + onion roundtrip in-repo unit test | **PASSED 2026-11-20** — `node web/tests/p2pfusion-g1.mjs` → 4/4: NIP-44 roundtrip + tamper reject (payload 600 b64 chars), NIP-59 wrap/unwrap + outsider reject, onion 3-hop wrap/peel + order reject, live relay gift-wrap roundtrip (relays 1/2 connected — `wss://relay.damus.io`, `wss://nos.lol`; delivery confirmed, `since` window must cover NIP-59's 2-day created_at backdating) `[measured]` |
 | G2 | 2-party chipnet round, real tx, confirmed | txid + block + size/fee `[measured]` |
 | G3 | 5-party chipnet round (two browser contexts + scripted peers) | txid + entropy notes |
 | G4 | mainnet opt-in beta behind a settings flag | live links on `/toolbox/fusion` |

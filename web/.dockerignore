@@ -1,0 +1,8 @@
+# Build artifacts and host-installed deps must never enter the image build context:
+# the Dockerfile runs `yarn install` before `COPY .`, and a copied host node_modules
+# would silently overwrite the fresh install (also breaks on dev-only symlinks).
+node_modules
+.nuxt
+.output
+.git
+*.log
