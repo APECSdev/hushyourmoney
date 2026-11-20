@@ -43,10 +43,19 @@ function convertBits(data: number[], from: number, to: number, pad: boolean): nu
     return out
 }
 
+export type AddressType = 'p2pkh' | 'p2sh' | 'token-p2pkh' | 'token-p2sh'
+
 export interface DecodedAddress {
     prefix: string
-    type: 'p2pkh' | 'p2sh'
+    type: AddressType
     hash: Uint8Array
+}
+
+const TYPE_BITS: Record<AddressType, number> = {
+    'p2pkh': 0,
+    'p2sh': 1,
+    'token-p2pkh': 2,
+    'token-p2sh': 3,
 }
 
 export function decodeCashAddress(address: string): DecodedAddress {
@@ -74,13 +83,14 @@ export function decodeCashAddress(address: string): DecodedAddress {
     if (hashBits === undefined) throw new Error('cashaddr: bad size')
     const hash = Uint8Array.from(bytes.slice(1))
     if (hash.length * 8 !== hashBits) throw new Error('cashaddr: hash length mismatch')
-    if (typeBits === 0) return { prefix, type: 'p2pkh', hash }
-    if (typeBits === 1) return { prefix, type: 'p2sh', hash }
+    const byBits: AddressType[] = ['p2pkh', 'p2sh', 'token-p2pkh', 'token-p2sh']
+    if (typeBits < byBits.length) return { prefix, type: byBits[typeBits], hash }
     throw new Error('cashaddr: unsupported type ' + typeBits)
 }
 
-export function encodeCashAddress(prefix: string, type: 'p2pkh' | 'p2sh', hash: Uint8Array): string {
-    const typeBits = type === 'p2pkh' ? 0 : 1
+export function encodeCashAddress(prefix: string, type: AddressType, hash: Uint8Array): string {
+    const typeBits = TYPE_BITS[type]
+    if (typeBits === undefined) throw new Error('cashaddr: unknown type ' + type)
     const sizeBits = [20, 24, 28, 32, 40, 48, 56, 64].indexOf(hash.length)
     if (sizeBits < 0) throw new Error('cashaddr: unsupported hash length')
     const version = (typeBits << 3) | sizeBits
