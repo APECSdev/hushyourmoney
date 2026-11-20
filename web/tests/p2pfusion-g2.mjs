@@ -10,7 +10,7 @@ import assert from 'node:assert'
 import { createEphemeralIdentity, bytesToHex, hexToBytes } from '../stores/p2pfusion/identity.ts'
 import { NostrRelayPool, waitForRelays } from '../stores/p2pfusion/relay.ts'
 import { FusionRound } from '../stores/p2pfusion/round.ts'
-import { p2pkhScript, hash160, bip143Sighash, serializeTx, txidOf } from '../stores/p2pfusion/txbuild.ts'
+import { p2pkhScript, hash160, bip143Sighash, serializeTx, txidOf, bchSchnorrVerify } from '../stores/p2pfusion/txbuild.ts'
 import { secp256k1, schnorr } from '@noble/curves/secp256k1.js'
 import { startRelayFixture } from './nostr-relay-fixture.mjs'
 
@@ -51,7 +51,7 @@ async function main() {
 
     // ── peer wallet fixtures (dry-run UTXOs) ──────────────────────────────
     const wallets = peers.map((id, n) => {
-        const script = p2pkhScript(hash160(compressedOf(id.pubHex)))
+        const script = p2pkhScript(hash160(secp256k1.getPublicKey(hexToBytes(id.privHex), true)))
         const utxos = [
             { txid: fakeTxid('a' + n), vout: 0, value: 100000, privHex: id.privHex },
             { txid: fakeTxid('b' + n), vout: 1, value: 50000, privHex: id.privHex },
@@ -60,7 +60,7 @@ async function main() {
         // two fresh outputs per peer (fresh keys, scripts only)
         const outs = [createEphemeralIdentity(), createEphemeralIdentity()].map((fresh, k) => ({
             addr: 'dryrun:' + fresh.pubHex.slice(0, 12),
-            script: p2pkhScript(hash160(compressedOf(fresh.pubHex))),
+            script: p2pkhScript(hash160(secp256k1.getPublicKey(hexToBytes(fresh.privHex), true))),
             value: Math.floor((total - 1500) / 2) + (k === 0 ? (total - 1500) % 2 : 0),
         }))
         return { id, script, utxos, outs }
@@ -104,21 +104,21 @@ async function main() {
 
     // map outpoint → owner pubkey (compressed) via the fixture scripts
     const ownerByOutpoint = new Map()
-    for (const w of wallets) for (const u of w.utxos) ownerByOutpoint.set(u.txid + ':' + u.vout, w.id.pubHex)
+    for (const w of wallets) for (const u of w.utxos) ownerByOutpoint.set(u.txid + ':' + u.vout, w.id.privHex)
     const valueByOutpoint = new Map()
     for (const w of wallets) for (const u of w.utxos) valueByOutpoint.set(u.txid + ':' + u.vout, u.value)
 
     const prevouts = parsed.inputs.map(i => {
-        const owner = ownerByOutpoint.get(i.txid + ':' + i.vout)
-        assert.ok(owner, 'unknown input outpoint')
-        return { value: valueByOutpoint.get(i.txid + ':' + i.vout), scriptCode: p2pkhScript(hash160(compressedOf(owner))) }
+        const ownerPriv = ownerByOutpoint.get(i.txid + ':' + i.vout)
+        assert.ok(ownerPriv, 'unknown input outpoint')
+        return { value: valueByOutpoint.get(i.txid + ':' + i.vout), scriptCode: p2pkhScript(hash160(secp256k1.getPublicKey(hexToBytes(ownerPriv), true))) }
     })
     const txForSighash = { version: parsed.version, inputs: parsed.inputs.map(i => ({ ...i, scriptSig: new Uint8Array(0) })), outputs: parsed.outputs, locktime: parsed.locktime }
     parsed.inputs.forEach((inp, idx) => {
         const { sig, hashType, pub } = scriptSigParts(inp.scriptSig)
         assert.strictEqual(hashType, 0x41, 'sighash type must be ALL|FORKID')
         const sighash = bip143Sighash(txForSighash, idx, prevouts)
-        const ok = schnorr.verify(sig, sighash, pub.subarray(1))
+        const ok = bchSchnorrVerify(sig, sighash, pub)
         assert.ok(ok, 'input ' + idx + ' signature must verify')
     })
     // outputs: each peer's scripts present with exact values

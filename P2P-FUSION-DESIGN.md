@@ -178,7 +178,7 @@ P1        P2        P3(coordinator)   relays/chain
 |---|---|---|
 | G1 | relay + NIP-59 + onion roundtrip in-repo unit test | **PASSED 2026-11-20** — `node web/tests/p2pfusion-g1.mjs` → 4/4: NIP-44 roundtrip + tamper reject (payload 600 b64 chars), NIP-59 wrap/unwrap + outsider reject, onion 3-hop wrap/peel + order reject, live relay gift-wrap roundtrip (relays 1/2 connected — `wss://relay.damus.io`, `wss://nos.lol`; delivery confirmed, `since` window must cover NIP-59's 2-day created_at backdating) `[measured]` |
 | G2a | 2-party round, full six phases, dry-run | **PASSED 2026-11-20** — `node web/tests/p2pfusion-g2.mjs` → 3/3 deterministic runs; 4 inputs / 4 outputs; independent BIP143+Schnorr verification 4/4; fee 3,000 sats; est. size 738 B `[measured]`. Test transport = in-process NIP-01 relay fixture (`web/tests/nostr-relay-fixture.mjs`) — deterministic by design; live relays remain covered by G1 |
-| G2b | same round, real chipnet tx broadcast + confirmed | txid + block + size/fee `[measured]` — pending |
+| G2b | same round, real chipnet tx broadcast + confirmed | **PASSED 2026-11-20** — funding tx `f3158b02d0825a84e7f60e81377cde40644f24f85016934fc7e70ec035ac601e` (253 B) accepted; round tx **`c4fc6fc911408c0ceba1030c0e4d86c4c0f095e9141c9fcd315f2115d0c754d5`** (2 in / 4 out, 428 B, fee 2,000 sats ≈ 4.7 sat/B) accepted by the network and visible via Electrum; explorer `chipnet.imaginary.cash/tx/c4fc6fc9…` `[measured]` |
 | G3 | 5-party chipnet round (two browser contexts + scripted peers) | txid + entropy notes |
 | G4 | mainnet opt-in beta behind a settings flag | live links on `/toolbox/fusion` |
 
@@ -203,6 +203,32 @@ pool pages (file path / command output / txid links).
 8. **Schnorr self-verify passed a 33-byte key** — BIP-340 wants x-only (32).
 9. **NIP-44 padding** must allocate `prefix + calc_padded_len(L)` bytes (exact spec form) —
    powers-of-two plaintexts overflowed by the 2-byte prefix.
+
+## 5c. G2b defect log — BCH Schnorr ≠ BIP-340 (the expensive one)
+
+The first real broadcast was rejected with `mandatory-script-verify-flag-failed
+(Signature must be zero for failed CHECK(MULTI)SIG operation)` — NULLFAIL.
+Chain of evidence (all reproduced 2026-11-20):
+
+1. Our BIP143 sighash **matched libauth's `generateSigningSerializationBCH` byte-for-byte**
+   on a real chain transaction — the preimage was never the problem.
+2. Our serializer matched libauth's `encodeTransactionBCH` byte-for-byte.
+3. libauth's BCH VM reproduced the NULLFAIL locally — the signature was the problem.
+4. **Cause:** BCH's 2019 Schnorr (Lundeberg) is the *BIP-340 draft*, not final BIP-340:
+   `e = SHA256(r ‖ compressed_pubkey33 ‖ m)` with **no BIP-0340 tag prefixes**, and
+   `R` must be normalized to the **quadratic-residue** Y root (Jacobi symbol 1) — not
+   the even-Y root that final BIP-340 uses. Noble's `schnorr` produces final BIP-340
+   signatures, which the BCH VM rejects.
+   Spec: `bitcoincashorg/bitcoincash.org/spec/2019-05-15-schnorr.md` (fetched 2026-11-20).
+
+`txbuild.ts` now implements `bchSchnorrSign` / `bchSchnorrVerify` per that spec;
+the signed tx passes libauth's BCH VM (`error: none, stack: ['01']`) and the
+network accepts it. **Lesson for every future on-chain gate: verify against
+libauth's VM before broadcasting — self-consistency proves nothing.**
+
+5. Also fixed: P2PKH scriptCode must be derived from each input's own private key
+   (y-parity!), never from an x-only pubkey with a forced `02` prefix — the second
+   rejection was `OP_EQUALVERIFY`.
 
 ## 6. Open questions
 

@@ -12,6 +12,7 @@ import type { NostrEvent } from './giftwrap.ts'
 import { onionWrap, onionPeel } from './onion.ts'
 import type { EphemeralIdentity } from './identity.ts'
 import { hexToBytes, bytesToHex, bytesToUtf8 } from './identity.ts'
+import { secp256k1 } from '@noble/curves/secp256k1.js'
 import {
     p2pkhScript, signP2pkhInput, estimateTxSize, hash160, serializeTx, txidOf,
 } from './txbuild.ts'
@@ -381,16 +382,13 @@ export class FusionRound {
         const valueByOutpoint = new Map<string, number>()
         for (const list of this.peerInputs.values()) for (const i of list) valueByOutpoint.set(i.txid + ':' + i.vout, i.value)
 
-        // our own P2PKH scriptCode (compressed pubkey, even-y lift)
-        const compressed = new Uint8Array(33)
-        compressed[0] = 0x02
-        compressed.set(hexToBytes(this.id.pubHex), 1)
-        const myScript = p2pkhScript(hash160(compressed))
-
         const sigs: { index: number; scriptSig: string }[] = []
         tx.inputs.forEach((inp, index) => {
             const mine = this.cfg.utxos.find(u => u.txid === inp.txid && u.vout === inp.vout)
             if (!mine) return
+            // scriptCode = the P2PKH script of THIS input's key (correct y-parity)
+            const compressed = secp256k1.getPublicKey(hexToBytes(mine.privHex), true)
+            const myScript = p2pkhScript(hash160(compressed))
             const prevouts: PrevOut[] = tx.inputs.map(i => ({ value: valueByOutpoint.get(i.txid + ':' + i.vout) ?? 0, scriptCode: myScript }))
             const scriptSig = signP2pkhInput(tx, index, prevouts, mine.privHex)
             sigs.push({ index, scriptSig: bytesToHex(scriptSig) })

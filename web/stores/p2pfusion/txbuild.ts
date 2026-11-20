@@ -116,7 +116,7 @@ export interface PrevOut {
     scriptCode: Uint8Array
 }
 
-export function bip143Sighash(tx: Tx, inputIndex: number, prevouts: PrevOut[]): Uint8Array {
+export function bip143Sighash(tx: Tx, inputIndex: number, prevouts: PrevOut[], hashType: number = SIGHASH_ALL_FORKID): Uint8Array {
     if (tx.inputs.length !== prevouts.length) throw new Error('bip143: prevouts length mismatch')
     const hashPrevouts = doubleSha256(concatBytes(...tx.inputs.map(i => concatBytes(hexToBytes(i.txid).reverse(), u32le(i.vout)))))
     const hashSequence = doubleSha256(concatBytes(...tx.inputs.map(i => u32le(i.sequence))))
@@ -135,18 +135,97 @@ export function bip143Sighash(tx: Tx, inputIndex: number, prevouts: PrevOut[]): 
         u32le(inp.sequence),
         hashOutputs,
         u32le(tx.locktime),
-        u32le(SIGHASH_ALL_FORKID),
+        u32le(hashType),
     )
     return doubleSha256(preimage)
 }
 
-/** Sign one of our P2PKH inputs with Schnorr and return the scriptSig. */
+/* BCH's Schnorr (2019 upgrade, Lundeberg) follows the BIP-340 DRAFT:
+   e = SHA256(r ‖ compressed_pubkey(33) ‖ msg) with NO BIP-0340 tags, and R is
+   normalized so Y(R) has Jacobi symbol 1 (the quadratic-residue root, NOT
+   necessarily even-y). Final BIP-340 signatures (noble's schnorr) are rejected
+   by the BCH VM — reproduced locally with libauth's VM (NULLFAIL, 2026-11-20).
+   Spec: bitcoincashorg/bitcoincash.org/spec/2019-05-15-schnorr.md */
+
+const SECP_N = BigInt('0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFEBAAEDCE6AF48A03BBFD25E8CD0364141')
+const SECP_P = BigInt('0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFEFFFFFC2F')
+
+function bytesToBigInt(b: Uint8Array): bigint {
+    let v = 0n
+    for (const x of b) v = (v << 8n) | BigInt(x)
+    return v
+}
+
+function bigIntTo32(v: bigint): Uint8Array {
+    const out = new Uint8Array(32)
+    let x = ((v % SECP_N) + SECP_N) % SECP_N
+    for (let i = 31; i >= 0; i--) { out[i] = Number(x & 0xffn); x >>= 8n }
+    return out
+}
+
+function modPow(base: bigint, exp: bigint, mod: bigint): bigint {
+    let result = 1n
+    let b = base % mod
+    let e = exp
+    while (e > 0n) {
+        if (e & 1n) result = (result * b) % mod
+        b = (b * b) % mod
+        e >>= 1n
+    }
+    return result
+}
+
+/** Jacobi/Legendre symbol of y over the secp256k1 field: 1, -1 or 0. */
+function legendre(y: bigint): bigint {
+    const r = modPow(((y % SECP_P) + SECP_P) % SECP_P, (SECP_P - 1n) / 2n, SECP_P)
+    return r === SECP_P - 1n ? -1n : r
+}
+
+/** BCH Schnorr sign: s = k′ + e·d, e = SHA256(r ‖ BP33 ‖ msg), Y(R) QR-normalized. */
+export function bchSchnorrSign(msgHash: Uint8Array, privHex: string): Uint8Array {
+    const d = bytesToBigInt(hexToBytes(privHex))
+    if (d <= 0n || d >= SECP_N) throw new Error('txbuild: invalid private key')
+    const pub33 = secp256k1.getPublicKey(hexToBytes(privHex), true)
+    for (let attempt = 0; attempt < 64; attempt++) {
+        const kSeed = sha256(concatBytes(hexToBytes(privHex), msgHash, new Uint8Array([attempt])))
+        const k = bytesToBigInt(kSeed) % SECP_N
+        if (k === 0n) continue
+        const R = secp256k1.Point.BASE.multiply(k)
+        const aff = R.toAffine()
+        const kk = legendre(aff.y) === 1n ? k : (SECP_N - k) % SECP_N
+        const rx = bigIntTo32(aff.x)
+        const e = bytesToBigInt(sha256(concatBytes(rx, pub33, msgHash))) % SECP_N
+        const s = (kk + e * d) % SECP_N
+        if (s === 0n) continue
+        const sig = concatBytes(rx, bigIntTo32(s))
+        if (bchSchnorrVerify(sig, msgHash, pub33)) return sig
+    }
+    throw new Error('txbuild: could not produce a valid BCH Schnorr signature')
+}
+
+/** BCH Schnorr verify: R′ = sG − eP; check R′.x == r and Y(R′) is a QR. */
+export function bchSchnorrVerify(sig: Uint8Array, msgHash: Uint8Array, pubkey33: Uint8Array): boolean {
+    try {
+        if (sig.length !== 64) return false
+        const rx = sig.subarray(0, 32)
+        const s = bytesToBigInt(sig.subarray(32))
+        if (s >= SECP_N) return false
+        const P = secp256k1.Point.fromHex(bytesToHex(pubkey33))
+        const e = bytesToBigInt(sha256(concatBytes(rx, pubkey33, msgHash))) % SECP_N
+        const Rprime = secp256k1.Point.BASE.multiply(s).add(P.multiply(e).negate())
+        if (Rprime.equals(secp256k1.Point.ZERO)) return false
+        const aff = Rprime.toAffine()
+        if (aff.x !== bytesToBigInt(rx)) return false
+        return legendre(aff.y) === 1n
+    } catch { return false }
+}
+
+/** Sign one of our P2PKH inputs with BCH Schnorr and return the scriptSig. */
 export function signP2pkhInput(tx: Tx, inputIndex: number, prevouts: PrevOut[], privHex: string): Uint8Array {
-    const pubkey = secp256k1.getPublicKey(hexToBytes(privHex), true) // 33-byte compressed (schnorr.getPublicKey returns x-only)
+    const pubkey = secp256k1.getPublicKey(hexToBytes(privHex), true)
     const sighash = bip143Sighash(tx, inputIndex, prevouts)
-    const sig = schnorr.sign(sighash, hexToBytes(privHex))
-    // sanity: our own signature must verify against the sighash
-    if (!schnorr.verify(sig, sighash, pubkey.subarray(1))) throw new Error('txbuild: self-signature failed to verify')
+    const sig = bchSchnorrSign(sighash, privHex)
+    if (!bchSchnorrVerify(sig, sighash, pubkey)) throw new Error('txbuild: self-signature failed to verify')
     return p2pkhScriptSig(sig, pubkey)
 }
 
