@@ -310,6 +310,8 @@ export class FusionRound {
         const outputs = msg.outputs as PlainOutput[]
         if (!Array.isArray(outputs) || outputs.length === 0) throw new Error('round: empty output set')
         this.plainOutputs = outputs
+        // the output set is public at this point: everyone advances to phase 4
+        this.enterPhase('outputs')
         if (this.isCoordinator) this.startTxAssembly()
     }
 

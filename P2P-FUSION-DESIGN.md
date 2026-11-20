@@ -179,7 +179,8 @@ P1        P2        P3(coordinator)   relays/chain
 | G1 | relay + NIP-59 + onion roundtrip in-repo unit test | **PASSED 2026-11-20** — `node web/tests/p2pfusion-g1.mjs` → 4/4: NIP-44 roundtrip + tamper reject (payload 600 b64 chars), NIP-59 wrap/unwrap + outsider reject, onion 3-hop wrap/peel + order reject, live relay gift-wrap roundtrip (relays 1/2 connected — `wss://relay.damus.io`, `wss://nos.lol`; delivery confirmed, `since` window must cover NIP-59's 2-day created_at backdating) `[measured]` |
 | G2a | 2-party round, full six phases, dry-run | **PASSED 2026-11-20** — `node web/tests/p2pfusion-g2.mjs` → 3/3 deterministic runs; 4 inputs / 4 outputs; independent BIP143+Schnorr verification 4/4; fee 3,000 sats; est. size 738 B `[measured]`. Test transport = in-process NIP-01 relay fixture (`web/tests/nostr-relay-fixture.mjs`) — deterministic by design; live relays remain covered by G1 |
 | G2b | same round, real chipnet tx broadcast + confirmed | **PASSED 2026-11-20** — funding tx `f3158b02d0825a84e7f60e81377cde40644f24f85016934fc7e70ec035ac601e` (253 B) accepted; round tx **`c4fc6fc911408c0ceba1030c0e4d86c4c0f095e9141c9fcd315f2115d0c754d5`** (2 in / 4 out, 428 B, fee 2,000 sats ≈ 4.7 sat/B) accepted by the network and visible via Electrum; explorer `chipnet.imaginary.cash/tx/c4fc6fc9…` `[measured]` |
-| G3 | 5-party chipnet round (two browser contexts + scripted peers) | txid + entropy notes |
+| G3 | N-party round (5 default, 7 tested) | **PASSED 2026-11-20** — 5-party: tx `c23b441c65f0ff8e15198891944454284d63fd1e339a30326d30390012a0d19f`, 10 in / 10 out, 1,760 B, fee 5,000 sats, **10/10 signatures independently verified**; 7-party: 14/14 verified, tx `a91b695a…edd81`; 2-party regression re-passed `[measured]`. Transport = local relay fixture (deterministic) |
+| G3L | same round over LIVE public relays (damus/nos.lol) | not yet gate-tested — G1 proves live transport for gift wraps; a full round over public relays is the open gap `[open]` |
 | G4 | mainnet opt-in beta behind a settings flag | live links on `/toolbox/fusion` |
 
 Each gate's numbers get published with the same verification contract as the
@@ -229,6 +230,14 @@ libauth's VM before broadcasting — self-consistency proves nothing.**
 5. Also fixed: P2PKH scriptCode must be derived from each input's own private key
    (y-parity!), never from an x-only pubkey with a forced `02` prefix — the second
    rejection was `OP_EQUALVERIFY`.
+
+## 5d. G3 defect log
+
+1. **Intermediate peelers never left the `onion` phase** — they received the
+   `outputs` broadcast but only the coordinator reacted, so the subsequent `tx`
+   message was buffered forever (2-party rounds masked this: with N=2 the last
+   peeler is also the only non-coordinator). Fix: the `outputs` message now
+   advances **every** peer to phase 4.
 
 ## 6. Open questions
 
