@@ -21,9 +21,15 @@ interface RelayConn {
     connected: boolean
     retry: number
     closed: boolean
-    /** events published before the socket opened — flushed on connect */
+    /** paced outbound queue — drains at PUBLISH_INTERVAL_MS while connected */
     outbox: string[]
+    draining: boolean
 }
+
+/** Per-connection pacing: public relays rate-limit bursts aggressively
+   (observed 2026-11-20: damus "banned: too many rate-limit violations",
+   nos.lol "rate-limited: slow down matey"). */
+const PUBLISH_INTERVAL_MS = 80
 
 const SEEN_MAX = 5000
 
@@ -36,7 +42,7 @@ export class NostrRelayPool {
     private statusListeners = new Set<StatusCallback>()
 
     constructor(urls: string[]) {
-        for (const url of urls) this.conns.push({ url, ws: null, connected: false, retry: 0, closed: false, outbox: [] })
+        for (const url of urls) this.conns.push({ url, ws: null, connected: false, retry: 0, closed: false, outbox: [], draining: false })
     }
 
     connect(): void {
@@ -56,10 +62,8 @@ export class NostrRelayPool {
                 for (const [subId, sub] of this.subs) {
                     try { ws.send(JSON.stringify(['REQ', subId, ...sub.filters])) } catch { /* noop */ }
                 }
-                // flush events queued while the socket was down
-                for (const payload of c.outbox.splice(0)) {
-                    try { ws.send(payload) } catch { /* noop */ }
-                }
+                // drain anything queued while the socket was down (paced)
+                this.drain(c)
             })
             ws.addEventListener('message', (ev: MessageEvent) => this.onMessage(ev.data))
             ws.addEventListener('close', () => {
@@ -131,21 +135,26 @@ export class NostrRelayPool {
         const result: Record<string, boolean> = {}
         const payload = JSON.stringify(['EVENT', event])
         for (const c of this.conns) {
-            if (c.ws && c.connected) {
-                try {
-                    c.ws.send(payload)
-                    result[c.url] = true
-                } catch {
-                    result[c.url] = false
-                }
-            } else if (!c.closed) {
-                if (c.outbox.length < 200) c.outbox.push(payload)
-                result[c.url] = false
-            } else {
-                result[c.url] = false
-            }
+            if (c.closed) { result[c.url] = false; continue }
+            if (c.outbox.length < 500) c.outbox.push(payload)
+            result[c.url] = c.connected
+            this.drain(c)
         }
         return result
+    }
+
+    /** Send queued events one at a time, PUBLISH_INTERVAL_MS apart. */
+    private drain(c: RelayConn): void {
+        if (c.draining || !c.connected || !c.ws) return
+        c.draining = true
+        const step = (): void => {
+            if (!c.connected || !c.ws || c.closed) { c.draining = false; return }
+            const payload = c.outbox.shift()
+            if (!payload) { c.draining = false; return }
+            try { c.ws.send(payload) } catch { /* close handler resets state */ }
+            setTimeout(step, PUBLISH_INTERVAL_MS)
+        }
+        step()
     }
 
     status(): RelayPoolStatus {

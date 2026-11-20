@@ -180,7 +180,7 @@ P1        P2        P3(coordinator)   relays/chain
 | G2a | 2-party round, full six phases, dry-run | **PASSED 2026-11-20** — `node web/tests/p2pfusion-g2.mjs` → 3/3 deterministic runs; 4 inputs / 4 outputs; independent BIP143+Schnorr verification 4/4; fee 3,000 sats; est. size 738 B `[measured]`. Test transport = in-process NIP-01 relay fixture (`web/tests/nostr-relay-fixture.mjs`) — deterministic by design; live relays remain covered by G1 |
 | G2b | same round, real chipnet tx broadcast + confirmed | **PASSED 2026-11-20** — funding tx `f3158b02d0825a84e7f60e81377cde40644f24f85016934fc7e70ec035ac601e` (253 B) accepted; round tx **`c4fc6fc911408c0ceba1030c0e4d86c4c0f095e9141c9fcd315f2115d0c754d5`** (2 in / 4 out, 428 B, fee 2,000 sats ≈ 4.7 sat/B) accepted by the network and visible via Electrum; explorer `chipnet.imaginary.cash/tx/c4fc6fc9…` `[measured]` |
 | G3 | N-party round (5 default, 7 tested) | **PASSED 2026-11-20** — 5-party: tx `c23b441c65f0ff8e15198891944454284d63fd1e339a30326d30390012a0d19f`, 10 in / 10 out, 1,760 B, fee 5,000 sats, **10/10 signatures independently verified**; 7-party: 14/14 verified, tx `a91b695a…edd81`; 2-party regression re-passed `[measured]`. Transport = local relay fixture (deterministic) |
-| G3L | same round over LIVE public relays (damus/nos.lol) | not yet gate-tested — G1 proves live transport for gift wraps; a full round over public relays is the open gap `[open]` |
+| G3L | same round over LIVE public relays | **PASSED 2026-11-20** — 5-party full round over `wss://relay.primal.net`, `wss://nostr.mom`, `wss://offchain.pub`: tx `13bc75cecaf0c6f845f8a6e6074c8b6f43909670c85f304b9f413d5989f70f0d`, 10/10 signatures verified; repeat run `20d0c9b90571dd2ae11cd3a8d4de3219d02398c18aa42cc8a61f6bd52d8b9b6d` also passed `[measured]` |
 | G4 | mainnet opt-in beta behind a settings flag | live links on `/toolbox/fusion` |
 
 Each gate's numbers get published with the same verification contract as the
@@ -238,6 +238,23 @@ libauth's VM before broadcasting — self-consistency proves nothing.**
    message was buffered forever (2-party rounds masked this: with N=2 the last
    peeler is also the only non-coordinator). Fix: the `outputs` message now
    advances **every** peer to phase 4.
+
+## 5e. G3L defect log — public relays behave very differently from fixtures
+
+1. **Relays do not echo events back to the publishing connection.** With one shared
+   socket for all peers (the G2/G3 harness pattern), peers never receive each other's
+   messages on real relays. Fix: **one connection per peer** (also the honest wallet model).
+2. **Free relays rate-limit bursts hard** — observed verbatim: damus
+   `banned: too many rate-limit violations, try again later`; nos.lol
+   `rate-limited: slow down matey`. A 5-party round emits ~100+ gift wraps.
+   Fix: **paced publishing** (one event per 80 ms per connection) in `relay.ts`.
+3. **Relay selection matters**: `relay.primal.net`, `nostr.mom`, `offchain.pub` accepted
+   and delivered kind-1059 wraps (probed 2026-11-20); `relay.nostr.band` and
+   `relay.nostr.bg` did not connect; damus now advertises NIP-42 `AUTH`
+   (the NIP-59 spec recommends supporting it — not implemented yet, tracked as open).
+4. **Origin-side onion retries** were missing: only forwarded layers were re-sent, so a
+   dropped first hop stalled the round. All outbound layers are now re-sent while the
+   onion phase is active, with hash-based dedupe at the receiver.
 
 ## 6. Open questions
 

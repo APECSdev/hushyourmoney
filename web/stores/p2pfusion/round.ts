@@ -13,6 +13,7 @@ import { onionWrap, onionPeel } from './onion.ts'
 import type { EphemeralIdentity } from './identity.ts'
 import { hexToBytes, bytesToHex, bytesToUtf8 } from './identity.ts'
 import { secp256k1 } from '@noble/curves/secp256k1.js'
+import { sha256 } from '@noble/hashes/sha2.js'
 import {
     p2pkhScript, signP2pkhInput, estimateTxSize, hash160, serializeTx, txidOf,
 } from './txbuild.ts'
@@ -94,6 +95,11 @@ export class FusionRound {
     /** messages that arrived before their phase — flushed on phase entry */
     private pending: Msg[] = []
     private flushing = false
+    /** onion layers already processed (public relays may duplicate deliveries) */
+    private seenOnions = new Set<string>()
+    /** every onion layer we sent (origin or forwarded), re-sent while the phase is active (lossy relays) */
+    private outbound: { layer: Uint8Array; to: string }[] = []
+    private onionResend: ReturnType<typeof setInterval> | null = null
 
     constructor(pool: NostrRelayPool, id: EphemeralIdentity, cfg: RoundConfig) {
         this.pool = pool
@@ -198,6 +204,7 @@ export class FusionRound {
         this.cfg.onPhase?.(p, detail)
         if (this.timer) clearTimeout(this.timer)
         if (this.resendTimer) { clearInterval(this.resendTimer); this.resendTimer = null }
+        if (this.onionResend) { clearInterval(this.onionResend); this.onionResend = null }
         const timeout = this.cfg.phaseTimeoutMs ?? DEFAULT_PHASE_TIMEOUT_MS
         this.timer = setTimeout(() => this.fail(new Error(`round: phase ${p} timed out after ${timeout}ms`)), timeout)
 
@@ -220,6 +227,7 @@ export class FusionRound {
     private fail(e: Error): void {
         if (this.timer) clearTimeout(this.timer)
         if (this.resendTimer) { clearInterval(this.resendTimer); this.resendTimer = null }
+        if (this.onionResend) { clearInterval(this.onionResend); this.onionResend = null }
         if (this.subId) this.pool.unsubscribe(this.subId)
         this.phase = null
         this.rejectFn?.(e)
@@ -257,19 +265,34 @@ export class FusionRound {
         this.expectedOnions = 0
         for (const c of this.peerOutputCounts.values()) this.expectedOnions += c
 
+        // lossy relays: re-send forwarded layers while this phase is active
+        this.onionResend = setInterval(() => {
+            if (this.phase !== 'onion') { if (this.onionResend) clearInterval(this.onionResend); this.onionResend = null; return }
+            for (const f of this.outbound) {
+                this.send({ type: 'onion', roundId: this.cfg.roundId, from: this.id.pubHex, onion: bytesToHex(f.layer) }, f.to)
+            }
+        }, 5000)
         const first = this.peers[0]
         for (const out of this.cfg.outputs) {
             const payload = JSON.stringify({ addr: out.addr, value: out.value, script: bytesToHex(out.script) })
             const layer = onionWrap(payload, this.peers)
-            if (first === this.id.pubHex) this.processOnionLayer(layer)
-            else this.send({ type: 'onion', roundId: this.cfg.roundId, from: this.id.pubHex, onion: bytesToHex(layer) }, first)
+            if (first === this.id.pubHex) {
+                this.processOnionLayer(layer)
+            } else {
+                this.outbound.push({ layer, to: first })
+                this.send({ type: 'onion', roundId: this.cfg.roundId, from: this.id.pubHex, onion: bytesToHex(layer) }, first)
+            }
         }
         this.checkOnions()
     }
 
     private onOnion(msg: Msg): void {
         if (this.phase !== 'onion') return
-        this.processOnionLayer(hexToBytes(String(msg.onion)))
+        const layer = hexToBytes(String(msg.onion))
+        const key = bytesToHex(sha256(layer))
+        if (this.seenOnions.has(key)) return // duplicate delivery
+        this.seenOnions.add(key)
+        this.processOnionLayer(layer)
     }
 
     /** Peel one layer: final payload → collect; otherwise forward to the next peeler. */
@@ -286,6 +309,7 @@ export class FusionRound {
         } catch { /* not the final layer */ }
         const next = this.peers[this.myIndex + 1]
         if (!next) throw new Error('round: last peeler received a non-final onion')
+        this.outbound.push({ layer: inner, to: next })
         this.send({ type: 'onion', roundId: this.cfg.roundId, from: this.id.pubHex, onion: bytesToHex(inner) }, next)
     }
 
@@ -299,7 +323,14 @@ export class FusionRound {
             ;[plain[i], plain[j]] = [plain[j], plain[i]]
         }
         this.plainOutputs = plain
-        this.broadcastMsg({ type: 'outputs', roundId: this.cfg.roundId, from: this.id.pubHex, outputs: plain })
+        const outputsMsg: Msg = { type: 'outputs', roundId: this.cfg.roundId, from: this.id.pubHex, outputs: plain }
+        this.broadcastMsg(outputsMsg)
+        // the last peeler is the only sender of this set: repeat it briefly
+        let outputsResends = 0
+        const outputsTimer = setInterval(() => {
+            if (this.phase === 'done' || ++outputsResends > 3) { clearInterval(outputsTimer); return }
+            this.broadcastMsg(outputsMsg)
+        }, 5000)
         this.enterPhase('outputs')
         if (this.isCoordinator) this.startTxAssembly()
     }
@@ -307,6 +338,7 @@ export class FusionRound {
     private onOutputs(msg: Msg): void {
         // the coordinator may still be in 'onion' (it only peeled/forwarded its hops)
         if (this.phase !== 'outputs' && this.phase !== 'onion') return
+        if (this.assembled) return // duplicate delivery — already assembling
         const outputs = msg.outputs as PlainOutput[]
         if (!Array.isArray(outputs) || outputs.length === 0) throw new Error('round: empty output set')
         this.plainOutputs = outputs
@@ -345,11 +377,25 @@ export class FusionRound {
             },
         })
         this.enterPhase('tx')
+        // re-send the tx until signatures are complete (lossy relays)
+        const txMsg: Msg = {
+            type: 'tx', roundId: this.cfg.roundId, from: this.id.pubHex,
+            tx: {
+                version: tx.version, locktime: tx.locktime,
+                inputs: tx.inputs.map(i => ({ txid: i.txid, vout: i.vout, sequence: i.sequence })),
+                outputs: tx.outputs.map(o => ({ value: o.value, script: bytesToHex(o.script) })),
+            },
+        }
+        const txTimer = setInterval(() => {
+            if (this.phase === 'done' || this.phase === null) { clearInterval(txTimer); return }
+            this.broadcastMsg(txMsg)
+        }, 5000)
         this.signMyInputs() // coordinator is also a participant
     }
 
     private onTx(msg: Msg): void {
         if (this.phase !== 'tx' && this.phase !== 'outputs') return
+        if (this.assembled) return // duplicate delivery — already signed
         this.enterPhase('tx')
         const t = msg.tx as { version: number; locktime: number; inputs: { txid: string; vout: number; sequence: number }[]; outputs: { value: number; script: string }[] }
         if (!t || !Array.isArray(t.inputs) || !Array.isArray(t.outputs)) throw new Error('round: malformed tx message')
@@ -420,6 +466,7 @@ export class FusionRound {
     }
 
     private checkSignatures(): void {
+        if (this.phase === 'done' || this.phase === null) return
         this.dbg('checkSignatures peerSigs', this.peerSigs.size, '/', this.peers.length, 'phase', this.phase)
         if (this.peerSigs.size < this.peers.length) return
         if (!this.assembled) throw new Error('round: signatures before assembly')
@@ -441,7 +488,13 @@ export class FusionRound {
         this.dbg('assembled txHex len', bytesToHex(serializeTx(tx)).length, 'input0 scriptSig len', tx.inputs[0].scriptSig.length)
         const finish = (txid: string) => {
             const result: RoundResult = { txid, txHex, fee, inputs: tx.inputs.length, outputs: tx.outputs.length }
-            this.broadcastMsg({ type: 'done', roundId: this.cfg.roundId, from: this.id.pubHex, txid, txHex })
+            const doneMsg: Msg = { type: 'done', roundId: this.cfg.roundId, from: this.id.pubHex, txid, txHex }
+            this.broadcastMsg(doneMsg)
+            let doneResends = 0
+            const doneTimer = setInterval(() => {
+                if (++doneResends > 3) { clearInterval(doneTimer); return }
+                this.broadcastMsg(doneMsg)
+            }, 5000)
             this.succeed(result, 'checkSignatures')
         }
         if (this.cfg.broadcastFn) {

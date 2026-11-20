@@ -52,13 +52,19 @@ function parseTx(b) {
 }
 
 async function main() {
-    console.log('G3: peers =', PEER_COUNT)
-    const fixture = await startRelayFixture()
-    const pool = new NostrRelayPool([fixture.url])
-    pool.connect()
-    await new Promise(r => setTimeout(r, 400))
-
+    const live = !!process.env.HUSH_RELAYS
+    console.log('G3' + (live ? 'L (LIVE RELAYS)' : '') + ': peers =', PEER_COUNT)
+    const fixture = live ? null : await startRelayFixture()
+    const relayUrls = live ? process.env.HUSH_RELAYS.split(',') : [fixture.url]
+    if (live) console.log('relays:', relayUrls.join(', '))
     const peers = Array.from({ length: PEER_COUNT }, () => createEphemeralIdentity())
+    // one connection per peer: public relays do not echo events back to the
+    // publishing connection, so a shared socket breaks peer-to-peer delivery
+    const pools = peers.map(() => new NostrRelayPool(relayUrls))
+    for (const p of pools) p.connect()
+    // give live sockets time to open before the first publish
+    await new Promise(r => setTimeout(r, live ? 5000 : 400))
+
     const roundId = 'g3-' + Date.now().toString(36)
 
     const wallets = peers.map((id, n) => {
@@ -82,12 +88,12 @@ async function main() {
     assert.ok(expectedFee > 0, 'fixture fee must be positive')
 
     const phases = wallets.map(() => [])
-    const rounds = wallets.map((w, i) => new FusionRound(pool, w.id, {
+    const rounds = wallets.map((w, i) => new FusionRound(pools[i], w.id, {
         peers: peers.map(p => p.pubHex),
         roundId,
         utxos: w.utxos,
         outputs: w.outs,
-        phaseTimeoutMs: 90000,
+        phaseTimeoutMs: live ? 120000 : 90000,
         onPhase: (p) => phases[i].push(p),
     }))
 
@@ -98,8 +104,8 @@ async function main() {
         await new Promise(r => setTimeout(r, 400))
     }
     const results = await Promise.all(promises)
-    pool.close()
-    await fixture.close()
+    for (const p of pools) p.close()
+    if (fixture) await fixture.close()
 
     // ── agreement ─────────────────────────────────────────────────────────
     const txids = new Set(results.map(r => r.txid))
@@ -149,7 +155,7 @@ async function main() {
     console.log('phases (peer 0):', phases[0].join(' → '))
     console.log('phases (last peer):', phases[PEER_COUNT - 1].join(' → '))
     console.log('fee:', res.fee, 'sats | size:', res.txHex.length / 2, 'B')
-    console.log('G3: PASS')
+    console.log((live ? 'G3L' : 'G3') + ': PASS')
 }
 
 main().catch((e) => { console.error('G3 FAIL:', e?.message || e); process.exit(1) })
