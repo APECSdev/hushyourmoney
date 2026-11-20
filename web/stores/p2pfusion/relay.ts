@@ -21,6 +21,8 @@ interface RelayConn {
     connected: boolean
     retry: number
     closed: boolean
+    /** events published before the socket opened — flushed on connect */
+    outbox: string[]
 }
 
 const SEEN_MAX = 5000
@@ -34,7 +36,7 @@ export class NostrRelayPool {
     private statusListeners = new Set<StatusCallback>()
 
     constructor(urls: string[]) {
-        for (const url of urls) this.conns.push({ url, ws: null, connected: false, retry: 0, closed: false })
+        for (const url of urls) this.conns.push({ url, ws: null, connected: false, retry: 0, closed: false, outbox: [] })
     }
 
     connect(): void {
@@ -53,6 +55,10 @@ export class NostrRelayPool {
                 // (re)send all subscriptions to this relay
                 for (const [subId, sub] of this.subs) {
                     try { ws.send(JSON.stringify(['REQ', subId, ...sub.filters])) } catch { /* noop */ }
+                }
+                // flush events queued while the socket was down
+                for (const payload of c.outbox.splice(0)) {
+                    try { ws.send(payload) } catch { /* noop */ }
                 }
             })
             ws.addEventListener('message', (ev: MessageEvent) => this.onMessage(ev.data))
@@ -116,7 +122,11 @@ export class NostrRelayPool {
         }
     }
 
-    /** Publish to every connected relay; resolves with per-relay send results. */
+    /**
+     * Publish to every relay. Events published before a relay's socket opens are
+     * queued and flushed on connect (a dropped pre-connect publish silently stalls
+     * a round phase — found by the G2 harness).
+     */
     publish(event: NostrEvent): Record<string, boolean> {
         const result: Record<string, boolean> = {}
         const payload = JSON.stringify(['EVENT', event])
@@ -128,6 +138,9 @@ export class NostrRelayPool {
                 } catch {
                     result[c.url] = false
                 }
+            } else if (!c.closed) {
+                if (c.outbox.length < 200) c.outbox.push(payload)
+                result[c.url] = false
             } else {
                 result[c.url] = false
             }

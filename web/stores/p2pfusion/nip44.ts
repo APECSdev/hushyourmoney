@@ -56,9 +56,9 @@ export function calcPaddedLen(unpaddedLen: number): number {
 }
 
 function pad(plaintext: Uint8Array): Uint8Array {
-    const paddedLen = calcPaddedLen(plaintext.length)
+    // spec pad(): total = prefix ‖ plaintext ‖ zeros(calc_padded_len(L) - L)
     const prefixLen = plaintext.length < EXT_PREFIX_THRESHOLD ? 2 : 6
-    const out = new Uint8Array(paddedLen)
+    const out = new Uint8Array(prefixLen + calcPaddedLen(plaintext.length))
     if (prefixLen === 2) {
         out[0] = (plaintext.length >> 8) & 0xff
         out[1] = plaintext.length & 0xff
@@ -79,10 +79,11 @@ function unpad(padded: Uint8Array): Uint8Array {
     if (first2 === 0) {
         if (padded.length < 6) throw new Error('nip44: extended prefix truncated')
         const len = (padded[2] * 0x1000000) + (padded[3] << 16) + (padded[4] << 8) + padded[5]
-        if (len < EXT_PREFIX_THRESHOLD || 6 + len > padded.length) throw new Error('nip44: bad extended length')
+        if (len < EXT_PREFIX_THRESHOLD) throw new Error('nip44: bad extended length')
+        if (padded.length !== 6 + calcPaddedLen(len)) throw new Error('nip44: invalid padding')
         return padded.subarray(6, 6 + len)
     }
-    if (2 + first2 > padded.length) throw new Error('nip44: bad length prefix')
+    if (padded.length !== 2 + calcPaddedLen(first2)) throw new Error('nip44: invalid padding')
     return padded.subarray(2, 2 + first2)
 }
 
