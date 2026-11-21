@@ -1,4 +1,4 @@
-<!-- web/pages/research/coinjoin.vue — topic 03 (the technique) -->
+<!-- web/pages/research/coinjoin.vue — topic 05 (the technique) -->
 
 <script setup lang="ts">
 /* Shared shell + styles come from layouts/research.vue (user refactor 2026-11-13). */
@@ -30,7 +30,7 @@ useReveal()
             </NuxtLink>
 
             <p class="animate-rise mt-6 font-mono text-[0.8rem] uppercase tracking-[0.5em] text-violet-200 sm:text-xs" style="animation-delay: 0.1s">
-                topic 03 · the technique
+                topic 05 · the technique
             </p>
 
             <h1 class="animate-rise mt-6 font-display text-[clamp(2.4rem,8vw,6rem)] font-extrabold leading-[1.04] tracking-tight text-white" style="animation-delay: 0.2s">
@@ -81,8 +81,10 @@ useReveal()
                     coordination model is its own design axis: a central coordinator, a blind-signing
                     coordinator, or no coordinator at all. An early-stage experiment announced on
                     the research forum (topic 1773) coordinates rounds peer-to-peer over Nostr with
-                    onion-wrapped outputs — pre-mainnet, cited as a data point.
+                    onion-wrapped outputs — pre-mainnet, cited as a data point. We are building and
+                    measuring that coordination model in our own P2P fusion research.
                     <a href="https://github.com/00-Protocol/BCH-Stealth-Protocol" target="_blank" rel="noopener" class="src-link ml-2">P2P fusion over Nostr (third-party) ↗</a>
+                    <NuxtLink to="/research/nostr-fusion" class="src-link ml-2">our measured P2P fusion research →</NuxtLink>
                 </p>
                 <div class="mt-3 flex flex-wrap gap-3 font-mono text-[0.8rem]">
                     <NuxtLink to="/research/cashfusion" class="src-link">CashFusion — the BCH implementation →</NuxtLink>
@@ -98,9 +100,9 @@ useReveal()
                     <span class="pager-dir">← previous</span>
                     <span class="pager-title">Shielded Addresses</span>
                 </NuxtLink>
-                <NuxtLink to="/research/cashfusion" class="pager-link right">
+                <NuxtLink to="/ceremony" class="pager-link right">
                     <span class="pager-dir">next topic →</span>
-                    <span class="pager-title">CashFusion</span>
+                    <span class="pager-title">Trusted Setup · The Hush Ceremony</span>
                 </NuxtLink>
             </div>
         </section>

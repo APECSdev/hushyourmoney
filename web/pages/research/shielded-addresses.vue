@@ -1,4 +1,4 @@
-<!-- web/pages/research/shielded-addresses.vue — topic 02 (survey of external ECDH stealth work) -->
+<!-- web/pages/research/shielded-addresses.vue — topic 04 (survey of external ECDH stealth work) -->
 
 <script setup lang="ts">
 /* Shared shell + styles come from layouts/research.vue (user refactor 2026-11-13). */
@@ -38,7 +38,7 @@ const STEALTH_FACTS = [
             </NuxtLink>
 
             <p class="animate-rise mt-6 font-mono text-[0.8rem] uppercase tracking-[0.5em] text-cyan-200 sm:text-xs" style="animation-delay: 0.1s">
-                topic 02 · receiver privacy · survey of external work
+                topic 04 · receiver privacy · survey of external work
             </p>
 
             <h1 class="animate-rise mt-6 font-display text-[clamp(2.4rem,8vw,6rem)] font-extrabold leading-[1.04] tracking-tight text-white" style="animation-delay: 0.2s">
@@ -68,7 +68,7 @@ const STEALTH_FACTS = [
         <section class="relative z-10 mx-auto w-full max-w-6xl px-6 pb-28 sm:pb-36">
             <div class="grid items-start gap-12 lg:grid-cols-[1fr_1.4fr]">
                 <div class="reveal">
-                    <p class="font-mono text-[0.8rem] uppercase tracking-[0.45em] text-cyan-200">02 · the survey</p>
+                    <p class="font-mono text-[0.8rem] uppercase tracking-[0.45em] text-cyan-200">04 · the survey</p>
                     <h2 class="mt-5 font-display text-[clamp(1.9rem,5vw,3.4rem)] font-bold leading-[1.08] text-white">
                         What we're<br />looking at
                     </h2>
@@ -146,9 +146,9 @@ const STEALTH_FACTS = [
         <!-- ── Pager ── -->
         <section class="relative z-10 mx-auto w-full max-w-5xl px-6 pb-24">
             <div class="pager reveal">
-                <NuxtLink to="/research/shielded-pool" class="pager-link">
+                <NuxtLink to="/research/nostr-fusion" class="pager-link">
                     <span class="pager-dir">← previous</span>
-                    <span class="pager-title">The Shielded Pool</span>
+                    <span class="pager-title">P2P Fusion over Nostr</span>
                 </NuxtLink>
                 <NuxtLink to="/research/coinjoin" class="pager-link right">
                     <span class="pager-dir">next topic →</span>

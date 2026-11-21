@@ -1,5 +1,5 @@
 /* web/assets/css/research.css — shared styles for the /research suite
-   (index + shielded-pool + shielded-addresses + coinjoin + cashfusion).
+   (index + shielded-pool + cashfusion + nostr-fusion + shielded-addresses + coinjoin).
    Imported NON-scoped by web/layouts/research.vue and fully namespaced
    under `.research-page` (scoped layout styles cannot reach slot content). */
 

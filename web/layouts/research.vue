@@ -1,5 +1,5 @@
 <!-- web/layouts/research.vue — shared shell for the /research suite
-     (index + shielded-pool + shielded-addresses + coinjoin + cashfusion). -->
+     (index + shielded-pool + cashfusion + nostr-fusion + shielded-addresses + coinjoin). -->
 
 <script setup lang="ts">
 /* Shared research-suite layout: dark shell + aurora backdrop + GitHub banner +
@@ -17,18 +17,22 @@
 </script>
 
 <template>
-    <main class="research-page relative min-h-screen w-full overflow-x-clip bg-[#060a10] font-sans text-slate-200 antialiased selection:bg-lime-300 selection:text-slate-900">
+    <div class="min-h-screen bg-[#060a10]">
+        <SiteNav />
 
-        <AuroraBackdrop />
+        <main class="research-page relative min-h-screen w-full overflow-x-clip bg-[#060a10] font-sans text-slate-200 antialiased selection:bg-lime-300 selection:text-slate-900">
 
-        <!-- GitHub source banner (top-right) -->
-        <GithubBanner />
+            <AuroraBackdrop />
 
-        <slot />
+            <!-- GitHub source banner (top-right) -->
+            <GithubBanner />
 
-        <Footer />
+            <slot />
 
-    </main>
+            <Footer />
+
+        </main>
+    </div>
 </template>
 
 <style src="~/assets/css/research.css" lang="css"></style>

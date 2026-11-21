@@ -1,4 +1,4 @@
-<!-- web/pages/research/cashfusion.vue — topic 04 (survey of BCH's CoinJoin implementation) -->
+<!-- web/pages/research/cashfusion.vue — topic 02 (survey of BCH's CoinJoin implementation) -->
 
 <script setup lang="ts">
 /* Shared shell + styles come from layouts/research.vue (user refactor 2026-11-13). */
@@ -30,7 +30,7 @@ useReveal()
             </NuxtLink>
 
             <p class="animate-rise mt-6 font-mono text-[0.8rem] uppercase tracking-[0.5em] text-violet-200 sm:text-xs" style="animation-delay: 0.1s">
-                topic 04 · the BCH implementation · survey of third-party work
+                topic 02 · the BCH implementation · survey of third-party work
             </p>
 
             <h1 class="animate-rise mt-6 font-display text-[clamp(2.4rem,8vw,6rem)] font-extrabold leading-[1.04] tracking-tight text-white" style="animation-delay: 0.2s">
@@ -66,11 +66,17 @@ useReveal()
                     The work is also <strong class="font-semibold text-white">under active scrutiny</strong>: a
                     standing red-team discussion on the research forum, ongoing UX/tech improvement
                     threads, and a public fusion-statistics dashboard. We survey and link this work —
-                    it belongs to its authors; our contribution is the shielded-pool layer above it.
+                    it belongs to its authors; our contribution is the shielded-pool layer above it
+                    and the coordinator-free fusion research beside it.
                 </p>
             </div>
 
             <div class="mt-12 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+                <NuxtLink to="/research/nostr-fusion" class="doc-card reveal">
+                    <h3 class="font-mono text-sm text-lime-300">our research · P2P fusion over Nostr</h3>
+                    <p class="mt-2 text-sm leading-relaxed text-slate-200">We are building and measuring a coordinator-free CoinJoin round over Nostr — gift-wrapped peer messages, onion-routed outputs, gates G1–G3L passed. This is our own work, not a survey.</p>
+                    <span class="mt-3 inline-block font-mono text-xs uppercase tracking-[0.22em] text-lime-300">explore the research →</span>
+                </NuxtLink>
                 <a href="https://bitcoincashresearch.org/t/94-percent-of-all-bch-transacted-since-july-2020-is-now-a-descendant-of-a-cashfusion-transaction/752" target="_blank" rel="noopener" class="doc-card reveal">
                     <h3 class="font-mono text-sm text-lime-300">the 94% analysis</h3>
                     <p class="mt-2 text-sm leading-relaxed text-slate-200">"94 percent of all BCH transacted since July 2020 is now a descendant of a CashFusion transaction" — the adoption record, third-party.</p>
@@ -97,13 +103,13 @@ useReveal()
         <!-- ── Pager ── -->
         <section class="relative z-10 mx-auto w-full max-w-5xl px-6 pb-24">
             <div class="pager reveal">
-                <NuxtLink to="/research/coinjoin" class="pager-link">
+                <NuxtLink to="/research/shielded-pool" class="pager-link">
                     <span class="pager-dir">← previous</span>
-                    <span class="pager-title">CoinJoin</span>
+                    <span class="pager-title">The Shielded Pool</span>
                 </NuxtLink>
-                <NuxtLink to="/ceremony" class="pager-link right">
-                    <span class="pager-dir">next →</span>
-                    <span class="pager-title">Trusted Setup · The Hush Ceremony</span>
+                <NuxtLink to="/research/nostr-fusion" class="pager-link right">
+                    <span class="pager-dir">next topic →</span>
+                    <span class="pager-title">P2P Fusion over Nostr</span>
                 </NuxtLink>
             </div>
         </section>

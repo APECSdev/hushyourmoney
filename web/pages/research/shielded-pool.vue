@@ -857,9 +857,9 @@ const LIFECYCLE = [
                     <span class="pager-dir">← all topics</span>
                     <span class="pager-title">Research hub</span>
                 </NuxtLink>
-                <NuxtLink to="/research/shielded-addresses" class="pager-link right">
+                <NuxtLink to="/research/cashfusion" class="pager-link right">
                     <span class="pager-dir">next topic →</span>
-                    <span class="pager-title">Shielded Addresses</span>
+                    <span class="pager-title">CashFusion</span>
                 </NuxtLink>
             </div>
         </section>

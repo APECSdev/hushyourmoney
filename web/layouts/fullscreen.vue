@@ -57,7 +57,11 @@ onBeforeUnmount(() => {
 </script>
 
 <template>
-    <main>
-        <slot />
-    </main>
+    <div class="min-h-screen bg-[#060a10]">
+        <SiteNav />
+
+        <main>
+            <slot />
+        </main>
+    </div>
 </template>

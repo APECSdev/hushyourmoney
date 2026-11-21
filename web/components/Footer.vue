@@ -9,6 +9,10 @@
             <div class="flex flex-wrap items-center justify-center gap-x-4 gap-y-2 font-mono text-xs text-slate-300">
                 <NuxtLink to="/" class="footer-link">home</NuxtLink>
                 <span class="text-slate-300">|</span>
+                <NuxtLink to="/research" class="footer-link">research</NuxtLink>
+                <span class="text-slate-300">|</span>
+                <NuxtLink to="/roadmap" class="footer-link">roadmap</NuxtLink>
+                <span class="text-slate-300">|</span>
                 <NuxtLink to="/readme" class="footer-link">readme</NuxtLink>
                 <span class="text-slate-300">|</span>
                 <NuxtLink to="/legal" class="footer-link">legal</NuxtLink>
