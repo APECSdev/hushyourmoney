@@ -283,7 +283,7 @@ const LIFECYCLE = [
                 Zero-knowledge payments on the UTXO model — measured, not promised.
             </p>
 
-            <p class="animate-rise mt-8 max-w-2xl text-base leading-relaxed text-slate-300/90 sm:text-lg" style="animation-delay: 0.42s">
+            <p class="animate-rise mt-8 max-w-2xl text-base leading-relaxed text-slate-100/95 sm:text-lg" style="animation-delay: 0.42s">
                 A complete Groth16 shielded pool for CashTokens — note commitments, nullifiers,
                 a Merkle tree, a covenant state machine and a full on-chain Groth16 verifier —
                 deployed and measured on Bitcoin Cash, chipnet and <strong class="font-semibold text-white">mainnet</strong>. <strong class="font-semibold text-white">It runs
@@ -315,8 +315,8 @@ const LIFECYCLE = [
             <div class="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-5">
                 <div v-for="(s, i) in STATS" :key="s.label" class="stat-card reveal" :style="{ transitionDelay: (i * 0.08) + 's' }">
                     <div class="font-display text-2xl font-extrabold sm:text-3xl" :class="s.color">{{ s.value }}</div>
-                    <div class="mt-2 text-xs uppercase tracking-widest text-slate-500">{{ s.label }}</div>
-                    <div class="mt-1 font-mono text-[0.6rem] text-slate-600">[{{ s.tag }}]</div>
+                    <div class="mt-2 text-xs uppercase tracking-widest text-slate-300">{{ s.label }}</div>
+                    <div class="mt-1 font-mono text-[0.6rem] text-slate-400">[{{ s.tag }}]</div>
                 </div>
             </div>
         </section>
@@ -324,22 +324,22 @@ const LIFECYCLE = [
         <!-- ── Featured: MAINNET matrix (PREP → GENESIS → DEPLOY → TRANSFER) ── -->
         <section id="mainnet-matrix" class="relative z-10 mx-auto w-full max-w-6xl px-6 pb-28 sm:pb-36">
             <div class="reveal text-center">
-                <p class="font-mono text-[0.65rem] uppercase tracking-[0.45em] text-lime-300/80">mainnet matrix · live</p>
+                <p class="font-mono text-[0.65rem] uppercase tracking-[0.45em] text-lime-300/80">live · mainnet</p>
                 <h2 class="mt-5 font-display text-[clamp(1.9rem,5vw,3.4rem)] font-bold leading-[1.08] text-white">
-                    The same pool, on mainnet
+                    Live on Bitcoin Cash mainnet
                 </h2>
-                <p class="mt-3 font-mono text-xs text-slate-500">real PUSD · real Groth16 proof · every stage linked to its mainnet transaction [measured]</p>
+                <p class="mt-3 font-mono text-xs text-slate-400">real PUSD · real Groth16 proof · every stage linked to its mainnet transaction [measured]</p>
             </div>
 
-            <div class="reveal mt-14 overflow-x-auto">
-                <div class="flex min-w-[680px] items-start px-1">
+            <div class="reveal mt-14">
+                <div class="grid grid-cols-1 gap-6 md:grid-cols-2">
                     <template v-for="(s, i) in MAINNET_LIFECYCLE" :key="s.stage">
                         <div class="life-stage">
                             <div class="stage-dot" :class="s.cls" :style="{ animationDelay: (i * 2) + 's' }">
                                 <span class="font-display text-lg font-extrabold">{{ String(i + 1).padStart(2, '0') }}</span>
                             </div>
                             <h3 class="mt-5 font-display text-xl font-bold text-white">{{ s.stage }}</h3>
-                            <p class="mt-1 font-mono text-[0.62rem] uppercase tracking-[0.22em] text-slate-500">{{ s.kicker }}</p>
+                            <p class="mt-1 font-mono text-[0.62rem] uppercase tracking-[0.22em] text-slate-400">{{ s.kicker }}</p>
                             <ul class="life-points" :style="{ '--dot': s.dot }">
                                 <li v-for="b in s.bullets" :key="b">{{ b }}</li>
                             </ul>
@@ -356,17 +356,13 @@ const LIFECYCLE = [
                                 </a>
                             </div>
                         </div>
-
-                        <div v-if="i < MAINNET_LIFECYCLE.length - 1" class="life-flow hidden md:block">
-                            <span class="pulse" :class="i === 0 ? '' : i === 1 ? 'p2' : 'p3'"></span>
-                        </div>
                     </template>
                 </div>
             </div>
 
-            <p class="reveal mt-8 text-center font-mono text-[0.65rem] leading-relaxed text-slate-600">
+            <p class="reveal mt-8 text-center font-mono text-[0.65rem] leading-relaxed text-slate-400">
                 all four txs broadcast on BCH mainnet, 2026-11-20 [measured] · setup grade:
-                <strong class="text-slate-400">demo — solo 1-of-1 ceremony, entropy published</strong>
+                <strong class="text-slate-200">demo — solo 1-of-1 ceremony, entropy published</strong>
                 (c490ce06…17b931) · production remains gated on the
                 <NuxtLink to="/ceremony" class="src-link">public ceremony</NuxtLink>
             </p>
@@ -379,7 +375,7 @@ const LIFECYCLE = [
                 <h2 class="mt-5 font-display text-[clamp(1.9rem,5vw,3.4rem)] font-bold leading-[1.08] text-white">
                     Shield, Transfer, Unshield
                 </h2>
-                <p class="mt-3 font-mono text-xs text-slate-500">one full pass through the pool on chipnet — every stage linked to the transaction that performed it [measured]</p>
+                <p class="mt-3 font-mono text-xs text-slate-400">one full pass through the pool on chipnet — every stage linked to the transaction that performed it [measured]</p>
             </div>
 
             <div class="reveal mt-14 overflow-x-auto">
@@ -390,7 +386,7 @@ const LIFECYCLE = [
                                 <span class="font-display text-lg font-extrabold">{{ String(i + 1).padStart(2, '0') }}</span>
                             </div>
                             <h3 class="mt-5 font-display text-xl font-bold text-white">{{ s.stage }}</h3>
-                            <p class="mt-1 font-mono text-[0.62rem] uppercase tracking-[0.22em] text-slate-500">{{ s.kicker }}</p>
+                            <p class="mt-1 font-mono text-[0.62rem] uppercase tracking-[0.22em] text-slate-400">{{ s.kicker }}</p>
                             <ul class="life-points" :style="{ '--dot': s.dot }">
                                 <li v-for="b in s.bullets" :key="b">{{ b }}</li>
                             </ul>
@@ -415,7 +411,7 @@ const LIFECYCLE = [
                 </div>
             </div>
 
-            <p class="reveal mt-8 text-center font-mono text-[0.65rem] leading-relaxed text-slate-600">
+            <p class="reveal mt-8 text-center font-mono text-[0.65rem] leading-relaxed text-slate-400">
                 all three txs confirmed on chipnet [measured] · the mainnet matrix above ran the same
                 circuit and covenant with real PUSD · production deployment remains gated on the
                 <NuxtLink to="/ceremony" class="src-link">trusted-setup ceremony</NuxtLink>
@@ -469,7 +465,7 @@ const LIFECYCLE = [
             <div id="architecture" class="reveal mt-24 text-center">
                 <p class="font-mono text-[0.65rem] uppercase tracking-[0.45em] text-cyan-300/80">03 · the machine</p>
                 <h2 class="mt-5 font-display text-[clamp(1.9rem,5vw,3.4rem)] font-bold leading-[1.08] text-white">Architecture</h2>
-                <p class="mt-3 font-mono text-xs text-slate-500">rendered from the design docs — GENERALIZED-SHIELDING.md / COVENANT-DESIGN.md</p>
+                <p class="mt-3 font-mono text-xs text-slate-400">rendered from the design docs — GENERALIZED-SHIELDING.md / COVENANT-DESIGN.md</p>
             </div>
 
             <div class="reveal mt-12">
@@ -570,7 +566,7 @@ const LIFECYCLE = [
             <div class="reveal">
                 <p class="font-mono text-[0.65rem] uppercase tracking-[0.45em] text-lime-300/80">04 · the numbers</p>
                 <h2 class="mt-3 font-display text-[clamp(1.9rem,5vw,3.4rem)] font-bold leading-[1.08] text-white">Measured Results</h2>
-                <p class="mt-2 font-mono text-xs text-slate-500">[ measured ] = live measurement with a recorded source · nothing on this page is estimated</p>
+                <p class="mt-2 font-mono text-xs text-slate-400">[ measured ] = live measurement with a recorded source · nothing on this page is estimated</p>
             </div>
 
             <div class="reveal mt-10 overflow-x-auto rounded-2xl border border-white/10 bg-white/[0.03] backdrop-blur">
@@ -586,7 +582,7 @@ const LIFECYCLE = [
                         <tr v-for="r in RESULTS" :key="r.q">
                             <td class="whitespace-nowrap font-mono text-[0.72rem] uppercase tracking-wider text-slate-400">{{ r.q }}</td>
                             <td class="text-slate-100">{{ r.v }}</td>
-                            <td class="font-mono text-[0.7rem] text-slate-500">
+                            <td class="font-mono text-[0.7rem] text-slate-400">
                                 <a v-if="r.href" :href="r.href" target="_blank" rel="noopener" class="src-link">{{ r.src }} ↗</a>
                                 <span v-else>{{ r.src }}</span>
                             </td>
@@ -595,7 +591,7 @@ const LIFECYCLE = [
                 </table>
             </div>
 
-            <p class="reveal mt-4 font-mono text-[0.65rem] leading-relaxed text-slate-600">
+            <p class="reveal mt-4 font-mono text-[0.65rem] leading-relaxed text-slate-400">
                 build records: APECSdev/pusd-shielded-pool (CHIPNET.md) · hushyourmoney (POOL-DEPLOYMENT.md) — all measured on chipnet, 2026-10/11.
             </p>
         </section>
@@ -605,7 +601,7 @@ const LIFECYCLE = [
             <div class="reveal">
                 <p class="font-mono text-[0.65rem] uppercase tracking-[0.45em] text-violet-300/80">05 · the trail</p>
                 <h2 class="mt-3 font-display text-[clamp(1.9rem,5vw,3.4rem)] font-bold leading-[1.08] text-white">Gate-by-Gate Evidence</h2>
-                <p class="mt-2 font-mono text-xs text-slate-500">seven launch gates · six passed · one in design</p>
+                <p class="mt-2 font-mono text-xs text-slate-400">seven launch gates · six passed · one in design</p>
             </div>
 
             <div class="mt-10 space-y-4">
@@ -643,7 +639,7 @@ const LIFECYCLE = [
             <div class="reveal">
                 <p class="font-mono text-[0.65rem] uppercase tracking-[0.45em] text-lime-300/80">06 · on-chain state</p>
                 <h2 class="mt-3 font-display text-[clamp(1.9rem,5vw,3.4rem)] font-bold leading-[1.08] text-white">Live Pools</h2>
-                <p class="mt-2 font-mono text-xs text-slate-500">from pool-registry.json · chipnet</p>
+                <p class="mt-2 font-mono text-xs text-slate-400">from pool-registry.json · chipnet</p>
             </div>
 
             <div class="mt-10 grid gap-6 lg:grid-cols-2">
@@ -654,19 +650,19 @@ const LIFECYCLE = [
                     </div>
                     <dl class="mt-4 space-y-2.5 font-mono text-[0.72rem] leading-relaxed">
                         <div class="flex gap-3">
-                            <dt class="w-24 shrink-0 uppercase tracking-widest text-slate-600">category</dt>
+                            <dt class="w-24 shrink-0 uppercase tracking-widest text-slate-400">category</dt>
                             <dd class="break-all text-slate-300"><a :href="EXPLORER + p.catFull + NETQ" target="_blank" rel="noopener" class="src-link">{{ p.cat }}</a></dd>
                         </div>
                         <div class="flex gap-3">
-                            <dt class="w-24 shrink-0 uppercase tracking-widest text-slate-600">locking</dt>
+                            <dt class="w-24 shrink-0 uppercase tracking-widest text-slate-400">locking</dt>
                             <dd class="break-all text-slate-300" :title="p.lockingFull">{{ p.locking }}</dd>
                         </div>
                         <div class="flex gap-3">
-                            <dt class="w-24 shrink-0 uppercase tracking-widest text-slate-600">tree root</dt>
+                            <dt class="w-24 shrink-0 uppercase tracking-widest text-slate-400">tree root</dt>
                             <dd class="break-all text-slate-300">{{ p.root }}</dd>
                         </div>
                         <div class="flex gap-3">
-                            <dt class="w-24 shrink-0 uppercase tracking-widest text-slate-600">first op</dt>
+                            <dt class="w-24 shrink-0 uppercase tracking-widest text-slate-400">first op</dt>
                             <dd class="break-all text-slate-300">
                                 {{ p.firstOp }} ·
                                 <a :href="EXPLORER + p.txFull + NETQ" target="_blank" rel="noopener" class="src-link">{{ p.tx }} ↗</a>
@@ -676,7 +672,7 @@ const LIFECYCLE = [
                 </div>
             </div>
 
-            <p class="reveal mt-6 text-sm leading-relaxed text-slate-500">
+            <p class="reveal mt-6 text-sm leading-relaxed text-slate-400">
                 A third pool (Gate 6b) demonstrates the full two-asset lifecycle — SHIELD A, SHIELD B,
                 TRANSFER, UNSHIELD — on a single multi-asset instance; its operations were VM-verified and
                 broadcast 2026-11-10/11 and are pending confirmation at last check. Registry entry to follow.
@@ -719,7 +715,7 @@ const LIFECYCLE = [
                         testnet only · 1-of-1 trusted setup · no audits yet · /ceremony is the path to mainnet
                     </div>
                     <p>
-                        <span class="font-mono text-xs text-slate-500">[cited · third-party]</span> — the pool
+                        <span class="font-mono text-xs text-slate-400">[cited · third-party]</span> — the pool
                         sits inside an active research conversation, and we place it there deliberately.
                         Confidential-transaction designs pursue amount-hiding at the protocol level
                         (topic 1724, continued as topic 2028); this pool is the complementary opt-in
@@ -850,7 +846,7 @@ const LIFECYCLE = [
                     </a>
                 </div>
 
-                <p class="mt-6 font-mono text-[0.6rem] uppercase tracking-[0.3em] text-slate-600">[ discussion link pending publication ]</p>
+                <p class="mt-6 font-mono text-[0.6rem] uppercase tracking-[0.3em] text-slate-400">[ discussion link pending publication ]</p>
             </div>
         </section>
 

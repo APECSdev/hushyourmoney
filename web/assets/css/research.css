@@ -316,7 +316,7 @@
     padding: 0.24rem 0;
     font-size: 0.8rem;
     line-height: 1.5;
-    color: rgba(203, 213, 225, 0.9);
+    color: rgba(232, 238, 247, 0.96);
 }
 .research-page .life-points li::before {
     content: "";
@@ -332,13 +332,13 @@
     align-items: center;
     gap: 0.45rem;
     border-radius: 9999px;
-    border: 1px solid rgba(148, 163, 184, 0.25);
+    border: 1px solid rgba(203, 213, 225, 0.42);
     padding: 0.2rem 0.7rem;
     font-family: "Space Mono", ui-monospace, monospace;
     font-size: 0.56rem;
     letter-spacing: 0.18em;
     text-transform: uppercase;
-    color: rgba(148, 163, 184, 0.85);
+    color: rgba(226, 232, 240, 0.95);
 }
 .research-page .tx-btn-lg {
     padding: 0.7rem 1.3rem;
