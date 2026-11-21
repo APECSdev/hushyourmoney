@@ -101,10 +101,82 @@ const GATES: Gate[] = [
     },
 ]
 
+/* ── Mainnet matrix (2026-11-20) ──────────────────────────────────
+   The SAME circuit, covenant and verifier that ran on chipnet, executed on
+   MAINNET with real PUSD (category 2469acc5…2544). Every tx below is a
+   broadcast mainnet transaction [measured]; the shielded op was evaluated on
+   all seven inputs with the libauth BCH-2026 VM before broadcast.
+   Setup grade: DEMO — solo 1-of-1 ceremony, entropy published
+   (c490ce06a2f364ee1ec87c75b0a8d9138e18df4e0f17b931). NOT the Gate-7 public
+   ceremony; production deployment remains gated on it. */
+const MAINNET_LIFECYCLE = [
+    {
+        stage: 'Prep',
+        cls: 'stage-lime',
+        dot: '#bef264',
+        network: 'mainnet',
+        kicker: 'pool category created',
+        bullets: [
+            'genesis input = any input spending a vout-0 outpoint',
+            'its txid becomes the pool state-NFT category',
+            'zero-value carrier — no tokens minted yet',
+        ],
+        meta: ['mainnet', '219 B [measured]'],
+        tx: 'dd1e3506…0e7d',
+        txFull: 'dd1e3506f4fb7e81dd4f9146612df1f0aff1f812378332297556653356020e7d',
+    },
+    {
+        stage: 'Genesis',
+        cls: 'stage-cyan',
+        dot: '#67e8f9',
+        network: 'mainnet',
+        kicker: 'state NFT minted',
+        bullets: [
+            'mutable NFT commitment = merkle root ‖ nullifier-set hash',
+            'root = 49bda9bd…830f (the proof vector\u2019s anchored root)',
+            'the pool\u2019s whole state lives in 64 bytes',
+        ],
+        meta: ['mainnet', '459 B [measured]'],
+        tx: '0a8cb008…c5c4',
+        txFull: '0a8cb008cbacc618a27726e4422a61748fe5d5aa1e75c3ed379eff918441c5c4',
+    },
+    {
+        stage: 'Deploy',
+        cls: 'stage-violet',
+        dot: '#c48dff',
+        network: 'mainnet',
+        kicker: 'covenant + verifier funded',
+        bullets: [
+            'P2SH32 covenant aa20a8d375c44dfa… pins poolCategory',
+            '5 Groth16 verifier step UTXOs pre-funded (36,649 B)',
+            '100 PUSD holdings locked under the same covenant',
+        ],
+        meta: ['mainnet', '909 B [measured]'],
+        tx: '63ddfdd4…af7c',
+        txFull: '63ddfdd4718b5186dfb0ed36ceebb66a8c5dde06ad28b291b53bd040b1f5af7c',
+    },
+    {
+        stage: 'Transfer',
+        cls: 'stage-lime',
+        dot: '#bef264',
+        network: 'mainnet',
+        kicker: '100 PUSD shielded',
+        bullets: [
+            'real Groth16 proof · 2 public inputs · 183,472 constraints',
+            '7 inputs VM-validated before broadcast, all OK',
+            'state root advanced to d5ec91ad…d508; 100 PUSD conserved',
+        ],
+        meta: ['mainnet', '38,475 B · 1 sat/B [measured]'],
+        tx: '4fda8a8b…544f',
+        txFull: '4fda8a8b63ff2ef82cc1f5a9ad89bdcbbc86fec254e9c08bb1b874312f6b544f',
+    },
+]
+
 /* ── Live pools (from pool-registry.json) ────────────────────────── */
 /* Explorer: Selene (user directive 2026-11-13 — imaginary.cash is FALLBACK ONLY, never primary). */
 const EXPLORER = 'https://explorer.selene.cash/tx/'
 const NETQ = '?network=chipnet'
+const MAINNET_NETQ = '?network=mainnet'
 const POOLS = [
     {
         name: 'gate3-demo-pool',
@@ -214,12 +286,12 @@ const LIFECYCLE = [
             <p class="animate-rise mt-8 max-w-2xl text-base leading-relaxed text-slate-300/90 sm:text-lg" style="animation-delay: 0.42s">
                 A complete Groth16 shielded pool for CashTokens — note commitments, nullifiers,
                 a Merkle tree, a covenant state machine and a full on-chain Groth16 verifier —
-                deployed and measured on Bitcoin Cash chipnet. <strong class="font-semibold text-white">It runs
+                deployed and measured on Bitcoin Cash, chipnet and <strong class="font-semibold text-white">mainnet</strong>. <strong class="font-semibold text-white">It runs
                 today</strong>: one standard transaction, one scripting VM, no fork required.
             </p>
 
             <div class="animate-rise mt-8 flex flex-wrap items-center justify-center gap-3" style="animation-delay: 0.5s">
-                <span class="status-chip status-lime">live on chipnet</span>
+                <span class="status-chip status-lime">live on mainnet</span>
                 <span class="status-chip status-cyan">no consensus changes</span>
                 <span class="status-chip status-violet">asset-generic — category is a private witness</span>
             </div>
@@ -249,14 +321,65 @@ const LIFECYCLE = [
             </div>
         </section>
 
+        <!-- ── Featured: MAINNET matrix (PREP → GENESIS → DEPLOY → TRANSFER) ── -->
+        <section id="mainnet-matrix" class="relative z-10 mx-auto w-full max-w-6xl px-6 pb-28 sm:pb-36">
+            <div class="reveal text-center">
+                <p class="font-mono text-[0.65rem] uppercase tracking-[0.45em] text-lime-300/80">mainnet matrix · live</p>
+                <h2 class="mt-5 font-display text-[clamp(1.9rem,5vw,3.4rem)] font-bold leading-[1.08] text-white">
+                    The same pool, on mainnet
+                </h2>
+                <p class="mt-3 font-mono text-xs text-slate-500">real PUSD · real Groth16 proof · every stage linked to its mainnet transaction [measured]</p>
+            </div>
+
+            <div class="reveal mt-14 overflow-x-auto">
+                <div class="flex min-w-[680px] items-start px-1">
+                    <template v-for="(s, i) in MAINNET_LIFECYCLE" :key="s.stage">
+                        <div class="life-stage">
+                            <div class="stage-dot" :class="s.cls" :style="{ animationDelay: (i * 2) + 's' }">
+                                <span class="font-display text-lg font-extrabold">{{ String(i + 1).padStart(2, '0') }}</span>
+                            </div>
+                            <h3 class="mt-5 font-display text-xl font-bold text-white">{{ s.stage }}</h3>
+                            <p class="mt-1 font-mono text-[0.62rem] uppercase tracking-[0.22em] text-slate-500">{{ s.kicker }}</p>
+                            <ul class="life-points" :style="{ '--dot': s.dot }">
+                                <li v-for="b in s.bullets" :key="b">{{ b }}</li>
+                            </ul>
+                            <div class="mt-4 flex flex-wrap justify-center gap-2">
+                                <span v-for="m in s.meta" :key="m" class="life-meta">{{ m }}</span>
+                            </div>
+                            <div class="mt-6 flex justify-center">
+                                <a :href="EXPLORER + s.txFull + MAINNET_NETQ" target="_blank" rel="noopener" class="tx-btn tx-btn-lg">
+                                    <span class="tx-chip">{{ s.network }}</span>
+                                    <span class="tx-id">{{ s.tx }}</span>
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="h-3 w-3">
+                                        <path d="M7 17L17 7M9 7h8v8" />
+                                    </svg>
+                                </a>
+                            </div>
+                        </div>
+
+                        <div v-if="i < MAINNET_LIFECYCLE.length - 1" class="life-flow hidden md:block">
+                            <span class="pulse" :class="i === 0 ? '' : i === 1 ? 'p2' : 'p3'"></span>
+                        </div>
+                    </template>
+                </div>
+            </div>
+
+            <p class="reveal mt-8 text-center font-mono text-[0.65rem] leading-relaxed text-slate-600">
+                all four txs broadcast on BCH mainnet, 2026-11-20 [measured] · setup grade:
+                <strong class="text-slate-400">demo — solo 1-of-1 ceremony, entropy published</strong>
+                (c490ce06…17b931) · production remains gated on the
+                <NuxtLink to="/ceremony" class="src-link">public ceremony</NuxtLink>
+            </p>
+        </section>
+
         <!-- ── Featured: the lifecycle (SHIELD → TRANSFER → UNSHIELD) ── -->
         <section id="lifecycle" class="relative z-10 mx-auto w-full max-w-6xl px-6 pb-28 sm:pb-36">
             <div class="reveal text-center">
-                <p class="font-mono text-[0.65rem] uppercase tracking-[0.45em] text-lime-300/80">01 · the lifecycle · featured</p>
+                <p class="font-mono text-[0.65rem] uppercase tracking-[0.45em] text-lime-300/80">01 · the lifecycle · chipnet matrix</p>
                 <h2 class="mt-5 font-display text-[clamp(1.9rem,5vw,3.4rem)] font-bold leading-[1.08] text-white">
                     Shield, Transfer, Unshield
                 </h2>
-                <p class="mt-3 font-mono text-xs text-slate-500">one full pass through the pool — every stage linked to the transaction that performed it [measured]</p>
+                <p class="mt-3 font-mono text-xs text-slate-500">one full pass through the pool on chipnet — every stage linked to the transaction that performed it [measured]</p>
             </div>
 
             <div class="reveal mt-14 overflow-x-auto">
@@ -293,7 +416,8 @@ const LIFECYCLE = [
             </div>
 
             <p class="reveal mt-8 text-center font-mono text-[0.65rem] leading-relaxed text-slate-600">
-                all three txs confirmed on chipnet [measured] — mainnet deployment follows gate 7 · the
+                all three txs confirmed on chipnet [measured] · the mainnet matrix above ran the same
+                circuit and covenant with real PUSD · production deployment remains gated on the
                 <NuxtLink to="/ceremony" class="src-link">trusted-setup ceremony</NuxtLink>
             </p>
         </section>
