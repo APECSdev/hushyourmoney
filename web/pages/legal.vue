@@ -29,11 +29,11 @@ useReveal()
 
             <!-- ── Header ── -->
             <section class="reveal text-center">
-                <p class="font-mono text-[0.65rem] uppercase tracking-[0.5em] text-lime-300/80">utxo privacy toolkit · the fine print</p>
+                <p class="font-mono text-[0.8rem] uppercase tracking-[0.5em] text-lime-200">utxo privacy toolkit · the fine print</p>
                 <h1 class="mt-6 font-display text-[clamp(2.2rem,6.5vw,4.75rem)] font-extrabold leading-[1.05] tracking-tight text-white">
                     Terms of Service<br /><span class="text-gradient">&amp; Disclaimer</span>
                 </h1>
-                <p class="mt-6 font-mono text-xs uppercase tracking-[0.3em] text-slate-500">
+                <p class="mt-6 font-mono text-xs uppercase tracking-[0.3em] text-slate-300">
                     Last updated: November 12, 2026
                 </p>
             </section>

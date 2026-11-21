@@ -28,7 +28,7 @@ useReveal()
         <!-- ── Hero ── -->
         <section class="relative z-10 mx-auto flex w-full max-w-5xl flex-col items-center px-6 pb-16 pt-24 text-center sm:pt-32">
 
-            <p class="animate-rise font-mono text-[0.65rem] uppercase tracking-[0.5em] text-lime-300/80 sm:text-xs" style="animation-delay: 0.05s">
+            <p class="animate-rise font-mono text-[0.8rem] uppercase tracking-[0.5em] text-lime-200 sm:text-xs" style="animation-delay: 0.05s">
                 utxo privacy toolkit · getting started
             </p>
 
@@ -36,11 +36,11 @@ useReveal()
                 Welcome to<br /><span class="text-gradient">the hush</span>
             </h1>
 
-            <p class="animate-rise mt-6 font-mono text-lg italic text-cyan-200/90 sm:text-xl" style="animation-delay: 0.32s">
+            <p class="animate-rise mt-6 font-mono text-lg italic text-cyan-100 sm:text-xl" style="animation-delay: 0.32s">
                 Spend Privately. Fearlessly!
             </p>
 
-            <p class="animate-rise mt-8 max-w-2xl text-base leading-relaxed text-slate-300/90 sm:text-lg" style="animation-delay: 0.44s">
+            <p class="animate-rise mt-8 max-w-2xl text-base leading-relaxed text-slate-100 sm:text-lg" style="animation-delay: 0.44s">
                 In the next few minutes a <strong class="font-semibold text-white">wallet is created right in your browser</strong>.
                 The seed phrase it shows you is the only credential you will ever need —
                 write it down, keep it safe, and never share it with anyone.
@@ -64,7 +64,7 @@ useReveal()
         <!-- ── The ritual ── -->
         <section class="relative z-10 mx-auto w-full max-w-6xl px-6 py-20 sm:py-28">
             <div class="reveal max-w-3xl">
-                <p class="font-mono text-[0.65rem] uppercase tracking-[0.45em] text-lime-300/80">01 · the ritual</p>
+                <p class="font-mono text-[0.8rem] uppercase tracking-[0.45em] text-lime-200">01 · the ritual</p>
                 <h2 class="mt-5 font-display text-[clamp(1.9rem,5vw,3.4rem)] font-bold leading-[1.08] text-white">
                     Three steps to a clean history
                 </h2>
@@ -74,7 +74,7 @@ useReveal()
                 <div class="g-card reveal">
                     <p class="font-display text-5xl font-extrabold text-lime-300/25">01</p>
                     <h3 class="mt-4 font-display text-xl font-bold text-white">Create</h3>
-                    <p class="mt-3 text-sm leading-relaxed text-slate-400">
+                    <p class="mt-3 text-sm leading-relaxed text-slate-200">
                         Generate a fresh wallet in seconds. Your seed phrase never leaves this
                         device — back it up once, and you alone control your coins, forever.
                     </p>
@@ -83,7 +83,7 @@ useReveal()
                 <div class="g-card reveal" style="transition-delay: 0.1s">
                     <p class="font-display text-5xl font-extrabold text-cyan-300/25">02</p>
                     <h3 class="mt-4 font-display text-xl font-bold text-white">Fund</h3>
-                    <p class="mt-3 text-sm leading-relaxed text-slate-400">
+                    <p class="mt-3 text-sm leading-relaxed text-slate-200">
                         Top up your address from an exchange or an existing wallet.
                         Freshly received coins carry their public history — that is exactly
                         what we are about to erase.
@@ -93,7 +93,7 @@ useReveal()
                 <div class="g-card reveal" style="transition-delay: 0.2s">
                     <p class="font-display text-5xl font-extrabold text-violet-300/25">03</p>
                     <h3 class="mt-4 font-display text-xl font-bold text-white">Hush</h3>
-                    <p class="mt-3 text-sm leading-relaxed text-slate-400">
+                    <p class="mt-3 text-sm leading-relaxed text-slate-200">
                         Enter a shuffle or fusion round and weave your coins together with
                         everyone else's into a single collaborative transaction.
                         The trail stops at the crowd.
@@ -111,7 +111,7 @@ useReveal()
                     </svg>
                     <div>
                         <h3 class="font-display text-lg font-bold text-white">The non-custodial pledge</h3>
-                        <p class="mt-2 text-sm leading-relaxed text-slate-400">
+                        <p class="mt-2 text-sm leading-relaxed text-slate-200">
                             Keys are born on your device, live on your device, and never once touch our
                             servers. The servers only relay public blockchain data. If we disappeared
                             tomorrow, your coins would not notice.

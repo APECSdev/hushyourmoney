@@ -44,6 +44,6 @@ onMounted(() => {
             Please DO NOT add funds to this wallet, as they will be LOST FOREVER at the end of this session.
         </p>
 
-        <pre v-if="$1" class="w-fit max-w-full overflow-x-auto rounded-2xl border border-white/10 bg-white/[0.03] p-4 font-mono text-xs text-lime-200/90">{{wallet}}</pre>
+        <pre v-if="$1" class="w-fit max-w-full overflow-x-auto rounded-2xl border border-white/10 bg-white/[0.03] p-4 font-mono text-xs text-lime-200">{{wallet}}</pre>
     </main>
 </template>

@@ -58,7 +58,7 @@ const System = useSystemStore()
             </div>
 
             <div class="px-3 py-2 col-span-1 h-64 rounded-xl border-2 border-violet-300/30 bg-gradient-to-br from-violet-300/10 to-transparent">
-                <h3 class="text-xl text-violet-200/60 font-medium">
+                <h3 class="text-xl text-violet-200 font-medium">
                     THIS IS A SIDEBAR
                 </h3>
             </div>
@@ -84,14 +84,14 @@ const System = useSystemStore()
             </div>
 
             <div class="px-3 py-2 col-span-1 h-64 rounded-xl border-2 border-violet-300/30 bg-gradient-to-br from-violet-300/10 to-transparent">
-                <h3 class="text-xl text-violet-200/60 font-medium">
+                <h3 class="text-xl text-violet-200 font-medium">
                     THIS IS A SIDEBAR
                 </h3>
             </div>
         </section>
 
 
-<pre class="p-5 rounded-2xl border border-white/10 bg-white/[0.03] font-mono text-sm text-lime-200/90 overflow-x-auto leading-7">
+<pre class="p-5 rounded-2xl border border-white/10 bg-white/[0.03] font-mono text-sm text-lime-200 overflow-x-auto leading-7">
 
 ## Protobuf payload
 

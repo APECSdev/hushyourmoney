@@ -113,14 +113,14 @@ onMounted(() => {
 
             <!-- ── Header ── -->
             <section class="reveal text-center">
-                <p class="font-mono text-[0.65rem] uppercase tracking-[0.5em] text-lime-300/80">utxo privacy toolkit · support the mission</p>
+                <p class="font-mono text-[0.8rem] uppercase tracking-[0.5em] text-lime-200">utxo privacy toolkit · support the mission</p>
                 <h1 class="mt-6 font-display text-[clamp(2.4rem,7vw,5.5rem)] font-extrabold leading-[1.05] tracking-tight text-white">
                     Sponsors <span>💗</span>
                 </h1>
-                <p class="mt-6 font-mono text-lg italic text-cyan-200/90 sm:text-xl">
+                <p class="mt-6 font-mono text-lg italic text-cyan-100 sm:text-xl">
                     Backing the cost of a "fair" FIGHT!
                 </p>
-                <p class="mx-auto mt-6 max-w-2xl text-base leading-relaxed text-slate-300/90 sm:text-lg">
+                <p class="mx-auto mt-6 max-w-2xl text-base leading-relaxed text-slate-100 sm:text-lg">
                     Your support is <strong class="font-semibold text-white">SOOOO greatly appreciated!</strong>
                     Donations fund the development of the UTXO privacy toolkit — the CoinJoin
                     wallet, the zero-knowledge shielded-pool research, and decentralized
@@ -137,20 +137,20 @@ onMounted(() => {
                 <div class="mt-8 grid gap-6 sm:grid-cols-3">
                     <div v-for="(d, i) in donations" :key="d.ticker" class="g-card flex flex-col items-center gap-4 !p-6 text-center">
                         <img v-if="qrCodes && qrCodes[d.ticker]" :src="qrCodes[d.ticker]" :alt="`${d.network} donation QR code`" class="h-32 w-32 rounded-xl border border-white/10" />
-                        <div v-else class="grid h-32 w-32 place-items-center rounded-xl border border-white/10 bg-white/[0.03] font-mono text-xs text-slate-500">
+                        <div v-else class="grid h-32 w-32 place-items-center rounded-xl border border-white/10 bg-white/[0.03] font-mono text-xs text-slate-300">
                             QR...
                         </div>
 
                         <div>
                             <h3 class="font-display text-lg font-bold text-white">{{ d.network }}</h3>
-                            <p class="font-mono text-xs uppercase tracking-[0.3em] text-lime-300/80">{{ d.ticker }}</p>
+                            <p class="font-mono text-xs uppercase tracking-[0.3em] text-lime-200">{{ d.ticker }}</p>
                         </div>
 
-                        <p class="break-all font-mono text-[0.65rem] leading-4 text-slate-400">
+                        <p class="break-all font-mono text-[0.8rem] leading-4 text-slate-200">
                             {{ d.address }}
                         </p>
 
-                        <button type="button" @click="copy(i)" class="mt-auto w-full rounded-full border border-white/15 px-4 py-2 font-mono text-[0.65rem] uppercase tracking-[0.2em] text-slate-300 transition-colors hover:border-lime-300/50 hover:text-lime-300">
+                        <button type="button" @click="copy(i)" class="mt-auto w-full rounded-full border border-white/15 px-4 py-2 font-mono text-[0.8rem] uppercase tracking-[0.2em] text-slate-300 transition-colors hover:border-lime-300/50 hover:text-lime-300">
                             {{ copiedIdx === i ? 'copied ✓' : 'copy address' }}
                         </button>
                     </div>
@@ -163,19 +163,19 @@ onMounted(() => {
                     Reserved networks
                 </h2>
 
-                <p class="mt-3 text-sm leading-relaxed text-slate-400">
+                <p class="mt-3 text-sm leading-relaxed text-slate-200">
                     Slots reserved for shielded-network donations — addresses coming soon.
                 </p>
 
                 <div class="mt-8 grid gap-6 sm:grid-cols-3">
                     <div v-for="r in reserved" :key="r.ticker" class="g-card flex flex-col items-center gap-3 !p-6 text-center opacity-60">
-                        <div class="grid h-16 w-16 place-items-center rounded-2xl border border-dashed border-white/15 bg-white/[0.02] font-display text-lg font-bold text-slate-400">
+                        <div class="grid h-16 w-16 place-items-center rounded-2xl border border-dashed border-white/15 bg-white/[0.02] font-display text-lg font-bold text-slate-200">
                             {{ r.ticker }}
                         </div>
 
                         <h3 class="font-display text-lg font-bold text-white">{{ r.network }}</h3>
-                        <p class="font-mono text-[0.65rem] uppercase tracking-[0.25em] text-slate-500">{{ r.note }}</p>
-                        <p class="mt-auto font-mono text-[0.65rem] uppercase tracking-[0.2em] text-slate-600">
+                        <p class="font-mono text-[0.8rem] uppercase tracking-[0.25em] text-slate-300">{{ r.note }}</p>
+                        <p class="mt-auto font-mono text-[0.8rem] uppercase tracking-[0.2em] text-slate-300">
                             reserved slot
                         </p>
                     </div>

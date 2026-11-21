@@ -37,7 +37,7 @@ const STEALTH_FACTS = [
                 research <span class="sep">/</span> shielded-addresses
             </NuxtLink>
 
-            <p class="animate-rise mt-6 font-mono text-[0.65rem] uppercase tracking-[0.5em] text-cyan-300/80 sm:text-xs" style="animation-delay: 0.1s">
+            <p class="animate-rise mt-6 font-mono text-[0.8rem] uppercase tracking-[0.5em] text-cyan-200 sm:text-xs" style="animation-delay: 0.1s">
                 topic 02 · receiver privacy · survey of external work
             </p>
 
@@ -46,11 +46,11 @@ const STEALTH_FACTS = [
                 <span class="text-gradient">Addresses</span>
             </h1>
 
-            <p class="animate-rise mt-6 font-mono text-[clamp(1rem,2.8vw,1.5rem)] italic text-cyan-200/90" style="animation-delay: 0.32s">
+            <p class="animate-rise mt-6 font-mono text-[clamp(1rem,2.8vw,1.5rem)] italic text-cyan-100" style="animation-delay: 0.32s">
                 Hide who you pay — not just what you hold.
             </p>
 
-            <p class="animate-rise mt-8 max-w-2xl text-base leading-relaxed text-slate-300/90 sm:text-lg" style="animation-delay: 0.42s">
+            <p class="animate-rise mt-8 max-w-2xl text-base leading-relaxed text-slate-100 sm:text-lg" style="animation-delay: 0.42s">
                 An ECDH stealth address lets a payer derive a fresh one-time P2PKH address per
                 payment that only the recipient can find and spend — <strong class="font-semibold text-white">with no
                 new opcodes, no script changes, and no way for an observer to tell the output
@@ -68,7 +68,7 @@ const STEALTH_FACTS = [
         <section class="relative z-10 mx-auto w-full max-w-6xl px-6 pb-28 sm:pb-36">
             <div class="grid items-start gap-12 lg:grid-cols-[1fr_1.4fr]">
                 <div class="reveal">
-                    <p class="font-mono text-[0.65rem] uppercase tracking-[0.45em] text-cyan-300/80">02 · the survey</p>
+                    <p class="font-mono text-[0.8rem] uppercase tracking-[0.45em] text-cyan-200">02 · the survey</p>
                     <h2 class="mt-5 font-display text-[clamp(1.9rem,5vw,3.4rem)] font-bold leading-[1.08] text-white">
                         What we're<br />looking at
                     </h2>
@@ -78,7 +78,7 @@ const STEALTH_FACTS = [
                     </div>
                 </div>
 
-                <div class="reveal space-y-6 text-base leading-relaxed text-slate-300/90 sm:text-lg" style="transition-delay: 0.12s">
+                <div class="reveal space-y-6 text-base leading-relaxed text-slate-100 sm:text-lg" style="transition-delay: 0.12s">
                     <p>
                         Shielded addresses solve a different layer of the stack: not the amount, but
                         the <strong class="font-semibold text-white">recipient</strong>. A live BCH implementation
@@ -103,13 +103,13 @@ const STEALTH_FACTS = [
                         <h3 class="font-mono text-sm text-cyan-300">the scheme, as implemented</h3>
                         <span class="badge badge-mid">cited · topic 1773</span>
                     </div>
-                    <dl class="mt-4 space-y-2.5 font-mono text-[0.72rem] leading-relaxed">
+                    <dl class="mt-4 space-y-2.5 font-mono text-[0.82rem] leading-relaxed">
                         <div v-for="f in STEALTH_FACTS" :key="f.k" class="flex gap-3">
-                            <dt class="w-20 shrink-0 uppercase tracking-widest text-slate-600">{{ f.k }}</dt>
+                            <dt class="w-20 shrink-0 uppercase tracking-widest text-slate-300">{{ f.k }}</dt>
                             <dd class="break-all text-slate-300">{{ f.v }}</dd>
                         </div>
                     </dl>
-                    <div class="mt-4 flex flex-wrap gap-3 font-mono text-[0.68rem]">
+                    <div class="mt-4 flex flex-wrap gap-3 font-mono text-[0.8rem]">
                         <a href="https://bitcoincashresearch.org/t/ecdh-stealth-addresses-on-bitcoin-cash-implementation-code/1773" target="_blank" rel="noopener" class="src-link">implementation report ↗</a>
                         <a href="https://github.com/00-Protocol/00-Wallet" target="_blank" rel="noopener" class="src-link">00-Wallet source ↗</a>
                     </div>
@@ -121,7 +121,7 @@ const STEALTH_FACTS = [
                         <h3 class="font-mono text-sm text-lime-300">where it meets the pool</h3>
                         <span class="badge badge-done">design direction</span>
                     </div>
-                    <p class="mt-4 text-sm leading-relaxed text-slate-400">
+                    <p class="mt-4 text-sm leading-relaxed text-slate-200">
                         Pool notes already commit to an owner public key — the commitment is
                         <code class="text-cyan-200">Poseidon(value, ownerPub, rho, r)</code>. A stealth-derived
                         one-time key is a natural fit for <code class="text-cyan-200">ownerPub</code>: a payer could
@@ -129,12 +129,12 @@ const STEALTH_FACTS = [
                         and the pool's receiver-detection design (encrypted tags + trial decryption)
                         composes with stealth scanning rather than competing with it.
                     </p>
-                    <p class="mt-3 text-sm leading-relaxed text-slate-400">
+                    <p class="mt-3 text-sm leading-relaxed text-slate-200">
                         Status: this integration is a <strong class="text-white">design direction, not built yet</strong>.
                         Open questions: derivation inside the note protocol vs. at the wallet layer,
                         and the scan UX for note detection. Tracked as follow-up research on this page.
                     </p>
-                    <div class="mt-4 flex flex-wrap gap-3 font-mono text-[0.68rem]">
+                    <div class="mt-4 flex flex-wrap gap-3 font-mono text-[0.8rem]">
                         <a href="https://bitcoincashresearch.org/t/silent-reusable-payment-addresses-srpa/1637" target="_blank" rel="noopener" class="src-link">related: SRPA thread ↗</a>
                         <a href="https://bitcoincashresearch.org/t/new-chip-2026-paths-the-derivation-type/1831" target="_blank" rel="noopener" class="src-link">derivation-path CHIP (2026-paths) ↗</a>
                         <NuxtLink to="/research/shielded-pool" class="src-link">our pool layer →</NuxtLink>

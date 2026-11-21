@@ -48,7 +48,7 @@ const THREADS = [
     <!-- ── Hero ── -->
     <section class="relative z-10 mx-auto flex min-h-[88vh] w-full max-w-7xl flex-col items-center justify-center px-6 pb-20 pt-16 text-center">
 
-        <p class="animate-rise font-mono text-[0.65rem] uppercase tracking-[0.5em] text-lime-300/80 sm:text-xs" style="animation-delay: 0.05s">
+        <p class="animate-rise font-mono text-[0.8rem] uppercase tracking-[0.5em] text-lime-200 sm:text-xs" style="animation-delay: 0.05s">
             utxo privacy research · hush your money
         </p>
 
@@ -57,11 +57,11 @@ const THREADS = [
             <span class="text-gradient">Research</span>
         </h1>
 
-        <p class="animate-rise mt-6 font-mono text-[clamp(1rem,2.8vw,1.6rem)] italic text-cyan-200/90" style="animation-delay: 0.32s">
+        <p class="animate-rise mt-6 font-mono text-[clamp(1rem,2.8vw,1.6rem)] italic text-cyan-100" style="animation-delay: 0.32s">
             A research hub for UTXO privacy — measured where we build, cited where we survey.
         </p>
 
-        <p class="animate-rise mt-8 max-w-2xl text-base leading-relaxed text-slate-300/90 sm:text-lg" style="animation-delay: 0.44s">
+        <p class="animate-rise mt-8 max-w-2xl text-base leading-relaxed text-slate-100 sm:text-lg" style="animation-delay: 0.44s">
             Five layers of the privacy stack, each with its own dedicated page — from
             zero-knowledge pools to address-level unlinkability and collaborative mixing.
             Our own work — <strong class="font-semibold text-white">the shielded pool</strong> — is
@@ -87,7 +87,7 @@ const THREADS = [
             </NuxtLink>
         </div>
 
-        <div class="animate-rise mt-16 flex items-center gap-3 font-mono text-[0.6rem] uppercase tracking-[0.3em] text-slate-500" style="animation-delay: 0.7s">
+        <div class="animate-rise mt-16 flex items-center gap-3 font-mono text-[0.78rem] uppercase tracking-[0.3em] text-slate-300" style="animation-delay: 0.7s">
             <span class="h-px w-10 bg-slate-600/60"></span>
             our numbers are measured — third-party claims are cited
             <span class="h-px w-10 bg-slate-600/60"></span>
@@ -97,7 +97,7 @@ const THREADS = [
     <!-- ── 00 · Topic index (dedicated pages) ── -->
     <section id="topics" class="relative z-10 mx-auto w-full max-w-6xl px-6 pb-28 sm:pb-36">
         <div class="reveal text-center">
-            <p class="font-mono text-[0.65rem] uppercase tracking-[0.45em] text-lime-300/80">00 · the map</p>
+            <p class="font-mono text-[0.8rem] uppercase tracking-[0.45em] text-lime-200">00 · the map</p>
             <h2 class="mt-5 font-display text-[clamp(1.9rem,5vw,3.4rem)] font-bold leading-[1.08] text-white">
                 Research Topics
             </h2>
@@ -111,7 +111,7 @@ const THREADS = [
                         <span class="badge" :class="t.badgeClass">{{ t.chip }}</span>
                     </div>
                     <h3 class="mt-4 font-display text-lg font-bold text-white">{{ t.title }}</h3>
-                    <p class="mt-2 text-sm leading-relaxed text-slate-400">{{ t.blurb }}</p>
+                    <p class="mt-2 text-sm leading-relaxed text-slate-200">{{ t.blurb }}</p>
                     <span class="topic-go">explore →</span>
                 </NuxtLink>
             </template>
@@ -121,16 +121,16 @@ const THREADS = [
     <!-- ── Related discussions ── -->
     <section id="threads" class="relative z-10 mx-auto w-full max-w-5xl px-6 pb-28 sm:pb-36">
         <div class="reveal text-center">
-            <p class="font-mono text-[0.65rem] uppercase tracking-[0.45em] text-cyan-300/80">05 · conversations</p>
+            <p class="font-mono text-[0.8rem] uppercase tracking-[0.45em] text-cyan-200">05 · conversations</p>
             <h2 class="mt-5 font-display text-[clamp(1.9rem,5vw,3.4rem)] font-bold leading-[1.08] text-white">Related Discussions</h2>
-            <p class="mt-2 font-mono text-xs text-slate-500">bitcoincashresearch.org threads this research sits inside</p>
+            <p class="mt-2 font-mono text-xs text-slate-300">bitcoincashresearch.org threads this research sits inside</p>
         </div>
 
         <div class="reveal mt-10 divide-y divide-white/5 rounded-2xl border border-white/10 bg-white/[0.03] backdrop-blur">
             <a v-for="t in THREADS" :key="t.id" :href="'https://bitcoincashresearch.org/t/' + t.slug + '/' + t.id" target="_blank" rel="noopener" class="thread-row">
-                <span class="font-mono text-[0.62rem] uppercase tracking-widest text-slate-600">{{ t.date }}</span>
+                <span class="font-mono text-[0.78rem] uppercase tracking-widest text-slate-300">{{ t.date }}</span>
                 <span class="flex-1 text-sm text-slate-300 transition-colors">{{ t.title }}</span>
-                <span class="font-mono text-xs text-cyan-300/70">thread ↗</span>
+                <span class="font-mono text-xs text-cyan-200">thread ↗</span>
             </a>
         </div>
     </section>

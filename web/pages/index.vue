@@ -114,7 +114,7 @@ useReveal()
                 <span>yours</span>
             </div>
 
-            <p class="animate-rise font-mono text-[0.65rem] uppercase tracking-[0.5em] text-lime-300/80 sm:text-xs" style="animation-delay: 0.05s">
+            <p class="animate-rise font-mono text-[0.8rem] uppercase tracking-[0.5em] text-lime-200 sm:text-xs" style="animation-delay: 0.05s">
                 utxo privacy toolkit · non-custodial
             </p>
 
@@ -123,11 +123,11 @@ useReveal()
                 <span class="text-gradient">Money</span>
             </h1>
 
-            <p class="animate-rise mt-6 font-mono text-[clamp(1.05rem,3.2vw,2rem)] italic text-cyan-200/90" style="animation-delay: 0.32s">
+            <p class="animate-rise mt-6 font-mono text-[clamp(1.05rem,3.2vw,2rem)] italic text-cyan-100" style="animation-delay: 0.32s">
                 Spend Privately. Fearlessly!
             </p>
 
-            <p class="animate-rise mt-8 max-w-2xl text-base leading-relaxed text-slate-300/90 sm:text-lg" style="animation-delay: 0.44s">
+            <p class="animate-rise mt-8 max-w-2xl text-base leading-relaxed text-slate-100 sm:text-lg" style="animation-delay: 0.44s">
                 Hush Your Money is a free, open-source
                 <strong class="font-semibold text-white">UTXO privacy toolkit</strong>.
                 Break the link between your coins and your identity with the battle-tested
@@ -149,7 +149,7 @@ useReveal()
                 </NuxtLink>
             </div>
 
-            <div class="animate-rise mt-16 flex items-center gap-3 font-mono text-[0.6rem] uppercase tracking-[0.3em] text-slate-500" style="animation-delay: 0.7s">
+            <div class="animate-rise mt-16 flex items-center gap-3 font-mono text-[0.78rem] uppercase tracking-[0.3em] text-slate-300" style="animation-delay: 0.7s">
                 <span class="h-px w-10 bg-slate-600/60"></span>
                 scroll to learn why privacy is money
                 <span class="h-px w-10 bg-slate-600/60"></span>
@@ -172,13 +172,13 @@ useReveal()
         <section id="what" class="relative z-10 mx-auto w-full max-w-6xl px-6 py-28 sm:py-36">
             <div class="grid items-start gap-12 lg:grid-cols-[1fr_1.4fr]">
                 <div class="reveal">
-                    <p class="font-mono text-[0.65rem] uppercase tracking-[0.45em] text-lime-300/80">01 · the wallet</p>
+                    <p class="font-mono text-[0.8rem] uppercase tracking-[0.45em] text-lime-200">01 · the wallet</p>
                     <h2 class="mt-5 font-display text-[clamp(1.9rem,5vw,3.9rem)] font-bold leading-[1.08] text-white">
                         What is<br />Hush Your Money?
                     </h2>
                 </div>
 
-                <div class="reveal space-y-6 text-base leading-relaxed text-slate-300/90 sm:text-lg" style="transition-delay: 0.12s">
+                <div class="reveal space-y-6 text-base leading-relaxed text-slate-100 sm:text-lg" style="transition-delay: 0.12s">
                     <p>
                         Hush Your Money is a <strong class="font-semibold text-white">non-custodial web wallet</strong>
                         built for one purpose: making private payments practical on UTXO-based blockchains.
@@ -201,13 +201,13 @@ useReveal()
         <section id="why" class="relative z-10 border-y border-white/5 bg-white/[0.02]">
             <div class="mx-auto grid w-full max-w-6xl items-start gap-12 px-6 py-28 sm:py-36 lg:grid-cols-[1fr_1.4fr]">
                 <div class="reveal">
-                    <p class="font-mono text-[0.65rem] uppercase tracking-[0.45em] text-cyan-300/80">02 · the stakes</p>
+                    <p class="font-mono text-[0.8rem] uppercase tracking-[0.45em] text-cyan-200">02 · the stakes</p>
                     <h2 class="mt-5 font-display text-[clamp(1.9rem,5vw,3.9rem)] font-bold leading-[1.08] text-white">
                         Why financial privacy matters
                     </h2>
                 </div>
 
-                <div class="reveal space-y-6 text-base leading-relaxed text-slate-300/90 sm:text-lg" style="transition-delay: 0.12s">
+                <div class="reveal space-y-6 text-base leading-relaxed text-slate-100 sm:text-lg" style="transition-delay: 0.12s">
                     <p>
                         Every transaction on a public blockchain is visible to anyone on Earth — forever.
                         Left unprotected, your balances, income, spending habits, and associations are
@@ -227,11 +227,11 @@ useReveal()
         <!-- ── How ── -->
         <section id="how" class="relative z-10 mx-auto w-full max-w-6xl px-6 py-28 sm:py-36">
             <div class="reveal max-w-3xl">
-                <p class="font-mono text-[0.65rem] uppercase tracking-[0.45em] text-violet-300/80">03 · the ritual</p>
+                <p class="font-mono text-[0.8rem] uppercase tracking-[0.45em] text-violet-200">03 · the ritual</p>
                 <h2 class="mt-5 font-display text-[clamp(1.9rem,5vw,3.9rem)] font-bold leading-[1.08] text-white">
                     How it works
                 </h2>
-                <p class="mt-6 text-base leading-relaxed text-slate-300/90 sm:text-lg">
+                <p class="mt-6 text-base leading-relaxed text-slate-100 sm:text-lg">
                     Three steps stand between you and coins with a clean history.
                     No sign-up, no deposit, no waiting room.
                 </p>
@@ -241,7 +241,7 @@ useReveal()
                 <div class="g-card reveal">
                     <p class="font-display text-5xl font-extrabold text-lime-300/25">01</p>
                     <h3 class="mt-4 font-display text-xl font-bold text-white">Create</h3>
-                    <p class="mt-3 text-sm leading-relaxed text-slate-400">
+                    <p class="mt-3 text-sm leading-relaxed text-slate-200">
                         Generate a fresh wallet in seconds. Your seed phrase never leaves this
                         device — back it up once, and you alone control your coins, forever.
                     </p>
@@ -250,7 +250,7 @@ useReveal()
                 <div class="g-card reveal" style="transition-delay: 0.1s">
                     <p class="font-display text-5xl font-extrabold text-cyan-300/25">02</p>
                     <h3 class="mt-4 font-display text-xl font-bold text-white">Shuffle &amp; Fuse</h3>
-                    <p class="mt-3 text-sm leading-relaxed text-slate-400">
+                    <p class="mt-3 text-sm leading-relaxed text-slate-200">
                         Enter a CashShuffle or CashFusion round and the protocol weaves your coins
                         together with everyone else’s into a single collaborative transaction.
                         Equal-value outputs come out the other side with their histories severed.
@@ -260,7 +260,7 @@ useReveal()
                 <div class="g-card reveal" style="transition-delay: 0.2s">
                     <p class="font-display text-5xl font-extrabold text-violet-300/25">03</p>
                     <h3 class="mt-4 font-display text-xl font-bold text-white">Spend Fearlessly</h3>
-                    <p class="mt-3 text-sm leading-relaxed text-slate-400">
+                    <p class="mt-3 text-sm leading-relaxed text-slate-200">
                         Pay anyone, anywhere. The public trail stops at the crowd
                         you shuffled with — analysts see everyone, and therefore no one.
                     </p>
@@ -272,7 +272,7 @@ useReveal()
         <section id="features" class="relative z-10 border-y border-white/5 bg-white/[0.02]">
             <div class="mx-auto w-full max-w-6xl px-6 py-28 sm:py-36">
                 <div class="reveal max-w-3xl">
-                    <p class="font-mono text-[0.65rem] uppercase tracking-[0.45em] text-lime-300/80">04 · the difference</p>
+                    <p class="font-mono text-[0.8rem] uppercase tracking-[0.45em] text-lime-200">04 · the difference</p>
                     <h2 class="mt-5 font-display text-[clamp(1.9rem,5vw,3.9rem)] font-bold leading-[1.08] text-white">
                         Built different.<br />Built for privacy.
                     </h2>
@@ -284,7 +284,7 @@ useReveal()
                             <rect x="5" y="10" width="14" height="10" rx="2.5" /><path d="M8 10V7.5a4 4 0 0 1 8 0V10" />
                         </svg>
                         <h3 class="mt-4 font-display text-lg font-bold text-white">Zero Custody</h3>
-                        <p class="mt-2 text-sm leading-relaxed text-slate-400">
+                        <p class="mt-2 text-sm leading-relaxed text-slate-200">
                             Keys are born on your device, live on your device, and never once touch our
                             servers. If we disappeared tomorrow, your coins would not notice.
                         </p>
@@ -295,7 +295,7 @@ useReveal()
                             <path d="M8 4 3 12l5 8M16 4l5 8-5 8M13 3l-2.5 18" />
                         </svg>
                         <h3 class="mt-4 font-display text-lg font-bold text-white">Open Source</h3>
-                        <p class="mt-2 text-sm leading-relaxed text-slate-400">
+                        <p class="mt-2 text-sm leading-relaxed text-slate-200">
                             Every line of the wallet is public and auditable.
                             Do not trust — <a href="https://github.com/nyusternie/hushyourmoney" target="_blank" rel="noopener" class="text-cyan-300 underline decoration-cyan-300/40 underline-offset-4 hover:decoration-cyan-300">verify</a>.
                         </p>
@@ -306,7 +306,7 @@ useReveal()
                             <path d="M3 7h4l4 5-4 5H3" /><path d="M13 7h8" /><path d="M13 17h8" /><path d="M18 4.5 21 7l-3 2.5" /><path d="M18 14.5 21 17l-3 2.5" />
                         </svg>
                         <h3 class="mt-4 font-display text-lg font-bold text-white">CashShuffle &amp; CashFusion</h3>
-                        <p class="mt-2 text-sm leading-relaxed text-slate-400">
+                        <p class="mt-2 text-sm leading-relaxed text-slate-200">
                             The two reference CoinJoin implementations — engineered so
                             coordinators can neither steal funds nor break your anonymity.
                         </p>
@@ -317,7 +317,7 @@ useReveal()
                             <rect x="3" y="4" width="18" height="13" rx="2" /><path d="M8 21h8M12 17v4" />
                         </svg>
                         <h3 class="mt-4 font-display text-lg font-bold text-white">Browser-Native</h3>
-                        <p class="mt-2 text-sm leading-relaxed text-slate-400">
+                        <p class="mt-2 text-sm leading-relaxed text-slate-200">
                             Nothing to install, nothing to update. Open a tab and the latest build of
                             your wallet is already there — or pin it as an app with one tap.
                         </p>
@@ -328,7 +328,7 @@ useReveal()
                             <path d="M12 3 4 7v6c0 4 3.5 6.5 8 8 4.5-1.5 8-4 8-8V7l-8-4Z" /><path d="M9 11.5l2.2 2.5L15.5 9" />
                         </svg>
                         <h3 class="mt-4 font-display text-lg font-bold text-white">ZK Research Lab</h3>
-                        <p class="mt-2 text-sm leading-relaxed text-slate-400">
+                        <p class="mt-2 text-sm leading-relaxed text-slate-200">
                             Active research into zero-knowledge shielded pools for UTXO assets —
                             proven on public test networks, heading for mainnet once its
                             multi-party ceremony completes.
@@ -340,7 +340,7 @@ useReveal()
                             <path d="M6 17a3.5 3.5 0 0 1-.4-7A5 5 0 0 1 15.6 8 4 4 0 0 1 19 16.7" /><path d="M6 17h12" />
                         </svg>
                         <h3 class="mt-4 font-display text-lg font-bold text-white">Decentralized Infra</h3>
-                        <p class="mt-2 text-sm leading-relaxed text-slate-400">
+                        <p class="mt-2 text-sm leading-relaxed text-slate-200">
                             Hosted on <a href="https://cloud.runonflux.io" target="_blank" rel="noopener" class="text-violet-300 underline decoration-violet-300/40 underline-offset-4 hover:decoration-violet-300">Flux</a>,
                             a community-run cloud — the wallet stays online without depending on any single company.
                         </p>
@@ -352,7 +352,7 @@ useReveal()
         <!-- ── FAQ ── -->
         <section id="faq" class="relative z-10 mx-auto w-full max-w-4xl px-6 py-28 sm:py-36">
             <div class="reveal text-center">
-                <p class="font-mono text-[0.65rem] uppercase tracking-[0.45em] text-cyan-300/80">05 · the fine print</p>
+                <p class="font-mono text-[0.8rem] uppercase tracking-[0.45em] text-cyan-200">05 · the fine print</p>
                 <h2 class="mt-5 font-display text-[clamp(1.9rem,5vw,3.9rem)] font-bold leading-[1.08] text-white">
                     Frequently asked questions
                 </h2>
@@ -366,7 +366,7 @@ useReveal()
                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="h-4 w-4"><path d="M6 9l6 6 6-6" /></svg>
                         </span>
                     </summary>
-                    <p class="px-6 pb-6 text-sm leading-relaxed text-slate-400 sm:text-base">{{ f.a }}</p>
+                    <p class="px-6 pb-6 text-sm leading-relaxed text-slate-200 sm:text-base">{{ f.a }}</p>
                 </details>
             </div>
         </section>
@@ -377,7 +377,7 @@ useReveal()
                 <h2 class="font-display text-[clamp(1.8rem,6vw,4.5rem)] font-extrabold leading-[1.05] text-white">
                     Your money.<br /><span class="text-gradient">Your business.</span>
                 </h2>
-                <p class="mx-auto mt-6 max-w-xl text-base leading-relaxed text-slate-300/90 sm:text-lg">
+                <p class="mx-auto mt-6 max-w-xl text-base leading-relaxed text-slate-100 sm:text-lg">
                     Take five minutes to shuffle — and take back a lifetime of financial privacy.
                 </p>
                 <div class="mt-10 flex justify-center">
@@ -422,7 +422,7 @@ useReveal()
     background: rgba(255, 255, 255, 0.04);
     backdrop-filter: blur(8px);
     font-family: "Space Mono", ui-monospace, monospace;
-    font-size: 0.62rem;
+    font-size: 0.78rem;
     letter-spacing: 0.22em;
     text-transform: uppercase;
     color: rgba(226, 232, 240, 0.75);
@@ -453,7 +453,7 @@ useReveal()
     white-space: nowrap;
     padding-right: 1.5rem;
     font-family: "Space Mono", ui-monospace, monospace;
-    font-size: 0.72rem;
+    font-size: 0.82rem;
     letter-spacing: 0.34em;
     text-transform: uppercase;
     color: rgba(148, 163, 184, 0.7);

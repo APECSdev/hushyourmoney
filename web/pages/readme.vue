@@ -43,12 +43,12 @@ useReveal()
 
             <!-- ── Header ── -->
             <section class="reveal text-center">
-                <p class="font-mono text-[0.65rem] uppercase tracking-[0.5em] text-lime-300/80">utxo privacy toolkit · documentation</p>
+                <p class="font-mono text-[0.8rem] uppercase tracking-[0.5em] text-lime-200">utxo privacy toolkit · documentation</p>
                 <h1 class="mt-6 font-display text-[clamp(2.4rem,7vw,5.5rem)] font-extrabold leading-[1.05] tracking-tight text-white">
                     Hush <span class="text-gradient">README</span>
                 </h1>
 
-                <h3 class="mt-6 font-display text-xl text-cyan-200/90 sm:text-2xl">
+                <h3 class="mt-6 font-display text-xl text-cyan-100 sm:text-2xl">
                     tl;dr — a practical, <span class="whitespace-nowrap">add-on</span> privacy solution for UTXO-based networks
                 </h3>
 
@@ -72,7 +72,7 @@ FUNCTION : Tokenized Assets + Smart Contracts
                     </div>
                 </div>
 
-                <small class="text-center text-sm font-bold italic text-slate-500 transition-colors group-hover:text-lime-300">
+                <small class="text-center text-sm font-bold italic text-slate-300 transition-colors group-hover:text-lime-300">
                     Click to learn about Where, When &amp; How <span class="text-base font-bold">Hush Your Money</span> was born!
                 </small>
             </NuxtLink>

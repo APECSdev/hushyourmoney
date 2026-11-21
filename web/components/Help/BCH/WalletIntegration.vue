@@ -35,7 +35,7 @@ const props = defineProps({
             <li>Rust</li>
         </ol>
 
-        <p class="leading-relaxed text-slate-400">
+        <p class="leading-relaxed text-slate-200">
             Lorem ipsum dolor sit amet consectetur adipisicing elit. Magni error a, praesentium reprehenderit provident unde sapiente inventore, voluptas atque quidem qui quae repellat recusandae vel nulla, harum impedit adipisci non!
         </p>
     </main>

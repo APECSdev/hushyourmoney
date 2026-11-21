@@ -203,7 +203,7 @@ onMounted(() => {
                             </a>
                         </h3>
 
-                        <p class="mt-1 text-sm text-slate-400">
+                        <p class="mt-1 text-sm text-slate-200">
                             Another to-do system you’ll try but eventually give up on.
                         </p>
                     </div>
@@ -230,7 +230,7 @@ onMounted(() => {
                                 <span aria-hidden="true"> &rarr;</span>
                             </a>
                         </h3>
-                        <p class="mt-1 text-sm text-slate-400">Stay on top of your deadlines, or don’t — it’s up to you.</p>
+                        <p class="mt-1 text-sm text-slate-200">Stay on top of your deadlines, or don’t — it’s up to you.</p>
                     </div>
                 </div>
             </li>
@@ -254,7 +254,7 @@ onMounted(() => {
                                 <span aria-hidden="true"> &rarr;</span>
                             </a>
                         </h3>
-                        <p class="mt-1 text-sm text-slate-400">Great for mood boards and inspiration.</p>
+                        <p class="mt-1 text-sm text-slate-200">Great for mood boards and inspiration.</p>
                     </div>
                 </div>
             </li>
@@ -278,7 +278,7 @@ onMounted(() => {
                                 <span aria-hidden="true"> &rarr;</span>
                             </a>
                         </h3>
-                        <p class="mt-1 text-sm text-slate-400">Track tasks in different stages of your project.</p>
+                        <p class="mt-1 text-sm text-slate-200">Track tasks in different stages of your project.</p>
                     </div>
                 </div>
             </li>
@@ -302,7 +302,7 @@ onMounted(() => {
                                 <span aria-hidden="true"> &rarr;</span>
                             </a>
                         </h3>
-                        <p class="mt-1 text-sm text-slate-400">Lots of numbers and things — good for nerds.</p>
+                        <p class="mt-1 text-sm text-slate-200">Lots of numbers and things — good for nerds.</p>
                     </div>
                 </div>
             </li>
@@ -322,7 +322,7 @@ onMounted(() => {
                                 <span aria-hidden="true"> &rarr;</span>
                             </a>
                         </h3>
-                        <p class="mt-1 text-sm text-slate-400">Get a birds-eye-view of your procrastination.</p>
+                        <p class="mt-1 text-sm text-slate-200">Get a birds-eye-view of your procrastination.</p>
                     </div>
                 </div>
             </li>

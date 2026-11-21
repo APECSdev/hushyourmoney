@@ -43,6 +43,6 @@ onMounted(() => {
             Instantly and permissionlessly exchange between $HUSH and $NITO tokens.
         </p>
 
-        <pre v-if="$1" class="w-fit max-w-full overflow-x-auto rounded-2xl border border-white/10 bg-white/[0.03] p-4 font-mono text-xs text-lime-200/90">{{vaults}}</pre>
+        <pre v-if="$1" class="w-fit max-w-full overflow-x-auto rounded-2xl border border-white/10 bg-white/[0.03] p-4 font-mono text-xs text-lime-200">{{vaults}}</pre>
     </main>
 </template>

@@ -71,7 +71,7 @@ onBeforeUnmount(() => {
         <!-- ── Hero ── -->
         <section class="relative z-10 mx-auto flex min-h-screen w-full max-w-7xl flex-col items-center justify-center px-6 pb-24 pt-16 text-center">
 
-            <p class="animate-rise font-mono text-[0.65rem] uppercase tracking-[0.5em] text-lime-300/80 sm:text-xs" style="animation-delay: 0.05s">
+            <p class="animate-rise font-mono text-[0.8rem] uppercase tracking-[0.5em] text-lime-200 sm:text-xs" style="animation-delay: 0.05s">
                 trusted setup · perpetual powers of tau · gate 7
             </p>
 
@@ -80,11 +80,11 @@ onBeforeUnmount(() => {
                 <span class="text-gradient">Ceremony</span>
             </h1>
 
-            <p class="animate-rise mt-6 font-mono text-[clamp(1rem,2.8vw,1.6rem)] italic text-cyan-200/90" style="animation-delay: 0.32s">
+            <p class="animate-rise mt-6 font-mono text-[clamp(1rem,2.8vw,1.6rem)] italic text-cyan-100" style="animation-delay: 0.32s">
                 Bring your entropy. Leave no trace.
             </p>
 
-            <p class="animate-rise mt-8 max-w-2xl text-base leading-relaxed text-slate-300/90 sm:text-lg" style="animation-delay: 0.44s">
+            <p class="animate-rise mt-8 max-w-2xl text-base leading-relaxed text-slate-100 sm:text-lg" style="animation-delay: 0.44s">
                 Before our zero-knowledge pools can launch on mainnet, the secret parameters
                 behind the proofs must be created — and destroyed. Anyone on Earth can
                 contribute randomness. If <strong class="font-semibold text-white">just one person</strong>
@@ -104,7 +104,7 @@ onBeforeUnmount(() => {
                 </a>
             </div>
 
-            <div class="animate-rise mt-16 flex items-center gap-3 font-mono text-[0.6rem] uppercase tracking-[0.3em] text-slate-500" style="animation-delay: 0.7s">
+            <div class="animate-rise mt-16 flex items-center gap-3 font-mono text-[0.78rem] uppercase tracking-[0.3em] text-slate-300" style="animation-delay: 0.7s">
                 <span class="h-px w-10 bg-slate-600/60"></span>
                 scroll to see the machine
                 <span class="h-px w-10 bg-slate-600/60"></span>
@@ -127,13 +127,13 @@ onBeforeUnmount(() => {
         <section id="what" class="relative z-10 mx-auto w-full max-w-6xl px-6 py-28 sm:py-36">
             <div class="grid items-start gap-12 lg:grid-cols-[1fr_1.4fr]">
                 <div class="reveal">
-                    <p class="font-mono text-[0.65rem] uppercase tracking-[0.45em] text-lime-300/80">01 · why a ceremony</p>
+                    <p class="font-mono text-[0.8rem] uppercase tracking-[0.45em] text-lime-200">01 · why a ceremony</p>
                     <h2 class="mt-5 font-display text-[clamp(1.9rem,5vw,3.9rem)] font-bold leading-[1.08] text-white">
                         Why<br />a Ceremony?
                     </h2>
                 </div>
 
-                <div class="reveal space-y-6 text-base leading-relaxed text-slate-300/90 sm:text-lg" style="transition-delay: 0.12s">
+                <div class="reveal space-y-6 text-base leading-relaxed text-slate-100 sm:text-lg" style="transition-delay: 0.12s">
                     <p>
                         Our shielded pools use <strong class="font-semibold text-white">Groth16 proofs</strong> on the
                         <strong class="font-semibold text-white">BN254 curve</strong> — proven on public test networks
@@ -159,8 +159,8 @@ onBeforeUnmount(() => {
             <div class="reveal mt-16 grid grid-cols-2 gap-4 sm:grid-cols-4">
                 <div v-for="(s, i) in STATS" :key="s.label" class="stat-card" :style="{ transitionDelay: (i * 0.08) + 's' }">
                     <div class="font-display text-2xl font-extrabold sm:text-3xl" :class="s.color">{{ s.value }}</div>
-                    <div class="mt-2 text-xs uppercase tracking-widest text-slate-500">{{ s.label }}</div>
-                    <div class="mt-1 font-mono text-[0.6rem] text-slate-600">[{{ s.note }}]</div>
+                    <div class="mt-2 text-xs uppercase tracking-widest text-slate-300">{{ s.label }}</div>
+                    <div class="mt-1 font-mono text-[0.78rem] text-slate-300">[{{ s.note }}]</div>
                 </div>
             </div>
         </section>
@@ -168,7 +168,7 @@ onBeforeUnmount(() => {
         <!-- ── How it works ── -->
         <section id="how" class="relative z-10 mx-auto w-full max-w-6xl px-6 pb-28 sm:pb-36">
             <div class="reveal text-center">
-                <p class="font-mono text-[0.65rem] uppercase tracking-[0.45em] text-cyan-300/80">02 · the machine</p>
+                <p class="font-mono text-[0.8rem] uppercase tracking-[0.45em] text-cyan-200">02 · the machine</p>
                 <h2 class="mt-5 font-display text-[clamp(1.9rem,5vw,3.4rem)] font-bold leading-[1.08] text-white">
                     How a Contribution Works
                 </h2>
@@ -211,7 +211,7 @@ onBeforeUnmount(() => {
                 <div class="step-card reveal">
                     <div class="step-num text-lime-300">1</div>
                     <h3 class="mt-4 font-display text-lg font-bold text-white">Download</h3>
-                    <p class="mt-3 text-sm leading-relaxed text-slate-400">
+                    <p class="mt-3 text-sm leading-relaxed text-slate-200">
                         Grab the current accumulator and the deterministic participant script.
                         Everything is public and re-runnable — you verify every step yourself.
                     </p>
@@ -220,7 +220,7 @@ onBeforeUnmount(() => {
                 <div class="step-card reveal" style="transition-delay: 0.12s">
                     <div class="step-num text-cyan-300">2</div>
                     <h3 class="mt-4 font-display text-lg font-bold text-white">Mix</h3>
-                    <p class="mt-3 text-sm leading-relaxed text-slate-400">
+                    <p class="mt-3 text-sm leading-relaxed text-slate-200">
                         Feed your secret randomness — dice, hardware RNG, anything unpredictable —
                         into the transformation. A single run on an ordinary laptop.
                     </p>
@@ -229,7 +229,7 @@ onBeforeUnmount(() => {
                 <div class="step-card reveal" style="transition-delay: 0.24s">
                     <div class="step-num text-violet-300">3</div>
                     <h3 class="mt-4 font-display text-lg font-bold text-white">Destroy &amp; Publish</h3>
-                    <p class="mt-3 text-sm leading-relaxed text-slate-400">
+                    <p class="mt-3 text-sm leading-relaxed text-slate-200">
                         Wipe your secret, publish the new accumulator plus a proof that you
                         transformed it correctly. The chain grows; the waste dies with you.
                     </p>
@@ -240,11 +240,11 @@ onBeforeUnmount(() => {
         <!-- ── Live monitor (DEMO) ── -->
         <section class="relative z-10 mx-auto w-full max-w-6xl px-6 pb-28 sm:pb-36">
             <div class="reveal text-center">
-                <p class="font-mono text-[0.65rem] uppercase tracking-[0.45em] text-violet-300/80">03 · the desk</p>
+                <p class="font-mono text-[0.8rem] uppercase tracking-[0.45em] text-violet-200">03 · the desk</p>
                 <h2 class="mt-5 font-display text-[clamp(1.9rem,5vw,3.4rem)] font-bold leading-[1.08] text-white">
                     Ceremony Monitor
                 </h2>
-                <p class="mt-3 font-mono text-xs text-slate-500">[ demo preview — wiring to the real machine comes later ]</p>
+                <p class="mt-3 font-mono text-xs text-slate-300">[ demo preview — wiring to the real machine comes later ]</p>
             </div>
 
             <div class="mt-12 grid gap-6 lg:grid-cols-[1.5fr_1fr]">
@@ -254,7 +254,7 @@ onBeforeUnmount(() => {
                         <span class="h-3 w-3 rounded-full bg-rose-400/80"></span>
                         <span class="h-3 w-3 rounded-full bg-amber-300/80"></span>
                         <span class="h-3 w-3 rounded-full bg-lime-300/80"></span>
-                        <span class="ml-3 font-mono text-[0.6rem] uppercase tracking-[0.3em] text-slate-500">hush-ceremony — session</span>
+                        <span class="ml-3 font-mono text-[0.78rem] uppercase tracking-[0.3em] text-slate-300">hush-ceremony — session</span>
                     </div>
 
                     <div class="min-h-[220px] px-5 py-4 font-mono text-sm leading-7 text-lime-300/90">
@@ -265,31 +265,31 @@ onBeforeUnmount(() => {
 
                 <!-- Queue -->
                 <div class="term-card reveal" style="transition-delay: 0.12s">
-                    <div class="border-b border-white/10 px-5 py-3 font-mono text-[0.6rem] uppercase tracking-[0.3em] text-slate-500">
+                    <div class="border-b border-white/10 px-5 py-3 font-mono text-[0.78rem] uppercase tracking-[0.3em] text-slate-300">
                         contribution queue
                     </div>
 
                     <ul class="flex flex-col divide-y divide-white/5 px-5">
                         <li class="queue-row">
-                            <span class="font-mono text-xs text-slate-400">satoshi-dreamer</span>
+                            <span class="font-mono text-xs text-slate-200">satoshi-dreamer</span>
                             <span class="badge badge-done">sealed</span>
                         </li>
                         <li class="queue-row">
-                            <span class="font-mono text-xs text-slate-400">entropy-goblin</span>
+                            <span class="font-mono text-xs text-slate-200">entropy-goblin</span>
                             <span class="badge badge-done">sealed</span>
                         </li>
                         <li class="queue-row">
-                            <span class="font-mono text-xs text-slate-400">dice-roller-99</span>
+                            <span class="font-mono text-xs text-slate-200">dice-roller-99</span>
                             <span class="badge badge-live">mixing…</span>
                         </li>
                         <li class="queue-row">
-                            <span class="font-mono text-xs text-slate-400">you (maybe?)</span>
+                            <span class="font-mono text-xs text-slate-200">you (maybe?)</span>
                             <span class="badge badge-wait">waiting</span>
                         </li>
                     </ul>
 
                     <div class="px-5 pb-5 pt-4">
-                        <div class="flex justify-between font-mono text-[0.6rem] uppercase tracking-widest text-slate-500">
+                        <div class="flex justify-between font-mono text-[0.78rem] uppercase tracking-widest text-slate-300">
                             <span>current phase</span>
                             <span class="text-lime-300">perpetual · open</span>
                         </div>
@@ -304,7 +304,7 @@ onBeforeUnmount(() => {
         <!-- ── FAQ ── -->
         <section class="relative z-10 mx-auto w-full max-w-4xl px-6 pb-28 sm:pb-36">
             <div class="reveal text-center">
-                <p class="font-mono text-[0.65rem] uppercase tracking-[0.45em] text-lime-300/80">04 · questions</p>
+                <p class="font-mono text-[0.8rem] uppercase tracking-[0.45em] text-lime-200">04 · questions</p>
                 <h2 class="mt-5 font-display text-[clamp(1.9rem,5vw,3.4rem)] font-bold leading-[1.08] text-white">
                     Ceremony FAQ
                 </h2>
@@ -363,11 +363,11 @@ onBeforeUnmount(() => {
         <!-- ── CTA / Join ── -->
         <section id="join" class="relative z-10 mx-auto w-full max-w-5xl px-6 pb-28 text-center sm:pb-36">
             <div class="cta-glow reveal relative overflow-hidden rounded-[2rem] border border-lime-300/20 bg-gradient-to-br from-lime-300/10 via-transparent to-violet-300/10 px-8 py-16 shadow-[0_24px_80px_-40px_rgba(190,242,100,0.35)]">
-                <p class="font-mono text-[0.65rem] uppercase tracking-[0.5em] text-lime-300/80">the door is open</p>
+                <p class="font-mono text-[0.8rem] uppercase tracking-[0.5em] text-lime-200">the door is open</p>
                 <h2 class="mt-6 font-display text-[clamp(1.8rem,5vw,3.6rem)] font-extrabold leading-tight text-white">
                     Add your entropy to<br /><span class="text-gradient">the chain of trust</span>
                 </h2>
-                <p class="mx-auto mt-6 max-w-xl text-base leading-relaxed text-slate-300/90">
+                <p class="mx-auto mt-6 max-w-xl text-base leading-relaxed text-slate-100">
                     Slot reservations for the first public rounds are opening soon.
                     Leave a signal and we'll ping you when the machine spins up.
                 </p>
@@ -382,7 +382,7 @@ onBeforeUnmount(() => {
                     </NuxtLink>
                 </div>
 
-                <p class="mt-6 font-mono text-[0.6rem] uppercase tracking-[0.3em] text-slate-600">[ demo button — wired to sign-up later ]</p>
+                <p class="mt-6 font-mono text-[0.78rem] uppercase tracking-[0.3em] text-slate-300">[ demo button — wired to sign-up later ]</p>
             </div>
         </section>
 
@@ -419,7 +419,7 @@ onBeforeUnmount(() => {
     white-space: nowrap;
     padding-right: 1.5rem;
     font-family: "Space Mono", ui-monospace, monospace;
-    font-size: 0.72rem;
+    font-size: 0.82rem;
     letter-spacing: 0.34em;
     text-transform: uppercase;
     color: rgba(148, 163, 184, 0.7);
@@ -521,7 +521,7 @@ onBeforeUnmount(() => {
 .chain-label {
     text-align: center;
     font-family: "Space Mono", ui-monospace, monospace;
-    font-size: 0.62rem;
+    font-size: 0.78rem;
     letter-spacing: 0.18em;
     text-transform: uppercase;
     color: rgba(148, 163, 184, 0.85);
@@ -606,7 +606,7 @@ onBeforeUnmount(() => {
     border: 1px solid;
     padding: 0.15rem 0.6rem;
     font-family: "Space Mono", ui-monospace, monospace;
-    font-size: 0.6rem;
+    font-size: 0.78rem;
     letter-spacing: 0.16em;
     text-transform: uppercase;
 }

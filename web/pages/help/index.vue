@@ -102,7 +102,7 @@ faqs.push({
                                 </button>
                             </dt>
                             <dd class="mt-2 pr-12" id="faq-0">
-                                <p class="text-base leading-7 text-slate-400">{{faq.answer}}</p>
+                                <p class="text-base leading-7 text-slate-200">{{faq.answer}}</p>
                             </dd>
                         </div>
 
@@ -132,7 +132,7 @@ faqs.push({
                                 </button>
                             </dt>
                             <dd class="mt-2 pr-12" id="faq-0">
-                                <p class="text-base leading-7 text-slate-400">I don&#039;t know, but the flag is a big plus. Lorem ipsum dolor sit amet consectetur adipisicing elit. Quas cupiditate laboriosam fugiat.</p>
+                                <p class="text-base leading-7 text-slate-200">I don&#039;t know, but the flag is a big plus. Lorem ipsum dolor sit amet consectetur adipisicing elit. Quas cupiditate laboriosam fugiat.</p>
                             </dd>
                         </div>
 
@@ -162,7 +162,7 @@ faqs.push({
                                 </button>
                             </dt>
                             <dd class="hidden mt-2 pr-12" id="faq-0">
-                                <p class="text-base leading-7 text-slate-400">You boil the hell out of it. Lorem ipsum dolor sit amet consectetur adipisicing elit. Magnam aut tempora vitae odio inventore fuga aliquam nostrum quod porro. Delectus quia facere id sequi expedita natus.</p>
+                                <p class="text-base leading-7 text-slate-200">You boil the hell out of it. Lorem ipsum dolor sit amet consectetur adipisicing elit. Magnam aut tempora vitae odio inventore fuga aliquam nostrum quod porro. Delectus quia facere id sequi expedita natus.</p>
                             </dd>
                         </div>
 

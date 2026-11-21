@@ -108,7 +108,7 @@ onMounted(() => {
                 If this was a playground, LPs would be the ones turning the double dutch ropes for everyone else to enjoy a great time!
             </p>
 
-            <p class="text-slate-400 text-base font-light leading-7 sm:text-lg">
+            <p class="text-slate-200 text-base font-light leading-7 sm:text-lg">
                 Liquidity is spread across ALL <NuxtLink to="/help/tiers" class="text-cyan-300 font-normal underline decoration-cyan-300/40 underline-offset-4 hover:decoration-cyan-300">Tiers</NuxtLink> to maximize its utility to the greatest number of active <NuxtLink to="/help/guests" class="text-cyan-300 font-normal underline decoration-cyan-300/40 underline-offset-4 hover:decoration-cyan-300">Club Guests</NuxtLink>.
                 The Hush Protocol, powered by a community of independently operated Hush Your Money (HYM) Clubs, is engineered <em>(i.e. financially incentivized)</em> to offer sub 15-seconds <NuxtLink to="/help/coinjoin" class="text-cyan-300 font-normal underline decoration-cyan-300/40 underline-offset-4 hover:decoration-cyan-300">CoinJoins</NuxtLink>, consistently!
             </p>

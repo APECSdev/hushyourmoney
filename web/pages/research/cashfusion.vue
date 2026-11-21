@@ -29,7 +29,7 @@ useReveal()
                 research <span class="sep">/</span> cashfusion
             </NuxtLink>
 
-            <p class="animate-rise mt-6 font-mono text-[0.65rem] uppercase tracking-[0.5em] text-violet-300/80 sm:text-xs" style="animation-delay: 0.1s">
+            <p class="animate-rise mt-6 font-mono text-[0.8rem] uppercase tracking-[0.5em] text-violet-200 sm:text-xs" style="animation-delay: 0.1s">
                 topic 04 · the BCH implementation · survey of third-party work
             </p>
 
@@ -37,11 +37,11 @@ useReveal()
                 <span class="text-gradient">CashFusion</span>
             </h1>
 
-            <p class="animate-rise mt-6 font-mono text-[clamp(1rem,2.8vw,1.5rem)] italic text-cyan-200/90" style="animation-delay: 0.32s">
+            <p class="animate-rise mt-6 font-mono text-[clamp(1rem,2.8vw,1.5rem)] italic text-cyan-100" style="animation-delay: 0.32s">
                 CoinJoin on Bitcoin Cash — with a measured adoption history.
             </p>
 
-            <p class="animate-rise mt-8 max-w-2xl text-base leading-relaxed text-slate-300/90 sm:text-lg" style="animation-delay: 0.42s">
+            <p class="animate-rise mt-8 max-w-2xl text-base leading-relaxed text-slate-100 sm:text-lg" style="animation-delay: 0.42s">
                 CashFusion is Bitcoin Cash's CoinJoin-style mixing tool. Its distinguishing fact is
                 <strong class="font-semibold text-white">measured adoption</strong>: a widely-cited 2022 forum
                 analysis reports that <strong class="font-semibold text-white">94% of all BCH transacted since
@@ -56,9 +56,9 @@ useReveal()
 
         <!-- ── Content ── -->
         <section class="relative z-10 mx-auto w-full max-w-6xl px-6 pb-28 sm:pb-36">
-            <div class="reveal mx-auto max-w-3xl space-y-6 text-base leading-relaxed text-slate-300/90 sm:text-lg">
+            <div class="reveal mx-auto max-w-3xl space-y-6 text-base leading-relaxed text-slate-100 sm:text-lg">
                 <p>
-                    <span class="font-mono text-xs text-slate-500">[cited · third-party analysis]</span> —
+                    <span class="font-mono text-xs text-slate-300">[cited · third-party analysis]</span> —
                     the 94% adoption figure comes from a 2022 Bitcoin Cash Research analysis, linked
                     below. We cite it, we don't own it.
                 </p>
@@ -73,23 +73,23 @@ useReveal()
             <div class="mt-12 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
                 <a href="https://bitcoincashresearch.org/t/94-percent-of-all-bch-transacted-since-july-2020-is-now-a-descendant-of-a-cashfusion-transaction/752" target="_blank" rel="noopener" class="doc-card reveal">
                     <h3 class="font-mono text-sm text-lime-300">the 94% analysis</h3>
-                    <p class="mt-2 text-sm leading-relaxed text-slate-400">"94 percent of all BCH transacted since July 2020 is now a descendant of a CashFusion transaction" — the adoption record, third-party.</p>
+                    <p class="mt-2 text-sm leading-relaxed text-slate-200">"94 percent of all BCH transacted since July 2020 is now a descendant of a CashFusion transaction" — the adoption record, third-party.</p>
                 </a>
                 <a href="https://bitcoincashresearch.org/t/is-there-interest-in-a-red-team-analysis-of-cashfusion/525" target="_blank" rel="noopener" class="doc-card reveal" style="transition-delay: 0.08s">
                     <h3 class="font-mono text-sm text-cyan-300">red-team discussion</h3>
-                    <p class="mt-2 text-sm leading-relaxed text-slate-400">"Is there interest in a Red Team analysis of CashFusion?" — the thread where the scheme gets attacked instead of praised.</p>
+                    <p class="mt-2 text-sm leading-relaxed text-slate-200">"Is there interest in a Red Team analysis of CashFusion?" — the thread where the scheme gets attacked instead of praised.</p>
                 </a>
                 <a href="https://fusionstats.redteam.cash/" target="_blank" rel="noopener" class="doc-card reveal" style="transition-delay: 0.16s">
                     <h3 class="font-mono text-sm text-violet-300">fusion statistics</h3>
-                    <p class="mt-2 text-sm leading-relaxed text-slate-400">Live fusion-statistics dashboard (fusionstats.redteam.cash) and its open-source app (Rucknium/CashFusionStats on GitHub).</p>
+                    <p class="mt-2 text-sm leading-relaxed text-slate-200">Live fusion-statistics dashboard (fusionstats.redteam.cash) and its open-source app (Rucknium/CashFusionStats on GitHub).</p>
                 </a>
                 <a href="https://bitcoincashresearch.org/t/ways-to-improve-ux-tech-of-cashfusion/1854" target="_blank" rel="noopener" class="doc-card reveal" style="transition-delay: 0.24s">
                     <h3 class="font-mono text-sm text-lime-300">UX / tech improvement thread</h3>
-                    <p class="mt-2 text-sm leading-relaxed text-slate-400">"Ways to improve UX / tech of CashFusion" — the standing community thread on where the implementation should go next.</p>
+                    <p class="mt-2 text-sm leading-relaxed text-slate-200">"Ways to improve UX / tech of CashFusion" — the standing community thread on where the implementation should go next.</p>
                 </a>
                 <a href="https://github.com/00-Protocol/BCH-Stealth-Protocol" target="_blank" rel="noopener" class="doc-card reveal" style="transition-delay: 0.32s">
                     <h3 class="font-mono text-sm text-cyan-300">P2P fusion over Nostr</h3>
-                    <p class="mt-2 text-sm leading-relaxed text-slate-400">Serverless CoinJoin coordinated over Nostr with onion-wrapped outputs (the 00-Protocol experiment, announced in topic 1773) — a different coordination model, cited for completeness. <span class="font-mono text-[0.62rem] text-slate-500">[third-party · pre-mainnet · no LICENSE file]</span></p>
+                    <p class="mt-2 text-sm leading-relaxed text-slate-200">Serverless CoinJoin coordinated over Nostr with onion-wrapped outputs (the 00-Protocol experiment, announced in topic 1773) — a different coordination model, cited for completeness. <span class="font-mono text-[0.78rem] text-slate-300">[third-party · pre-mainnet · no LICENSE file]</span></p>
                 </a>
             </div>
         </section>

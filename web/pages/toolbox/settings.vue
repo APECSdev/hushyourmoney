@@ -33,13 +33,13 @@ const System = useSystemStore()
 
         <!-- Profile details -->
         <section class="rounded-2xl border border-white/10 bg-white/[0.03] p-6">
-            <p class="font-mono text-[0.6rem] uppercase tracking-[0.3em] text-lime-300/70">
+            <p class="font-mono text-[0.78rem] uppercase tracking-[0.3em] text-lime-200">
                 identity
             </p>
             <h2 class="mt-2 font-display text-xl font-bold text-white">
                 Profile details
             </h2>
-            <p class="mt-1 text-sm leading-6 text-slate-400">This information will be displayed publicly so be careful what you share.</p>
+            <p class="mt-1 text-sm leading-6 text-slate-200">This information will be displayed publicly so be careful what you share.</p>
 
             <dl class="mt-6 divide-y divide-white/5 border-t border-white/10 text-sm leading-6">
                 <div class="flex flex-col gap-1 pt-5 sm:flex-row sm:items-center sm:gap-x-6">
@@ -68,11 +68,11 @@ const System = useSystemStore()
 
         <!-- Bank accounts -->
         <section class="rounded-2xl border border-white/10 bg-white/[0.03] p-6">
-            <p class="font-mono text-[0.6rem] uppercase tracking-[0.3em] text-cyan-300/70">
+            <p class="font-mono text-[0.78rem] uppercase tracking-[0.3em] text-cyan-200">
                 connections
             </p>
             <h2 class="mt-2 font-display text-xl font-bold text-white">Bank accounts</h2>
-            <p class="mt-1 text-sm leading-6 text-slate-400">Connect bank accounts to your account.</p>
+            <p class="mt-1 text-sm leading-6 text-slate-200">Connect bank accounts to your account.</p>
 
             <ul role="list" class="mt-6 divide-y divide-white/5 border-t border-white/10 text-sm leading-6">
                 <li class="flex items-center justify-between gap-x-6 py-5">
@@ -92,11 +92,11 @@ const System = useSystemStore()
 
         <!-- Integrations -->
         <section class="rounded-2xl border border-white/10 bg-white/[0.03] p-6">
-            <p class="font-mono text-[0.6rem] uppercase tracking-[0.3em] text-violet-300/70">
+            <p class="font-mono text-[0.78rem] uppercase tracking-[0.3em] text-violet-200">
                 applications
             </p>
             <h2 class="mt-2 font-display text-xl font-bold text-white">Integrations</h2>
-            <p class="mt-1 text-sm leading-6 text-slate-400">Connect applications to your account.</p>
+            <p class="mt-1 text-sm leading-6 text-slate-200">Connect applications to your account.</p>
 
             <ul role="list" class="mt-6 divide-y divide-white/5 border-t border-white/10 text-sm leading-6">
                 <li class="flex items-center justify-between gap-x-6 py-5">
@@ -112,11 +112,11 @@ const System = useSystemStore()
 
         <!-- Language and dates -->
         <section class="rounded-2xl border border-white/10 bg-white/[0.03] p-6">
-            <p class="font-mono text-[0.6rem] uppercase tracking-[0.3em] text-slate-500">
+            <p class="font-mono text-[0.78rem] uppercase tracking-[0.3em] text-slate-300">
                 localization
             </p>
             <h2 class="mt-2 font-display text-xl font-bold text-white">Language and dates</h2>
-            <p class="mt-1 text-sm leading-6 text-slate-400">Choose what language and date format to use throughout your account.</p>
+            <p class="mt-1 text-sm leading-6 text-slate-200">Choose what language and date format to use throughout your account.</p>
 
             <dl class="mt-6 divide-y divide-white/5 border-t border-white/10 text-sm leading-6">
                 <div class="flex flex-col gap-1 pt-5 sm:flex-row sm:items-center sm:gap-x-6">

@@ -159,7 +159,7 @@ onMounted(() => {
                     {{lastProfileUpdate}}
                 </h3>
 
-                <h3 class="text-right font-mono text-sm font-medium tracking-widest text-slate-400">
+                <h3 class="text-right font-mono text-sm font-medium tracking-widest text-slate-200">
                     {{displayProfileTimeAgo}}
                 </h3>
             </section>
@@ -173,7 +173,7 @@ onMounted(() => {
                     {{lastProfileUpdate}}
                 </h3>
 
-                <h3 class="text-right font-mono text-sm font-medium tracking-widest text-slate-400">
+                <h3 class="text-right font-mono text-sm font-medium tracking-widest text-slate-200">
                     {{displayProfileTimeAgo}}
                 </h3>
             </section>
@@ -187,13 +187,13 @@ onMounted(() => {
                     {{lastProfileUpdate}}
                 </h3>
 
-                <h3 class="text-right font-mono text-sm font-medium tracking-widest text-slate-400">
+                <h3 class="text-right font-mono text-sm font-medium tracking-widest text-slate-200">
                     {{displayProfileTimeAgo}}
                 </h3>
             </section>
 
             <section class="w-full px-5 py-3 flex flex-col gap-0 rounded-2xl border border-white/10 bg-white/[0.03]">
-                <h2 class="font-mono text-base font-bold uppercase tracking-[0.2em] text-slate-400">
+                <h2 class="font-mono text-base font-bold uppercase tracking-[0.2em] text-slate-200">
                     Last Club Startup
                 </h2>
 
@@ -201,13 +201,13 @@ onMounted(() => {
                     {{displayCreatedAt}}
                 </h3>
 
-                <h3 class="text-right font-mono text-sm font-medium tracking-widest text-slate-400">
+                <h3 class="text-right font-mono text-sm font-medium tracking-widest text-slate-200">
                     {{displayTimeAgo}}
                 </h3>
             </section>
 
             <section class="w-full px-5 py-3 flex flex-col gap-0 rounded-2xl border border-white/10 bg-white/[0.03]">
-                <h2 class="font-mono text-base font-bold uppercase tracking-[0.2em] text-slate-400">
+                <h2 class="font-mono text-base font-bold uppercase tracking-[0.2em] text-slate-200">
                     Club Wallet
                 </h2>
 
@@ -215,13 +215,13 @@ onMounted(() => {
                     {{clubAddress}}
                 </NuxtLink>
 
-                <h3 class="text-right text-base font-medium italic text-slate-400">
+                <h3 class="text-right text-base font-medium italic text-slate-200">
                     Current signer of ALL Club messages
                 </h3>
             </section>
 
             <section class="w-full px-5 py-3 flex flex-col gap-0 rounded-2xl border border-white/10 bg-white/[0.03]">
-                <h2 class="font-mono text-base font-bold uppercase tracking-[0.2em] text-slate-400">
+                <h2 class="font-mono text-base font-bold uppercase tracking-[0.2em] text-slate-200">
                     Club Public Key
                 </h2>
 
@@ -229,14 +229,14 @@ onMounted(() => {
                     {{clubPubkey}}
                 </h3>
 
-                <h3 class="text-right text-base font-medium italic text-slate-400">
+                <h3 class="text-right text-base font-medium italic text-slate-200">
                     Use this key to sign encrypted messages
                 </h3>
             </section>
 
         </div>
 
-        <pre class="w-fit max-w-full overflow-x-auto rounded-2xl border border-white/10 bg-white/[0.03] p-4 font-mono text-xs text-lime-200/90">{{system}}</pre>
-        <pre class="w-fit max-w-full overflow-x-auto rounded-2xl border border-white/10 bg-white/[0.03] p-4 font-mono text-xs text-lime-200/90">{{profiles}}</pre>
+        <pre class="w-fit max-w-full overflow-x-auto rounded-2xl border border-white/10 bg-white/[0.03] p-4 font-mono text-xs text-lime-200">{{system}}</pre>
+        <pre class="w-fit max-w-full overflow-x-auto rounded-2xl border border-white/10 bg-white/[0.03] p-4 font-mono text-xs text-lime-200">{{profiles}}</pre>
     </main>
 </template>
