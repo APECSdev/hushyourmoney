@@ -270,16 +270,16 @@ const LIFECYCLE = [
                 research <span class="sep">/</span> shielded-pool
             </NuxtLink>
 
-            <p class="animate-rise mt-6 font-mono text-[0.65rem] uppercase tracking-[0.5em] text-lime-300/80 sm:text-xs" style="animation-delay: 0.1s">
+            <p class="animate-rise mt-6 font-mono text-[0.8rem] uppercase tracking-[0.5em] text-lime-200 sm:text-xs" style="animation-delay: 0.1s">
                 topic 01 · flagship · zero-knowledge · CashTokens
             </p>
 
             <h1 class="animate-rise mt-6 font-display text-[clamp(2.4rem,8vw,6rem)] font-extrabold leading-[1.04] tracking-tight text-white" style="animation-delay: 0.2s">
-                The Shielded<br />
-                <span class="text-gradient">Pool</span>
+                The <span class="text-gradient">Shielded</span><br />
+                Pool
             </h1>
 
-            <p class="animate-rise mt-6 font-mono text-[clamp(1rem,2.8vw,1.5rem)] italic text-cyan-200/90" style="animation-delay: 0.32s">
+            <p class="animate-rise mt-6 font-mono text-[clamp(1rem,2.8vw,1.5rem)] italic text-cyan-100" style="animation-delay: 0.32s">
                 Zero-knowledge payments on the UTXO model — measured, not promised.
             </p>
 
@@ -315,8 +315,8 @@ const LIFECYCLE = [
             <div class="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-5">
                 <div v-for="(s, i) in STATS" :key="s.label" class="stat-card reveal" :style="{ transitionDelay: (i * 0.08) + 's' }">
                     <div class="font-display text-2xl font-extrabold sm:text-3xl" :class="s.color">{{ s.value }}</div>
-                    <div class="mt-2 text-xs uppercase tracking-widest text-slate-300">{{ s.label }}</div>
-                    <div class="mt-1 font-mono text-[0.6rem] text-slate-400">[{{ s.tag }}]</div>
+                    <div class="mt-2 text-xs uppercase tracking-widest text-slate-100">{{ s.label }}</div>
+                    <div class="mt-1 font-mono text-[0.78rem] text-slate-200">[{{ s.tag }}]</div>
                 </div>
             </div>
         </section>
@@ -324,11 +324,11 @@ const LIFECYCLE = [
         <!-- ── Featured: MAINNET matrix (PREP → GENESIS → DEPLOY → TRANSFER) ── -->
         <section id="mainnet-matrix" class="relative z-10 mx-auto w-full max-w-6xl px-6 pb-28 sm:pb-36">
             <div class="reveal text-center">
-                <p class="font-mono text-[0.65rem] uppercase tracking-[0.45em] text-lime-300/80">live · mainnet</p>
+                <p class="font-mono text-[0.8rem] uppercase tracking-[0.45em] text-lime-200">live · mainnet</p>
                 <h2 class="mt-5 font-display text-[clamp(1.9rem,5vw,3.4rem)] font-bold leading-[1.08] text-white">
                     Live on Bitcoin Cash mainnet
                 </h2>
-                <p class="mt-3 font-mono text-xs text-slate-400">real PUSD · real Groth16 proof · every stage linked to its mainnet transaction [measured]</p>
+                <p class="mt-3 font-mono text-xs text-slate-200">real PUSD · real Groth16 proof · every stage linked to its mainnet transaction [measured]</p>
             </div>
 
             <div class="reveal mt-14">
@@ -339,7 +339,7 @@ const LIFECYCLE = [
                                 <span class="font-display text-lg font-extrabold">{{ String(i + 1).padStart(2, '0') }}</span>
                             </div>
                             <h3 class="mt-5 font-display text-xl font-bold text-white">{{ s.stage }}</h3>
-                            <p class="mt-1 font-mono text-[0.62rem] uppercase tracking-[0.22em] text-slate-400">{{ s.kicker }}</p>
+                            <p class="mt-1 font-mono text-[0.78rem] uppercase tracking-[0.22em] text-slate-200">{{ s.kicker }}</p>
                             <ul class="life-points" :style="{ '--dot': s.dot }">
                                 <li v-for="b in s.bullets" :key="b">{{ b }}</li>
                             </ul>
@@ -360,7 +360,7 @@ const LIFECYCLE = [
                 </div>
             </div>
 
-            <p class="reveal mt-8 text-center font-mono text-[0.65rem] leading-relaxed text-slate-400">
+            <p class="reveal mt-8 text-center font-mono text-[0.8rem] leading-relaxed text-slate-200">
                 all four txs broadcast on BCH mainnet, 2026-11-20 [measured] · setup grade:
                 <strong class="text-slate-200">demo — solo 1-of-1 ceremony, entropy published</strong>
                 (c490ce06…17b931) · production remains gated on the
@@ -371,11 +371,11 @@ const LIFECYCLE = [
         <!-- ── Featured: the lifecycle (SHIELD → TRANSFER → UNSHIELD) ── -->
         <section id="lifecycle" class="relative z-10 mx-auto w-full max-w-6xl px-6 pb-28 sm:pb-36">
             <div class="reveal text-center">
-                <p class="font-mono text-[0.65rem] uppercase tracking-[0.45em] text-lime-300/80">01 · the lifecycle · chipnet matrix</p>
+                <p class="font-mono text-[0.8rem] uppercase tracking-[0.45em] text-lime-200">01 · the lifecycle · chipnet matrix</p>
                 <h2 class="mt-5 font-display text-[clamp(1.9rem,5vw,3.4rem)] font-bold leading-[1.08] text-white">
                     Shield, Transfer, Unshield
                 </h2>
-                <p class="mt-3 font-mono text-xs text-slate-400">one full pass through the pool on chipnet — every stage linked to the transaction that performed it [measured]</p>
+                <p class="mt-3 font-mono text-xs text-slate-200">one full pass through the pool on chipnet — every stage linked to the transaction that performed it [measured]</p>
             </div>
 
             <div class="reveal mt-14 overflow-x-auto">
@@ -386,7 +386,7 @@ const LIFECYCLE = [
                                 <span class="font-display text-lg font-extrabold">{{ String(i + 1).padStart(2, '0') }}</span>
                             </div>
                             <h3 class="mt-5 font-display text-xl font-bold text-white">{{ s.stage }}</h3>
-                            <p class="mt-1 font-mono text-[0.62rem] uppercase tracking-[0.22em] text-slate-400">{{ s.kicker }}</p>
+                            <p class="mt-1 font-mono text-[0.78rem] uppercase tracking-[0.22em] text-slate-200">{{ s.kicker }}</p>
                             <ul class="life-points" :style="{ '--dot': s.dot }">
                                 <li v-for="b in s.bullets" :key="b">{{ b }}</li>
                             </ul>
@@ -411,7 +411,7 @@ const LIFECYCLE = [
                 </div>
             </div>
 
-            <p class="reveal mt-8 text-center font-mono text-[0.65rem] leading-relaxed text-slate-400">
+            <p class="reveal mt-8 text-center font-mono text-[0.8rem] leading-relaxed text-slate-200">
                 all three txs confirmed on chipnet [measured] · the mainnet matrix above ran the same
                 circuit and covenant with real PUSD · production deployment remains gated on the
                 <NuxtLink to="/ceremony" class="src-link">trusted-setup ceremony</NuxtLink>
@@ -422,13 +422,13 @@ const LIFECYCLE = [
         <section class="relative z-10 mx-auto w-full max-w-6xl px-6 pb-28 sm:pb-36">
             <div class="grid items-start gap-12 lg:grid-cols-[1fr_1.4fr]">
                 <div class="reveal">
-                    <p class="font-mono text-[0.65rem] uppercase tracking-[0.45em] text-lime-300/80">02 · what this is</p>
+                    <p class="font-mono text-[0.8rem] uppercase tracking-[0.45em] text-lime-200">02 · what this is</p>
                     <h2 class="mt-5 font-display text-[clamp(1.9rem,5vw,3.4rem)] font-bold leading-[1.08] text-white">
                         Payments that<br />leave no trace
                     </h2>
                 </div>
 
-                <div class="reveal space-y-6 text-base leading-relaxed text-slate-300/90 sm:text-lg" style="transition-delay: 0.12s">
+                <div class="reveal space-y-6 text-base leading-relaxed text-slate-100 sm:text-lg" style="transition-delay: 0.12s">
                     <p>
                         The pool is a <strong class="font-semibold text-white">join-split state machine</strong>:
                         users deposit CashTokens publicly (<strong class="font-semibold text-white">SHIELD</strong>),
@@ -463,9 +463,9 @@ const LIFECYCLE = [
 
             <!-- Architecture -->
             <div id="architecture" class="reveal mt-24 text-center">
-                <p class="font-mono text-[0.65rem] uppercase tracking-[0.45em] text-cyan-300/80">03 · the machine</p>
+                <p class="font-mono text-[0.8rem] uppercase tracking-[0.45em] text-cyan-200">03 · the machine</p>
                 <h2 class="mt-5 font-display text-[clamp(1.9rem,5vw,3.4rem)] font-bold leading-[1.08] text-white">Architecture</h2>
-                <p class="mt-3 font-mono text-xs text-slate-400">rendered from the design docs — GENERALIZED-SHIELDING.md / COVENANT-DESIGN.md</p>
+                <p class="mt-3 font-mono text-xs text-slate-200">rendered from the design docs — GENERALIZED-SHIELDING.md / COVENANT-DESIGN.md</p>
             </div>
 
             <div class="reveal mt-12">
@@ -533,7 +533,7 @@ const LIFECYCLE = [
                 <div class="step-card reveal">
                     <div class="step-num text-lime-300">1</div>
                     <h3 class="mt-4 font-display text-lg font-bold text-white">Prove</h3>
-                    <p class="mt-3 text-sm leading-relaxed text-slate-400">
+                    <p class="mt-3 text-sm leading-relaxed text-slate-200">
                         The wallet builds the action locally, generates the Groth16 witness
                         and proof (16.967 s measured for the full joinsplit on our build
                         runner) and assembles one transaction.
@@ -543,7 +543,7 @@ const LIFECYCLE = [
                 <div class="step-card reveal" style="transition-delay: 0.12s">
                     <div class="step-num text-cyan-300">2</div>
                     <h3 class="mt-4 font-display text-lg font-bold text-white">Verify</h3>
-                    <p class="mt-3 text-sm leading-relaxed text-slate-400">
+                    <p class="mt-3 text-sm leading-relaxed text-slate-200">
                         Sibling script-inputs run the on-chain verifier (35,626 B total);
                         vk_x is recomputed in-script so public inputs can never be forged.
                     </p>
@@ -552,7 +552,7 @@ const LIFECYCLE = [
                 <div class="step-card reveal" style="transition-delay: 0.24s">
                     <div class="step-num text-violet-300">3</div>
                     <h3 class="mt-4 font-display text-lg font-bold text-white">Settle</h3>
-                    <p class="mt-3 text-sm leading-relaxed text-slate-400">
+                    <p class="mt-3 text-sm leading-relaxed text-slate-200">
                         The covenant checks the actionHash, archives the nullifiers, adopts
                         the new tree root in its state NFT and pays the unshield leg —
                         all in the same transaction.
@@ -564,9 +564,9 @@ const LIFECYCLE = [
         <!-- ── Measured results ── -->
         <section id="results" class="relative z-10 mx-auto w-full max-w-6xl px-6 pb-28 sm:pb-36">
             <div class="reveal">
-                <p class="font-mono text-[0.65rem] uppercase tracking-[0.45em] text-lime-300/80">04 · the numbers</p>
+                <p class="font-mono text-[0.8rem] uppercase tracking-[0.45em] text-lime-200">04 · the numbers</p>
                 <h2 class="mt-3 font-display text-[clamp(1.9rem,5vw,3.4rem)] font-bold leading-[1.08] text-white">Measured Results</h2>
-                <p class="mt-2 font-mono text-xs text-slate-400">[ measured ] = live measurement with a recorded source · nothing on this page is estimated</p>
+                <p class="mt-2 font-mono text-xs text-slate-200">[ measured ] = live measurement with a recorded source · nothing on this page is estimated</p>
             </div>
 
             <div class="reveal mt-10 overflow-x-auto rounded-2xl border border-white/10 bg-white/[0.03] backdrop-blur">
@@ -580,9 +580,9 @@ const LIFECYCLE = [
                     </thead>
                     <tbody>
                         <tr v-for="r in RESULTS" :key="r.q">
-                            <td class="whitespace-nowrap font-mono text-[0.72rem] uppercase tracking-wider text-slate-400">{{ r.q }}</td>
+                            <td class="whitespace-nowrap font-mono text-[0.82rem] uppercase tracking-wider text-slate-200">{{ r.q }}</td>
                             <td class="text-slate-100">{{ r.v }}</td>
-                            <td class="font-mono text-[0.7rem] text-slate-400">
+                            <td class="font-mono text-[0.82rem] text-slate-200">
                                 <a v-if="r.href" :href="r.href" target="_blank" rel="noopener" class="src-link">{{ r.src }} ↗</a>
                                 <span v-else>{{ r.src }}</span>
                             </td>
@@ -591,7 +591,7 @@ const LIFECYCLE = [
                 </table>
             </div>
 
-            <p class="reveal mt-4 font-mono text-[0.65rem] leading-relaxed text-slate-400">
+            <p class="reveal mt-4 font-mono text-[0.8rem] leading-relaxed text-slate-200">
                 build records: APECSdev/pusd-shielded-pool (CHIPNET.md) · hushyourmoney (POOL-DEPLOYMENT.md) — all measured on chipnet, 2026-10/11.
             </p>
         </section>
@@ -599,9 +599,9 @@ const LIFECYCLE = [
         <!-- ── Evidence: gates ── -->
         <section id="evidence" class="relative z-10 mx-auto w-full max-w-6xl px-6 pb-28 sm:pb-36">
             <div class="reveal">
-                <p class="font-mono text-[0.65rem] uppercase tracking-[0.45em] text-violet-300/80">05 · the trail</p>
+                <p class="font-mono text-[0.8rem] uppercase tracking-[0.45em] text-violet-200">05 · the trail</p>
                 <h2 class="mt-3 font-display text-[clamp(1.9rem,5vw,3.4rem)] font-bold leading-[1.08] text-white">Gate-by-Gate Evidence</h2>
-                <p class="mt-2 font-mono text-xs text-slate-400">seven launch gates · six passed · one in design</p>
+                <p class="mt-2 font-mono text-xs text-slate-200">seven launch gates · six passed · one in design</p>
             </div>
 
             <div class="mt-10 space-y-4">
@@ -613,7 +613,7 @@ const LIFECYCLE = [
                             {{ g.status === 'confirmed' ? 'passed' : g.status === 'in-flight' ? 'in flight' : 'in design' }}
                         </span>
                     </div>
-                    <p class="mt-3 text-sm leading-relaxed text-slate-400">{{ g.result }}</p>
+                    <p class="mt-3 text-sm leading-relaxed text-slate-200">{{ g.result }}</p>
                     <div class="mt-4 flex flex-wrap gap-3">
                         <a v-if="g.href" :href="g.href" target="_blank" rel="noopener" class="tx-btn">
                             <span class="tx-chip">tx</span>
@@ -637,9 +637,9 @@ const LIFECYCLE = [
         <!-- ── Live pools ── -->
         <section id="pools" class="relative z-10 mx-auto w-full max-w-6xl px-6 pb-28 sm:pb-36">
             <div class="reveal">
-                <p class="font-mono text-[0.65rem] uppercase tracking-[0.45em] text-lime-300/80">06 · on-chain state</p>
+                <p class="font-mono text-[0.8rem] uppercase tracking-[0.45em] text-lime-200">06 · on-chain state</p>
                 <h2 class="mt-3 font-display text-[clamp(1.9rem,5vw,3.4rem)] font-bold leading-[1.08] text-white">Live Pools</h2>
-                <p class="mt-2 font-mono text-xs text-slate-400">from pool-registry.json · chipnet</p>
+                <p class="mt-2 font-mono text-xs text-slate-200">from pool-registry.json · chipnet</p>
             </div>
 
             <div class="mt-10 grid gap-6 lg:grid-cols-2">
@@ -648,22 +648,22 @@ const LIFECYCLE = [
                         <h3 class="font-mono text-sm text-lime-300">{{ p.name }}</h3>
                         <span class="badge badge-done">deployed</span>
                     </div>
-                    <dl class="mt-4 space-y-2.5 font-mono text-[0.72rem] leading-relaxed">
+                    <dl class="mt-4 space-y-2.5 font-mono text-[0.82rem] leading-relaxed">
                         <div class="flex gap-3">
-                            <dt class="w-24 shrink-0 uppercase tracking-widest text-slate-400">category</dt>
-                            <dd class="break-all text-slate-300"><a :href="EXPLORER + p.catFull + NETQ" target="_blank" rel="noopener" class="src-link">{{ p.cat }}</a></dd>
+                            <dt class="w-24 shrink-0 uppercase tracking-widest text-slate-200">category</dt>
+                            <dd class="break-all text-slate-100"><a :href="EXPLORER + p.catFull + NETQ" target="_blank" rel="noopener" class="src-link">{{ p.cat }}</a></dd>
                         </div>
                         <div class="flex gap-3">
-                            <dt class="w-24 shrink-0 uppercase tracking-widest text-slate-400">locking</dt>
-                            <dd class="break-all text-slate-300" :title="p.lockingFull">{{ p.locking }}</dd>
+                            <dt class="w-24 shrink-0 uppercase tracking-widest text-slate-200">locking</dt>
+                            <dd class="break-all text-slate-100" :title="p.lockingFull">{{ p.locking }}</dd>
                         </div>
                         <div class="flex gap-3">
-                            <dt class="w-24 shrink-0 uppercase tracking-widest text-slate-400">tree root</dt>
-                            <dd class="break-all text-slate-300">{{ p.root }}</dd>
+                            <dt class="w-24 shrink-0 uppercase tracking-widest text-slate-200">tree root</dt>
+                            <dd class="break-all text-slate-100">{{ p.root }}</dd>
                         </div>
                         <div class="flex gap-3">
-                            <dt class="w-24 shrink-0 uppercase tracking-widest text-slate-400">first op</dt>
-                            <dd class="break-all text-slate-300">
+                            <dt class="w-24 shrink-0 uppercase tracking-widest text-slate-200">first op</dt>
+                            <dd class="break-all text-slate-100">
                                 {{ p.firstOp }} ·
                                 <a :href="EXPLORER + p.txFull + NETQ" target="_blank" rel="noopener" class="src-link">{{ p.tx }} ↗</a>
                             </dd>
@@ -672,7 +672,7 @@ const LIFECYCLE = [
                 </div>
             </div>
 
-            <p class="reveal mt-6 text-sm leading-relaxed text-slate-400">
+            <p class="reveal mt-6 text-sm leading-relaxed text-slate-200">
                 A third pool (Gate 6b) demonstrates the full two-asset lifecycle — SHIELD A, SHIELD B,
                 TRANSFER, UNSHIELD — on a single multi-asset instance; its operations were VM-verified and
                 broadcast 2026-11-10/11 and are pending confirmation at last check. Registry entry to follow.
@@ -684,13 +684,13 @@ const LIFECYCLE = [
         <section id="limits" class="relative z-10 mx-auto w-full max-w-6xl px-6 pb-28 sm:pb-36">
             <div class="grid items-start gap-12 lg:grid-cols-[1fr_1.4fr]">
                 <div class="reveal">
-                    <p class="font-mono text-[0.65rem] uppercase tracking-[0.45em] text-rose-300/80">07 · posture</p>
+                    <p class="font-mono text-[0.8rem] uppercase tracking-[0.45em] text-rose-200">07 · posture</p>
                     <h2 class="mt-5 font-display text-[clamp(1.9rem,5vw,3.4rem)] font-bold leading-[1.08] text-white">
                         Security<br />&amp; Limits
                     </h2>
                 </div>
 
-                <div class="reveal space-y-6 text-base leading-relaxed text-slate-300/90 sm:text-lg" style="transition-delay: 0.12s">
+                <div class="reveal space-y-6 text-base leading-relaxed text-slate-100 sm:text-lg" style="transition-delay: 0.12s">
                     <p>
                         <strong class="font-semibold text-white">What was attacked:</strong> the on-chain
                         verifier survived a red-team pass — 5/5 valid proofs accepted, 9/9 mutated
@@ -711,11 +711,11 @@ const LIFECYCLE = [
                         never to a txid — double-spend protection lives in the on-chain nullifier
                         set, stale roots block replay.
                     </p>
-                    <div class="rounded-2xl border border-rose-300/25 bg-rose-300/5 px-5 py-4 font-mono text-xs leading-relaxed text-rose-200/90">
+                    <div class="rounded-2xl border border-rose-300/25 bg-rose-300/5 px-5 py-4 font-mono text-xs leading-relaxed text-rose-200">
                         testnet only · 1-of-1 trusted setup · no audits yet · /ceremony is the path to mainnet
                     </div>
                     <p>
-                        <span class="font-mono text-xs text-slate-400">[cited · third-party]</span> — the pool
+                        <span class="font-mono text-xs text-slate-200">[cited · third-party]</span> — the pool
                         sits inside an active research conversation, and we place it there deliberately.
                         Confidential-transaction designs pursue amount-hiding at the protocol level
                         (topic 1724, continued as topic 2028); this pool is the complementary opt-in
@@ -725,7 +725,7 @@ const LIFECYCLE = [
                         discussions. What the pool does not touch: network-layer metadata — IP-linked
                         transaction propagation is a separate research axis (topic 1524).
                     </p>
-                    <div class="flex flex-wrap gap-3 font-mono text-[0.68rem]">
+                    <div class="flex flex-wrap gap-3 font-mono text-[0.8rem]">
                         <a href="https://bitcoincashresearch.org/t/optimized-groth16-verifier-contract-for-bch-verifier-cash-initiative/1896" target="_blank" rel="noopener" class="src-link">Verifier.cash — Groth16 verifier initiative ↗</a>
                         <a href="https://bitcoincashresearch.org/t/confidential-transactions/1724" target="_blank" rel="noopener" class="src-link">Confidential Transactions ↗</a>
                         <a href="https://bitcoincashresearch.org/t/proofnote-apnt-phase-3-public-evidence-current-limits-and-the-next-experiment/2028" target="_blank" rel="noopener" class="src-link">Proofnote / APNT (continuation) ↗</a>
@@ -738,34 +738,34 @@ const LIFECYCLE = [
         <!-- ── Design docs ── -->
         <section id="docs" class="relative z-10 mx-auto w-full max-w-6xl px-6 pb-28 sm:pb-36">
             <div class="reveal text-center">
-                <p class="font-mono text-[0.65rem] uppercase tracking-[0.45em] text-cyan-300/80">08 · go deeper</p>
+                <p class="font-mono text-[0.8rem] uppercase tracking-[0.45em] text-cyan-200">08 · go deeper</p>
                 <h2 class="mt-5 font-display text-[clamp(1.9rem,5vw,3.4rem)] font-bold leading-[1.08] text-white">Design Docs</h2>
             </div>
 
             <div class="mt-10 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
                 <a href="https://github.com/APECSdev/pusd-shielded-pool/blob/master/CIRCUIT-DESIGN.md" target="_blank" rel="noopener" class="doc-card reveal">
                     <h3 class="font-mono text-sm text-lime-300">CIRCUIT-DESIGN.md</h3>
-                    <p class="mt-2 text-sm leading-relaxed text-slate-400">The Groth16 joinsplit: note commitments, nullifiers, the actionHash binding, and the public-input packing.</p>
+                    <p class="mt-2 text-sm leading-relaxed text-slate-200">The Groth16 joinsplit: note commitments, nullifiers, the actionHash binding, and the public-input packing.</p>
                 </a>
                 <a href="https://github.com/APECSdev/pusd-shielded-pool/blob/master/COVENANT-DESIGN.md" target="_blank" rel="noopener" class="doc-card reveal" style="transition-delay: 0.08s">
                     <h3 class="font-mono text-sm text-cyan-300">COVENANT-DESIGN.md</h3>
-                    <p class="mt-2 text-sm leading-relaxed text-slate-400">The CashScript pool covenant: state machine, action-hash recomputation, holdings path, unshield payout.</p>
+                    <p class="mt-2 text-sm leading-relaxed text-slate-200">The CashScript pool covenant: state machine, action-hash recomputation, holdings path, unshield payout.</p>
                 </a>
                 <a href="https://github.com/APECSdev/pusd-shielded-pool/blob/master/GENERALIZED-SHIELDING.md" target="_blank" rel="noopener" class="doc-card reveal" style="transition-delay: 0.16s">
                     <h3 class="font-mono text-sm text-violet-300">GENERALIZED-SHIELDING.md</h3>
-                    <p class="mt-2 text-sm leading-relaxed text-slate-400">Why one category is a deployment choice, not a limit — per-asset pools now, one multi-asset pool next.</p>
+                    <p class="mt-2 text-sm leading-relaxed text-slate-200">Why one category is a deployment choice, not a limit — per-asset pools now, one multi-asset pool next.</p>
                 </a>
                 <a href="https://github.com/APECSdev/pusd-shielded-pool/blob/master/CHIPNET.md" target="_blank" rel="noopener" class="doc-card reveal" style="transition-delay: 0.24s">
                     <h3 class="font-mono text-sm text-lime-300">CHIPNET.md</h3>
-                    <p class="mt-2 text-sm leading-relaxed text-slate-400">The build record and on-chain worked examples: deployment, SHIELD / TRANSFER / UNSHIELD, verifier wiring.</p>
+                    <p class="mt-2 text-sm leading-relaxed text-slate-200">The build record and on-chain worked examples: deployment, SHIELD / TRANSFER / UNSHIELD, verifier wiring.</p>
                 </a>
                 <a href="https://github.com/APECSdev/hushyourmoney/blob/master/POOL-DEPLOYMENT.md" target="_blank" rel="noopener" class="doc-card reveal" style="transition-delay: 0.32s">
                     <h3 class="font-mono text-sm text-cyan-300">POOL-DEPLOYMENT.md</h3>
-                    <p class="mt-2 text-sm leading-relaxed text-slate-400">The deployment runbook — the full Path A lifecycle executed end-to-end on chipnet (Gate 3).</p>
+                    <p class="mt-2 text-sm leading-relaxed text-slate-200">The deployment runbook — the full Path A lifecycle executed end-to-end on chipnet (Gate 3).</p>
                 </a>
                 <a href="https://github.com/APECSdev/hushyourmoney/blob/master/pool-registry.json" target="_blank" rel="noopener" class="doc-card reveal" style="transition-delay: 0.4s">
                     <h3 class="font-mono text-sm text-violet-300">pool-registry.json</h3>
-                    <p class="mt-2 text-sm leading-relaxed text-slate-400">The machine-readable registry: category ↔ covenant address ↔ tree root ↔ first operations.</p>
+                    <p class="mt-2 text-sm leading-relaxed text-slate-200">The machine-readable registry: category ↔ covenant address ↔ tree root ↔ first operations.</p>
                 </a>
             </div>
         </section>
@@ -773,7 +773,7 @@ const LIFECYCLE = [
         <!-- ── FAQ ── -->
         <section id="faq" class="relative z-10 mx-auto w-full max-w-4xl px-6 pb-28 sm:pb-36">
             <div class="reveal text-center">
-                <p class="font-mono text-[0.65rem] uppercase tracking-[0.45em] text-lime-300/80">09 · questions</p>
+                <p class="font-mono text-[0.8rem] uppercase tracking-[0.45em] text-lime-200">09 · questions</p>
                 <h2 class="mt-5 font-display text-[clamp(1.9rem,5vw,3.4rem)] font-bold leading-[1.08] text-white">Reviewer FAQ</h2>
             </div>
 
@@ -823,11 +823,11 @@ const LIFECYCLE = [
         <!-- ── CTA ── -->
         <section class="relative z-10 mx-auto w-full max-w-5xl px-6 pb-20 text-center sm:pb-28">
             <div class="cta-glow reveal relative overflow-hidden rounded-[2rem] bg-gradient-to-br from-lime-300/10 via-transparent to-violet-300/10 px-8 py-16 shadow-[0_24px_80px_-40px_rgba(190,242,100,0.35)]">
-                <p class="font-mono text-[0.65rem] uppercase tracking-[0.5em] text-lime-300/80">gate 7 · the last gate</p>
+                <p class="font-mono text-[0.8rem] uppercase tracking-[0.5em] text-lime-200">gate 7 · the last gate</p>
                 <h2 class="mt-6 font-display text-[clamp(1.8rem,5vw,3.6rem)] font-extrabold leading-tight text-white">
                     Before mainnet,<br /><span class="text-gradient">break the waste</span>
                 </h2>
-                <p class="mx-auto mt-6 max-w-xl text-base leading-relaxed text-slate-300/90">
+                <p class="mx-auto mt-6 max-w-xl text-base leading-relaxed text-slate-100">
                     The trusted-setup ceremony is the one thing standing between chipnet and mainnet.
                     Bring your entropy — one honest participant is all it takes.
                 </p>
@@ -846,7 +846,7 @@ const LIFECYCLE = [
                     </a>
                 </div>
 
-                <p class="mt-6 font-mono text-[0.6rem] uppercase tracking-[0.3em] text-slate-400">[ discussion link pending publication ]</p>
+                <p class="mt-6 font-mono text-[0.78rem] uppercase tracking-[0.3em] text-slate-200">[ discussion link pending publication ]</p>
             </div>
         </section>
 
