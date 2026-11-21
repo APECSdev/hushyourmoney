@@ -6,23 +6,23 @@
 <template>
     <footer class="relative z-10 border-t border-white/5 px-6 py-8">
         <div class="mx-auto flex w-full max-w-6xl flex-col items-center justify-between gap-5 sm:flex-row">
-            <div class="flex flex-wrap items-center justify-center gap-x-4 gap-y-2 font-mono text-xs text-slate-500">
+            <div class="flex flex-wrap items-center justify-center gap-x-4 gap-y-2 font-mono text-xs text-slate-300">
                 <NuxtLink to="/" class="footer-link">home</NuxtLink>
-                <span class="text-slate-700">|</span>
+                <span class="text-slate-500">|</span>
                 <NuxtLink to="/readme" class="footer-link">readme</NuxtLink>
-                <span class="text-slate-700">|</span>
+                <span class="text-slate-500">|</span>
                 <NuxtLink to="/legal" class="footer-link">legal</NuxtLink>
-                <span class="text-slate-700">|</span>
+                <span class="text-slate-500">|</span>
                 <NuxtLink to="/sponsors" class="footer-link">sponsors 💗</NuxtLink>
-                <span class="text-slate-700">|</span>
+                <span class="text-slate-500">|</span>
                 <NuxtLink to="/help" class="footer-link">need help?</NuxtLink>
             </div>
 
-            <div class="flex flex-wrap items-center justify-center gap-x-4 gap-y-2 font-mono text-xs text-slate-500">
-                <span class="text-slate-600">© 2020-2026 <a href="https://apecs.dev" target="_blank" rel="noopener" class="footer-link">APECS Dev</a></span>
-                <span class="text-slate-700">|</span>
+            <div class="flex flex-wrap items-center justify-center gap-x-4 gap-y-2 font-mono text-xs text-slate-300">
+                <span class="text-slate-300">© 2020-2026 <a href="https://apecs.dev" target="_blank" rel="noopener" class="footer-link">APECS Dev</a></span>
+                <span class="text-slate-500">|</span>
                 <CcBadge />
-                <span class="text-slate-700">|</span>
+                <span class="text-slate-500">|</span>
                 <a href="https://cloud.runonflux.io" target="_blank" rel="noopener" class="footer-link">running on flux cloud</a>
             </div>
         </div>
