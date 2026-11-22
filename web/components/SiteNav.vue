@@ -22,7 +22,6 @@ const LINKS = [
     { label: 'Ceremony', to: '/ceremony' },
     { label: 'Roadmap', to: '/roadmap' },
     { label: 'Security', to: '/security' },
-    { label: 'Token', to: '/token' },
     { label: 'Toolbox', to: '/toolbox' },
 ]
 

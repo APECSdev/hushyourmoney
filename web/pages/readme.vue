@@ -241,14 +241,6 @@ FUNCTION : Tokenized Assets + Smart Contracts
                 <p>
                     A compact data format is immutable stored on the Host network for EVERY Hush transaction.
                 </p>
-
-<pre class="code-block text-sm">04 NITO (protocol id)
-20 921aa05b86a1bc9dc1d99583e2932657696e82cf9051219e3dccaeecfd463ee9 (nito tx idem)
-14 875a1f6d7a6e33e27d61c43c26b70d4b8886f726 (aes read-ONLY key)</pre>
-
-                <p>
-                    A compact data format is immutable stored on the Host network for EVERY Hush transaction.
-                </p>
             </section>
 
             <!-- ── Commitment centers ── -->
@@ -326,8 +318,6 @@ FUNCTION : Tokenized Assets + Smart Contracts
             </section>
 
             <div class="doc-card reveal mt-8"><ReadmeEphemeralDb /></div>
-
-            <div class="doc-card reveal mt-8"><ReadmeMineable /></div>
 
         </div>
 

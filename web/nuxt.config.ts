@@ -87,11 +87,13 @@ export default defineNuxtConfig({
     /* Route Rules */
     routeRules: {
         /* Add CORS headers to root. */
-        // NOTE: We need this to make <token>.json available to web apps.
         '/**': { cors: true },
 
         /* Retired standalone Nostr page — the research now lives on CashFusion. */
         '/research/nostr-fusion': { redirect: { to: '/research/cashfusion', statusCode: 301 } },
+
+        /* Retired privacy token page — the $HUSH token is no longer pursued. */
+        '/token': { redirect: { to: '/', statusCode: 301 } },
     },
 
     runtimeConfig: {

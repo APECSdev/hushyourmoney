@@ -40,7 +40,7 @@ onMounted(() => {
         </h1>
 
         <p class="leading-relaxed text-slate-300">
-            Instantly and permissionlessly exchange between $HUSH and $NITO tokens.
+            Instantly and permissionlessly exchange assets across your vaults.
         </p>
 
         <pre v-if="$1" class="w-fit max-w-full overflow-x-auto rounded-2xl border border-white/10 bg-white/[0.03] p-4 font-mono text-xs text-lime-200">{{vaults}}</pre>
