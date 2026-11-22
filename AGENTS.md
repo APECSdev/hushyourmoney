@@ -14,6 +14,42 @@
 - Make ample use of figures and diagrams when documenting or discussing technical designs and implementations (ASCII/Mermaid in repo docs; rendered diagrams on the site).
 - Published technical claims must satisfy the verification contract (file path, command output, or cited source). Where a quantity has not been measured, mark it UNMEASURED rather than estimating.
 
+## CURRENT HANDOFF — 2026-11-22 (playground page; SOURCE PUSHED, BUILD/DEPLOY PENDING)
+
+**User directive 2026-11-22:** create a `/playground` page to host our LIVE experiments, especially CashFusion over Nostr; cite the research at `/research/cashfusion`; mock whatever is necessary until the work is real; commit + push when completed.
+
+### What was built (source commit `d9b1422`, pushed to `origin/master`)
+
+1. **New `web/pages/playground.vue` (1,258 lines)** — uses `layout: 'research'` for the shared dark shell (SiteNav + AuroraBackdrop + GithubBanner + Footer + `.research-page` CSS). Sections:
+   - Hero: “Run the research. Break the mock. Publish the evidence.”; status chips for the interactive simulation, live relay probe and real chipnet evidence; CTA to `#fusion-lab` and `/research/cashfusion`.
+   - 00 Experiment board: 6 cards — EXP-01 CashFusion over Nostr (interactive · simulated), EXP-02 relay reachability (live · opt-in), EXP-03 real chain evidence (chipnet), EXP-04 shielded pool (live on chipnet), EXP-05 trusted setup (demo · ceremony), EXP-06 mainnet fusion beta (pending · G4).
+   - 01 Featured bench: CashFusion over Nostr. A deterministic browser-side **simulation** of the six-phase round: 5/6/7 peers, 1×/2×/4× speed, peer election by lowest ephemeral pubkey, 1–5 inputs / 2–4 outputs per peer, onion layers through every peer, the per-peer fee model (`nIn·148 + nOut·34 + ceil(10/peers)`), signature assembly and a mock txid. The console shows the phase rail, peers, relay rail, chain rail, round inspector and an `aria-live` log.
+   - 02 Live relay probe: opt-in browser WebSocket handshake to `relay.primal.net`, `nostr.mom`, `offchain.pub`, `relay.damus.io`, `nos.lol`; no NIP-01 REQ, no event published, socket closed after the handshake. The page discloses that the browser connects directly and the relay sees the user's IP. Uses the new shared `.badge-error` class.
+   - 03 Evidence: G2b real chipnet fund/round tx buttons (Selene, `network=chipnet`); G3L dry-run txids labelled “harness txid · dry-run (not broadcast)”; G1–G4 gate table.
+   - Composition bench: “Fusion first, then shield” — design-only, links `/research/coinjoin`.
+   - 04 Real vs mock table: interactive round = mock; relay probe = live; relay names/behavior = cited; G2b = real; G3/G3L = dry-run; mainnet beta = not built; shielded pool = live on chipnet.
+   - 05 Lab notes: BCH Schnorr ≠ final BIP-340, relays do not echo, free relays throttle bursts, NIP-42 AUTH not implemented — all linked to `/research/cashfusion#lessons` / `#boundary`.
+   - 06 Sources + pager back to `/research/cashfusion`.
+2. **Navigation/footer:** `web/components/SiteNav.vue` LINKS gained `{ label: 'Playground', to: '/playground' }`; `web/components/Footer.vue` gained a `playground` link between `research` and `roadmap`.
+3. **Cross-link:** `web/pages/research/cashfusion.vue` now has a “Run the interactive round” CTA after the six-phase grid (links `/playground#fusion-lab`, labelled `simulation · no broadcast`).
+4. **Shared-shell docs/styles:** `web/layouts/research.vue` header and `web/assets/css/research.css` header now list `/playground`; `research.css` gained `.research-page .badge-error`.
+
+### Mock boundary (must stay explicit)
+- The round simulator is **MOCK**: deterministic `mulberry32` values, no keys, no relay messages, no signatures, no transaction. The mock txid is generated locally.
+- The relay probe is **LIVE**: browser WebSocket handshake only; no NIP-01 REQ and no event published. It is opt-in because the browser connects directly to public relays.
+- G2b is the only gate with **REAL** chain transactions; G3/G3L txids are **DRY-RUN** harness txids (not broadcast). G4 is **NOT BUILT** (`web/pages/toolbox/fusion.vue` does not exist).
+- The page's OG image reuses `/posters/research-cashfusion.jpg`; a dedicated playground poster is a follow-up.
+
+### Verification performed
+- `git diff --check` clean.
+- SFC parse + `compileScript` + `compileTemplate` via the existing Docker image `nyusternie/hushyourmoney:latest` (`NODE_PATH=/usr/src/app/node_modules`, `/tmp/check-sfc.cjs`): `playground.vue`, `cashfusion.vue`, `SiteNav.vue`, `Footer.vue`, `research.vue` all **OK**.
+- **NOT verified:** full Nuxt build (host build policy — no full build in this session), browser-rendered visuals, a real browser relay handshake, and Flux rollout. Do not declare the page live until the live host serves `/playground` with the experiment board and the nav link.
+
+### Release state
+- Source commit `d9b1422` pushed to `origin/master`.
+- Docker image / Docker Hub / Flux: **PENDING** — not built or deployed in this session (the user asked for commit + push). The previous Hub digest remains `sha256:c89c582d…` (`last_updated 2026-11-22T06:04:49Z`) from the research retirement release.
+- Historical note: the 2026-11-21/22 research handoff below remains the record for the navigation/research reorder/Nostr release; this section supersedes it only for the `/playground` work.
+
 ## CURRENT HANDOFF — 2026-11-21 (navigation + research reorder + Nostr research; SOURCE + HUB PUSHED, FLUX PENDING)
 
 **User correction 2026-11-21:** the earlier “re-submit our MR / review other MRs” line was a misdirected message and is **NOT** a task for this project. No MR work is assigned here. The current task is the navigation + research reorder + Nostr research release.
