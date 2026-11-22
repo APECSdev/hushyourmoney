@@ -169,7 +169,7 @@ useReveal()
                     <h2 class="font-display text-2xl font-bold text-white">11. Intellectual Property</h2>
                     <p class="mt-4">
                         The Software is open source under the
-                        <a href="https://github.com/nyusternie/hushyourmoney" target="_blank" rel="noopener" class="link-cyan">MIT license</a>.
+                        <a href="https://github.com/APECSdev/hushyourmoney" target="_blank" rel="noopener" class="link-cyan">MIT license</a>.
                         You may use, copy, modify, and distribute it under that license's terms.
                     </p>
                 </section>
@@ -189,7 +189,7 @@ useReveal()
                     <h2 class="font-display text-2xl font-bold text-white">13. Contact</h2>
                     <p class="mt-4">
                         Questions about these terms? Open an issue at
-                        <a href="https://github.com/nyusternie/hushyourmoney" target="_blank" rel="noopener" class="link-cyan">github.com/nyusternie/hushyourmoney</a>.
+                        <a href="https://github.com/APECSdev/hushyourmoney" target="_blank" rel="noopener" class="link-cyan">github.com/APECSdev/hushyourmoney</a>.
                     </p>
                 </section>
 

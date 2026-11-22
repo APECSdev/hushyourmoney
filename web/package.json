@@ -4,7 +4,7 @@
   "license": "MIT",
   "description": "Spend Privately. Fearlessly!",
   "author": "Shomari <nyusternie@protonmail.com>",
-  "repository": "https://gogs.hos.im/nyusternie/hushyourmoney.git",
+  "repository": "https://github.com/APECSdev/hushyourmoney.git",
   "scripts": {
     "build": "nuxt build",
     "dev": "nuxt dev",

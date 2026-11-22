@@ -297,7 +297,7 @@ useReveal()
                         <h3 class="mt-4 font-display text-lg font-bold text-white">Open Source</h3>
                         <p class="mt-2 text-sm leading-relaxed text-slate-200">
                             Every line of the wallet is public and auditable.
-                            Do not trust — <a href="https://github.com/nyusternie/hushyourmoney" target="_blank" rel="noopener" class="text-cyan-300 underline decoration-cyan-300/40 underline-offset-4 hover:decoration-cyan-300">verify</a>.
+                            Do not trust — <a href="https://github.com/APECSdev/hushyourmoney" target="_blank" rel="noopener" class="text-cyan-300 underline decoration-cyan-300/40 underline-offset-4 hover:decoration-cyan-300">verify</a>.
                         </p>
                     </div>
 
