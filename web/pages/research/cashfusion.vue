@@ -416,11 +416,11 @@ const SOURCES = [
                     <h3 class="font-mono text-sm text-cyan-300">P2P fusion over Nostr</h3>
                     <p class="mt-2 text-sm leading-relaxed text-slate-200">Serverless CoinJoin coordinated over Nostr with onion-wrapped outputs (the 00-Protocol experiment, announced in topic 1773) — a different coordination model, cited for completeness. <span class="font-mono text-[0.78rem] text-slate-300">[third-party · pre-mainnet · no LICENSE file]</span></p>
                 </a>
-                <NuxtLink to="/research/nostr-fusion" class="doc-card reveal" style="transition-delay: 0.4s">
-                    <h3 class="font-mono text-sm text-lime-300">the full deep-dive</h3>
-                    <p class="mt-2 text-sm leading-relaxed text-slate-200">The standalone technical record: all six gates, the defect logs, the constants, and the security analysis in one place.</p>
-                    <span class="mt-3 inline-block font-mono text-xs uppercase tracking-[0.22em] text-lime-300">read the full record →</span>
-                </NuxtLink>
+                <a href="#gate-evidence" class="doc-card reveal" style="transition-delay: 0.4s">
+                    <h3 class="font-mono text-sm text-lime-300">the gate evidence</h3>
+                    <p class="mt-2 text-sm leading-relaxed text-slate-200">G1 through G4, with chain links and dry-run labels — jump straight to the measured record on this page.</p>
+                    <span class="mt-3 inline-block font-mono text-xs uppercase tracking-[0.22em] text-lime-300">jump to the gates →</span>
+                </a>
             </div>
         </section>
 
@@ -873,10 +873,6 @@ R must be normalized to the QR Y root        // Jacobi symbol 1, not even-Y</cod
                     <h3 class="font-mono text-sm" :class="s.cls">{{ s.title }}</h3>
                     <p class="mt-2 text-sm leading-relaxed text-slate-200">{{ s.body }}</p>
                 </a>
-                <NuxtLink to="/research/nostr-fusion" class="doc-card reveal" style="transition-delay: 0.36s">
-                    <h3 class="font-mono text-sm text-lime-300">the standalone deep-dive</h3>
-                    <p class="mt-2 text-sm leading-relaxed text-slate-200">The same research as a dedicated page — useful when you want the protocol record without the CashFusion survey around it.</p>
-                </NuxtLink>
             </div>
         </section>
 
@@ -887,9 +883,9 @@ R must be normalized to the QR Y root        // Jacobi symbol 1, not even-Y</cod
                     <span class="pager-dir">← previous</span>
                     <span class="pager-title">The Shielded Pool</span>
                 </NuxtLink>
-                <NuxtLink to="/research/nostr-fusion" class="pager-link right">
+                <NuxtLink to="/research/shielded-addresses" class="pager-link right">
                     <span class="pager-dir">next topic →</span>
-                    <span class="pager-title">P2P Fusion over Nostr</span>
+                    <span class="pager-title">Shielded Addresses</span>
                 </NuxtLink>
             </div>
         </section>

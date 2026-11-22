@@ -1,5 +1,5 @@
 <!-- web/layouts/research.vue — shared shell for the /research suite
-     (index + shielded-pool + cashfusion + nostr-fusion + shielded-addresses + coinjoin). -->
+     (index + shielded-pool + cashfusion + shielded-addresses + coinjoin). -->
 
 <script setup lang="ts">
 /* Shared research-suite layout: dark shell + aurora backdrop + GitHub banner +

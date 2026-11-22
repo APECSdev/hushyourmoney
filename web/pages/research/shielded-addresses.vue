@@ -1,4 +1,4 @@
-<!-- web/pages/research/shielded-addresses.vue — topic 04 (survey of external ECDH stealth work) -->
+<!-- web/pages/research/shielded-addresses.vue — topic 03 (survey of external ECDH stealth work) -->
 
 <script setup lang="ts">
 /* Shared shell + styles come from layouts/research.vue (user refactor 2026-11-13). */
@@ -38,7 +38,7 @@ const STEALTH_FACTS = [
             </NuxtLink>
 
             <p class="animate-rise mt-6 font-mono text-[0.8rem] uppercase tracking-[0.5em] text-cyan-200 sm:text-xs" style="animation-delay: 0.1s">
-                topic 04 · receiver privacy · survey of external work
+                topic 03 · receiver privacy · survey of external work
             </p>
 
             <h1 class="animate-rise mt-6 font-display text-[clamp(2.4rem,8vw,6rem)] font-extrabold leading-[1.04] tracking-tight text-white" style="animation-delay: 0.2s">
@@ -146,9 +146,9 @@ const STEALTH_FACTS = [
         <!-- ── Pager ── -->
         <section class="relative z-10 mx-auto w-full max-w-5xl px-6 pb-24">
             <div class="pager reveal">
-                <NuxtLink to="/research/nostr-fusion" class="pager-link">
+                <NuxtLink to="/research/cashfusion" class="pager-link">
                     <span class="pager-dir">← previous</span>
-                    <span class="pager-title">P2P Fusion over Nostr</span>
+                    <span class="pager-title">CashFusion</span>
                 </NuxtLink>
                 <NuxtLink to="/research/coinjoin" class="pager-link right">
                     <span class="pager-dir">next topic →</span>

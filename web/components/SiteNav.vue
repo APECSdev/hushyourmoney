@@ -7,14 +7,13 @@
 const route = useRoute()
 const mobileOpen = ref(false)
 
-/* Topic order is the research hub order (CashFusion moved to 02; Nostr is 03). */
+/* Topic order is the research hub order (CashFusion is 02 and carries the Nostr research). */
 const RESEARCH = [
     { n: '01', label: 'The Shielded Pool', to: '/research/shielded-pool' },
     { n: '02', label: 'CashFusion', to: '/research/cashfusion' },
-    { n: '03', label: 'P2P Fusion over Nostr', to: '/research/nostr-fusion' },
-    { n: '04', label: 'Shielded Addresses', to: '/research/shielded-addresses' },
-    { n: '05', label: 'CoinJoin', to: '/research/coinjoin' },
-    { n: '06', label: 'Trusted Setup', to: '/ceremony' },
+    { n: '03', label: 'Shielded Addresses', to: '/research/shielded-addresses' },
+    { n: '04', label: 'CoinJoin', to: '/research/coinjoin' },
+    { n: '05', label: 'Trusted Setup', to: '/ceremony' },
 ]
 
 const LINKS = [

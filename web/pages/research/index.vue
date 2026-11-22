@@ -9,11 +9,11 @@ definePageMeta({
 /* OpenGraph + Twitter + canonical (shared composable; per-page poster). */
 useOg({
     title: `Research — Hush Your Money`,
-    description: `UTXO privacy research hub: the Groth16 shielded pool (built and measured on chipnet), CashFusion, serverless P2P fusion over Nostr, ECDH shielded addresses and CoinJoin. Our numbers are measured; third-party claims are cited.`,
+    description: `UTXO privacy research hub: the Groth16 shielded pool (built and measured on chipnet), CashFusion (including our coordinator-free P2P fusion research over Nostr), ECDH shielded addresses and CoinJoin. Our numbers are measured; third-party claims are cited.`,
     path: '/research',
     image: '/posters/research.jpg',
     type: 'website',
-    imageAlt: `Privacy Research — six layers of the UTXO privacy stack on Hush Your Money`,
+    imageAlt: `Privacy Research — five layers of the UTXO privacy stack on Hush Your Money`,
 })
 
 /* Scroll-reveal (shared composable). */
@@ -22,11 +22,10 @@ useReveal()
 /* ── Topic index (dedicated pages for SEO — user directive 2026-11-13) ── */
 const TOPICS = [
     { n: '01', title: 'The Shielded Pool', blurb: 'Groth16 joinsplit + covenant state machine + full on-chain verifier — built, deployed and measured on chipnet.', chip: 'flagship · deep dive', chipClass: 'topic-lime', badgeClass: 'badge-done', to: '/research/shielded-pool' },
-    { n: '02', title: 'CashFusion', blurb: 'Bitcoin Cash\'s CoinJoin-style mixing tool, with a real adoption history and an active red-team discussion.', chip: 'live on BCH · survey', chipClass: 'topic-violet', badgeClass: 'badge-mid', to: '/research/cashfusion' },
-    { n: '03', title: 'P2P Fusion over Nostr', blurb: 'Our serverless CoinJoin research: no coordinator, gift-wrapped peer messages, onion-routed outputs — measured through gate G3L.', chip: 'our research · G1–G3L', chipClass: 'topic-cyan', badgeClass: 'badge-live', to: '/research/nostr-fusion' },
-    { n: '04', title: 'Shielded Addresses', blurb: 'ECDH one-time addresses on standard P2PKH — receiver privacy with no new opcodes. External implementation, surveyed here.', chip: 'external · survey', chipClass: 'topic-cyan', badgeClass: 'badge-live', to: '/research/shielded-addresses' },
-    { n: '05', title: 'CoinJoin', blurb: 'Collaborative transactions that break the input-to-output link. The base technique — live on BCH through CashFusion.', chip: 'technique', chipClass: 'topic-violet', badgeClass: 'badge-mid', to: '/research/coinjoin' },
-    { n: '06', title: 'Trusted Setup', blurb: 'The ceremony: a multi-party Powers-of-Tau setup gating any mainnet deployment of the pool.', chip: 'gate 7 · in design', chipClass: 'topic-white', badgeClass: 'badge-wait', to: '/ceremony' },
+    { n: '02', title: 'CashFusion', blurb: 'Bitcoin Cash\'s CoinJoin-style mixing tool, with a real adoption history, an active red-team discussion, and our coordinator-free P2P fusion research over Nostr.', chip: 'survey + our research · G1–G3L', chipClass: 'topic-violet', badgeClass: 'badge-mid', to: '/research/cashfusion' },
+    { n: '03', title: 'Shielded Addresses', blurb: 'ECDH one-time addresses on standard P2PKH — receiver privacy with no new opcodes. External implementation, surveyed here.', chip: 'external · survey', chipClass: 'topic-cyan', badgeClass: 'badge-live', to: '/research/shielded-addresses' },
+    { n: '04', title: 'CoinJoin', blurb: 'Collaborative transactions that break the input-to-output link. The base technique — live on BCH through CashFusion.', chip: 'technique', chipClass: 'topic-violet', badgeClass: 'badge-mid', to: '/research/coinjoin' },
+    { n: '05', title: 'Trusted Setup', blurb: 'The ceremony: a multi-party Powers-of-Tau setup gating any mainnet deployment of the pool.', chip: 'gate 7 · in design', chipClass: 'topic-white', badgeClass: 'badge-wait', to: '/ceremony' },
 ]
 
 /* ── Related discussions (all topics verified live 2026-11-13/16) ───── */
@@ -63,9 +62,10 @@ const THREADS = [
         </p>
 
         <p class="animate-rise mt-8 max-w-2xl text-base leading-relaxed text-slate-100 sm:text-lg" style="animation-delay: 0.44s">
-            Six layers of the privacy stack, each with its own dedicated page — from
-            zero-knowledge pools to address-level unlinkability, collaborative mixing, and
-            coordinator-free coordination over Nostr. Our own work — <strong class="font-semibold text-white">the shielded pool</strong>
+            Five layers of the privacy stack, each with its own dedicated page — from
+            zero-knowledge pools to address-level unlinkability, collaborative mixing, our
+            coordinator-free P2P fusion research over Nostr, and the trusted setup that gates
+            mainnet. Our own work — <strong class="font-semibold text-white">the shielded pool</strong>
             and <strong class="font-semibold text-white">the P2P fusion harness</strong> — is documented gate-by-gate with every number
             traceable to a chain artifact or a reproducible test.
         </p>
@@ -123,7 +123,7 @@ const THREADS = [
     <!-- ── Related discussions ── -->
     <section id="threads" class="relative z-10 mx-auto w-full max-w-5xl px-6 pb-28 sm:pb-36">
         <div class="reveal text-center">
-            <p class="font-mono text-[0.8rem] uppercase tracking-[0.45em] text-cyan-200">06 · conversations</p>
+            <p class="font-mono text-[0.8rem] uppercase tracking-[0.45em] text-cyan-200">05 · conversations</p>
             <h2 class="mt-5 font-display text-[clamp(1.9rem,5vw,3.4rem)] font-bold leading-[1.08] text-white">Related Discussions</h2>
             <p class="mt-2 font-mono text-xs text-slate-300">bitcoincashresearch.org threads this research sits inside</p>
         </div>
