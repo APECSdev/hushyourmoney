@@ -140,7 +140,6 @@ FUNCTION : Tokenized Assets + Smart Contracts
                 <ul class="space-y-1 pl-10 leading-relaxed">
                     <li>Original repo: <a href="https://github.com/BCHDEVCON3/hush-your-money" target="_blank" rel="noopener" class="link-cyan">BCHDEVCON3/hush-your-money</a> (includes the full <em>Activity Journal</em>)</li>
                     <li>Hackathon presentation: <a href="https://lbry.tv/@BCHPlease:1/BCHDevCon3-Hush-Your-Money-Presentation:7" target="_blank" rel="noopener" class="link-cyan">LBRY — BCHDevCon3 Hush Your Money Presentation</a></li>
-                    <li>Fundraiser: <a href="https://causes.cash/@bchplease/hush-your-money-7a1589216c59" target="_blank" rel="noopener" class="link-cyan">causes.cash — Help bring CashFusion to your mobile wallet</a></li>
                 </ul>
             </section>
 

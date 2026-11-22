@@ -29,8 +29,8 @@ useReveal()
 // })
 
 /* ── Donation addresses ────────────────────────────────────────────
-   NOTE: single donation address per network (former round-1 campaign
-   addresses). Monero / Zcash / Dash slots are RESERVED for now. */
+   NOTE: single donation address per network. Monero / Zcash / Dash
+   slots are RESERVED for now. */
 const donations = [
     {
         network: 'Bitcoin',
@@ -42,7 +42,7 @@ const donations = [
         network: 'Bitcoin Cash',
         ticker: 'BCH',
         accent: 'lime',
-        address: 'bitcoincash:qrqdff68n8wm757kvfumylxs47tud3fuvqz3h6depv',
+        address: 'bitcoincash:qzdyw35wslfrk6qjrcva2ujzkwv5a6ufl5uhg5xjkg',
     },
     {
         network: 'Nexa',

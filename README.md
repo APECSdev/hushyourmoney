@@ -52,9 +52,8 @@ into the Bitcoin.com mobile wallet, built on the wallet's 3rd-party app API,
 **Stretch goal:** extend the Link API with `getAccount` (xPub) to enable
 automated shuffle verification and wallet-wide privacy analysis.
 
-The full hackathon story — including the [LBRY presentation](https://lbry.tv/@BCHPlease:1/BCHDevCon3-Hush-Your-Money-Presentation:7),
-the [activity journal](https://github.com/BCHDEVCON3/hush-your-money/blob/master/JOURNAL.md)
-and the [causes.cash fundraiser](https://causes.cash/@bchplease/hush-your-money-7a1589216c59) —
+The full hackathon story — including the [LBRY presentation](https://lbry.tv/@BCHPlease:1/BCHDevCon3-Hush-Your-Money-Presentation:7)
+and the [activity journal](https://github.com/BCHDEVCON3/hush-your-money/blob/master/JOURNAL.md) —
 is preserved in the original repo. The in-app README page ([/readme](https://hushyourmoney.com/readme))
 carries the full project documentation.
 
