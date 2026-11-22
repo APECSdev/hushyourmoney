@@ -89,8 +89,7 @@ const GATES: Gate[] = [
     },
     {
         gate: 'G6b', title: 'Two-asset lifecycle, one pool',
-        result: 'SHIELD A → SHIELD B → TRANSFER → UNSHIELD B on one multi-asset pool; all four ops VM-verified and broadcast 2026-11-10/11.',
-        href: 'https://explorer.selene.cash/tx/b7bc81867707fb4ae80e722e81685b9518b21105638eae9014516ec34ca3d28f?network=chipnet', hrefLabel: 'b7bc8186…3d8f',
+        result: 'SHIELD A → SHIELD B → TRANSFER → UNSHIELD B on one multi-asset pool; all four ops VM-verified and broadcast 2026-11-10/11 — never confirmed: the op set was RBF-replaced with a fresh set and the replacements also remain unconfirmed on chain, so there is no explorer link.',
         status: 'in-flight',
     },
     {
