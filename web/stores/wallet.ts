@@ -15,12 +15,12 @@ import _completeFusion from './wallet/completeFusion.ts'
 import _getWifForAddress from './wallet/getWifForAddress.ts'
 import _setEntropy from './wallet/setEntropy.ts'
 import _setupKeychain from './wallet/setupKeychain.ts'
-import _setupHushKeychain from './wallet/setupHushKeychain.ts'
+import _setupCoinjoinKeychain from './wallet/setupCoinjoinKeychain.ts'
 import _signFusion from './wallet/signFusion.ts'
 import _startFusion from './wallet/startFusion.ts'
 
 /* Initialize constants. */
-const HUSH_PROTOCOL_ID = 0x48555348
+const COINJOIN_PROTOCOL_ID = 0x48555348
 
 // REST API servers.
 // NOTE: bchn.fullstack.cash/v5 was RETIRED; bch-js is used
@@ -158,9 +158,9 @@ export const useWalletStore = defineStore('wallet', {
                 inputs = { ...inputs, ..._state._utxos[0] }
             }
 
-            /* Verify Hush chain. */
-            if (_state._utxos[HUSH_PROTOCOL_ID]) {
-                inputs = { ...inputs, ..._state._utxos[HUSH_PROTOCOL_ID] }
+            /* Verify CoinJoin chain. */
+            if (_state._utxos[COINJOIN_PROTOCOL_ID]) {
+                inputs = { ...inputs, ..._state._utxos[COINJOIN_PROTOCOL_ID] }
             }
             console.log('FUSION (inputs)', inputs)
 
@@ -169,7 +169,7 @@ export const useWalletStore = defineStore('wallet', {
         },
 
         fusionAddrs() {
-            return this._keychain[HUSH_PROTOCOL_ID]
+            return this._keychain[COINJOIN_PROTOCOL_ID]
         },
 
         /* Return wif. */
@@ -204,19 +204,19 @@ export const useWalletStore = defineStore('wallet', {
             if (this._keychain === null) {
                 this._keychain = {
                     0: {}, // NEXA chain
-                    0x48555348: {}, // HUSH chain (1_213_551_432)
+                    0x48555348: {}, // CoinJoin chain (1_213_551_432)
                 }
                 console.log('Keychain initialized successfully!', this._keychain)
 
                 /* Set keychain. */
                 _setupKeychain.bind(this)()
 
-                /* Set Hush keychian. */
-                _setupHushKeychain.bind(this)()
+                /* Set CoinJoin keychain. */
+                _setupCoinjoinKeychain.bind(this)()
             }
 // FOR DEV PURPOSES ONLY
 _setupKeychain.bind(this)()
-_setupHushKeychain.bind(this)()
+_setupCoinjoinKeychain.bind(this)()
 
             /* Request a wallet instance (by mnemonic). */
             this._wallet = await Wallet.init(this._entropy, true)
@@ -302,7 +302,7 @@ _setupHushKeychain.bind(this)()
             /* Initialize locals. */
             let coins
             let data
-            let hushAddresses
+            let coinjoinAddresses
             let usedAddresses
             let utxos
             let walletAddresses
@@ -313,39 +313,39 @@ _setupHushKeychain.bind(this)()
                 this._utxos = {}
             }
 
-            coins = this._keychain[HUSH_PROTOCOL_ID]
+            coins = this._keychain[COINJOIN_PROTOCOL_ID]
             // console.log('WAITING FOR COINS', coins)
 
-            hushAddresses = Object.keys(coins).map(_coinid => {
+            coinjoinAddresses = Object.keys(coins).map(_coinid => {
                 const coin = coins[_coinid]
                 return coin.address
             })
-            // console.log('HUSH ADDRESSES', hushAddresses)
+            // console.log('COINJOIN ADDRESSES', coinjoinAddresses)
 
             /* Request UTXO data. */
             data = await $fetch('/api/electrum', {
                 method: 'POST',
                 body: JSON.stringify({
                     method: 'blockchain.scripthash.listunspent',
-                    params: hushAddresses.slice(0, 20)
+                    params: coinjoinAddresses.slice(0, 20)
                 }),
             })
             .catch(err => console.error(err))
-            console.log('HUSH UTXOS', data)
+            console.log('COINJOIN UTXOS', data)
 
             // FIXME Update the deltas ONLY!
-            this._utxos[HUSH_PROTOCOL_ID] = {}
+            this._utxos[COINJOIN_PROTOCOL_ID] = {}
 
             /* Handle unspent outputs. */
             data.forEach(_unspent => {
                 _unspent.utxos.forEach(_utxo => {
-                    // console.log('ADDING HUSH UTXO...', _utxo)
+                    // console.log('ADDING COINJOIN UTXO...', _utxo)
 
                     /* Generate outpoint (hash). */
                     const outpoint = sha256(_utxo.tx_hash + ':' + _utxo.tx_pos)
 
                     /* Add to UTXOs. */
-                    this._utxos[HUSH_PROTOCOL_ID][outpoint] = {
+                    this._utxos[COINJOIN_PROTOCOL_ID][outpoint] = {
                         address: _unspent.address,
                         ..._utxo,
                         wif: _getWifForAddress.bind(this)(_unspent.address),
@@ -359,11 +359,11 @@ _setupHushKeychain.bind(this)()
                 method: 'POST',
                 body: JSON.stringify({
                     method: 'blockchain.scripthash.get_history',
-                    params: hushAddresses.slice(0, 20)
+                    params: coinjoinAddresses.slice(0, 20)
                 }),
             })
             .catch(err => console.error(err))
-            console.log('HUSH TX HISTORY', data)
+            console.log('COINJOIN TX HISTORY', data)
 
             usedAddresses = data?.filter(_tx => {
                 if (_tx.txs.length > 0) {
@@ -463,8 +463,8 @@ _setupHushKeychain.bind(this)()
 
             if (typeof addressIdx !== 'undefined') {
                 /* Set locked flag. */
-                this._keychain[HUSH_PROTOCOL_ID][addressIdx].isLocked = true
-                this._keychain[HUSH_PROTOCOL_ID][addressIdx].updatedAt = moment().unix()
+                this._keychain[COINJOIN_PROTOCOL_ID][addressIdx].isLocked = true
+                this._keychain[COINJOIN_PROTOCOL_ID][addressIdx].updatedAt = moment().unix()
 
                 /* Return address. */
                 return this.fusionAddrs[addressIdx].address

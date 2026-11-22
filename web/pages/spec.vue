@@ -29,11 +29,11 @@ const System = useSystemStore()
     <DocsShell>
         <main class="flex flex-col gap-6">
         <h1 class="font-display text-4xl font-bold text-white sm:text-5xl">
-            HUSH Specification
+            CoinJoin Specification
         </h1>
 
         <h4 class="w-2/3 text-xl text-rose-300 font-light italic">
-            TL;DR — HUSH automagically manages the <span class="text-2xl font-medium">"toxic waste"</span> produced by your CoinJoin transaction;
+            TL;DR — the protocol automagically manages the <span class="text-2xl font-medium">"toxic waste"</span> produced by your CoinJoin transaction;
             using a <span class="text-2xl font-medium">"TOR-free"</span> variation of the <NuxtLink to="https://cashfusion.org" target="_blank" class="text-2xl font-medium text-cyan-300 hover:underline">CashFusion</NuxtLink> protocol running on the <NuxtLink to="https://runonflux.io" target="_blank" class="text-2xl font-medium text-cyan-300 hover:underline">Flux Cloud</NuxtLink> network.
         </h4>
 

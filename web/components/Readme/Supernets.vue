@@ -25,7 +25,7 @@ const props = defineProps({
         </h2>
 
         <div>
-            The Incognito Network (Nito) is specifically designed to run across multiple UTXO-style networks;
+            Supernets are specifically designed to run across multiple UTXO-style networks;
             specifically those Proof-of-Work (Layer 1) networks capable of efficiently running Supernets, like:
 
             <ol class="py-3 pl-10 list-decimal">

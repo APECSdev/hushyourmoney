@@ -25,7 +25,7 @@ const props = defineProps({
         </h1>
 
         <p class="leading-relaxed text-slate-300">
-            The HUSH Protocol can be easily implemented using ANY of the available software development kits (SDKs) available:
+            The CoinJoin protocol can be easily implemented using ANY of the available software development kits (SDKs) available:
         </p>
 
         <ol class="list-decimal pl-10 leading-8 text-slate-300">

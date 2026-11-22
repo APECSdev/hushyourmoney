@@ -16,7 +16,6 @@
                     <select class="form-control" disabled>
                         <option value="fusion">CashFusion</option>
                         <option value="shuffle" selected>CashShuffle</option>
-                        <option value="blender">Nito Blender</option>
                     </select>
                 </div>
             </div>

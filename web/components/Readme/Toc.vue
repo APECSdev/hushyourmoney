@@ -32,7 +32,6 @@ const props = defineProps({
             <li>Introduction</li>
             <li>You NEVER Go FULL Privacy</li>
             <li>(Transaction) Guardians</li>
-            <li>Incognito Address Format</li>
             <li>Inscriptions: OP_DATA or OP_RETURN</li>
             <li>Commitment Centers: A Universal Truth</li>
             <li>Sharding: A 256-bit Scaling Solution</li>

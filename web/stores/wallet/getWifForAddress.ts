@@ -6,7 +6,7 @@ import { mnemonicToSeed } from '@nexajs/hdnode'
 const bchjs = new BCHJS()
 
 /* Initialize constants. */
-const HUSH_PROTOCOL_ID = 0x48555348
+const COINJOIN_PROTOCOL_ID = 0x48555348
 
 
 /**
@@ -34,7 +34,7 @@ export default function (_address) {
         addressIdx = 0
     } else {
         /* Set account index. */
-        accountIdx = HUSH_PROTOCOL_ID // NOTE: This is the Hush chain
+        accountIdx = COINJOIN_PROTOCOL_ID // NOTE: This is the CoinJoin chain
 
         /* Handle fusion addresses. */
         Object.keys(this.fusionAddrs).forEach(_addressIdx => {

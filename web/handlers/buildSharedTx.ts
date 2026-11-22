@@ -7,9 +7,6 @@ import { utf8ToBin } from '@nexajs/utils'
 
 const bchjs = new BCHJS()
 
-/* Initialize constants. */
-const HUSH_PROTOCOL_ID = 0x48555348
-
 
 /**
  * Build Shared Transaction
@@ -26,7 +23,7 @@ console.log('BUILD SHARED TX', _sessionid, _inputs, _outputs)
     let data
     let ecPair
     // let ownedInputs
-    let protocolId
+    let protocolTag
     let msg
     let rawTx
     let redeemScript
@@ -70,14 +67,14 @@ console.log('DO WE HAVE FUSION INPUTS??', this.fusionInputs)
     })
     // console.log('OUR INPUTS INDEX', ownedInputs)
 
-    /* Set protocol ID. */
-    protocolId = 'HUSH'
+    /* Set protocol tag. */
+    protocolTag = 'COINJOIN'
 
     /* Set protocol message. */
     msg = '4fa84224-be56-49ba-830a-fa3b6774eb01'
 
     script = [
-        utf8ToBin(protocolId),
+        utf8ToBin(protocolTag),
         utf8ToBin(msg),
         // utf8ToBin(_sessionid),
     ]

@@ -39,7 +39,7 @@ const props = defineProps({
         </p>
 
         <p>
-            The #1 benefit of a non-TOTAL approach is that Incognito
+            The #1 benefit of a non-TOTAL approach is that
             <NuxtLink to="https://nexa.wiki/supernet" target="_blank" class="text-cyan-300 font-bold hover:underline">
                 Supernet
 
@@ -48,7 +48,7 @@ const props = defineProps({
                 </svg>
             </NuxtLink> assets CANNOT be banned by Centralized Exchanges (CEXs);
             as it would require banning the Host asset as well.
-            100% of Incognito
+            100% of
             <NuxtLink to="https://nexa.wiki/supernet" target="_blank" class="text-cyan-300 font-bold hover:underline">
                 Supernet
 

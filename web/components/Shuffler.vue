@@ -715,7 +715,7 @@ I'm NOT the last player
         this.showMnemonic = false
 
         // Pubsub channel that nodes will use to coordinate.
-        this.roomName = 'af84de592984f9403c9539c1049a01369e6302f08043b79db783bd34ad344190' // #lobby:nitoblender.com
+        this.roomName = 'af84de592984f9403c9539c1049a01369e6302f08043b79db783bd34ad344190' // #lobby (blender service)
 
         /* Request BCH/USD market price. */
         this.usd = await Nexa.Markets.getTicker('BCH', 'USD')

@@ -10,13 +10,13 @@ import {
 } from '@nexajs/utils'
 import { v5 as uuidv5 } from 'uuid'
 
-/* Set Hush (UUIDv5) Namespace */
+/* Set CoinJoin (UUIDv5) Namespace */
 // NOTE: Replace the 1st 4-bytes of the standard prefix with the
-//       Hush Protocol ID (0x48555348).
+//       CoinJoin protocol id (0x48555348).
 // For reference:
 //   - uuidv5.DNS 6ba7b810-9dad-11d1-80b4-00c04fd430c8
 //   - uuidv5.URL 6ba7b811-9dad-11d1-80b4-00c04fd430c8
-const HUSH_NAMESPACE = '48555348-9dad-11d1-80b4-00c04fd430c8'
+const COINJOIN_NAMESPACE = '48555348-9dad-11d1-80b4-00c04fd430c8'
 
 
 export default defineEventHandler(async (event) => {
@@ -184,7 +184,7 @@ console.log('FUSION', fusion)
     // console.log('SESSION HASH', sessionHash)
 
     /* Calculate session ID. */
-    const sessionid = uuidv5(sessionHash, HUSH_NAMESPACE)
+    const sessionid = uuidv5(sessionHash, COINJOIN_NAMESPACE)
     // console.log('SESSION (uuid v5)', sessionid)
 
     /* Set session ID. */

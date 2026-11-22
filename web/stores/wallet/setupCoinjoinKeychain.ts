@@ -4,10 +4,10 @@ import moment from 'moment'
 /* Set constants. */
 const ADDRESS_POOL_SIZE = 40 // NOTE: Recommended default is 100 addresses.
 const CHANGE_IDX = 0
-const HUSH_PROTOCOL_ID = 0x48555348
+const COINJOIN_PROTOCOL_ID = 0x48555348
 
 export default async function () {
-    console.time('Hush keychain initialization')
+    console.time('CoinJoin keychain initialization')
 
     /* Initialize locals. */
     let address
@@ -18,7 +18,7 @@ export default async function () {
         /* Set address index. */
         addressIdx = i
 
-        address = this.getBchAddress(HUSH_PROTOCOL_ID, CHANGE_IDX, addressIdx)
+        address = this.getBchAddress(COINJOIN_PROTOCOL_ID, CHANGE_IDX, addressIdx)
 
         pkg = {
             address,
@@ -28,8 +28,8 @@ export default async function () {
         }
         // console.log('PKG', addressIdx, pkg)
 
-        this._keychain[HUSH_PROTOCOL_ID][addressIdx] = pkg
+        this._keychain[COINJOIN_PROTOCOL_ID][addressIdx] = pkg
     }
 
-    console.timeEnd('Hush keychain initialization')
+    console.timeEnd('CoinJoin keychain initialization')
 }

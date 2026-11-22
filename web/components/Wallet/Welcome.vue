@@ -16,10 +16,10 @@ const Wallet = useWalletStore()
 
 const bchAddresses = ref(null)
 const btcAddresses = ref(null)
-const hushAddresses = ref(null)
+const coinjoinAddresses = ref(null)
 const nexaAddresses = ref(null)
 
-const HUSH_PROTOCOL_ID = 0x48555348
+const COINJOIN_PROTOCOL_ID = 0x48555348
 
 
 const balance = computed(() => {
@@ -73,15 +73,15 @@ const init = () => {
         return
     }
 
-    /* Initialize #? Hush addresses. */
-    hushAddresses.value = []
+    /* Initialize #? CoinJoin addresses. */
+    coinjoinAddresses.value = []
 
     for (let i = 0; i < 20; i++) {
-        // HUSH == 0x48555348 == 1,213,551,432
-        // address = Wallet.getBchAddress(HUSH_PROTOCOL_ID, 0, i)
-        address = Wallet.keychain[HUSH_PROTOCOL_ID][i].address
+        // COINJOIN == 0x48555348 == 1,213,551,432
+        // address = Wallet.getBchAddress(COINJOIN_PROTOCOL_ID, 0, i)
+        address = Wallet.keychain[COINJOIN_PROTOCOL_ID][i].address
         // console.log('GET BCH ADDRESS', i, address)
-        hushAddresses.value.push(address)
+        coinjoinAddresses.value.push(address)
     }
 
 
@@ -132,9 +132,9 @@ onMounted(() => {
                     </h3>
                 </section>
 
-                <div v-for="(address, index) of hushAddresses" :key="address" class="text-xs">
+                <div v-for="(address, index) of coinjoinAddresses" :key="address" class="text-xs">
                     <div class="grid grid-cols-4 items-center gap-3">
-                        <span class="text-right">Hush #{{(index + 1)}}</span>
+                        <span class="text-right">CoinJoin #{{(index + 1)}}</span>
                         <NuxtLink :to="'https://explorer.melroy.org/address/' + address.slice(12)" target="_blank" class="col-span-3 text-cyan-300 hover:underline">{{address}}</NuxtLink>
                     </div>
                 </div>
@@ -159,9 +159,9 @@ onMounted(() => {
                     </h3>
                 </section>
 
-                <!-- <div v-for="(address, index) of hushAddresses" :key="address" class="text-xs">
+                <!-- <div v-for="(address, index) of coinjoinAddresses" :key="address" class="text-xs">
                     <div class="grid grid-cols-4 items-center gap-3">
-                        <span class="text-right">Hush #{{(index + 1)}}</span>
+                        <span class="text-right">CoinJoin #{{(index + 1)}}</span>
                         <NuxtLink :to="'https://explorer.melroy.org/address/' + address.slice(12)" target="_blank" class="col-span-3 text-cyan-300 hover:underline">{{address}}</NuxtLink>
                     </div>
                 </div> -->

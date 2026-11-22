@@ -195,7 +195,7 @@ export class FusionRound {
     /* ── phase machinery ───────────────────────────────────────── */
 
     private dbg(...a: unknown[]): void {
-        if (typeof process !== 'undefined' && process.env?.HUSH_DEBUG) console.error('[round]', this.id.pubHex.slice(0, 8), ...a)
+        if (typeof process !== 'undefined' && process.env?.COINJOIN_DEBUG) console.error('[round]', this.id.pubHex.slice(0, 8), ...a)
     }
 
     private enterPhase(p: RoundPhase, detail?: string): void {

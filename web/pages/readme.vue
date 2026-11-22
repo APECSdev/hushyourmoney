@@ -93,10 +93,9 @@ FUNCTION : Tokenized Assets + Smart Contracts
                 </p>
 
                 <p>
-                    After years of frustration with broken promises of fungible crypto payments — and earlier privacy
-                    work on <a href="https://gitlab.com/bchplease/nito.cash" target="_blank" rel="noopener" class="link-cyan">Nito Cash</a>
-                    and the <a href="https://app.nitojs.org" target="_blank" rel="noopener" class="link-cyan">NitoJS App</a> —
-                    the hackathon provided the direct connection with the Bitcoin.com wallet team needed to push mobile privacy forward.
+                    After years of frustration with broken promises of fungible crypto payments, and earlier privacy
+                    work in the UTXO privacy space, the hackathon provided the direct connection with the Bitcoin.com
+                    wallet team needed to push mobile privacy forward.
                     The project took <strong class="font-semibold text-white">1st place</strong>.
                 </p>
 
@@ -165,13 +164,6 @@ FUNCTION : Tokenized Assets + Smart Contracts
                     to deliver a family of the MOST widely accessible privacy networks the world has ever seen...
                 </p>
 
-                <p class="text-center text-2xl font-bold italic leading-[50px] text-cyan-200">
-                    Incognito Network <span class="text-3xl text-cyan-300">(Nito)</span> is a cross-chain <NuxtLink to="https://nexa.wiki/supernet" target="_blank" class="text-3xl font-bold text-cyan-300 hover:underline">Supernet</NuxtLink> designed explicitly to meet the <span class="text-3xl text-lime-300">&ldquo;everyday&rdquo;</span> privacy needs for <span class="text-3xl text-lime-300">99%</span> of users.
-                </p>
-
-                <p class="text-justify">
-                    Nito uniquely offers Content Creators and Application Developers the MOST functionally capable Crypto network, <span class="font-bold italic">with FULL support for BOTH Tokenized Assets and Smart Contracts on Layer 1+ (Plus)</span>, while offering uncompromising, trustless and permissionless financial privacy for their communities <span class="font-bold">AT ALL TIMES.</span>
-                </p>
             </section>
 
             <div class="doc-card reveal mt-16"><ReadmeToc /></div>
@@ -215,21 +207,6 @@ FUNCTION : Tokenized Assets + Smart Contracts
                         Hush aims to meet the primary needs for 99% of users, without sacrificing privacy!
                     </h3>
                 </div>
-            </section>
-
-            <!-- ── Incognito address format ── -->
-            <section class="doc-card reveal mt-8 flex flex-col gap-5">
-                <h2 class="font-display text-3xl font-bold text-white">
-                    Incognito Address Format
-                </h2>
-
-                <h3 class="font-mono text-xl font-bold tracking-widest text-lime-300">
-                    nito:nqtsq5g5sp33aj07d808w8xvv7kuarwcrv3z2fvskw2ej7dj
-                </h3>
-
-                <p>
-                    An address format that's very easy on the eyes.
-                </p>
             </section>
 
             <!-- ── Inscriptions ── -->
@@ -280,7 +257,7 @@ FUNCTION : Tokenized Assets + Smart Contracts
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 6H5.25A2.25 2.25 0 0 0 3 8.25v10.5A2.25 2.25 0 0 0 5.25 21h10.5A2.25 2.25 0 0 0 18 18.75V10.5m-10.5 6L21 3m0 0h-5.25M21 3v5.25"></path>
                             </svg>
                         </NuxtLink>)</span> is the most decentralized and fastest growing network in the world.
-                    Its peer-powered cloud computing network offers enterprise-level infrastructure for Incognito Network's MOST demanding decentralized applications.
+                    Its peer-powered cloud computing network offers enterprise-level infrastructure for the MOST demanding decentralized applications.
                 </p>
 
                 <p class="text-sm italic">
@@ -289,7 +266,7 @@ FUNCTION : Tokenized Assets + Smart Contracts
                 </p>
 
                 <p>
-                    Although Flux Cloud will continue to offer users the MOST convenient gateway into Incognito Network (Nito);
+                    Although Flux Cloud will continue to offer users the MOST convenient gateway into the network;
                     the long-term solution is to encourage ALL clients to utilize <span class="text-base font-bold">Nexa's (PoW-secured) CAPD</span> communications network (at least as a fallback).
                 </p>
             </section>
