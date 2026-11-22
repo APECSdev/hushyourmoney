@@ -58,7 +58,7 @@
 ### What was built this session (commit `72f2489`, pushed to `origin/master`)
 
 1. **Site navigation** — new `web/components/SiteNav.vue` (143 lines):
-   - Sticky top bar (z-40), brand home link, desktop links Research / Ceremony / Roadmap / Security / Token / Toolbox, a Research hover/focus dropdown with the 6 topics, a mobile hamburger panel with the same links + topics, active states, and close-on-route-change.
+   - Sticky top bar (z-40), brand home link, desktop links Research / Playground / Ceremony / Roadmap / Security / Toolbox, a Research hover/focus dropdown with the topics, a mobile hamburger panel with the same links + topics, active states, and close-on-route-change. (The `Token` link was REMOVED 2026-11-22 — see the token-retirement release entry.)
    - GitHub banner clearance: the nav reserves `pr-28 sm:pr-32` because `GithubBanner.vue` is fixed top-right at z-50.
    - Mounted in `web/layouts/fullscreen.vue` (layout wrapped in a `min-h-screen` div; `<SiteNav />` before `<main>`) and `web/layouts/research.vue` (nav placed OUTSIDE the `.research-page` `overflow-x-clip` main so sticky positioning is not clipped; the main still carries `.research-page` + `min-h-screen`).
    - Legacy `web/components/Header.vue`: Research added to the desktop nav + mobile menu (legacy default-layout pages only).
