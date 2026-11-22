@@ -582,6 +582,11 @@ const SOURCES = [
                 [measured · P2P-FUSION-DESIGN.md §4 + web/stores/p2pfusion/round.ts]
             </p>
 
+            <div class="reveal mt-8 flex flex-wrap items-center justify-center gap-3">
+                <NuxtLink to="/playground#fusion-lab" class="btn-primary">Run the interactive round</NuxtLink>
+                <span class="font-mono text-xs uppercase tracking-[0.2em] text-slate-300">simulation · no broadcast</span>
+            </div>
+
             <div class="reveal mt-12 overflow-x-auto rounded-2xl border border-white/10 bg-white/[0.03] backdrop-blur">
                 <table class="data-table">
                     <thead>

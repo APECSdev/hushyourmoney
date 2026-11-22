@@ -1,5 +1,6 @@
 /* web/assets/css/research.css — shared styles for the /research suite
-   (index + shielded-pool + cashfusion + shielded-addresses + coinjoin).
+   (index + shielded-pool + cashfusion + shielded-addresses + coinjoin)
+   and the /playground experiments page.
    Imported NON-scoped by web/layouts/research.vue and fully namespaced
    under `.research-page` (scoped layout styles cannot reach slot content). */
 
@@ -165,6 +166,7 @@
 .research-page .badge-live { border-color: rgba(103, 232, 249, 0.5); color: #67e8f9; }
 .research-page .badge-mid  { border-color: rgba(196, 141, 255, 0.4); color: #c48dff; }
 .research-page .badge-wait { border-color: rgba(148, 163, 184, 0.3); color: rgba(203, 213, 225, 0.95); }
+.research-page .badge-error { border-color: rgba(251, 113, 133, 0.45); color: #fda4af; }
 
 /* ── Stat cards ──────────────────────────────────────────────────── */
 .research-page .stat-card {
