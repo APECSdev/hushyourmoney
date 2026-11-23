@@ -24,7 +24,7 @@
       "assetCategory": "2469acc5afa4b10cb5b5c04afb89c3a3ffd61c5da9c01e26d00951cae2a02544",
       "setupGrade": "demo-solo-1of1",
       "ceremonyEntropy": "c490ce06a2f364ee1ec87c75b0a8d9138e18df4e0f17b931",
-      "notes": "FIRST mainnet shielded pool op. Same circuit (183,472 constraints, 2 public inputs) + covenant as the chipnet runs, solo 1-of-1 ceremony (entropy published). PREP dd1e3506…0e7d (category), GENESIS 0a8cb008…c5c4 (state NFT, commitment = root || nullifier-set hash), DEPLOY 63ddfdd4…af7c (covenant + 5 verifier steps + 100 PUSD holdings), TRANSFER 4fda8a8b…544f (real Groth16 proof, 100 PUSD conserved, 38,475 B, 1 sat/B). All 7 inputs VM-validated (libauth BCH-2026) before broadcast. A 10-unit test op preceded it: c8bb80db02ef0196180ccb1c8b6db54fdcbcb0be5028396e1afac00a9708e679. NOT production: Gate-7 public ceremony still required."
+      "notes": "FIRST mainnet shielded pool op. Same circuit (183,472 constraints, 2 public inputs) + covenant as the chipnet runs, solo 1-of-1 ceremony (entropy published). PREP dd1e3506…0e7d (category), GENESIS 0a8cb008…c5c4 (state NFT, commitment = root || nullifier-set hash), DEPLOY 63ddfdd4…af7c (covenant + 5 verifier steps + 1 PUSD holdings (100 base units)), TRANSFER 4fda8a8b…544f (real Groth16 proof, 1 PUSD conserved, 38,475 B, 1 sat/B). All 7 inputs VM-validated (libauth BCH-2026) before broadcast. A 10-unit test op preceded it: c8bb80db02ef0196180ccb1c8b6db54fdcbcb0be5028396e1afac00a9708e679. NOT production: Gate-7 public ceremony still required."
     },
     {
       "name": "gate3-demo-pool",
