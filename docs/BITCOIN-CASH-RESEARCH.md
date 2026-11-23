@@ -36,7 +36,7 @@ describes the system, the evidence, and the ceremony we are raising funds to run
 ## Background
 
 The project started at BCHDEVCON3 in 2020:
-https://github.com/BCHDEVCON3/hush-your-money
+**https://github.com/BCHDEVCON3/hush-your-money**
 
 After the event, Bitcoin.com pledged to integrate the technology into their flagship
 wallet. Their legal department intervened before launch. (First-hand account; there was
@@ -44,9 +44,9 @@ no public news coverage.)
 
 Since then the work has continued on privacy tooling for UTXO chains — CashShuffle and
 CashFusion first, then a coordinator-free fusion design over Nostr relays:
-https://hushyourmoney.com/research/cashfusion
+**https://hushyourmoney.com/research/cashfusion**
 
-Zero knowledge entered the picture with the work around [verifier.cash](https://verifier.cash)
+Zero knowledge entered the picture with the work around **[verifier.cash](https://verifier.cash)**
 and the `groth16_cashscript` toolchain. ZK-STARKs remain attractive for their transparency and
 post-quantum security, but proof size does not fit the BCH 2026 per-input op-cost budget
 for this use case. Groth16 verification fits in **35,626 bytes of script in one standard
@@ -82,7 +82,7 @@ and it is not quantum-resistant.
   rejected.
 - `vk_x` is recomputed in-script and never accepted as a witness.
 - The upstream red-team fix was merged into `mr-zwets/groth16_cashscript` (PR #26,
-  2026-10-30): https://github.com/mr-zwets/groth16_cashscript/pull/26
+  2026-10-30): **https://github.com/mr-zwets/groth16_cashscript/pull/26**
 
 ### Mainnet
 
@@ -168,7 +168,7 @@ Open item: the multi-asset tree uses a category-agnostic zero leaf
 | 6b | Two-asset lifecycle | 4 ops broadcast 2026-11-10/11, RBF-replaced, still unconfirmed | pending confirmation |
 | 7 | Public ceremony → production | — | pending |
 
-Full records: https://hushyourmoney.com/research/shielded-pool
+Full records: **https://hushyourmoney.com/research/shielded-pool**
 
 ## The trusted setup
 
@@ -186,7 +186,7 @@ multiple independent contributors, a published transcript, and a verification re
 anyone can replay.
 
 The ceremony page is live, and the contribution monitor is still a demo:
-https://hushyourmoney.com/ceremony
+**https://hushyourmoney.com/ceremony**
 
 ## What the campaign funds
 
@@ -224,14 +224,14 @@ re-pledged as "Anonymous" during the campaign.
 
 ## Links
 
-- Campaign: https://fundme.cash/campaign/180
-- DoraHacks BUIDL (BLAZE Hackathon, nito.cash): https://dorahacks.io/build/49513
-- Research: https://hushyourmoney.com/research/shielded-pool
-- Ceremony: https://hushyourmoney.com/ceremony
-- verifier.cash: https://verifier.cash
-- Circuit and covenant source: https://github.com/APECSdev/pusd-shielded-pool
-- Site and registry: https://github.com/APECSdev/hushyourmoney
-- Upstream verifier fix: https://github.com/mr-zwets/groth16_cashscript/pull/26
+- Campaign: **https://fundme.cash/campaign/180**
+- DoraHacks BUIDL (BLAZE Hackathon, nito.cash): **https://dorahacks.io/build/49513**
+- Research: **https://hushyourmoney.com/research/shielded-pool**
+- Ceremony: **https://hushyourmoney.com/ceremony**
+- verifier.cash: **https://verifier.cash**
+- Circuit and covenant source: **https://github.com/APECSdev/pusd-shielded-pool**
+- Site and registry: **https://github.com/APECSdev/hushyourmoney**
+- Upstream verifier fix: **https://github.com/mr-zwets/groth16_cashscript/pull/26**
 
 ## Open questions
 
