@@ -239,7 +239,7 @@ out 1–5: verifier steps re-created      out 6: change / public payout
 
 ## 9. Step 7 — register the pool (PROPOSED manifest schema)
 
-⚠️ PROPOSED — no registry implementation exists yet (roadmap step 3).
+⚠️ The proposal below predates the implemented registry: the live manifest is `pool-registry.json` at the repo root (version 1, updated 2026-11-22).
 
 ```json
 {
@@ -281,6 +281,10 @@ out 1–5: verifier steps re-created      out 6: change / public payout
 4. `VERIFIER_DIR` unset ⇒ wrong verifier layout / missing vk (silent failure).
 5. Non-interactive SSH: `node` not in PATH — export `node24/bin` first.
 6. Verifier step layout drifts with repo state — regenerate steps, keep proofs.
+7. Fee probes on the **unsigned** size undersize ~70 B per input — probe with 100 B
+   placeholder unlockings, or the broadcast lands below the relay floor (§13).
+8. BCH txid = double-SHA256 of the **full signed** tx; libauth `hash256` is already
+   the double-SHA — call it once (§13).
 
 ## 12. Known discrepancies and disclosures
 
@@ -335,3 +339,50 @@ out 1–5: verifier steps re-created      out 6: change / public payout
   (Gate 3 used a 219 B prep tx). Genesis tx: vout0 minting NFT (empty commitment),
   vout1 full FT supply, vout2 change; new category = the PREP txid. Deploy then
   spends genesis vout0–2 (NFT + supply + sats) — one tx, 971 B, fee 2000 sats.
+
+---
+
+## 13. chipnet-pusd-v2 — runner-independent Path-A pool (2026-11-22, VERIFIED LIVE)
+
+Deployed by the nito.cash team from `apps/web/scripts/deploy-pool.mjs`, using the
+wallet-committed verifying key (GitHub Release `proving-assets-v1` lineage), **not**
+the recovered runner key. Registry entry: `pool-registry.json` → `chipnet-pusd-v2`.
+
+| What | Value |
+| ---- | ----- |
+| Category anchor tx (= the category) | `050b5934bea9a7713e842371d8fb233b14f5596b7339fcbf8c1c7dac58c504a9` |
+| Mint tx (minting NFT + 100,000,000 FT) | `a3e90020be9924f4a6400b922c651d69ce0005941922b7f4f62331c781decc02` |
+| Deploy tx (pool UTXO + 5 verifier steps) | `53014fd4749ff205795e288689e12316a1497e09fc6a97bcfaa38360206766da` |
+| Pool covenant locking (P2SH32) | `aa20e6b3af9822cdaf8d2c0744bdf51e7d61b8edd280820f661b8641d3c9844d585587` |
+| Genesis tree root (LE) | `551108f63731bcc628dda2697d70219d103a8c1bf203f2d4aaec6bbea5b4510f` |
+| Pool CashAddress | `bchtest:p0nt8tucytx6lrfvqaztmag704sm3mwjszpq7esmseqa8jvyf4v92g7pntldw` |
+| Setup grade | committed 1-of-1, published entropy (`walletProverCompatible: true`) |
+
+Verified on chain 2026-11-22 (Fulcrum `chipnet.bch.ninja:50004`, protocol 1.5):
+deploy confirmed at block **343322** (88 confirmations at probe); pool UTXO vout 0
+carries category `050b5934…`, amount `0`, and a **mutable** NFT whose commitment is
+the genesis root LE followed by 32 zero bytes. The 100,000,000 FT supply sits at
+deploy vout 6 (P2PKH), not under the covenant. Two **public** bootstrap seed notes
+(value 0, nk=1) let any wallet open its first action.
+
+### Deployment rules this run had to discover (each cost a rejected broadcast)
+
+1. **The mint MUST spend the anchor's vout 0.** The category equals the anchor txid,
+   and the mint must spend `out[0]` of that tx. Spending `out[1]` (same txid) is
+   rejected with `bad-txns-token-invalid-category (16)`. Our known-good mints follow
+   this (`097619e8` spends `98690dba:0`), but the runbook did not state it.
+2. **Genesis NFTs are MINTING-capable with EMPTY commitments.** A genesis output that
+   attempts a mutable NFT with a commitment is rejected with the same error; the
+   pool's mutable state NFT is created by SPENDING the minting NFT in the deploy.
+3. **Fee probing on the unsigned size undersizes ~70 B per input.** At 1 sat/B the
+   result lands below the relay floor. Probe with 100 B placeholder unlockings
+   (`build.js` convention).
+4. **BCH txid = double-SHA256 of the FULL SIGNED tx.** libauth's `hash256` is already
+   the double-SHA — call it once; two calls produce a wrong txid.
+
+### Wallet compatibility
+
+`chipnet-pusd-v2` is the first pool with `walletProverCompatible: true` — the
+shield/transfer/unshield flows work with no further code change. The gate3 and
+mainnet pools remain gated on the runner's witness-encoding revision
+(`apps/web/scripts/pool-accept.mjs` in nito.cash is the byte-exact acceptance gate).
