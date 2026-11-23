@@ -33,6 +33,8 @@ The remaining step is the trusted setup. Every deployment so far uses a disclose
 single-party (1-of-1) setup; production requires a public multi-party ceremony. This post
 describes the system, the evidence, and the ceremony we are raising funds to run.
 
+Support the campaign: **https://fundme.cash/campaign/180**.
+
 ## Background
 
 The project started at BCHDEVCON3 in 2020:
@@ -109,6 +111,8 @@ is a disclosed single-party (1-of-1) demo setup, not production.
   wallet-committed proving key (`proving-assets-v1`) and ships two **public** bootstrap
   seed notes (value 0, nk=1) so any wallet can open its first action.
 
+The wallet side (nito.cash) is a BLAZE Hackathon entry: **https://dorahacks.io/build/49513**.
+
 ## Evidence
 
 | Gate | Scope | Evidence | Status |
@@ -142,6 +146,8 @@ anyone can replay.
 The ceremony page is live, and the contribution monitor is still a demo:
 **https://hushyourmoney.com/ceremony**
 
+The ceremony is funded by the campaign: **https://fundme.cash/campaign/180**.
+
 ## What the campaign funds
 
 **12.5 BCH** (≈ $2,500 at ~$200/BCH), all-or-nothing:
@@ -155,6 +161,8 @@ The ceremony page is live, and the contribution monitor is still a demo:
 
 Pledges are held by the CashStarter contract. Direct donations to the campaign address are
 re-pledged as "Anonymous" during the campaign.
+
+Pledge: **https://fundme.cash/campaign/180**.
 
 ## Roadmap
 
@@ -204,6 +212,11 @@ re-pledged as "Anonymous" during the campaign.
 - **No independent audit yet.** That is one of the budget lines.
 - Gate 6b's two-asset lifecycle was broadcast but never confirmed.
 - The ceremony monitor UI is a demo until Gate 7 runs.
+
+## Support this work
+
+- Campaign: **https://fundme.cash/campaign/180**
+- DoraHacks BUIDL: **https://dorahacks.io/build/49513**
 
 ## Appendix A: Multi-asset pools
 
