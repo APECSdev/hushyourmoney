@@ -15,7 +15,7 @@ Hush Your Money is proud to introduce Shielded Stablecoin Payments — built on 
 ## INTRODUCTION
 
 The shielded pool has already run on BCH mainnet: a **183,472-constraint** Groth16
-circuit, a covenant, and a verifier, deployed and exercised with **1.00 PUSD** on
+circuit, a covenant, and a verifier, deployed and exercised with **100 base units (1.00 PUSD)** on
 2026-11-20. [Four public mainnet txs](https://hushyourmoney.com/research/shielded-pool)
 
 Hush Your Money ([ceremony](https://hushyourmoney.com/ceremony)) is preparing the
@@ -75,7 +75,7 @@ The team is a solo builder + Technical advisors + AI agents.
 **FULL DISCLOSURE:**
 I've had a poor track record with Bitcoin Cash fundraising in the past (25% funded at best),
 so I'm hoping after delivering this BIG WIN for the community — the shielded pool:
-Gates 1-6b measured on chipnet, plus a real mainnet pool deployment and 1.00 PUSD
+Gates 1-6b measured on chipnet, plus a real mainnet pool deployment and 100 base units (1.00 PUSD)
 shielded on 2026-11-20 ([research](https://hushyourmoney.com/research/shielded-pool)) —
 that'll help shift the momentum back in my favor.
 *(but only time will tell...)*

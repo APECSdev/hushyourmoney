@@ -148,7 +148,7 @@ const MAINNET_LIFECYCLE = [
         bullets: [
             'P2SH32 covenant aa20a8d375c44dfa… pins poolCategory',
             '5 Groth16 verifier step UTXOs pre-funded (36,649 B)',
-            '1.00 PUSD holdings locked under the same covenant',
+            '100 base units (1.00 PUSD) holdings locked under the same covenant',
         ],
         meta: ['mainnet', '909 B [measured]'],
         tx: '63ddfdd4…af7c',
@@ -159,11 +159,11 @@ const MAINNET_LIFECYCLE = [
         cls: 'stage-lime',
         dot: '#bef264',
         network: 'mainnet',
-        kicker: '1.00 PUSD shielded',
+        kicker: '100 base units (1.00 PUSD) shielded',
         bullets: [
             'real Groth16 proof · 2 public inputs · 183,472 constraints',
             '7 inputs VM-validated before broadcast, all OK',
-            'state root advanced to d5ec91ad…d508; 1.00 PUSD conserved',
+            'state root advanced to d5ec91ad…d508; 100 base units (1.00 PUSD) conserved',
         ],
         meta: ['mainnet', '38,475 B · 1 sat/B [measured]'],
         tx: '4fda8a8b…544f',

@@ -25,7 +25,7 @@ BN254 — 183,472 constraints, 2 public inputs — with the pool state in a muta
 CashToken NFT commitment enforced by a CashScript covenant.
 
 It has run on BCH mainnet. On 2026-11-20 four transactions deployed a pool and shielded
-**1.00 PUSD** with a real proof. On chipnet the same circuit has been exercised through the
+**100 base units (1.00 PUSD)** with a real proof. On chipnet the same circuit has been exercised through the
 full SHIELD → TRANSFER → UNSHIELD lifecycle, and a runner-independent pool
 (`chipnet-pusd-v2`) now runs under the wallet-committed proving key.
 
@@ -92,8 +92,8 @@ Four public transactions, 2026-11-20 (explorer links on the research page):
 | ----- | ---- | ------------ |
 | PREP | `dd1e3506f4fb7e81dd4f9146612df1f0aff1f812378332297556653356020e7d` | pool category anchor |
 | GENESIS | `0a8cb008cbacc618a27726e4422a61748fe5d5aa1e75c3ed379eff918441c5c4` | state NFT minted |
-| DEPLOY | `63ddfdd4718b5186dfb0ed36ceebb66a8c5dde06ad28b291b53bd040b1f5af7c` | covenant + 5 verifier steps + 1.00 PUSD |
-| TRANSFER | `4fda8a8b63ff2ef82cc1f5a9ad89bdcbbc86fec254e9c08bb1b874312f6b544f` | real proof, 1.00 PUSD conserved, 38,475 B |
+| DEPLOY | `63ddfdd4718b5186dfb0ed36ceebb66a8c5dde06ad28b291b53bd040b1f5af7c` | covenant + 5 verifier steps + 100 base units (1.00 PUSD) |
+| TRANSFER | `4fda8a8b63ff2ef82cc1f5a9ad89bdcbbc86fec254e9c08bb1b874312f6b544f` | real proof, 100 base units conserved (1.00 PUSD), 38,475 B |
 
 All seven inputs were evaluated with the libauth BCH-2026 VM before broadcast. The setup
 is a disclosed single-party (1-of-1) demo setup, not production.
