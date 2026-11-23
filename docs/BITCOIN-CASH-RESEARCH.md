@@ -109,52 +109,6 @@ is a disclosed single-party (1-of-1) demo setup, not production.
   wallet-committed proving key (`proving-assets-v1`) and ships two **public** bootstrap
   seed notes (value 0, nk=1) so any wallet can open its first action.
 
-## Multi-asset pools
-
-The single-asset pool (Path A) deploys one covenant and one circuit per CashToken
-category. It works today — it is what the mainnet demo used — but it fragments the
-anonymity set: one pool per asset.
-
-Path B puts every category in one pool. The note commitment binds the full 256-bit
-category, value, owner, rho and r. The 256-bit category is the hard part: BN254's scalar
-field is 254 bits, so a 32-byte category cannot be one field element. Truncating to 253
-bits (what the single-asset circuit does for its action hash) is unsound for multi-asset:
-an attacker could grind a ~2³-aliasing category pair and turn the pool into a converter.
-Two drafts were measured:
-
-- **variant c** — note = `Poseidon(5)(Poseidon(2)(catHi, catLo), value, owner, rho, r)`:
-  **187,547 constraints** (+2.22%).
-- **variant b** — note = `Poseidon(6)(catHi, catLo, value, owner, rho, r)`:
-  **186,007 constraints** (+1.38%).
-
-Variant b is the recommendation: cheaper, and exact — it binds both category limbs with
-no collapse-hash assumption.
-
-Per-category conservation is enforced in-circuit: a canonical 256-bit sort of both sides
-(two `LessThan(128)` + `IsEqual` per sort — circomlib's `LessThan` is capped at n ≤ 252,
-so no 254-bit compare), output categories aligned with input categories, and the public
-delta applied only to the public category's slot. The anti-converter negative test (1 unit
-moved across categories) is rejected at the slot-conservation constraint on both variants.
-
-The covenant (Gate 5) binds the pool's state-NFT category as a constructor argument and
-holds one bare-FT UTXO per category on the same bytecode. It branches on
-`tx.inputs[i].tokenCategory` — state path vs holdings path — and the holdings leg enforces
-spawn (`newHoldings = held + pv − 2·isUnshield·pv ≥ 0`), output continuity and the
-unshield payout. Measured redeem **448 B**; harness op-cost **47.5k–49.5k** against
-193.6k–195.2k budget, and **84,819 / 556,800 (15.2%)** on the real broadcast op.
-
-Gate 6 deployed the first multi-asset pool on chipnet (category `d85ba98a…`, deploy
-`e36fd153…`, block 330459) and shielded 500,000 units of a **different** category
-(`98690dba…`) on its first op — the multi-asset property exercised on chain with a real
-proof. Gate 6b then ran the full lifecycle with two categories on one pool: SHIELD A,
-SHIELD B, TRANSFER A+B, UNSHIELD B. All four ops were VM-verified and broadcast
-2026-11-10/11; they were never confirmed (the miner skipped the set, and the RBF
-replacement set also stayed unconfirmed), so the pool stays out of `pool-registry.json`
-until an op set confirms.
-
-Open item: the multi-asset tree uses a category-agnostic zero leaf
-`Poseidon(6)(0,0,0,0,0,0)`; the per-asset seed policy for production is still open.
-
 ## Evidence
 
 | Gate | Scope | Evidence | Status |
@@ -221,6 +175,52 @@ re-pledged as "Anonymous" during the campaign.
 6. **Payment gateway and SDK.** Wallet and merchant integration on top of the pool.
 7. **Post-quantum research.** A STARK-based variant; proof size and verification cost on
    BCH are the constraints.
+
+## Multi-asset pools
+
+The single-asset pool (Path A) deploys one covenant and one circuit per CashToken
+category. It works today — it is what the mainnet demo used — but it fragments the
+anonymity set: one pool per asset.
+
+Path B puts every category in one pool. The note commitment binds the full 256-bit
+category, value, owner, rho and r. The 256-bit category is the hard part: BN254's scalar
+field is 254 bits, so a 32-byte category cannot be one field element. Truncating to 253
+bits (what the single-asset circuit does for its action hash) is unsound for multi-asset:
+an attacker could grind a ~2³-aliasing category pair and turn the pool into a converter.
+Two drafts were measured:
+
+- **variant c** — note = `Poseidon(5)(Poseidon(2)(catHi, catLo), value, owner, rho, r)`:
+  **187,547 constraints** (+2.22%).
+- **variant b** — note = `Poseidon(6)(catHi, catLo, value, owner, rho, r)`:
+  **186,007 constraints** (+1.38%).
+
+Variant b is the recommendation: cheaper, and exact — it binds both category limbs with
+no collapse-hash assumption.
+
+Per-category conservation is enforced in-circuit: a canonical 256-bit sort of both sides
+(two `LessThan(128)` + `IsEqual` per sort — circomlib's `LessThan` is capped at n ≤ 252,
+so no 254-bit compare), output categories aligned with input categories, and the public
+delta applied only to the public category's slot. The anti-converter negative test (1 unit
+moved across categories) is rejected at the slot-conservation constraint on both variants.
+
+The covenant (Gate 5) binds the pool's state-NFT category as a constructor argument and
+holds one bare-FT UTXO per category on the same bytecode. It branches on
+`tx.inputs[i].tokenCategory` — state path vs holdings path — and the holdings leg enforces
+spawn (`newHoldings = held + pv − 2·isUnshield·pv ≥ 0`), output continuity and the
+unshield payout. Measured redeem **448 B**; harness op-cost **47.5k–49.5k** against
+193.6k–195.2k budget, and **84,819 / 556,800 (15.2%)** on the real broadcast op.
+
+Gate 6 deployed the first multi-asset pool on chipnet (category `d85ba98a…`, deploy
+`e36fd153…`, block 330459) and shielded 500,000 units of a **different** category
+(`98690dba…`) on its first op — the multi-asset property exercised on chain with a real
+proof. Gate 6b then ran the full lifecycle with two categories on one pool: SHIELD A,
+SHIELD B, TRANSFER A+B, UNSHIELD B. All four ops were VM-verified and broadcast
+2026-11-10/11; they were never confirmed (the miner skipped the set, and the RBF
+replacement set also stayed unconfirmed), so the pool stays out of `pool-registry.json`
+until an op set confirms.
+
+Open item: the multi-asset tree uses a category-agnostic zero leaf
+`Poseidon(6)(0,0,0,0,0,0)`; the per-asset seed policy for production is still open.
 
 ## Links
 
