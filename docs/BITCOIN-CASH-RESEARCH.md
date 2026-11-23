@@ -205,7 +205,7 @@ re-pledged as "Anonymous" during the campaign.
 - Gate 6b's two-asset lifecycle was broadcast but never confirmed.
 - The ceremony monitor UI is a demo until Gate 7 runs.
 
-## Appendix: Multi-asset pools
+## Appendix A: Multi-asset pools
 
 The single-asset pool (Path A) deploys one covenant and one circuit per CashToken
 category. It works today — it is what the mainnet demo used — but it fragments the
