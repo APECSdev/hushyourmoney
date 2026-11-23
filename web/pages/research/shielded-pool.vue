@@ -178,6 +178,17 @@ const NETQ = '?network=chipnet'
 const MAINNET_NETQ = '?network=mainnet'
 const POOLS = [
     {
+        name: 'chipnet-pusd-v2',
+        cat: '050b5934…504a9',
+        catFull: '050b5934bea9a7713e842371d8fb233b14f5596b7339fcbf8c1c7dac58c504a9',
+        locking: 'aa20e6b3…5587',
+        lockingFull: 'aa20e6b3af9822cdaf8d2c0744bdf51e7d61b8edd280820f661b8641d3c9844d585587',
+        root: '551108f6…510f',
+        firstOp: 'DEPLOYED 2026-11-22 · wallet-committed key · block 343322',
+        tx: '53014fd4…66da',
+        txFull: '53014fd4749ff205795e288689e12316a1497e09fc6a97bcfaa38360206766da',
+    },
+    {
         name: 'gate3-demo-pool',
         cat: '98690dba…b153',
         catFull: '98690dba09831a8099613ba2eb4cbe12fffa53739bdfce4978e311032a85b153',
@@ -661,7 +672,7 @@ const LIFECYCLE = [
                             <dd class="break-all text-slate-100">{{ p.root }}</dd>
                         </div>
                         <div class="flex gap-3">
-                            <dt class="w-24 shrink-0 uppercase tracking-widest text-slate-200">first op</dt>
+                            <dt class="w-24 shrink-0 uppercase tracking-widest text-slate-200">first tx</dt>
                             <dd class="break-all text-slate-100">
                                 {{ p.firstOp }} ·
                                 <a :href="EXPLORER + p.txFull + NETQ" target="_blank" rel="noopener" class="src-link">{{ p.tx }} ↗</a>
@@ -672,7 +683,7 @@ const LIFECYCLE = [
             </div>
 
             <p class="reveal mt-6 text-sm leading-relaxed text-slate-200">
-                A third pool (Gate 6b) demonstrates the full two-asset lifecycle — SHIELD A, SHIELD B,
+                A fourth pool (Gate 6b) demonstrates the full two-asset lifecycle — SHIELD A, SHIELD B,
                 TRANSFER, UNSHIELD — on a single multi-asset instance; its operations were VM-verified and
                 broadcast 2026-11-10/11 and are pending confirmation at last check. Registry entry to follow.
                 Full registry: <a href="https://github.com/APECSdev/hushyourmoney/blob/master/pool-registry.json" target="_blank" rel="noopener" class="src-link">pool-registry.json ↗</a>

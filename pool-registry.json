@@ -1,9 +1,20 @@
 {
   "$schema": "https://hushyourmoney.com/schemas/pool-registry-v1.json",
   "version": 1,
-  "network": "chipnet",
-  "updated": "2026-11-20",
+  "network": "multi",
+  "updated": "2026-11-22",
   "pools": [
+    {
+      "name": "chipnet-pusd-v2",
+      "network": "chipnet",
+      "poolCategory": "050b5934bea9a7713e842371d8fb233b14f5596b7339fcbf8c1c7dac58c504a9",
+      "poolLocking": "aa20e6b3af9822cdaf8d2c0744bdf51e7d61b8edd280820f661b8641d3c9844d585587",
+      "treeRootLE": "551108f63731bcc628dda2697d70219d103a8c1bf203f2d4aaec6bbea5b4510f",
+      "assetCategory": "050b5934bea9a7713e842371d8fb233b14f5596b7339fcbf8c1c7dac58c504a9",
+      "setupGrade": "committed-1of1-published-entropy",
+      "walletProverCompatible": true,
+      "notes": "Path-A runner-independent pool deployed 2026-11-22 from nito.cash apps/web/scripts/deploy-pool.mjs: the wallet-COMMITTED verifying key (proving-assets-v1 lineage) + a fresh category. Anchor 050b5934…504a9 (= the category), mint a3e90020…decc02 (minting NFT + 100,000,000 FT), deploy 53014fd4…766da (pool UTXO + 5 verifier-step UTXOs; chipnet block 343322, 88 confirmations at probe 2026-11-22). Two PUBLIC bootstrap seed notes (value 0, nk=1) — any wallet can bootstrap. Verified on-chain: pool UTXO category 050b5934…, mutable NFT commitment = 551108f6… (root LE) || 32 zero bytes. Wallet-prover compatible (nito.cash registry flag true); gate3 + mainnet remain runner-gated (missing witness-encoding revision)."
+    },
     {
       "name": "mainnet-pusd-pool",
       "network": "mainnet",
