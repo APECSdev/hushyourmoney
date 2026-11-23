@@ -18,9 +18,10 @@ STATUS: DRAFT — do not publish until the FundMe campaign is approved by the si
 
 ## Summary
 
-Hush Your Money is a shielded pool for CashTokens on Bitcoin Cash. The circuit is a
-2-in/2-out Groth16 joinsplit on BN254 — 183,472 constraints, 2 public inputs — and the
-pool state lives in a mutable CashToken NFT commitment enforced by a CashScript covenant.
+Hush Your Money is a research portal and resource on blockchain privacy. Its current
+flagship work is a shielded pool for CashTokens on Bitcoin Cash: a 2-in/2-out Groth16
+joinsplit on BN254 — 183,472 constraints, 2 public inputs — with the pool state in a
+mutable CashToken NFT commitment enforced by a CashScript covenant.
 
 It has run on BCH mainnet. On 2026-11-20 four transactions deployed a pool and shielded
 **100 PUSD** with a real proof. On chipnet the same circuit has been exercised through the
