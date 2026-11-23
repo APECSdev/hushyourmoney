@@ -150,25 +150,7 @@ anyone can replay.
 The ceremony page is live, and the contribution monitor is still a demo:
 **https://hushyourmoney.com/ceremony**
 
-The ceremony is funded by the campaign:
-
-**https://fundme.cash/campaign/180**
-
-## What the campaign funds
-
-**12.5 BCH** (≈ $2,500 at ~$200/BCH), all-or-nothing:
-
-- 6.25 BCH — agent + human code and security audits
-- 2.00 BCH — ceremony preparations (hosting, tooling, outreach)
-- 1.25 BCH — paid event promotions
-- 1.25 BCH — media and content
-- 1.25 BCH — documentation and contributor onboarding
-- 0.50 BCH — fees and contingency
-
-Pledges are held by the CashStarter contract. Direct donations to the campaign address are
-re-pledged as "Anonymous" during the campaign.
-
-Pledge:
+Support the ceremony:
 
 **https://fundme.cash/campaign/180**
 
@@ -182,8 +164,7 @@ Pledge:
 2. **Gate 7 — public ceremony.** Multi-party contribution over the Perpetual Powers-of-Tau
    transcript, a published transcript, independent verification, then a production
    deployment.
-3. **Independent audit.** One of the budget lines; scoped to the circuit, covenant, and
-   verifier.
+3. **Independent audit.** Scoped to the circuit, covenant, and verifier.
 4. **Note detection.** Indexer plus trial-decryption scan for pool outputs, so wallets can
    find notes without a local full scan.
 5. **Multi-asset production.** Variant b is measured (186,007 constraints); the per-asset
@@ -219,7 +200,7 @@ Pledge:
 ## Disclosure
 
 - The pool is **testnet-only** in its audited surface; the mainnet demo is a 1-of-1 setup.
-- **No independent audit yet.** That is one of the budget lines.
+- **No independent audit yet.**
 - Gate 6b's two-asset lifecycle was broadcast but never confirmed.
 - The ceremony monitor UI is a demo until Gate 7 runs.
 
