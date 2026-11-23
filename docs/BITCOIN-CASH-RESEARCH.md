@@ -33,7 +33,9 @@ The remaining step is the trusted setup. Every deployment so far uses a disclose
 single-party (1-of-1) setup; production requires a public multi-party ceremony. This post
 describes the system, the evidence, and the ceremony we are raising funds to run.
 
-Support the campaign: **https://fundme.cash/campaign/180**.
+Support the campaign:
+
+**https://fundme.cash/campaign/180**
 
 ## Background
 
@@ -111,7 +113,9 @@ is a disclosed single-party (1-of-1) demo setup, not production.
   wallet-committed proving key (`proving-assets-v1`) and ships two **public** bootstrap
   seed notes (value 0, nk=1) so any wallet can open its first action.
 
-The wallet side (nito.cash) is a BLAZE Hackathon entry: **https://dorahacks.io/build/49513**.
+The wallet side (nito.cash) is a BLAZE Hackathon entry:
+
+**https://dorahacks.io/build/49513**
 
 ## Evidence
 
@@ -146,7 +150,9 @@ anyone can replay.
 The ceremony page is live, and the contribution monitor is still a demo:
 **https://hushyourmoney.com/ceremony**
 
-The ceremony is funded by the campaign: **https://fundme.cash/campaign/180**.
+The ceremony is funded by the campaign:
+
+**https://fundme.cash/campaign/180**
 
 ## What the campaign funds
 
@@ -162,7 +168,9 @@ The ceremony is funded by the campaign: **https://fundme.cash/campaign/180**.
 Pledges are held by the CashStarter contract. Direct donations to the campaign address are
 re-pledged as "Anonymous" during the campaign.
 
-Pledge: **https://fundme.cash/campaign/180**.
+Pledge:
+
+**https://fundme.cash/campaign/180**
 
 ## Roadmap
 
@@ -187,7 +195,9 @@ Pledge: **https://fundme.cash/campaign/180**.
 ## Links
 
 - Campaign: **https://fundme.cash/campaign/180**
+
 - DoraHacks BUIDL (BLAZE Hackathon, nito.cash): **https://dorahacks.io/build/49513**
+
 - Research: **https://hushyourmoney.com/research/shielded-pool**
 - Ceremony: **https://hushyourmoney.com/ceremony**
 - verifier.cash: **https://verifier.cash**
@@ -215,8 +225,13 @@ Pledge: **https://fundme.cash/campaign/180**.
 
 ## Support this work
 
-- Campaign: **https://fundme.cash/campaign/180**
-- DoraHacks BUIDL: **https://dorahacks.io/build/49513**
+Campaign:
+
+**https://fundme.cash/campaign/180**
+
+DoraHacks BUIDL:
+
+**https://dorahacks.io/build/49513**
 
 ## Appendix A: Multi-asset pools
 
