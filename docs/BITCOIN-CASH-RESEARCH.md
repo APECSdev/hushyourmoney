@@ -46,8 +46,8 @@ Since then the work has continued on privacy tooling for UTXO chains — CashShu
 CashFusion first, then a coordinator-free fusion design over Nostr relays:
 https://hushyourmoney.com/research/cashfusion
 
-Zero knowledge entered the picture with the work around `verifier.cash` and the
-`groth16_cashscript` toolchain. ZK-STARKs remain attractive for their transparency and
+Zero knowledge entered the picture with the work around [verifier.cash](https://verifier.cash)
+and the `groth16_cashscript` toolchain. ZK-STARKs remain attractive for their transparency and
 post-quantum security, but proof size does not fit the BCH 2026 per-input op-cost budget
 for this use case. Groth16 verification fits in **35,626 bytes of script in one standard
 transaction**. The trade-off is explicit: Groth16 needs a circuit-specific trusted setup,
@@ -228,6 +228,7 @@ re-pledged as "Anonymous" during the campaign.
 - DoraHacks BUIDL (BLAZE Hackathon, nito.cash): https://dorahacks.io/build/49513
 - Research: https://hushyourmoney.com/research/shielded-pool
 - Ceremony: https://hushyourmoney.com/ceremony
+- verifier.cash: https://verifier.cash
 - Circuit and covenant source: https://github.com/APECSdev/pusd-shielded-pool
 - Site and registry: https://github.com/APECSdev/hushyourmoney
 - Upstream verifier fix: https://github.com/mr-zwets/groth16_cashscript/pull/26
