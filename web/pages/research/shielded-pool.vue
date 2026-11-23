@@ -178,6 +178,20 @@ const NETQ = '?network=chipnet'
 const MAINNET_NETQ = '?network=mainnet'
 const POOLS = [
     {
+        name: 'chipnet-pusd-v4-covenant0',
+        cat: '0d31da75…d664',
+        catFull: '0d31da753c6855b830ea683ac11552404139008bfbfac97801fe30d31a42d664',
+        locking: 'aa209dd6…5587',
+        lockingFull: 'aa209dd6f6ef70c453134afd0f13f3a1aff6b9507576c97fe1649ba5aaa06abaa15587',
+        root: '551108f6…510f',
+        firstOp: 'DEPLOYED 2026-11-23 · covenant-at-input-0 · block 344638',
+        tx: 'efd3314e…857c',
+        txFull: 'efd3314edb42bddd7f7438be5dfba5ffd3da378ab13082610edd68426f38357c',
+        badge: 'badge-done',
+        badgeLabel: 'spendable',
+        note: 'Wallet-originated actions confirmed: SHIELD 43ca7bca…2e4d (block 344641) and TRANSFER fdd2981d…7b8b (block 344646, encrypted note carrier at out[6]). Same seeded tree root as v2 — the two deploys\' state-NFT commitments are byte-identical.',
+    },
+    {
         name: 'chipnet-pusd-v2',
         cat: '050b5934…504a9',
         catFull: '050b5934bea9a7713e842371d8fb233b14f5596b7339fcbf8c1c7dac58c504a9',
@@ -187,6 +201,9 @@ const POOLS = [
         firstOp: 'DEPLOYED 2026-11-22 · wallet-committed key · block 343322',
         tx: '53014fd4…66da',
         txFull: '53014fd4749ff205795e288689e12316a1497e09fc6a97bcfaa38360206766da',
+        badge: 'badge-error',
+        badgeLabel: 'not spendable',
+        note: 'Deployed with the five-input fixture verifier program: its terminal pins inputs == 5 and its steps read input 3 as the genesis witness, while every wallet action emits seven inputs. No action can satisfy those scripts. Its pool UTXO is still the deploy output, unspent since block 343322 — zero actions. Successor: v4 above.',
     },
     {
         name: 'gate3-demo-pool',
@@ -198,6 +215,9 @@ const POOLS = [
         firstOp: 'SHIELD 1,000,000 units · block 330438',
         tx: 'f5927a0b…7426',
         txFull: 'f5927a0bb67d4688976f98483828259057bd399522a587e66e3b1099a2ab7426',
+        badge: 'badge-done',
+        badgeLabel: 'deployed',
+        note: '',
     },
     {
         name: 'gate6-multi-pool',
@@ -209,6 +229,9 @@ const POOLS = [
         firstOp: 'SHIELD 500,000 units (foreign category) · block 330459',
         tx: 'fc585fc9…912f',
         txFull: 'fc585fc9bf6499024c89c73a2bcb945de2ec212fb36f8ffc5acb617b6636912f',
+        badge: 'badge-done',
+        badgeLabel: 'deployed',
+        note: '',
     },
 ]
 
@@ -656,7 +679,7 @@ const LIFECYCLE = [
                 <div v-for="p in POOLS" :key="p.name" class="pool-card reveal">
                     <div class="flex items-center justify-between gap-3">
                         <h3 class="font-mono text-sm text-lime-300">{{ p.name }}</h3>
-                        <span class="badge badge-done">deployed</span>
+                        <span class="badge" :class="p.badge">{{ p.badgeLabel }}</span>
                     </div>
                     <dl class="mt-4 space-y-2.5 font-mono text-[0.82rem] leading-relaxed">
                         <div class="flex gap-3">
@@ -679,22 +702,123 @@ const LIFECYCLE = [
                             </dd>
                         </div>
                     </dl>
+                    <p v-if="p.note" class="mt-4 border-t border-white/10 pt-4 text-[0.82rem] leading-relaxed text-slate-200">
+                        {{ p.note }}
+                    </p>
                 </div>
             </div>
 
             <p class="reveal mt-6 text-sm leading-relaxed text-slate-200">
-                A fourth pool (Gate 6b) demonstrates the full two-asset lifecycle — SHIELD A, SHIELD B,
+                A fifth pool (Gate 6b) demonstrates the full two-asset lifecycle — SHIELD A, SHIELD B,
                 TRANSFER, UNSHIELD — on a single multi-asset instance; its operations were VM-verified and
                 broadcast 2026-11-10/11 and are pending confirmation at last check. Registry entry to follow.
                 Full registry: <a href="https://github.com/APECSdev/hushyourmoney/blob/master/pool-registry.json" target="_blank" rel="noopener" class="src-link">pool-registry.json ↗</a>
             </p>
         </section>
 
+        <!-- ── Partner integration: the dead pool ── -->
+        <section id="integration" class="relative z-10 mx-auto w-full max-w-6xl px-6 pb-28 sm:pb-36">
+            <div class="reveal">
+                <p class="font-mono text-[0.8rem] uppercase tracking-[0.45em] text-cyan-200">07 · integration</p>
+                <h2 class="mt-3 font-display text-[clamp(1.9rem,5vw,3.4rem)] font-bold leading-[1.08] text-white">
+                    What a Partner<br />Integration Taught Us
+                </h2>
+                <p class="mt-5 max-w-3xl text-base leading-relaxed text-slate-100 sm:text-lg">
+                    The nito.cash wallet was the first client built on this pool. Its first deployment
+                    was confirmed on chain and <strong class="font-semibold text-white">unusable</strong>.
+                    That failure is more instructive than any green gate row, so it is recorded here in
+                    full rather than quietly replaced.
+                </p>
+            </div>
+
+            <div class="mt-12 grid gap-6 lg:grid-cols-2">
+                <div class="fact-card reveal">
+                    <p class="font-mono text-[0.72rem] uppercase tracking-[0.3em] text-rose-200">the failure</p>
+                    <h3 class="mt-3 font-display text-xl font-bold text-white">A pool nobody could spend</h3>
+                    <p class="mt-3 text-sm leading-relaxed text-slate-100">
+                        <span class="font-mono text-xs text-rose-200">chipnet-pusd-v2</span> deployed fine —
+                        correct covenant, correct state NFT, correct verifying key. Its five step scripts,
+                        though, were the <em>five-input test fixture</em>: the terminal pinned
+                        <span class="font-mono text-xs">inputs == 5</span> and the executor scripts read
+                        input 3 as the genesis witness. Every wallet action emits <strong>seven</strong>
+                        inputs. No proof, however valid, could ever satisfy those scripts.
+                    </p>
+                    <p class="mt-3 text-sm leading-relaxed text-slate-100">
+                        Verified on chain: the pool UTXO is still the deploy output, unspent since block
+                        343322, and the covenant's address history holds exactly one entry — the deploy.
+                        Zero actions in ~1,340 blocks.
+                    </p>
+                </div>
+
+                <div class="fact-card reveal" style="transition-delay: 0.1s">
+                    <p class="font-mono text-[0.72rem] uppercase tracking-[0.3em] text-cyan-200">the cause</p>
+                    <h3 class="mt-3 font-display text-xl font-bold text-white">The verifier is a loader</h3>
+                    <p class="mt-3 text-sm leading-relaxed text-slate-100">
+                        The Groth16 verifier is split across five inputs, and three of them load an
+                        <strong>assembled shared program</strong> carried as data inside their witnesses —
+                        hashed, defined as function 100, and invoked at runtime. The transaction layout is
+                        therefore baked in three times: in the redeems, in the generator sources, and in the
+                        assembled program's own dispatch.
+                    </p>
+                    <p class="mt-3 text-sm leading-relaxed text-slate-100">
+                        That third layer is <strong>invisible to byte comparison</strong> — the fragments are
+                        witness data, so two builds look identical and the divergence only exists at runtime.
+                        Four attempts failed on chain while every static diff came back clean. The fix was
+                        30 size-preserving source edits across five files, regenerating the program from
+                        source rather than patching bytecode.
+                    </p>
+                </div>
+            </div>
+
+            <div class="mt-6 grid gap-6 lg:grid-cols-2">
+                <div class="fact-card reveal">
+                    <p class="font-mono text-[0.72rem] uppercase tracking-[0.3em] text-lime-200">the method that found it</p>
+                    <h3 class="mt-3 font-display text-xl font-bold text-white">Reproduce the failure offline</h3>
+                    <p class="mt-3 text-sm leading-relaxed text-slate-100">
+                        Build a <strong>synthetic</strong> seven-input transaction — covenant, three
+                        executors, genesis, terminal, funding — and evaluate every input on the BCH-2026 VM
+                        before any broadcast. The synthetic run failed <em>identically</em> to the wallet's
+                        real transaction, which exonerated the wallet port and isolated the artifact. A
+                        failure that reproduces in the harness is a bug in our own program, not in the
+                        counterparty's integration.
+                    </p>
+                    <p class="mt-3 text-sm leading-relaxed text-slate-100">
+                        This is the same discipline the pool's own gates use: every input VM-evaluated
+                        before broadcast. It is the reason a dead pool cost zero sats to discover.
+                    </p>
+                </div>
+
+                <div class="fact-card reveal" style="transition-delay: 0.1s">
+                    <p class="font-mono text-[0.72rem] uppercase tracking-[0.3em] text-lime-200">the fix</p>
+                    <h3 class="mt-3 font-display text-xl font-bold text-white">Same key, same tree, new shape</h3>
+                    <p class="mt-3 text-sm leading-relaxed text-slate-100">
+                        <span class="font-mono text-xs text-lime-300">chipnet-pusd-v4-covenant0</span> is the
+                        spendable successor: the same wallet-committed verifying key, the same two public
+                        bootstrap seed notes — its genesis state-NFT commitment is byte-identical to v2's —
+                        with the program generalized to the final shape. Two wallet-originated actions are
+                        confirmed: a SHIELD at block 344641 and a TRANSFER at block 344646 carrying an
+                        encrypted note to a second wallet.
+                    </p>
+                    <p class="mt-3 text-sm leading-relaxed text-slate-100">
+                        The covenant script itself did not change. Its 347-byte redeem contains no
+                        input-count check at all — the seven-input pin lives in the terminal step. The
+                        covenant is shape-agnostic; the program around it is not.
+                    </p>
+                </div>
+            </div>
+
+            <div class="reveal mt-10 rounded-2xl border border-cyan-300/25 bg-cyan-300/5 px-5 py-5 font-mono text-xs leading-relaxed text-cyan-100">
+                research conclusion · a deployed pool's locking bytecode is a loader, not the constraint
+                system · static review of chain data cannot tell you which transaction shape a pool accepts
+                · reproducible generator source is a review requirement, not a convenience
+            </div>
+        </section>
+
         <!-- ── Security posture & limits ── -->
         <section id="limits" class="relative z-10 mx-auto w-full max-w-6xl px-6 pb-28 sm:pb-36">
             <div class="grid items-start gap-12 lg:grid-cols-[1fr_1.4fr]">
                 <div class="reveal">
-                    <p class="font-mono text-[0.8rem] uppercase tracking-[0.45em] text-rose-200">07 · posture</p>
+                    <p class="font-mono text-[0.8rem] uppercase tracking-[0.45em] text-rose-200">08 · posture</p>
                     <h2 class="mt-5 font-display text-[clamp(1.9rem,5vw,3.4rem)] font-bold leading-[1.08] text-white">
                         Security<br />&amp; Limits
                     </h2>
@@ -748,7 +872,7 @@ const LIFECYCLE = [
         <!-- ── Design docs ── -->
         <section id="docs" class="relative z-10 mx-auto w-full max-w-6xl px-6 pb-28 sm:pb-36">
             <div class="reveal text-center">
-                <p class="font-mono text-[0.8rem] uppercase tracking-[0.45em] text-cyan-200">08 · go deeper</p>
+                <p class="font-mono text-[0.8rem] uppercase tracking-[0.45em] text-cyan-200">09 · go deeper</p>
                 <h2 class="mt-5 font-display text-[clamp(1.9rem,5vw,3.4rem)] font-bold leading-[1.08] text-white">Design Docs</h2>
             </div>
 
@@ -783,7 +907,7 @@ const LIFECYCLE = [
         <!-- ── FAQ ── -->
         <section id="faq" class="relative z-10 mx-auto w-full max-w-4xl px-6 pb-28 sm:pb-36">
             <div class="reveal text-center">
-                <p class="font-mono text-[0.8rem] uppercase tracking-[0.45em] text-lime-200">09 · questions</p>
+                <p class="font-mono text-[0.8rem] uppercase tracking-[0.45em] text-lime-200">10 · questions</p>
                 <h2 class="mt-5 font-display text-[clamp(1.9rem,5vw,3.4rem)] font-bold leading-[1.08] text-white">Reviewer FAQ</h2>
             </div>
 
@@ -825,6 +949,21 @@ const LIFECYCLE = [
                         the right order was: build, measure, publish evidence — then discuss what
                         (if anything) the protocol should standardize. The measured op-costs and
                         verifier sizes are inputs for exactly those discussions.
+                    </p>
+                </details>
+
+                <details class="faq-card reveal">
+                    <summary>Is there a working wallet?</summary>
+                    <p>
+                        Yes, on chipnet. The nito.cash wallet is the first client built on this
+                        pool and has two confirmed, wallet-originated actions — a SHIELD at block
+                        344641 and a TRANSFER at block 344646. Its first deployment (v2) was
+                        confirmed on chain but structurally unspendable, because the deployed
+                        verifier program was the five-input test fixture while every wallet
+                        action emits seven inputs. That failure and its fix are recorded in
+                        <a href="#integration" class="src-link">07 · integration</a> rather than
+                        quietly replaced — the same pool, re-deployed under the same verifying
+                        key, is now spendable.
                     </p>
                 </details>
             </div>

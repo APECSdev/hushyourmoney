@@ -26,8 +26,9 @@ CashToken NFT commitment enforced by a CashScript covenant.
 
 It has run on BCH mainnet. On 2026-11-20 four transactions deployed a pool and shielded
 **100 base units (1.00 PUSD)** with a real proof. On chipnet the same circuit has been exercised through the
-full SHIELD → TRANSFER → UNSHIELD lifecycle, and a runner-independent pool
-(`chipnet-pusd-v2`) now runs under the wallet-committed proving key.
+full SHIELD → TRANSFER → UNSHIELD lifecycle, and a runner-independent pool now runs under
+the wallet-committed proving key — with two wallet-originated actions (SHIELD, TRANSFER)
+confirmed on chipnet on 2026-11-23.
 
 The remaining step is the trusted setup. Every deployment so far uses a disclosed
 single-party (1-of-1) setup; production requires a public multi-party ceremony. This post
@@ -111,7 +112,16 @@ is a disclosed single-party (1-of-1) demo setup, not production.
 - `chipnet-pusd-v2` (2026-11-22, runner-independent): anchor `050b5934…504a9`,
   mint `a3e90020…decc02`, deploy `53014fd4…766da`, block **343322**. It uses the
   wallet-committed proving key (`proving-assets-v1`) and ships two **public** bootstrap
-  seed notes (value 0, nk=1) so any wallet can open its first action.
+  seed notes (value 0, nk=1). **Not spendable:** it was deployed with the five-input
+  fixture verifier program, while every wallet action emits seven inputs, so no action
+  can satisfy its step scripts. Verified 2026-11-23: its pool UTXO is still the deploy
+  output and its covenant history holds exactly one entry — the deploy.
+- `chipnet-pusd-v4-covenant0` (2026-11-23, spendable successor): anchor
+  `0d31da75…d664`, mint `a5d251e4…a906`, deploy `efd3314e…857c`, block **344638**.
+  Same verifying key and the same seeded tree root as v2 (`551108f6…510f`), with the
+  verifier program generalized to the covenant-at-input-0 shape. Two confirmed
+  wallet-originated actions: SHIELD `43ca7bca…2e4d` (block 344641) and TRANSFER
+  `fdd2981d…7b8b` (block 344646, encrypted note carrier at out[6]).
 
 The wallet side (nito.cash) is a BLAZE Hackathon entry:
 
@@ -128,6 +138,7 @@ The wallet side (nito.cash) is a BLAZE Hackathon entry:
 | 5 | Multi-category covenant | 448 B redeem, 47.5k–49.5k op-cost vs 193.6k–195.2k budget | passed 2026-11-01 |
 | 6 | Multi-asset E2E | deploy `e36fd153…4324`, shield `fc585fc9…912f`, block 330459 | passed 2026-11-01 |
 | 6b | Two-asset lifecycle | 4 ops broadcast 2026-11-10/11, RBF-replaced, still unconfirmed | pending confirmation |
+| — | Wallet-originated actions (nito.cash) | v4 SHIELD `43ca7bca…2e4d` + TRANSFER `fdd2981d…7b8b`, both 7 in / 8 out on chain; 7/7 inputs VM-evaluated pre-broadcast per nito.cash | passed 2026-11-23 |
 | 7 | Public ceremony → production | — | pending |
 
 Full records: **https://hushyourmoney.com/research/shielded-pool**

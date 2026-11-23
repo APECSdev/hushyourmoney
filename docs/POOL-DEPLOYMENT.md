@@ -342,7 +342,7 @@ out 1–5: verifier steps re-created      out 6: change / public payout
 
 ---
 
-## 13. chipnet-pusd-v2 — runner-independent Path-A pool (2026-11-22, VERIFIED LIVE)
+## 13. chipnet-pusd-v2 — runner-independent Path-A pool (2026-11-22, DEPLOY VERIFIED LIVE · **NOT SPENDABLE**)
 
 Deployed by the nito.cash team from `apps/web/scripts/deploy-pool.mjs`, using the
 wallet-committed verifying key (GitHub Release `proving-assets-v1` lineage), **not**
@@ -356,7 +356,8 @@ the recovered runner key. Registry entry: `pool-registry.json` → `chipnet-pusd
 | Pool covenant locking (P2SH32) | `aa20e6b3af9822cdaf8d2c0744bdf51e7d61b8edd280820f661b8641d3c9844d585587` |
 | Genesis tree root (LE) | `551108f63731bcc628dda2697d70219d103a8c1bf203f2d4aaec6bbea5b4510f` |
 | Pool CashAddress | `bchtest:p0nt8tucytx6lrfvqaztmag704sm3mwjszpq7esmseqa8jvyf4v92g7pntldw` |
-| Setup grade | committed 1-of-1, published entropy (`walletProverCompatible: true`) |
+| Setup grade | committed 1-of-1, published entropy |
+| Wallet compatibility | **`false`** (corrected 2026-11-23 — see “Wallet compatibility” below) |
 
 Verified on chain 2026-11-22 (Fulcrum `chipnet.bch.ninja:50004`, protocol 1.5):
 deploy confirmed at block **343322** (88 confirmations at probe); pool UTXO vout 0
@@ -380,9 +381,146 @@ deploy vout 6 (P2PKH), not under the covenant. Two **public** bootstrap seed not
 4. **BCH txid = double-SHA256 of the FULL SIGNED tx.** libauth's `hash256` is already
    the double-SHA — call it once; two calls produce a wrong txid.
 
-### Wallet compatibility
+### Wallet compatibility — CORRECTED 2026-11-23
 
-`chipnet-pusd-v2` is the first pool with `walletProverCompatible: true` — the
-shield/transfer/unshield flows work with no further code change. The gate3 and
-mainnet pools remain gated on the runner's witness-encoding revision
-(`apps/web/scripts/pool-accept.mjs` in nito.cash is the byte-exact acceptance gate).
+**`chipnet-pusd-v2` is NOT spendable. `walletProverCompatible` is `false`.** The
+expectation recorded here on 2026-11-22 (“the first pool with
+`walletProverCompatible: true` — the shield/transfer/unshield flows work with no
+further code change”) was wrong, and the gate was misattributed to the runner's
+witness-encoding revision. It was the **verifier program's transaction layout**.
+
+What was deployed: v2's five step UTXOs lock to the **five-input fixture** program
+(nito.cash `verifier-program.js` → `WALLET_STEP_LOCKINGS`; the naming in that file is
+inverted relative to `STEP_LOCKINGS`). That program's terminal redeem pins
+`OP_TXINPUTCOUNT == 5` and `OP_INPUTINDEX == 4` (byte patterns `c35588` and `c05488`),
+and its exec/genesis redeems read input 3 as the genesis witness. Every wallet action
+emits **7** inputs in the covenant-at-input-0 shape, so **no action can ever satisfy
+those scripts, whatever the proof.**
+
+Verified on chain 2026-11-23 (Fulcrum `chipnet.imaginary.cash:50002`, tip 344661):
+
+- the pool UTXO is **still the deploy output `53014fd4…:0`**, unspent since block 343322;
+- the covenant scripthash history holds **exactly one entry — the deploy**. Zero actions
+  in ~1,340 blocks;
+- v2's on-chain step lockings (`aa20a1d2912b…` ×3, `aa200b704cc3…`, `aa206c2e6d3c…`)
+  hash-match `WALLET_STEP_LOCKINGS` byte-for-byte.
+
+The gate3 and mainnet pools remain gated on the runner's witness-encoding revision
+(`apps/web/scripts/pool-accept.mjs` in nito.cash is the byte-exact acceptance gate) —
+that is a **different, still-open** gate, and it is not what stopped v2.
+
+**Spendable successor: §14** (same verifying key, same seeded tree, generalized program).
+
+---
+
+## 14. chipnet-pusd-v4-covenant0 — the covenant-at-input-0 shape (2026-11-23, VERIFIED ON CHAIN, SPENDABLE)
+
+Deployed by the nito.cash team (repo commit `61cef0b`) as the fix for §13: the same
+wallet-committed verifying keypair (`proving-assets-v1` lineage) and the same two
+public bootstrap seed notes, with the verifier program **generalized to the final
+transaction shape**. Registry entry: `pool-registry.json` → `chipnet-pusd-v4-covenant0`.
+
+| What | Value |
+| ---- | ----- |
+| Category anchor tx (= the category) | `0d31da753c6855b830ea683ac11552404139008bfbfac97801fe30d31a42d664` |
+| Mint tx (minting NFT + 100,000,000 FT) | `a5d251e4146dbb887afc185c712007ba578d9766f81b7fd95df406cc1e36a906` |
+| Deploy tx (pool UTXO + 5 verifier steps) | `efd3314edb42bddd7f7438be5dfba5ffd3da378ab13082610edd68426f38357c` |
+| Deploy block | **344638** (24 confirmations at probe 2026-11-23; tip 344661) |
+| Pool covenant locking (P2SH32) | `aa209dd6f6ef70c453134afd0f13f3a1aff6b9507576c97fe1649ba5aaa06abaa15587` |
+| Genesis tree root (LE) | `551108f63731bcc628dda2697d70219d103a8c1bf203f2d4aaec6bbea5b4510f` (identical to v2) |
+| Step lockings | `aa20f8c0031d…9c87` ×3, `aa205f95d0d7…b287`, `aa20866e4f0a…e487` |
+| Setup grade | committed 1-of-1, published entropy |
+| Wallet compatibility | **`true`** — two confirmed wallet-originated actions |
+
+### The shape every action now uses
+
+```
+inputs:   in[0]  covenant (continuity UTXO + state NFT)
+          in[1]  exec0      in[2] exec1      in[3] exec2
+          in[4]  genesis    in[5] terminal
+          in[6]  funding (exactly one P2PKH Schnorr input)
+
+outputs:  out[0] continuity (NEW state NFT: rootLE ‖ nullifierSetHash, 64 B)
+          out[1] exec0   out[2] exec1   out[3] exec2   (re-created in program order)
+          out[4] GENESIS   out[5] TERMINAL
+          out[6] NP01 carrier (the recipient's encrypted note; transfers only)
+          out[7] BCH change
+```
+
+### Verified on chain (2026-11-23)
+
+- **Deploy** `efd3314e…` — 3 in / 8 out, 903 B. vout0 = pool UTXO: category
+  `0d31da75…`, amount 0, **mutable** NFT commitment = `551108f6…` (root LE) ‖ 32 zero
+  bytes — byte-identical to v2's genesis commitment. vout6 = 100,000,000 FT (P2PKH).
+  vouts 1-5 = the five step UTXOs, locking to the generalized program above.
+- **SHIELD** `43ca7bca59d35790e104a6c368dd1168a6fceae3eb5efa4d3a5d02ddb9f92e4d` —
+  block **344641**, 7 in / 8 out, 37,877 B. vout0 commitment advanced to
+  `26899c87…d093`; vout6 = 19,999,000 FT public change.
+- **TRANSFER** `fdd2981d2ceed10099941b9228f53a59020c2a4039581f98614038de1bf97b8b` —
+  block **344646**, 7 in / 8 out, 37,978 B. vout0 commitment advanced to
+  `7ee11962…61f8`; vout6 = **0 sats** (the encrypted note carrier); vout7 = 56,022 sats
+  change. The pool's current UTXO is `fdd2981d…:0`.
+- **Redeem lengths on both actions** — in0 covenant **347 B**, in1-3 exec **574 B**,
+  in4 genesis **6044 B**, in5 terminal **4415 B**, in6 P2PKH funding 33 B. These match
+  the program's declared layout exactly, so the on-chain actions and the published
+  program are the same artifact.
+
+### Constraints this shape imposes (design consequences, not bugs)
+
+1. **Exactly 7 inputs.** The pin lives in the **terminal step** redeem
+   (`c35788` = `OP_TXINPUTCOUNT OP_7 OP_EQUALVERIFY`, then `c05588` = `OP_INPUTINDEX
+   OP_5 OP_EQUALVERIFY`), *not* in the covenant. The 347-B covenant redeem contains no
+   `OP_TXINPUTCOUNT` at all — it is shape-agnostic and reusable.
+2. **One funding input, therefore one fee source.** No second input for a CPFP top-up
+   and no batching of independent pool actions into one tx. The fee must be sized from
+   the single funding UTXO, and change can only go to out[7].
+3. **The program is VK-specific.** `vkx-msm.mjs` bakes `FINAL = vk.ic[0] − [2^64]G`
+   into the genesis and terminal redeems, so the five step scripts must be regenerated
+   for any new verifying key. They are **not** category-bound: v2 and v4 share one VK
+   lineage across two different categories.
+4. **Genesis input is proof-marginal.** The reported spare budget is ≈125 B ≈100k op;
+   the bench's own test proof exceeds it while typical wallet-fresh proofs do not. A
+   valid proof can therefore fail to spend. UNMEASURED here — not re-verified by this
+   team; if it holds, the genesis pad should be widened before mainnet.
+
+### Why the earlier attempts failed — the hidden dispatch
+
+The verifier is split across five inputs; three executors each load an **assembled
+shared program** carried as data in their witnesses, hash it, define it as function
+`100`, and invoke it at runtime. The input layout is therefore baked into **three**
+layers, and only the first is visible in a disassembly of the redeems:
+
+1. **the redeems** — fragment-read indices, the genesis-input defs read, the executor
+   k-branch (`k==1/k==2 → k==2/k==3`, `next 1,2,4 → 2,3,5`), the terminal self-index
+   `4→5`, the UTXO checks `0-3→1-4`;
+2. **the msmA/contract generator sources** — the state-push pin index, `genIdx`, the
+   exec0 header read;
+3. **the assembled shared program's own `main`** (in `densless-recovered/shared.mjs`) —
+   a `k < 3` guard, **fourteen** k-comparison sites (including a first-executor flag and
+   an adapter-path gate at `0x17 OP_PICK`/`OP_ROLL`, both gated `k==0`), and **seven**
+   `readBoundedInputSlice` input indices (`0,1,2,3,4 → 1,2,3,4,5`).
+
+Layer 3 is **invisible to byte comparison**, because the fragments are witness data:
+two builds look “identical” and the dispatch only exists at runtime. This is why the
+first four attempts failed on chain while every static diff came back clean.
+
+**Research-relevant consequence:** a shielded pool's on-chain scripts are a *loader*,
+not the constraint system. Static review of a deployed pool's locking bytecode cannot
+tell you which transaction shape it accepts. Reproducible generator source
+(`nito.cash/apps/web/scripts/generalize-bench-source.sh`, 30 size-preserving edits across
+five files) is a **review requirement**, not a convenience.
+
+### Acceptance method used (and worth adopting)
+
+1. Build witnesses with the bench's own `produceTransaction`.
+2. Assemble a **synthetic 7-input transaction** (covenant at 0, steps 1-5, funding 6) and
+   evaluate it on the **BCH-2026 VM** — every input must pass. The synthetic run failed
+   *identically* to the wallet's real transaction, which exonerated the wallet port and
+   isolated the program.
+3. Trace-bisect (fixture control vs generalized, value-stream diff) located the last two
+   missing gates when 4 of 5 inputs already passed.
+4. Capture the wallet-built action pre-broadcast, evaluate **7/7 on the VM**, and only
+   then broadcast.
+
+Step 2 is the one that mattered: a failure that reproduces in the harness is a bug in
+**our** artifact, not in the counterparty's integration.
