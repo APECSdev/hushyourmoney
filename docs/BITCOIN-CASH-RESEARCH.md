@@ -176,7 +176,36 @@ re-pledged as "Anonymous" during the campaign.
 7. **Post-quantum research.** A STARK-based variant; proof size and verification cost on
    BCH are the constraints.
 
-## Multi-asset pools
+## Links
+
+- Campaign: **https://fundme.cash/campaign/180**
+- DoraHacks BUIDL (BLAZE Hackathon, nito.cash): **https://dorahacks.io/build/49513**
+- Research: **https://hushyourmoney.com/research/shielded-pool**
+- Ceremony: **https://hushyourmoney.com/ceremony**
+- verifier.cash: **https://verifier.cash**
+- Circuit and covenant source: **https://github.com/APECSdev/pusd-shielded-pool**
+- Site and registry: **https://github.com/APECSdev/hushyourmoney**
+- Upstream verifier fix: **https://github.com/mr-zwets/groth16_cashscript/pull/26**
+
+## Open questions
+
+1. **Multi-asset tree policy.** A category-agnostic zero leaf is implemented
+   (`Poseidon(6)(0,0,0,0,0,0)`); the per-asset seed policy for production is still open.
+2. **Note detection.** Scanning for pool outputs and trial-decrypting notes works on
+   chipnet; indexer coverage for production is not built.
+3. **Ceremony coordination.** Contributor scheduling, transcript hosting, and the
+   verification tooling for third parties.
+4. **Post-quantum path.** A STARK-based variant is the long-term answer; proof size and
+   verification cost on BCH are the constraints.
+
+## Disclosure
+
+- The pool is **testnet-only** in its audited surface; the mainnet demo is a 1-of-1 setup.
+- **No independent audit yet.** That is one of the budget lines.
+- Gate 6b's two-asset lifecycle was broadcast but never confirmed.
+- The ceremony monitor UI is a demo until Gate 7 runs.
+
+## Appendix: Multi-asset pools
 
 The single-asset pool (Path A) deploys one covenant and one circuit per CashToken
 category. It works today — it is what the mainnet demo used — but it fragments the
@@ -221,32 +250,3 @@ until an op set confirms.
 
 Open item: the multi-asset tree uses a category-agnostic zero leaf
 `Poseidon(6)(0,0,0,0,0,0)`; the per-asset seed policy for production is still open.
-
-## Links
-
-- Campaign: **https://fundme.cash/campaign/180**
-- DoraHacks BUIDL (BLAZE Hackathon, nito.cash): **https://dorahacks.io/build/49513**
-- Research: **https://hushyourmoney.com/research/shielded-pool**
-- Ceremony: **https://hushyourmoney.com/ceremony**
-- verifier.cash: **https://verifier.cash**
-- Circuit and covenant source: **https://github.com/APECSdev/pusd-shielded-pool**
-- Site and registry: **https://github.com/APECSdev/hushyourmoney**
-- Upstream verifier fix: **https://github.com/mr-zwets/groth16_cashscript/pull/26**
-
-## Open questions
-
-1. **Multi-asset tree policy.** A category-agnostic zero leaf is implemented
-   (`Poseidon(6)(0,0,0,0,0,0)`); the per-asset seed policy for production is still open.
-2. **Note detection.** Scanning for pool outputs and trial-decrypting notes works on
-   chipnet; indexer coverage for production is not built.
-3. **Ceremony coordination.** Contributor scheduling, transcript hosting, and the
-   verification tooling for third parties.
-4. **Post-quantum path.** A STARK-based variant is the long-term answer; proof size and
-   verification cost on BCH are the constraints.
-
-## Disclosure
-
-- The pool is **testnet-only** in its audited surface; the mainnet demo is a 1-of-1 setup.
-- **No independent audit yet.** That is one of the budget lines.
-- Gate 6b's two-asset lifecycle was broadcast but never confirmed.
-- The ceremony monitor UI is a demo until Gate 7 runs.
