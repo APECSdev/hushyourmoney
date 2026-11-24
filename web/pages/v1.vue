@@ -1,4 +1,11 @@
+<!-- web/pages/v1.vue -->
+
 <script setup lang="ts">
+/* NOTE: layout 'fullscreen' initializes the Profile/System stores and System.init(). */
+definePageMeta({
+    layout: 'fullscreen',
+})
+
 useHead({
     title: `API v1 — Hush Your Money`,
     meta: [
@@ -22,22 +29,23 @@ const System = useSystemStore()
 </script>
 
 <template>
-    <main class="max-w-5xl mx-auto py-5 flex flex-col gap-12">
+    <DocsShell>
+    <main class="flex flex-col gap-12">
         <section class="flex flex-col gap-4">
-            <h1 class="text-5xl font-medium">
+            <h1 class="font-display text-4xl font-bold text-white sm:text-5xl">
                 HYM API v1
             </h1>
 
-            <p class="text-gray-600 text-2xl italic font-light leading-9">
-                <span class="block py-2 text-3xl text-fuchsia-600 font-medium">Are you a developer?</span>
+            <p class="text-slate-300 text-2xl italic font-light leading-9">
+                <span class="block py-2 text-3xl text-fuchsia-400 font-medium">Are you a developer?</span>
 
-                Easily integrate ALL of the <span class="text-fuchsia-600 font-medium">Free and Open Source (FOSS)</span> Hush Your Money (HYM) protocols natively into your Crypto wallet and/or application;
-                then conveniently offer your community of users the leading set of <span class="text-fuchsia-600 font-medium">Financial Privacy Protections</span> the world has to offer.
+                Easily integrate ALL of the <span class="text-fuchsia-400 font-medium">Free and Open Source (FOSS)</span> Hush Your Money (HYM) protocols natively into your Crypto wallet and/or application;
+                then conveniently offer your community of users the leading set of <span class="text-fuchsia-400 font-medium">Financial Privacy Protections</span> the world has to offer.
             </p>
         </section>
 
         <section class="flex flex-col gap-4">
-            <h2 class="text-sky-600 text-2xl font-bold tracking-widest uppercase">
+            <h2 class="text-cyan-300 text-2xl font-bold tracking-widest uppercase">
                 Client Requests
             </h2>
 
@@ -52,7 +60,7 @@ const System = useSystemStore()
         </section>
 
         <section class="flex flex-col gap-4">
-            <h2 class="text-sky-600 text-2xl font-bold tracking-widest uppercase">
+            <h2 class="text-cyan-300 text-2xl font-bold tracking-widest uppercase">
                 Client Actions
             </h2>
 
@@ -78,7 +86,7 @@ const System = useSystemStore()
         </section>
 
         <section class="flex flex-col gap-4">
-            <h2 class="text-sky-600 text-2xl font-bold tracking-widest uppercase">
+            <h2 class="text-cyan-300 text-2xl font-bold tracking-widest uppercase">
                 Batch (System) Requests
             </h2>
 
@@ -109,7 +117,7 @@ const System = useSystemStore()
         </section>
 
         <section class="flex flex-col gap-4">
-            <h2 class="text-sky-600 text-2xl font-bold tracking-widest uppercase">
+            <h2 class="text-cyan-300 text-2xl font-bold tracking-widest uppercase">
                 Data Types
             </h2>
 
@@ -143,4 +151,5 @@ const System = useSystemStore()
 
         </section>
     </main>
+    </DocsShell>
 </template>

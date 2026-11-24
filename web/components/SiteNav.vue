@@ -35,7 +35,8 @@ watch(() => route.fullPath, () => { mobileOpen.value = false })
 
 <template>
     <header class="sticky top-0 z-40 border-b border-white/10 bg-[#060a10]/85 backdrop-blur">
-        <nav class="mx-auto flex h-16 w-full max-w-7xl items-center justify-between gap-4 px-4 pr-28 sm:px-6 sm:pr-32 lg:px-8" aria-label="Main navigation">
+        <!-- Right padding reserves room for GithubBanner, which is hidden below `sm`. -->
+        <nav class="mx-auto flex h-16 w-full max-w-7xl items-center justify-between gap-4 px-4 sm:px-6 sm:pr-32 lg:px-8" aria-label="Main navigation">
             <NuxtLink to="/" class="group flex items-center gap-2.5" aria-label="Hush Your Money — home">
                 <span class="grid h-8 w-8 place-items-center rounded-lg border border-lime-300/40 bg-lime-300/10 font-display text-sm font-extrabold text-lime-300 transition group-hover:border-lime-300/80 group-hover:bg-lime-300/15">H</span>
                 <span class="hidden font-display text-sm font-bold tracking-tight text-white sm:block">Hush Your Money</span>

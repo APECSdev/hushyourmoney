@@ -94,6 +94,12 @@ export default defineNuxtConfig({
 
         /* Retired privacy token page — the $HUSH token is no longer pursued. */
         '/token': { redirect: { to: '/', statusCode: 301 } },
+
+        /* Retired wallet onboarding page — the homepage now points at /playground. */
+        '/welcome': { redirect: { to: '/playground', statusCode: 301 } },
+
+        /* Retired wizard lobby — superseded by the playground experiments bench. */
+        '/lobby': { redirect: { to: '/playground', statusCode: 301 } },
     },
 
     runtimeConfig: {

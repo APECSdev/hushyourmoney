@@ -137,8 +137,8 @@ useReveal()
             </p>
 
             <div class="animate-rise mt-10 flex flex-col items-center gap-4 sm:flex-row" style="animation-delay: 0.56s">
-                <NuxtLink to="/welcome" class="btn-primary btn-pulse">
-                    Launch the Wallet
+                <NuxtLink to="/playground" class="btn-primary btn-pulse">
+                    Enter the Playground
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="h-4 w-4">
                         <path d="M5 12h14M13 6l6 6-6 6" />
                     </svg>
@@ -381,7 +381,7 @@ useReveal()
                     Take five minutes to shuffle — and take back a lifetime of financial privacy.
                 </p>
                 <div class="mt-10 flex justify-center">
-                    <NuxtLink to="/welcome" class="btn-primary btn-pulse">
+                    <NuxtLink to="/playground" class="btn-primary btn-pulse">
                         Hush Your Money Now
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="h-4 w-4"><path d="M5 12h14M13 6l6 6-6 6" /></svg>
                     </NuxtLink>
