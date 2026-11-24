@@ -134,9 +134,17 @@ and it is not quantum-resistant.
   rejection classes, with the complete program (graph + hook + final pairing) executing
   end-to-end. Design: `pusd-shielded-pool/ROLE2-POOL-HOOK-DESIGN.md`; implementation and
   every measurement: `pusd-shielded-pool/wip-role2-hook/STATUS.md`.
-- Open before redeploy: fill sizing against a pool-shaped transaction (current sizer dies
-  at the hook's carrier check on the default outputs, leaving no margin), hook pricing,
-  independent review of the new bytes, one combined redeploy.
+- **Sized, priced, and red-teamed under our key (2026-11-24, same day):** pool-shaped
+  fill sizing puts the acceptance controls at exactly 94.0% of the per-input budget
+  (the stock sizer builds tokenless source outputs and cannot size the hooked program
+  at all); the hook costs **33,156 op standard / 32,260 op consensus, 427 B of role-2
+  code** (statement→slices difference method); and the extended red team — the full
+  stock scenario list evaluated against the honest pool shape — ran **146 scenarios,
+  0 accepted** in both modes, with both positive controls accepted. The guard report
+  confirms the layering: public-input claims die at the hook's stored-root compare
+  before the graph's binding check; proof-point tampering dies in the graph.
+- Open before redeploy: **independent review of the new bytes**, then one combined
+  redeploy. (`worstCaseProof` for our key is UNMEASURED — it needs a snarkjs minter.)
 
 ### Testing on the BCH-2026 VM — harness landmines (verified 2026-11-24)
 
