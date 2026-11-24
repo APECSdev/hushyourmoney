@@ -14,6 +14,67 @@
 - Make ample use of figures and diagrams when documenting or discussing technical designs and implementations (ASCII/Mermaid in repo docs; rendered diagrams on the site).
 - Published technical claims must satisfy the verification contract (file path, command output, or cited source). Where a quantity has not been measured, mark it UNMEASURED rather than estimating.
 
+## CURRENT HANDOFF — 2026-11-24 (role-2 pool hook: 14/14 under our VK; docs updated; NOTHING DEPLOYED)
+
+**This session's mission:** implement the role-2 `COVENANT` hook so the pool rules live INSIDE the
+reviewed sound verifier (design: `pusd-shielded-pool/ROLE2-POOL-HOOK-DESIGN.md`), per the user's
+directives: ignore all "live risk today" concerns (nobody uses the pools), and treat Nito Cash's
+own client as the FINAL approval for any deployed result.
+
+**MILESTONE — the hook works: the acceptance suite passes 14/14 under our own verifying key.**
+3 acceptance controls (transfer pv=0, shield pv=250, unshield pv=400 — the unshield exercises the
+conditional payout branch) + 11 rejection classes (carrier newRoot/pv/sign/nf0 tamper; state
+wrong-category/wrong-stored-root; out1 wrong-category/forged-commitment/wrong-amount; unshield
+missing payout; shield minting payout). The COMPLETE program executes end-to-end: prologue, STMT
+decode, graph solo, all 12 hook checks, post-hook GT-GLS fold, final pairing verify.
+
+The previous session's blocker (a one-slot pick drift) was three stacked bugs, each solved by
+bisecting the runtime stack against the assembler's recorded model:
+1. `OP_SIZE` on the BCH-2026 VM is **non-popping** — model pop-1/push-2 (stock `FILL` precedent,
+   `script.mjs:75`); a pop-1/push-1 model leaks one operand copy and shifts every later pick.
+2. The actionHash preimage needs **every carrier limb REVERSEBYTES'd to BE** (deployed covenant
+   `asset-pool.cash:192-200`); the nullifier fold uses the **raw LE** forms (line 148). Compare
+   32-byte roots bytewise — `NUMEQUAL` on a 32-byte push is a sign trap (top byte ≥ 0x80 ⇒ negative).
+3. **THE HARNESS LANDMINE (hours lost; most durable finding): Node `Buffer` + libauth = in-place
+corruption.** libauth's opcodes do `item.slice()` before mutating — pure for plain `Uint8Array`
+(`slice()` copies), but **`Buffer.prototype.slice()` returns a VIEW sharing memory**, so the
+"reversals" write straight into the caller's transaction objects (carrier limbs reversed in
+place; `token.category` flipping per call with strict alternation; results call-order-dependent;
+masquerades as byte-order asymmetries between opcodes and as in-process vs fresh-process
+disagreements; a `Proxy` over the Buffer does NOT catch the writes). **Rule: pass ONLY plain
+`Uint8Array`s into the VM.** The stock harness (`Uint8Array.from` throughout) never hits this.
+
+**Also this session:** new check 8b `TXOUTPUTCOUNT == 2 + sign` (the shield-mints-payout test
+found the gap); the tail is now a dynamic drop-to-entry-depth loop (static name lists leak
+`pick()` copies that share names); every opcode the hook uses was probe-verified live.
+
+**Commits (all pushed):** `pusd-shielded-pool` `22afadb` (build gate), `eeac3bb` (red team 151/0),
+`5cdba1f` (design), `3dcb091` (implementation + blocker record), **`243a416` (14/14)**. All code,
+probes, and the full findings writeup: `pusd-shielded-pool/wip-role2-hook/` (see its `STATUS.md`).
+
+**Docs updated this session:** this AGENTS.md (this handoff + the full arc record under "Role-2
+pool hook"), `docs/BITCOIN-CASH-RESEARCH.md` (covenant sibling-hole + verifier build/red-team/role-2
+records + a new "Testing on the BCH-2026 VM — harness landmines" section),
+`pusd-shielded-pool/ROLE2-POOL-HOOK-DESIGN.md` (status → implemented WIP),
+`pusd-shielded-pool/SOUND-VERIFIER-BUILD.md` (gate 1 marked done, redeploy-path items updated).
+
+**Open before the hook leaves WIP (in order):** production **fill sizing against a pool-shaped
+transaction** (the stock sizer dies at the hook's carrier check on the default outputs → fills
+[0,0,0] → the real evaluation runs at ~6.6–6.7M op of a ~6.94M budget, NO margin); price the
+hook with `pinned/covenant-cost.mjs`; re-run the extended red team; **independent review** (new
+bytes = new review); then ONE combined redeploy. `worstCaseProof` for our key still UNMEASURED
+(no snarkjs minter under our VK yet). When reviewed, add the implementation record to
+`/research/shielded-pool`.
+
+**Standing while this work proceeds:** the Flux redeploy of image `1d9751879b2f` (v2/v4 site
+corrections) is still a PENDING OWNER ACTION at `https://cloud.runonflux.io` — live site still
+serves the old `31b87fa` build. Every deployed pool still carries BOTH the withdrawn verifier
+(F6) AND the unpinned covenant (complete-drain hole) — nothing about the live risk has changed
+because nothing is deployed. Gate 7 (ceremony → production) remains blocked on the organizer.
+
+**Older handoffs below are superseded only where marked; the 2026-11-22 playground/Flux items
+still stand.**
+
 ## CURRENT HANDOFF — 2026-11-22 (playground page; SOURCE + HUB PUSHED, FLUX PENDING)
 
 **User directive 2026-11-22:** create a `/playground` page to host our LIVE experiments, especially CashFusion over Nostr; cite the research at `/research/cashfusion`; mock whatever is necessary until the work is real; commit + push when completed.
@@ -434,6 +495,22 @@
 - **Covenant-chain verifier REJECTED as the pool's path (verified).** `chunked/pairing/README.md` deployment premise **P2**: the verdict is an immutable empty-commitment NFT at `L_{N-1}` and "the verdict output can never be spent … **No on-chain contract can consume it. A consumer is therefore off-chain**". A pool built on it would have to trust a server — not a shielded pool. Every graph transaction there is 1-in/1-out.
 - **`bn254-sound-native` is NOT a drop-in either (verified from its spec).** GRAPH: "`TXINPUTCOUNT == 3` and every `UTXOBYTECODE(j)` equals the own one … **No funding or fee input with another locking can be added**" (README lines 162, 228). Our pool needs a covenant sibling + a funding input. So the sound-verifier route is **extend role 2** (the README's supported integration: "applications that release funds add output rules in role 2"), not a redeploy. Role 2's budget is `(41 + 9792) × 800 ≈ 7.87M` with ~6.66M used → ~1.2M spare; our covenant logic is ~85k op.
 - **Curve decision deferred to Gate 7 (user-agreed framing).** Two independent research pages: `/research/bn254` and `/research/bls12-381`. Verified bench numbers (fetched 2026-11-23 from `mr-zwets/groth16_cashscript/verifiers.md`): BN254 `bch-groth16-bn254-sound-native` 27,624 B / 3 inputs / 20.6M op / reviewed 2026-10-26; BLS12-381 `bch-groth16-bls12381-sound-native` 34,229 B / 4 inputs / 24.0M op / reviewed 2026-10-26 (ε ≈ 2^−248; 6.18% standard / 6.42% consensus margin; 4 inputs share one 81 B redeem). Both are the verifier.cash winners. **A BLS12-381 pool forces a NEW ceremony** — verified: the Perpetual Powers of Tau transcript we used is BN254-only (PSE repo README: the two implementations are `phase2-bn254` and `snarkjs`).
+
+### Role-2 pool hook — pool rules INSIDE the sound verifier (2026-11-24: IMPLEMENTED WIP, 14/14)
+
+The arc in four pusd-shielded-pool commits, all pushed:
+
+- **Build gate `22afadb` — the reviewed sound verifier builds under OUR VK.** Key discovery: the build is VK-parametric via `BN_VK_FIXTURES` (`sound-si-gls/math.mjs:20`). Obstacles solved: `build/eval-proofs.json` was stale (regenerated — circuit input names are `assetCategoryHi/Lo`, a single `assetCategory` does not exist and fails wtns calc); `build.mjs` needs fixtures 0 AND 4 (≥5 proofs). Result: code **7,309 B** sha256 `5fd6a4bee213d2f8cd4e251afcfe894d15247421c860538debf0e93d95d9c5df`, redeem R **65 B**, program P2SH32 locking **`aa205233f888295170f09abaff3ffca7f8eb659034ed413c5856e214bcde5be09f6f87`**, `vkDigest 38876f95ad30fe82…a783`, role function ids 22/23/24, fixture-0 score **27,567**, unlockings 9,314/9,251/8,748 B, margins **6.03% std / 6.49% consensus**. Full record: `SOUND-VERIFIER-BUILD.md`.
+- **Red team `eeac3bb` — 151 runs, 0 accepted** under our VK, both positive controls accepted. All 10 graph tests reject, incl. foreign-P2SH32-at-index-j-carrying-the-honest-pushes. First run's `accepted 1` was fixture degeneracy (fixtures 0/1 shared n0); fixed with distinct `rho`/`r` per scenario → 5 distinct n0.
+- **Design `5cdba1f`** — `ROLE2-POOL-HOOK-DESIGN.md`: the hook already exists upstream (`script.mjs:258`, worked example `real-keys/covenant.mjs`, cost harness `pinned/covenant-cost.mjs`); transition data rides out0's OP_RETURN 169-B carrier `nf0|nf1|cm0|cm1|newRoot|pv(8)|sign(1)`; pool state = role 2's own input (index 2, a real architectural change from the 7-input sibling layout); 11 mapped checks; ~457k op spare vs ~85k needed (estimate).
+- **Implementation `3dcb091` → solved `243a416` — THE 14/14 MILESTONE.** The previous session's blocker (a one-slot pick drift) decomposed into three stacked bugs, each found by bisecting the runtime stack against the assembler's recorded model (monkey-patched `Asm.prototype.emit` + `vm.debug` stack snapshots):
+  1. **`OP_SIZE` on the BCH-2026 VM is NON-POPPING** — model pop-1/push-2 exactly as the stock `FILL` local function does (`script.mjs:75`); a pop-1/push-1 model leaks one operand copy and shifts every later pick by one. That leak WAS the "one-slot offset".
+  2. **The actionHash preimage needs every carrier limb REVERSEBYTES'd to big-endian** (deployed covenant `asset-pool.cash:192-200`: `nf0.reverse() … newMerkleRoot.reverse()`); the nullifier fold instead uses the RAW LE forms (`line 148`). 32-byte roots must compare bytewise — `NUMEQUAL` on a 32-byte push is a sign trap (top byte ≥ 0x80 decodes negative).
+  3. **THE HARNESS LANDMINE (biggest time sink, most durable finding): Node `Buffer` + libauth = in-place corruption.** libauth opcodes do `item.slice()` before mutating (`opReverseBytes`, `pushTokenExtendedCategory`…), pure for plain `Uint8Array` where `slice()` copies — but **`Buffer.prototype.slice()` is overridden to return a VIEW sharing memory**, so every "pure" slice becomes an alias and the reversals write straight into the caller's transaction objects: carrier limb fields reversed in place, `token.category` buffers flipping per call with strict alternation. It masqueraded for hours as "UTXOTOKCAT returns reversed but OUTTOKCAT returns display" and as in-process vs fresh-process disagreements. A `Proxy` over the Buffer does NOT catch the writes (they go through views of its ArrayBuffer). **Rule: pass ONLY plain `Uint8Array`s into the VM** (`new Uint8Array(buf)` copies). The stock harness never hits this because it uses `Uint8Array.from` throughout. A real node cannot mutate your transaction — purely a JS harness hazard.
+- **The suite (run from `~/zkb/groth16_cashscript/chunked/bn254/bn-native-sound/` with `BN_VK_FIXTURES=/home/apecs/cov/our.fixtures.json`):** 3 acceptance controls — transfer pv=0, shield pv=250, unshield pv=400 (the conditional payout branch) — and 11 rejection classes: carrier newRoot/pv/sign/nf0 tamper; state-input wrong category / wrong stored root; out1 wrong category / forged commitment / wrong amount; unshield missing payout; shield minting payout. **14/14**, with the complete program (prologue, STMT decode, graph solo, all 12 hook checks, post-hook GT-GLS fold, final pairing verify) executing end-to-end. The shield-mints-payout test exposed a real gap → new **check 8b: `TXOUTPUTCOUNT == 2 + sign`** (defense in depth; makes the payout rules total). The tail is a dynamic drop-to-entry-depth loop (static name lists leak `pick()` copies that share names).
+- **Every opcode the hook uses was probe-verified live** (probe set in `wip-role2-hook/`): all introspection ops pop their index; `OP_SIZE` does not; both input- and output-side token-category introspection push `reverse(stored)+capability` (shared helper `bch-2023-tokens.js:202-236`); bare token outputs push reversed-category with no capability byte; libauth `debug` `ip` = **byte offset** in the executing function (`OP_INVOKE` starts a fresh ip space), not an instruction index. Opcode numbers: `INPUTINDEX 0xc0, TXVERSION 0xc2, TXINPUTCOUNT 0xc3, TXOUTPUTCOUNT 0xc4, UTXOBYTECODE 0xc7, INPUTBYTECODE 0xca, OUTBYTECODE 0xcd, UTXOTOKCAT 0xce, UTXOTOKCOMMIT 0xcf, UTXOTOKAMT 0xd0, OUTTOKCAT 0xd1, OUTTOKCOMMIT 0xd2, OUTTOKAMT 0xd3, REVERSEBYTES 0xbc` (stock table `script.mjs:15` = `0xc0/0xc3/0xc7/0xca`; mine 0xce/0xcf also verified by probe.mjs earlier).
+- **Open before the hook leaves WIP:** (1) production **fill sizing** must run against a pool-shaped transaction — the stock `sizeFills` evaluates against the DEFAULT single-OP_RETURN outputs, dies at the hook's carrier check, leaves `fills [0,0,0]`, and the real evaluation runs at ~6.6–6.7M op of a ~6.94M budget (NO margin); (2) price the hook with `pinned/covenant-cost.mjs` (re-pointed at the hook) and re-run `sizeFills`; (3) re-run the extended red team (`export-our.mjs` + `redteam.mjs`); (4) **independent review — new bytes are new review** (the F6 lesson); (5) one combined redeploy (pinned covenant logic INSIDE the verifier). `worstCaseProof` for our key still UNMEASURED (the densless-fixtures trapdoor does not exist for our zkey). Also pending: the snarkjs-based minter so the liveness sweep can run under our VK.
+- **Nothing deployed.** Every live pool still carries BOTH the withdrawn verifier (F6) AND the unpinned covenant (the complete-drain hole). Site pages unchanged this session; when the role-2 work is reviewed, the `/research/shielded-pool` posture section should gain the implementation record.
 
 ### Mainnet solo demo (2026-11-13, IN FLIGHT — all on the `apecsdev` VM per user directive; runner unreachable)
 - **UPDATE 2026-11-22 (probe-verified):** the demo has ADVANCED beyond the 2026-11-13 handoff record below — `web/pages/research/shielded-pool.vue` carries a “Mainnet matrix (2026-11-20)” `MAINNET_LIFECYCLE` section with four mainnet txs: prep `dd1e3506…0e7d`, genesis `0a8cb008…c5c4`, deploy `63ddfdd4…f7c`, op `4fda8a8b…544f` — all four probed **200 on Selene `?network=mainnet`** this session. The 2026-11-13 “NEXT: op scripts” status is stale; do not re-plan from it without re-reading the page + chain state first.

@@ -79,6 +79,19 @@ and it is not quantum-resistant.
   every asset.
 - State `{merkleRoot, nullifierSet}` is carried in a mutable NFT commitment.
 - A spend requires the Groth16 verifier transaction as sibling inputs.
+- **Sibling-hole finding (2026-11-24, ours) — complete-drain vulnerability, fixed in source
+  only, NOT deployed.** The deployed covenant (v4's 347-B redeem, disassembled) reads the
+  proven public inputs out of the genesis step's unlocking at fixed offsets (n0 @ 1825,
+  n1 @ 1792) and never checks that input's locking — its whole introspection set is
+  `TXVERSION / INPUTINDEX / INPUTBYTECODE / OUTPUTBYTECODE / UTXOBYTECODE / UTXO+OUTPUT
+  TOKEN{category,commitment,amount}`; no `OP_TXINPUTCOUNT`, no `OP_TXOUTPUTCOUNT`.
+  Demonstrated on the BCH-2026 VM: a one-byte `OP_1` at the genesis index is **accepted** —
+  any spender could drain the pool with no proof and no verifier. Fix in
+  `pusd-shielded-pool/asset-pool.cash` (four new ctor args pin the verifier shape;
+  the unpinned source still reproduces the mainnet covenant byte-for-byte; regression gate
+  `pin-sibling-test.mjs` 6/6). **Every deployed pool still carries the unpinned covenant.**
+- The successor architecture moves the pool rules off the sibling covenant entirely and
+  into the reviewed sound verifier itself, as a role-2 hook — see under Verifier.
 
 ### Verifier
 
@@ -101,6 +114,65 @@ and it is not quantum-resistant.
   27,624 B, 3 inputs, one standard transaction, independently reviewed 2026-10-26
   (`chunked/bn254/bn-native-sound/`). It verifies the same relation under the same
   verifying key, so replacing it costs a pool redeploy, **not a new trusted setup**.
+- **Built under our own verifying key (2026-11-24, gate passed):** the program regenerates
+  from source via `BN_VK_FIXTURES` (code 7,309 B per input, sha256
+  `5fd6a4bee213d2f8cd4e251afcfe894d15247421c860538debf0e93d95d9c5df`; P2SH32 locking
+  `aa205233f888295170f09abaff3ffca7f8eb659034ed413c5856e214bcde5be09f6f87`; role ids
+  22/23/24; margins 6.03% standard / 6.49% consensus) and accepts our real proof on the
+  BCH-2026 VM in both modes. Record: `pusd-shielded-pool/SOUND-VERIFIER-BUILD.md`.
+- **Red team under our key (2026-11-24): 151 runs, 0 accepted**, both positive controls
+  accepted. All 10 graph tests reject, including a foreign P2SH32 input at index j
+  carrying the honest pushes — which is why the pool rules moved into role 2 instead of
+  sitting beside the verifier as a sibling covenant.
+- **Role-2 pool hook (2026-11-24, implemented WIP, not reviewed, not deployed):** the
+  pool rules now run as the verifier's role-2 `COVENANT` hook — 12 checks (state category
+  and stored root, carrier parse, `n1 == actionHash` with all eight preimage fields
+  reversed to big-endian, the raw-LE nullifier fold, balance arithmetic,
+  `TXOUTPUTCOUNT == 2 + sign`, out1 locking/category/commitment/amount, conditional
+  unshield payout, dynamic tail restore). Acceptance suite **14/14 under our key**:
+  3 controls (transfer pv=0, shield pv=250, unshield pv=400 — the payout branch) + 11
+  rejection classes, with the complete program (graph + hook + final pairing) executing
+  end-to-end. Design: `pusd-shielded-pool/ROLE2-POOL-HOOK-DESIGN.md`; implementation and
+  every measurement: `pusd-shielded-pool/wip-role2-hook/STATUS.md`.
+- Open before redeploy: fill sizing against a pool-shaped transaction (current sizer dies
+  at the hook's carrier check on the default outputs, leaving no margin), hook pricing,
+  independent review of the new bytes, one combined redeploy.
+
+### Testing on the BCH-2026 VM — harness landmines (verified 2026-11-24)
+
+For anyone reproducing this work with `@bitauth/libauth` 3.1.0-next.8
+(`createVirtualMachineBch2026`):
+
+- **Never pass Node `Buffer`s into the VM.** libauth's opcodes are written for plain
+  `Uint8Array` stack items and do `item.slice()` before mutating (`opReverseBytes` =
+  `item.slice().reverse()`; `pushTokenExtendedCategory` = `category.slice().reverse()` +
+  capability byte). `Uint8Array.prototype.slice()` copies — **`Buffer.prototype.slice()`
+  is overridden to return a view sharing memory**, so every "pure" slice becomes an alias
+  and the reversals write straight through into the caller's transaction objects: an
+  OP_RETURN carrier's 32-byte fields get reversed in place, `token.category` buffers flip
+  with strict per-call alternation, and results become call-order-dependent. This bug
+  masquerades as byte-order "asymmetries" between opcodes and as in-process vs
+  fresh-process disagreements. A `Proxy` over the Buffer does **not** catch the writes —
+  they go through views of its ArrayBuffer. Use `new Uint8Array(buf)` (copies) for every
+  transaction field. The stock bench harness avoids the whole class by using
+  `Uint8Array.from` throughout.
+- **`OP_SIZE` is non-popping** on BCH-2026: `[push 0xaa, OP_SIZE]` leaves `[aa, 01]`.
+  Model it pop-1/push-2 (operand returns under the size); the stock `FILL` local function
+  is the precedent.
+- Introspection semantics, probe-verified live: every introspection op pops its index;
+  both input-side and output-side token-category ops push `reverse(stored category)` +
+  capability byte (shared helper, `bch-2023-tokens.js`); bare (no-NFT) token outputs push
+  the reversed category with no capability byte; commitments and amounts are pushed as
+  stored. Opcode numbers that matter here: `INPUTINDEX 0xc0, TXVERSION 0xc2,
+  TXINPUTCOUNT 0xc3, TXOUTPUTCOUNT 0xc4, UTXOBYTECODE 0xc7, INPUTBYTECODE 0xca,
+  OUTBYTECODE 0xcd, UTXOTOKCAT 0xce, UTXOTOKCOMMIT 0xcf, UTXOTOKAMT 0xd0,
+  OUTTOKCAT 0xd1, OUTTOKCOMMIT 0xd2, OUTTOKAMT 0xd3, REVERSEBYTES 0xbc`.
+- `vm.debug`'s `ip` is a **byte offset** in the currently executing function's code
+  (`OP_INVOKE` starts a fresh ip space per invoked function), not an instruction index —
+  indexing a disassembly with it silently produces plausible-but-wrong instruction windows.
+- Per-input op budget: `(41 + unlockingBytecode length) × 800`, enforced in consensus.
+
+Reproduction set: `pusd-shielded-pool/wip-role2-hook/probe-*.mjs`.
 
 ### Mainnet
 
