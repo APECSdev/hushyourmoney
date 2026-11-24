@@ -84,10 +84,23 @@ and it is not quantum-resistant.
 
 - `densless-msm`, **35,626 B** in one standard transaction.
 - 5/5 valid proofs accepted, 9/9 mutated public inputs rejected, 26/26 red-team runs
-  rejected.
+  rejected — these measure the **public-input binding**, not the pairing.
 - `vk_x` is recomputed in-script and never accepted as a witness.
 - The upstream red-team fix was merged into `mr-zwets/groth16_cashscript` (PR #26,
   2026-10-30): **https://github.com/mr-zwets/groth16_cashscript/pull/26**
+- **SOUNDNESS WITHDRAWN (2026-10-26, finding F6).** The verifier's author withdrew the
+  full-verifier soundness claims: the shared Miller event consumes slopes without the
+  tangent/chord equations, and the terminal's carried-R predicate compares a value with
+  itself instead of checking the B endpoint. No end-to-end false acceptance has been
+  demonstrated, but the argument that a forged witness cannot pass is gone — so the
+  pool's on-chain value conservation is **not established**. Every pool deployed here
+  (gate3, gate6, gate6b, mainnet) carries this verifier. Record:
+  `chunked/bn254/densless-msm/README.md` + `verifiers.md` (F6) in
+  **https://github.com/mr-zwets/groth16_cashscript**
+- **Reviewed sound replacement (not yet deployed):** `bch-groth16-bn254-sound-native` —
+  27,624 B, 3 inputs, one standard transaction, independently reviewed 2026-10-26
+  (`chunked/bn254/bn-native-sound/`). It verifies the same relation under the same
+  verifying key, so replacing it costs a pool redeploy, **not a new trusted setup**.
 
 ### Mainnet
 

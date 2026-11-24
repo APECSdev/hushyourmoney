@@ -27,7 +27,8 @@ const STATS = [
     { value: '186,007', label: 'constraints · multi-asset circuit', tag: 'measured', color: 'text-lime-300' },
     { value: '2', label: 'public inputs', tag: 'measured', color: 'text-cyan-300' },
     { value: '35,626 B', label: 'on-chain verifier · one standard tx', tag: 'measured', color: 'text-violet-300' },
-    { value: '26/26', label: 'red-team attacks rejected', tag: 'measured', color: 'text-white' },
+    { value: '26/26', label: 'red-team attacks rejected · public-input binding', tag: 'measured', color: 'text-white' },
+    { value: 'F6', label: 'verifier soundness · withdrawn', tag: 'disclosure', color: 'text-rose-300' },
 ]
 
 /* ── Measured results table ──────────────────────────────────────── */
@@ -36,6 +37,8 @@ const RESULTS = [
     { q: 'Public inputs', v: '2 — [merkleRoot, actionHash]', src: 'pool.r1cs + verification_key.json (ic.length = 3)', href: 'https://github.com/APECSdev/pusd-shielded-pool' },
     { q: 'Circuit (multi-asset, variant b)', v: '186,007 constraints (+1.38%) · Poseidon(6) commitments bind the full 256-bit category', src: 'circom 2.2.3 --O2 compile, 2026-11-01 build record', href: 'https://github.com/APECSdev/pusd-shielded-pool' },
     { q: 'On-chain verifier size', v: '35,626 B inside ONE standard transaction', src: 'chipnet on-chain measurement', href: 'https://explorer.selene.cash/tx/b0a488db5b7e9bac07eebc45977523cd0730ddfe078571f2e17135231e30546b?network=chipnet' },
+    { q: 'Verifier soundness status', v: 'WITHDRAWN by its author 2026-10-26 — densless-msm, finding F6: the Miller slopes are not constrained by the tangent/chord equations and the terminal compares a value with itself instead of checking the B endpoint', src: 'groth16_cashscript chunked/bn254/densless-msm README · issue #32', href: 'https://github.com/mr-zwets/groth16_cashscript/tree/main/chunked/bn254/densless-msm' },
+    { q: 'Reviewed sound replacement (not yet deployed)', v: 'bch-groth16-bn254-sound-native — 27,624 B, 3 inputs, one standard tx, independently reviewed 2026-10-26', src: 'groth16_cashscript verifiers.md', href: 'https://github.com/mr-zwets/groth16_cashscript/blob/main/verifiers.md' },
     { q: 'Covenant redeem bytecode', v: '347 B — identical for every asset (category = constructor param)', src: 'decoded from transfer tx input 0 witness', href: 'https://explorer.selene.cash/tx/b0a488db5b7e9bac07eebc45977523cd0730ddfe078571f2e17135231e30546b?network=chipnet' },
     { q: 'Proof generation', v: '16.967 s (183,472) / 17.6 s (186,007) · build runner (hardware spec UNMEASURED)', src: 'snarkjs fullProve, session records', href: null },
     { q: 'Covenant op-cost (Gate 6, input 0)', v: '84,819 / 556,800 budget (15.2%)', src: 'libauth BCH-2026 VM debug on the broadcast tx', href: 'https://explorer.selene.cash/tx/fc585fc9bf6499024c89c73a2bcb945de2ec212fb36f8ffc5acb617b6636912f?network=chipnet' },
@@ -827,9 +830,35 @@ const LIFECYCLE = [
                 <div class="reveal space-y-6 text-base leading-relaxed text-slate-100 sm:text-lg" style="transition-delay: 0.12s">
                     <p>
                         <strong class="font-semibold text-white">What was attacked:</strong> the on-chain
-                        verifier survived a red-team pass — 5/5 valid proofs accepted, 9/9 mutated
-                        public inputs rejected, 26/26 red-team runs rejected. vk_x is recomputed
-                        in-script, so public inputs cannot be forged by a malicious spender.
+                        verifier survived a red-team pass on its <em>public-input binding</em> — 5/5 valid
+                        proofs accepted, 9/9 mutated public inputs rejected, 26/26 red-team runs rejected.
+                        vk_x is recomputed in-script, so the public-input vector cannot be forged by a
+                        malicious spender.
+                    </p>
+                    <p>
+                        <strong class="font-semibold text-white">What is NOT established:</strong> the
+                        pairing check itself. The verifier every pool here deployed is the
+                        <span class="font-mono text-xs">densless-msm</span> construction, and its author
+                        <strong class="text-rose-200">withdrew the soundness claims on 2026-10-26</strong>:
+                        the shared Miller event consumes slopes without the tangent/chord equations, and the
+                        terminal's carried-R predicate compares a value with itself instead of checking the
+                        B endpoint (finding F6). Our fixture results do not repair that. No end-to-end
+                        false acceptance has been demonstrated — but the argument that a forged witness
+                        cannot pass is gone, and the pool's value conservation rests on it.
+                    </p>
+                    <div class="rounded-2xl border border-rose-300/40 bg-rose-300/10 px-5 py-4 font-mono text-xs leading-relaxed text-rose-100">
+                        DISCLOSURE · the deployed verifier (densless-msm) is WITHDRAWN by its author under
+                        finding F6 · the pool's on-chain soundness is NOT established · every pool deployed
+                        here — gate3, gate6, gate6b, mainnet — carries it · the reviewed replacement
+                        (27,624 B, 3 inputs) needs a redeploy, NOT a new trusted setup
+                    </div>
+                    <p class="font-mono text-[0.8rem] leading-relaxed text-slate-200">
+                        withdrawal record:
+                        <a href="https://github.com/mr-zwets/groth16_cashscript/blob/main/chunked/bn254/densless-msm/README.md" target="_blank" rel="noopener" class="src-link">densless-msm README ↗</a>
+                        ·
+                        <a href="https://github.com/mr-zwets/groth16_cashscript/blob/main/verifiers.md" target="_blank" rel="noopener" class="src-link">verifiers.md (F6) ↗</a>
+                        ·
+                        <a href="https://github.com/mr-zwets/groth16_cashscript/blob/main/chunked/bn254/bn-native-sound/README.md" target="_blank" rel="noopener" class="src-link">sound replacement ↗</a>
                     </p>
                     <p>
                         <strong class="font-semibold text-white">What cannot happen:</strong> the pool cannot
@@ -918,7 +947,9 @@ const LIFECYCLE = [
                         No. The Groth16 verifier runs as an ordinary script inside one standard
                         transaction on the BCH 2026 VM, using CashTokens and P2SH32 — all shipped
                         features. The measured verifier transaction is 35,626 bytes. That is the
-                        point of the exercise: the existence proof came before any proposal.
+                        point of the exercise: the existence proof came before any proposal. Whether
+                        that particular program is <em>sound</em> is a separate question — see
+                        <a href="#limits" class="src-link">08 · posture</a>.
                     </p>
                 </details>
 
@@ -949,6 +980,24 @@ const LIFECYCLE = [
                         the right order was: build, measure, publish evidence — then discuss what
                         (if anything) the protocol should standardize. The measured op-costs and
                         verifier sizes are inputs for exactly those discussions.
+                    </p>
+                </details>
+
+                <details class="faq-card reveal">
+                    <summary>Is the on-chain verifier sound?</summary>
+                    <p>
+                        <strong class="text-rose-200">Not as deployed.</strong> Every pool here runs
+                        <span class="font-mono text-xs">densless-msm</span>, whose author withdrew the
+                        full-verifier soundness claims on 2026-10-26 (finding F6): the shared Miller event
+                        consumes slopes without the tangent/chord equations, and the terminal compares a
+                        value with itself instead of checking the B endpoint. Our own tests measure the
+                        <em>public-input binding</em> — which that variant does repair — not the pairing.
+                        No false acceptance has been demonstrated end-to-end. The fix is a reviewed sound
+                        verifier (<span class="font-mono text-xs">bch-groth16-bn254-sound-native</span>,
+                        27,624 B, 3 inputs, one standard tx, reviewed 2026-10-26) which verifies the same
+                        relation under the same verifying key — so it needs a pool redeploy and
+                        <strong>no new trusted setup</strong>. See
+                        <a href="#limits" class="src-link">08 · posture</a>.
                     </p>
                 </details>
 
