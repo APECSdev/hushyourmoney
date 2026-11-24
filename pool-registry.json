@@ -17,7 +17,34 @@
       "mintTxid": "48d458b86bd59e33be59e4c8015820272c69df586920818005b86c04a6dbd538",
       "deployTxid": "f8f215c3826b763805c71f0ee281b406cfa2e0d944f541dfdc3ae56e473b3319",
       "deployBlock": 345413,
-      "notes": "Deployed 2026-11-24, runner-free (user directive), funded from the APECS faucet hot wallet. Runs the independently reviewed bch-groth16-bn254-sound-native verifier with the pool rules as a role-2 COVENANT hook, under OUR solo-ceremony VK (zkey sha256 4a4e2543\u2026, VK sha256 05250429\u2026). Program: code 7,737 B sha256 0e82760211279f69\u2026, redeem R 65 B, pieces 3,981/3,756. NO separate covenant and NO step-UTXO fleet: every pool UTXO (state NFT, shield deposits, fee floats) is locked to the same program P2SH32, and every action is a SIGNATURE-FREE 3-input spend (TXINPUTCOUNT==3 \u2014 no fee input; fees ride the locked UTXOs' sats; the P2SH32 script satisfaction IS the authorization). State NFT born at f8f215c3\u2026:0 with commitment = the PUBLIC bootstrap-seed root 551108f6\u2026510f (verified byte-identical to the chain-deployed v2/v4 genesis commitments) \u2016 32 zero bytes. Bootstrap: the PUBLIC seed notes (value 0, nk=1, published constants). Op 1 SHIELD 1,000,000: tx 582cefee285f2e3f9528c0958158bcb8c0eef72ff516d17dfcfa7e8180bb79a2 (28,138 B, fee 32,000 sats), VM-ACCEPTED in consensus AND standard on all 3 inputs, balance 0 \u2192 1,000,000, broadcast 2026-11-24. Evidence: acceptance 14/14, red team 146/0, liveness sweeps 70+69 cases 0 failed (pusd-shielded-pool wip-role2-hook/). NOT yet drivable by the nito.cash wallet (their committed VK 27f6ea03\u2026 and their 7-input tx shape differ) \u2014 the client integration (VK/asset swap + 3-input builder) is the follow-up; their client remains the final approval per the user's standing directive."
+      "notes": "Deployed 2026-11-24, runner-free (user directive), funded from the APECS faucet hot wallet. Runs the independently reviewed bch-groth16-bn254-sound-native verifier with the pool rules as a role-2 COVENANT hook, under OUR solo-ceremony VK (zkey sha256 4a4e2543\u2026, VK sha256 05250429\u2026). Program: code 7,737 B sha256 0e82760211279f69\u2026, redeem R 65 B, pieces 3,981/3,756. NO separate covenant and NO step-UTXO fleet: every pool UTXO (state NFT, shield deposits, fee floats) is locked to the same program P2SH32, and every action is a SIGNATURE-FREE 3-input spend (TXINPUTCOUNT==3 \u2014 no fee input; fees ride the locked UTXOs' sats; the P2SH32 script satisfaction IS the authorization). State NFT born at f8f215c3\u2026:0 with commitment = the PUBLIC bootstrap-seed root 551108f6\u2026510f (verified byte-identical to the chain-deployed v2/v4 genesis commitments) \u2016 32 zero bytes. Bootstrap: the PUBLIC seed notes (value 0, nk=1, published constants). FULL LIFECYCLE CONFIRMED 2026-11-24: SHIELD 1,000,000 (582cefee\u2026, block 345,415) \u2192 TRANSFER (17f1322b\u2026, 345,423) \u2192 UNSHIELD 250,000 with the public payout executed (24cd6b42\u2026, 345,427); every action VM-ACCEPTED in consensus AND standard on all 3 inputs before broadcast; final state root 19318325\u2026, balance 750,000. Evidence: acceptance 14/14, red team 146/0, liveness sweeps 70+69 cases 0 failed (pusd-shielded-pool wip-role2-hook/). NOT yet drivable by the nito.cash wallet (their committed VK 27f6ea03\u2026 and their 7-input tx shape differ) \u2014 the client integration (VK/asset swap + 3-input builder) is the follow-up; their client remains the final approval per the user's standing directive.",
+      "lifecycle": [
+        {
+          "op": "SHIELD 1000000",
+          "txid": "582cefee285f2e3f9528c0958158bcb8c0eef72ff516d17dfcfa7e8180bb79a2",
+          "block": 345415
+        },
+        {
+          "op": "refill (2 action inputs)",
+          "txid": "de98e0df3152719af2fe3d77eada5c292c650d0c292e339a9dedcee3e3da4561",
+          "block": 345417
+        },
+        {
+          "op": "TRANSFER (pv=0)",
+          "txid": "17f1322b1aec7159570826472295056a9480f779b67f378f9022598e2add3492",
+          "block": 345423
+        },
+        {
+          "op": "refill (2 action inputs)",
+          "txid": "fe9e1aad6b2c0a64625fe058b72ebad3e77f48c0c8094310c667e43ed93bef8e",
+          "block": 345426
+        },
+        {
+          "op": "UNSHIELD 250000 (payout executed)",
+          "txid": "24cd6b42d451a0c9a82fb6e634e72a6cefc68642213ba011bdd61d8ec1230528",
+          "block": 345427
+        }
+      ]
     },
     {
       "name": "chipnet-pusd-v4-covenant0",

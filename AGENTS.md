@@ -30,9 +30,13 @@ No covenant, no step fleet — all pool UTXOs at the one program P2SH32; actions
 (TXINPUTCOUNT==3; fees ride the locked UTXOs). **Op 1 SHIELD 1,000,000 executed end-to-end**: real witness under
 our ceremony zkey (22.8 s), tx `582cefee…` (28,138 B, fee 32,000 sats), the COMPLETE program ACCEPTED consensus+
 standard on all 3 inputs, balance 0 → 1,000,000, FT conserved, accepted by chipnet.bch.ninja. Tooling committed:
-pool-deploy-role2.mjs / pool-op-role2.mjs (bench dir), role2-op-witness.mjs / role2-seeds.mjs (pusd root); state
-file /home/apecs/cov/role2-pool-state.json. Remaining: ops 2-3 (TRANSFER, UNSHIELD — each needs an actionInputs
-refill) + the nito.cash client integration (their committed VK 27f6ea03… + 7-input shape differ).
+pool-deploy-role2.mjs / pool-op-role2.mjs / pool-refill-role2.mjs (bench dir), role2-op-witness.mjs /
+role2-seeds.mjs (pusd root); state file /home/apecs/cov/role2-pool-state.json. **THE FULL LIFECYCLE IS CONFIRMED
+ON-CHAIN**: SHIELD 1,000,000 `582cefee…` (block 345,415) → refill `de98e0df…` (345,417) → TRANSFER `17f1322b…`
+(345,423) → refill `fe9e1aad…` (345,426) → UNSHIELD 250,000 `24cd6b42…` (345,427; 250,000 FT paid out publicly,
+750,000 shielded onward). Final state: root `19318325…`, balance 750,000, notes at tree 6,7. Remaining follow-up:
+the nito.cash client integration (their committed VK 27f6ea03… + 7-input shape differ — asset swap + 3-input
+builder; their client is the user's final approval per standing directive) and the /research/shielded-pool site record.
 
 **MILESTONE — the hook works: the acceptance suite passes 14/14 under our own verifying key.**
 3 acceptance controls (transfer pv=0, shield pv=250, unshield pv=400 — the unshield exercises the
