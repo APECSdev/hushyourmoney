@@ -39,6 +39,7 @@ const RESULTS = [
     { q: 'On-chain verifier size', v: '35,626 B inside ONE standard transaction', src: 'chipnet on-chain measurement', href: 'https://explorer.selene.cash/tx/b0a488db5b7e9bac07eebc45977523cd0730ddfe078571f2e17135231e30546b?network=chipnet' },
     { q: 'Verifier soundness status', v: 'WITHDRAWN by its author 2026-10-26 — densless-msm, finding F6: the Miller slopes are not constrained by the tangent/chord equations and the terminal compares a value with itself instead of checking the B endpoint', src: 'groth16_cashscript chunked/bn254/densless-msm README · issue #32', href: 'https://github.com/mr-zwets/groth16_cashscript/tree/main/chunked/bn254/densless-msm' },
     { q: 'Reviewed sound replacement (not yet deployed)', v: 'bch-groth16-bn254-sound-native — 27,624 B, 3 inputs, one standard tx, independently reviewed 2026-10-26', src: 'groth16_cashscript verifiers.md', href: 'https://github.com/mr-zwets/groth16_cashscript/blob/main/verifiers.md' },
+    { q: 'Covenant verifier-sibling pin', v: 'MISSING in every deployed pool — spend() read the genesis sibling\'s unlocking at fixed offsets and never checked that input\'s locking bytecode, so a 1-byte OP_1 script at that index was ACCEPTED on the BCH-2026 VM. Fixed in source (358 B, covenant op-cost 36,805 → 42,478), NOT yet deployed', src: 'pin-sibling-test.mjs — 6/6 cases', href: 'https://github.com/APECSdev/pusd-shielded-pool' },
     { q: 'Covenant redeem bytecode', v: '347 B — identical for every asset (category = constructor param)', src: 'decoded from transfer tx input 0 witness', href: 'https://explorer.selene.cash/tx/b0a488db5b7e9bac07eebc45977523cd0730ddfe078571f2e17135231e30546b?network=chipnet' },
     { q: 'Proof generation', v: '16.967 s (183,472) / 17.6 s (186,007) · build runner (hardware spec UNMEASURED)', src: 'snarkjs fullProve, session records', href: null },
     { q: 'Covenant op-cost (Gate 6, input 0)', v: '84,819 / 556,800 budget (15.2%)', src: 'libauth BCH-2026 VM debug on the broadcast tx', href: 'https://explorer.selene.cash/tx/fc585fc9bf6499024c89c73a2bcb945de2ec212fb36f8ffc5acb617b6636912f?network=chipnet' },
@@ -846,11 +847,33 @@ const LIFECYCLE = [
                         false acceptance has been demonstrated — but the argument that a forged witness
                         cannot pass is gone, and the pool's value conservation rests on it.
                     </p>
+                    <p>
+                        <strong class="font-semibold text-white">A second, independent gap — ours.</strong>
+                        The covenant reads the proven public inputs out of the <em>genesis sibling's</em>
+                        unlocking bytecode at fixed offsets (n0 at 1825, n1 at 1792). That read
+                        authenticates nothing on its own: the stored root is public (it is the pool's own
+                        NFT commitment) and the actionHash is recomputed from values the spender supplies.
+                        <strong class="text-rose-200">The covenant never checked which script it was
+                        reading from</strong>, and never checked the input count — verified by disassembling
+                        the deployed 347-byte redeem, whose whole introspection set contains no
+                        <code class="text-rose-200">TXINPUTCOUNT</code> and no sibling
+                        <code class="text-rose-200">UTXOBYTECODE</code> read. A one-byte
+                        <code class="text-rose-200">OP_1</code> script at that index was
+                        <strong class="text-rose-200">ACCEPTED</strong> on the BCH-2026 VM: no proof, no
+                        verifier, full drain. The fix pins all five step lockings and the genesis input
+                        index as constructor arguments; the regression gate is 6/6 (honest transaction
+                        accepted, both substitutions rejected). It is fixed in source and
+                        <strong class="text-rose-200">not yet deployed</strong>.
+                    </p>
                     <div class="rounded-2xl border border-rose-300/40 bg-rose-300/10 px-5 py-4 font-mono text-xs leading-relaxed text-rose-100">
-                        DISCLOSURE · the deployed verifier (densless-msm) is WITHDRAWN by its author under
-                        finding F6 · the pool's on-chain soundness is NOT established · every pool deployed
-                        here — gate3, gate6, gate6b, mainnet — carries it · the reviewed replacement
-                        (27,624 B, 3 inputs) needs a redeploy, NOT a new trusted setup
+                        DISCLOSURE · (1) the deployed verifier (densless-msm) is WITHDRAWN by its author
+                        under finding F6 · (2) the covenant did not pin its verifier sibling, so a
+                        substituted script was accepted — fixed in source, not deployed · every pool
+                        deployed here — gate3, gate6, gate6b, mainnet — carries BOTH · the reviewed
+                        replacement (27,624 B, 3 inputs) verifies the same relation under the same
+                        verifying key, so it needs no new trusted setup — but it cannot be dropped in
+                        beside a covenant (its graph pins exactly 3 inputs, all the same locking), so the
+                        route is to extend its third role with the pool rules
                     </div>
                     <p class="font-mono text-[0.8rem] leading-relaxed text-slate-200">
                         withdrawal record:
