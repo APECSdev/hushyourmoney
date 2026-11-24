@@ -45,6 +45,18 @@ window = between lock-confirmation and action-confirmation ONLY. Client rule unt
 action together (the action spends the lock's UNCONFIRMED outputs; first-seen wins). Durable fix = hook
 revision tagging lock outputs with H(nf0‖nf1) NFT commitments + matching hook checks — NOT implemented;
 full build/red-team/sweep gates required before any redeploy.
+**FEE-PRIVACY LADDER (user-corrected 2026-11-24 PM — do NOT dismiss CashShuffle; the earlier
+CashFusion-only framing was transport-blind):** the transfer's actor leaks via the fee lock (structural:
+fees are BCH, the shielded value is FT, so a transparent fee input must exist). Per-action: SHIELD deposit
+public-by-definition; TRANSFER = the real leak; UNSHIELD payout public-by-design. Ladder: (1) fresh
+history-free fee address per action; (2) browser-native blending via a CASHSHUFFLE-STYLE round — simple
+relay-based rounds, in-browser by design (shuffle.cash ran it in JS), onion-blinded so the relay CANNOT
+learn the mapping (the coordinator-sees critique applies to CashFusion, not CashShuffle); its
+tier-linkability weakness is moot for pool fuel (uniform 16,000-sat outputs by construction); wire spec
+carried in-repo at web/pages/research/coinjoin.vue; our P2P fusion-over-Nostr harnesses (G1–G3L/EXP-01)
+are the working prototype of this class over WebSocket — nito.cash is a WEB wallet and desktop CashFusion
+runs TCP+Tor, unreachable from a browser; (3) desktop CashFusion for desktop wallets only. Pool-native
+option: a CashShuffle-style round whose outputs ARE the tagged fuel UTXOs — composes with deposit tagging.
 **FUNDING & TERMINOLOGY (user clarification 2026-11-24 PM):** the funder `bchtest:qzmux3gx…` is the
 APECS FAUCET HOT WALLET (`/Workspace/apecsdev/.secrets/faucet-hot-wallet.json` — the operational float
 for the apecs-api Worker's FAUCET_BCH_WIF), NOT a public faucet service, and NOT the hushyourmoney
