@@ -38,6 +38,14 @@ ON-CHAIN**: SHIELD 1,000,000 `582cefee…` (block 345,415) → refill `de98e0df�
 the nito.cash client integration (their committed VK 27f6ea03… + 7-input shape differ — asset swap + 3-input
 builder; their client is the user's final approval per standing directive) and the /research/shielded-pool site record.
 
+**EXPLORER POLICY (user directive 2026-11-24 PM, supersedes the 2026-11-13 fallback):** chipnet transaction
+links are `https://explorer.selene.cash/tx/<txid>?network=chipnet` PRIMARY (verified 200 on all 8 role-2-pool
+txs) with `https://chipnet.chaingraph.cash/tx/<txid>` as the fallback. **DO NOT EVER fall back to
+`chipnet.imaginary.cash`** — retired everywhere (site links, docs, and the electrum broadcast fallback
+`wss://chipnet.imaginary.cash:50004` from the 2026-11-11 directive — `chipnet.bch.ninja` remains the electrum
+primary; chipnet.chaingraph.cash runs NO electrum ports, 50001/50002 probed closed). chaingraph sits behind a
+Cloudflare browser challenge (curl gets 403 on every path; browsers pass).
+
 **MILESTONE — the hook works: the acceptance suite passes 14/14 under our own verifying key.**
 3 acceptance controls (transfer pv=0, shield pv=250, unshield pv=400 — the unshield exercises the
 conditional payout branch) + 11 rejection classes (carrier newRoot/pv/sign/nf0 tamper; state
