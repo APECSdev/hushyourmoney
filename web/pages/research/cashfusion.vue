@@ -154,7 +154,7 @@ const GATES = [
         title: 'Mainnet opt-in beta',
         points: [
             'Criterion: mainnet opt-in beta behind a settings flag.',
-            'Not built: web/pages/toolbox/fusion.vue does not exist. The protocol modules and gate harnesses are in-repo; the production UI is the remaining step.',
+            'Not built: no production fusion UI exists. The protocol modules and gate harnesses are in-repo; the production UI is the remaining step.',
         ],
         txs: [],
         harnessTxs: [],
@@ -217,7 +217,7 @@ const FAQ = [
     },
     {
         q: 'Is the Nostr round live on mainnet?',
-        a: 'No. G2b is a real round on chipnet (funding tx and round tx are linked above). G3 and G3L are dry-runs with fixture UTXOs. G4 — a mainnet opt-in beta behind a settings flag — is pending, and web/pages/toolbox/fusion.vue does not exist yet.',
+        a: 'No. G2b is a real round on chipnet (funding tx and round tx are linked above). G3 and G3L are dry-runs with fixture UTXOs. G4 — a mainnet opt-in beta behind a settings flag — is pending, and no production fusion UI exists yet.',
     },
     {
         q: 'What is the difference between classic CashFusion and P2P over Nostr?',
@@ -432,7 +432,7 @@ const SOURCES = [
                     Remove the coordinator
                 </h2>
                 <p class="mx-auto mt-4 max-w-2xl text-base leading-relaxed text-slate-200">
-                    The toolbox already ships a classic CashFusion client, but that client depends on an
+                    A classic CashFusion client already ships with the project, but it depends on an
                     external coordinator server. This research removes the server: peers self-elect a
                     coordinator per round, and every message is end-to-end gift-wrapped before it reaches
                     a relay.
@@ -504,9 +504,9 @@ const SOURCES = [
                 </p>
             </div>
 
-            <pre class="reveal mt-10 overflow-x-auto rounded-2xl border border-white/10 bg-[#0a1018]/80 p-6 font-mono text-xs leading-relaxed text-slate-200 sm:text-sm"><code>┌─────────────────────────── browser (toolbox) ───────────────────────────┐
+            <pre class="reveal mt-10 overflow-x-auto rounded-2xl border border-white/10 bg-[#0a1018]/80 p-6 font-mono text-xs leading-relaxed text-slate-200 sm:text-sm"><code>┌─────────────────────────── browser ─────────────────────────────────────┐
 │                                                                         │
-│  /toolbox/fusion (UI, G4)                                               │
+│  fusion UI (not built)                                                  │
 │        │                                                                │
 │        ▼                                                                │
 │  stores/p2pfusion/round.ts ── six-phase state machine                   │

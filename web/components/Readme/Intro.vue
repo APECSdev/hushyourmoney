@@ -33,8 +33,8 @@ const props = defineProps({
         </h3>
 
         <ol class="-mt-3 pl-10 list-decimal leading-[50px]">
-            <li>Privatize <span class="font-bold">YOUR</span> assets <span class="font-bold">AHEAD OF TIME</span> using ANY <NuxtLink to="/toolbox/pools" class="text-cyan-300 font-bold hover:underline">HYM Club pool</NuxtLink>.</li>
-            <li>Transfer <span class="font-bold">ANY</span> asset (in real-time) <span class="font-bold">THROUGH</span> ANY <NuxtLink to="/toolbox/pools" class="text-cyan-300 font-bold hover:underline">HYM Club pool</NuxtLink>.</li>
+            <li>Privatize <span class="font-bold">YOUR</span> assets <span class="font-bold">AHEAD OF TIME</span> using ANY <span class="font-bold">HYM Club pool</span>.</li>
+            <li>Transfer <span class="font-bold">ANY</span> asset (in real-time) <span class="font-bold">THROUGH</span> ANY <span class="font-bold">HYM Club pool</span>.</li>
         </ol>
     </main>
 </template>

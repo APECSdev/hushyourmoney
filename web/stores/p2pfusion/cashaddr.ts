@@ -1,7 +1,7 @@
 /* web/stores/p2pfusion/cashaddr.ts
    Minimal CashAddr encode/decode (P2PKH + P2SH, 20-byte hashes).
    Spec: https://github.com/bitcoincashorg/bitcoincash.org/blob/master/spec/cashaddr.md
-   Used by the toolbox for address display and by gate harnesses for scripthashes. */
+   Used by the playground for address display and by gate harnesses for scripthashes. */
 
 const CHARSET = 'qpzry9x8gf2tvdw0s3jn54khce6mua7l'
 const GENERATOR = [0x98f2bc8e61n, 0x79b76d99e2n, 0xf33e5fb3c4n, 0xae2eabe2a8n, 0x1e4f43e470n]

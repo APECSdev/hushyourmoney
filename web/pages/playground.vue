@@ -86,7 +86,7 @@ const EXPERIMENTS = [
         badge: 'badge-wait',
         numClass: 'topic-white',
         to: '/research/cashfusion#gate-evidence',
-        body: 'The production UI is the remaining step: web/pages/toolbox/fusion.vue does not exist. G4 stays pending until it does.',
+        body: 'The production UI is the remaining step: no production fusion UI exists yet. G4 stays pending until it does.',
         meta: 'EXP-06 · not built',
     },
 ]
@@ -117,7 +117,7 @@ const GATES = [
     { id: 'G2b', status: 'on chain', cls: 'gate-live', title: 'Real chipnet broadcast', note: 'Funding 253 B + round 428 B, fee 2,000 sats ≈ 4.7 sat/B.' },
     { id: 'G3', status: 'passed', cls: 'gate-done', title: 'N-party round', note: '5-party 10/10 signatures; 7-party 14/14 signatures.' },
     { id: 'G3L', status: 'passed', cls: 'gate-done', title: 'Live public relays', note: '5-party 10/10 signatures over primal, nostr.mom and offchain.pub.' },
-    { id: 'G4', status: 'pending', cls: 'gate-wait', title: 'Mainnet opt-in beta', note: 'web/pages/toolbox/fusion.vue does not exist.' },
+    { id: 'G4', status: 'pending', cls: 'gate-wait', title: 'Mainnet opt-in beta', note: 'No production fusion UI exists yet.' },
 ]
 
 /* ── Real chain evidence (G2b) and dry-run harness txids (G3L) ───── */
@@ -138,7 +138,7 @@ const REAL_VS_MOCK = [
     { what: 'Relay names and behavior', verdict: 'cited', cls: 'badge-mid', detail: 'G1/G3L measurements recorded in P2P-FUSION-DESIGN.md §5 and /research/cashfusion#lessons.' },
     { what: 'G2b transactions', verdict: 'real', cls: 'badge-live', detail: 'Chipnet funding and round transactions, linked to Selene. The only chain transactions in the gate record.' },
     { what: 'G3 / G3L txids', verdict: 'dry-run', cls: 'badge-wait', detail: 'Harness txids, not broadcast. The rounds used fixture UTXOs.' },
-    { what: 'Mainnet fusion beta', verdict: 'not built', cls: 'badge-wait', detail: 'G4 is pending; web/pages/toolbox/fusion.vue does not exist.' },
+    { what: 'Mainnet fusion beta', verdict: 'not built', cls: 'badge-wait', detail: 'G4 is pending; no production fusion UI exists yet.' },
     { what: 'Shielded pool', verdict: 'live on chipnet', cls: 'badge-done', detail: 'The pool is deployed and measured on chipnet; see /research/shielded-pool.' },
 ]
 
@@ -815,7 +815,7 @@ onBeforeUnmount(() => {
                 <ul class="life-points">
                     <li>No real keys or signatures: peer pubkeys and the txid are deterministic mock hex from a local seed.</li>
                     <li>No relay messages and no broadcast: the separate relay probe opens a handshake only.</li>
-                    <li>No G4: the mainnet opt-in beta is pending and web/pages/toolbox/fusion.vue does not exist.</li>
+                    <li>No G4: the mainnet opt-in beta is pending and no production fusion UI exists yet.</li>
                 </ul>
             </div>
         </div>
