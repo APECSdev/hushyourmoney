@@ -89,7 +89,10 @@ and it is not quantum-resistant.
   any spender could drain the pool with no proof and no verifier. Fix in
   `pusd-shielded-pool/asset-pool.cash` (four new ctor args pin the verifier shape;
   the unpinned source still reproduces the mainnet covenant byte-for-byte; regression gate
-  `pin-sibling-test.mjs` 6/6). **Every deployed pool still carries the unpinned covenant.**
+  `pin-sibling-test.mjs` 6/6). **Every deployed pool still carries the unpinned covenant**
+  (the v2/v4/gate3/gate6/mainnet generation; the role-2 pool deployed 2026-11-24 supersedes
+  this architecture — it has no sibling covenant at all, so the hole class does not apply
+  to it).
 - The successor architecture moves the pool rules off the sibling covenant entirely and
   into the reviewed sound verifier itself, as a role-2 hook — see under Verifier.
 
@@ -124,7 +127,8 @@ and it is not quantum-resistant.
   accepted. All 10 graph tests reject, including a foreign P2SH32 input at index j
   carrying the honest pushes — which is why the pool rules moved into role 2 instead of
   sitting beside the verifier as a sibling covenant.
-- **Role-2 pool hook (2026-11-24, implemented WIP, not reviewed, not deployed):** the
+- **Role-2 pool hook — DEPLOYED ON CHIPNET 2026-11-24 (the role-2 pool is LIVE; full
+  SHIELD→TRANSFER→UNSHIELD lifecycle confirmed on-chain):** the
   pool rules now run as the verifier's role-2 `COVENANT` hook — 12 checks (state category
   and stored root, carrier parse, `n1 == actionHash` with all eight preimage fields
   reversed to big-endian, the raw-LE nullifier fold, balance arithmetic,
@@ -134,6 +138,28 @@ and it is not quantum-resistant.
   rejection classes, with the complete program (graph + hook + final pairing) executing
   end-to-end. Design: `pusd-shielded-pool/ROLE2-POOL-HOOK-DESIGN.md`; implementation and
   every measurement: `pusd-shielded-pool/wip-role2-hook/STATUS.md`.
+  **Deployed runner-free 2026-11-24 (user directive; funding below):** anchor `b6ee4196…`
+  (= the category) → mint `48d458b8…` → deploy `f8f215c3…` (block 345,413; state NFT at :0
+  with the PUBLIC bootstrap root 551108f6…510f — byte-identical to the v2/v4 genesis
+  commitments); program rebuilt for the real category (code 7,737 B sha256 `0e827602…`,
+  locking `aa20cd37…`). NO covenant, NO step fleet: every pool UTXO at the one program
+  P2SH32; actions are SIGNATURE-FREE 3-input spends (TXINPUTCOUNT==3; fees ride the locked
+  UTXOs' sats; the "refill/lock" txs pre-pay them). Lifecycle: SHIELD 1,000,000 `582cefee…`
+  (345,415) → TRANSFER `17f1322b…` (345,423) → UNSHIELD 250,000 with the public payout
+  executed `24cd6b42…` (345,427); every action VM-ACCEPTED in both modes on all 3 inputs
+  before broadcast. The 169-byte OP_RETURN carrier in out0 replaces the old covenant's
+  function arguments (tamper-proof via hook check 6: the carrier must hash to n1, which the
+  proof binds). Funding: the APECS FAUCET HOT WALLET `bchtest:qzmux3gx…`
+  (`/Workspace/apecsdev/.secrets/faucet-hot-wallet.json` — the operational float for the
+  apecs-api Worker's FAUCET_BCH_WIF, NOT a public faucet, and NOT the hushyourmoney
+  chipnet-faucet.json key `bchtest:qzk22…`, which held 0 sats): the only funded chipnet
+  wallet we hold runner-free (423,000 sats probed); 112,666 sats spent in total (fees +
+  locked fuel + the 10,000-sat state float that stays live on the state NFT), 310,334
+  sats + the 99M FT supply + the 250,000 FT payout remain. In the demo one key played three
+  roles (issuer / operator / demo user) that production must separate. KNOWN LIMIT (user-
+  surfaced, recorded in both AGENTS): actions bind no author — standing fuel/deposit UTXOs
+  are grabbable between lock- and action-confirmation; client rule = atomic lock+act,
+  durable fix = deposit tagging via hook revision (full re-test gates first).
 - **Sized, priced, and red-teamed under our key (2026-11-24, same day):** pool-shaped
   fill sizing puts the acceptance controls at exactly 94.0% of the per-input budget
   (the stock sizer builds tokenless source outputs and cannot size the hooked program

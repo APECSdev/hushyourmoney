@@ -524,3 +524,77 @@ five files) is a **review requirement**, not a convenience.
 
 Step 2 is the one that mattered: a failure that reproduces in the harness is a bug in
 **our** artifact, not in the counterparty's integration.
+
+## 15. chipnet-role2-pool — the pool rules INSIDE the sound verifier (2026-11-24, DEPLOYED, FULL LIFECYCLE CONFIRMED)
+
+The successor to every pool above: the reviewed `bch-groth16-bn254-sound-native` verifier
+with the covenant logic running as a role-2 HOOK inside the program — no separate covenant,
+no 5-UTXO step fleet. Deployed runner-free (user directive 2026-11-24: the runner is out of
+scope; all materials on the apecsdev VM), under OUR solo-ceremony VK (zkey sha256
+`4a4e2543…`, VK sha256 `05250429…`, wasm `8595b434…` — hash-verified against the ceremony
+records before deployment).
+
+**The 3-tx chain, all confirmed in block 345,413:**
+- ANCHOR `b6ee4196da1b0e3d548a03ea86a63d61445cd38d74300b2f7a8725eea05ceb72` — its txid IS
+  the new category. (No BN254-range retry needed: our circuit takes the category as two
+  128-bit limbs, always field-legal — unlike the wallet's single-field form.)
+- MINT `48d458b86bd59e33be59e4c8015820272c69df586920818005b86c04a6dbd538` — minting NFT
+  (empty commitment) + 100,000,000 FT, all outputs to the funding wallet.
+- DEPLOY `f8f215c3826b763805c71f0ee281b406cfa2e0d944f541dfdc3ae56e473b3319` — spends the
+  mint outputs; creates the pool state NFT at :0 (mutable, commitment = the PUBLIC bootstrap
+  root LE `551108f6…510f` ‖ 32 zero bytes — our seed derivation reproduces the v2/v4
+  on-chain genesis commitments byte-for-byte), the op-1 FT deposit (1,000,000) and one fuel
+  UTXO at the program locking, the 99M FT supply back to the wallet.
+
+**The program, rebuilt for the real category:** code 7,737 B sha256 `0e827602…`, redeem R
+65 B, pieces 3,981/3,756, P2SH32 locking
+`aa20cd37fe80b308ae414c2d342dae482256548f7280918b4b1946057f1b631d4acd87`.
+
+**The action shape (this is the big difference from §14):** 3 inputs, all spending the one
+program P2SH32 — in0/in1 fuel or FT-deposit UTXOs, in2 the state NFT (its FT amount IS the
+balance). SIGNATURE-FREE: the script satisfaction is the authorization; `TXINPUTCOUNT == 3`
+is pinned by the verifier's graph, so there is NO funding input and no fee input — each
+action's fee is prepaid by a wallet LOCK tx ("refill" in the tooling) that pre-creates the
+fuel UTXOs. The eight transition fields the old covenant took as `spend()` arguments now
+ride in a 169-byte OP_RETURN carrier (out0), which hook check 6 binds to the proof by
+requiring SHA256(carrier limbs) == n1. `TXOUTPUTCOUNT == 2 + sign` pins the output shape.
+
+**Lifecycle, all confirmed:** SHIELD 1,000,000 `582cefee…` (block 345,415) → lock
+`de98e0df…` (345,417) → TRANSFER `17f1322b…` (345,423) → lock `fe9e1aad…` (345,426) →
+UNSHIELD 250,000 `24cd6b42…` (345,427; the payout output executed). Every action: real
+witness under our zkey, VM-ACCEPTED in consensus AND standard on all 3 inputs before
+broadcast, FT conserved exactly. Final state: root `19318325…`, balance 750,000, notes at
+tree 6,7. Explorer links: Selene primary
+`https://explorer.selene.cash/tx/<txid>?network=chipnet`, fallback
+`https://chipnet.chaingraph.cash/tx/<txid>` (NEVER `chipnet.imaginary.cash` — user
+directive 2026-11-24).
+
+**Funding ledger (user-clarified 2026-11-24):** funder = the APECS FAUCET HOT WALLET
+`bchtest:qzmux3gx…` (`/Workspace/apecsdev/.secrets/faucet-hot-wallet.json` — the
+operational float for the apecs-api Worker's `FAUCET_BCH_WIF`; NOT a public faucet service,
+and NOT the hushyourmoney `chipnet-faucet.json` key `bchtest:qzk22…`, which held 0 sats and
+was not used). It was the only funded chipnet wallet we hold runner-free (423,000 sats,
+electrum-verified before deployment). Exact spend: **112,666 sats** (all chain fees + the
+locked fuel the actions burned + the 10,000-sat state float that remains live on the state
+NFT); the wallet keeps 310,334 sats, the 99M FT supply, and the 250,000 FT unshield payout.
+The wallet address therefore shows as the sender of every SIGNED step (anchor, mint, deploy,
+locks) because the mint's outputs all returned to it — the ACTIONS contain no wallet at all.
+
+**Two caveats for whoever drives this pool next:**
+1. **Author binding (user-surfaced):** actions bind no author — standing fuel/deposit UTXOs
+   are consumable by any valid action between lock-confirmation and action-confirmation.
+   Client rule: broadcast lock + action together (the action may spend the lock's
+   unconfirmed outputs). Durable fix: deposit tagging (lock outputs carry an NFT commitment
+   = H(nf0‖nf1); hook checks bind them to the carrier) — a hook revision that must pass the
+   full build/red-team/sweep gates first.
+2. **Client integration (nito.cash):** their wallet is committed to their own VK
+   (`27f6ea03…`, PPOT-derived, committed in `public/proving/verification_key.json`) and
+   builds the 7-input §14 shape; driving this pool needs their proving assets swapped to
+   ours + the 3-role tx builder + off-chain note delivery (the pinned output count leaves no
+   room for the old out[6] note-carrier). Their client is the user's final approval.
+
+Tooling (committed in pusd-shielded-pool): `pool-deploy-role2.mjs`, `pool-op-role2.mjs`,
+`pool-refill-role2.mjs` (bench dir), `role2-op-witness.mjs`, `role2-seeds.mjs` (repo root);
+pool state file `/home/apecs/cov/role2-pool-state.json`. Registry entry: `chipnet-role2-pool`
+in `pool-registry.json`. Full implementation record:
+`pusd-shielded-pool/wip-role2-hook/STATUS.md`.

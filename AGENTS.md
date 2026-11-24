@@ -45,6 +45,18 @@ window = between lock-confirmation and action-confirmation ONLY. Client rule unt
 action together (the action spends the lock's UNCONFIRMED outputs; first-seen wins). Durable fix = hook
 revision tagging lock outputs with H(nf0‖nf1) NFT commitments + matching hook checks — NOT implemented;
 full build/red-team/sweep gates required before any redeploy.
+**FUNDING & TERMINOLOGY (user clarification 2026-11-24 PM):** the funder `bchtest:qzmux3gx…` is the
+APECS FAUCET HOT WALLET (`/Workspace/apecsdev/.secrets/faucet-hot-wallet.json` — the operational float
+for the apecs-api Worker's FAUCET_BCH_WIF), NOT a public faucet service, and NOT the hushyourmoney
+`chipnet-faucet.json` key `bchtest:qzk22…` (0 sats, unused). It funded the whole chain because it was the
+ONLY funded chipnet wallet we hold runner-free (423,000 sats, electrum-verified). Its address shows as the
+sender of every SIGNED step (anchor, mint, deploy, both locks) because the mint's outputs all returned to it;
+the actions contain no wallet at all. Exact ledger: 112,666 sats spent (chain fees + locked fuel burned by
+the actions + the 10,000-sat state float that stays live on the state NFT); 310,334 sats + the 99M FT supply
++ the 250,000 FT payout remain at the wallet. In the demo one key played three roles (category issuer /
+pool operator / demo user) that production must separate; every tooling script takes `--secrets <path>`, so
+any funded chipnet key can fund future locks. The "SUPPORTING" transactions in the matrix are the LOCK
+transactions (tooling name: "refill") — each pre-creates the fuel/deposit UTXOs the next action spends.
 
 **EXPLORER POLICY (user directive 2026-11-24 PM, supersedes the 2026-11-13 fallback):** chipnet transaction
 links are `https://explorer.selene.cash/tx/<txid>?network=chipnet` PRIMARY (verified 200 on all 8 role-2-pool

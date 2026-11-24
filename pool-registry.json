@@ -44,7 +44,16 @@
           "txid": "24cd6b42d451a0c9a82fb6e634e72a6cefc68642213ba011bdd61d8ec1230528",
           "block": 345427
         }
-      ]
+      ],
+      "funding": {
+        "source": "APECS faucet HOT wallet bchtest:qzmux3gxj7tqqxwjuzxj7vg8vs49qzlnsszagj73z3 (/Workspace/apecsdev/.secrets/faucet-hot-wallet.json \u2014 the apecs-api Worker's FAUCET_BCH_WIF float; NOT a public faucet, NOT the hushyourmoney chipnet-faucet.json key bchtest:qzk22\u2026)",
+        "reason": "the only funded chipnet wallet we hold runner-free (423,000 sats, electrum-verified before deployment)",
+        "spentSats": 112666,
+        "remainingSats": 310334,
+        "spentBreakdown": "chain fees (anchor/mint/deploy/2 locks/3 actions) + locked fuel burned by the actions + the 10,000-sat state float that stays live on the state NFT",
+        "alsoHeld": "99,000,000 FT supply + the 250,000 FT unshield payout",
+        "note": "one key played three demo roles (issuer / operator / demo user) that production must separate; tooling takes --secrets <path> for any funded key"
+      }
     },
     {
       "name": "chipnet-pusd-v4-covenant0",
