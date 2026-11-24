@@ -100,6 +100,29 @@ export default defineNuxtConfig({
 
         /* Retired wizard lobby — superseded by the playground experiments bench. */
         '/lobby': { redirect: { to: '/playground', statusCode: 301 } },
+
+        /* Retired /toolbox operator dashboard — superseded by /playground (2026-11-24). */
+        '/toolbox': { redirect: { to: '/playground', statusCode: 301 } },
+        '/toolbox/**': { redirect: { to: '/playground', statusCode: 301 } },
+
+        /* Retired standalone specification — merged into the CoinJoin topic page. */
+        '/spec': { redirect: { to: '/research/coinjoin', statusCode: 301 } },
+
+        /* Retired placeholder / orphaned pages (2026-11-24 cleanup). */
+        '/_blank': { redirect: { to: '/', statusCode: 301 } },
+        '/compare': { redirect: { to: '/', statusCode: 301 } },
+        '/diary': { redirect: { to: '/', statusCode: 301 } },
+        '/treasury': { redirect: { to: '/', statusCode: 301 } },
+        '/profile': { redirect: { to: '/', statusCode: 301 } },
+
+        /* Retired one-line /help stubs. */
+        '/help/coinjoin': { redirect: { to: '/research/coinjoin', statusCode: 301 } },
+        '/help/guests': { redirect: { to: '/help', statusCode: 301 } },
+        '/help/tiers': { redirect: { to: '/help', statusCode: 301 } },
+
+        /* Retired /v1 API surface (page + server routes removed). */
+        '/v1': { redirect: { to: '/', statusCode: 301 } },
+        '/v1/**': { redirect: { to: '/', statusCode: 301 } },
     },
 
     runtimeConfig: {

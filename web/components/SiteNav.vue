@@ -1,8 +1,7 @@
 <!-- web/components/SiteNav.vue — site-wide navigation for the modern dark pages -->
 
 <script setup lang="ts">
-/* Shared top navigation for the fullscreen + research layouts.
-   The legacy default/toolbox layouts keep their own chrome. */
+/* Shared top navigation for the fullscreen + research layouts. */
 
 const route = useRoute()
 const mobileOpen = ref(false)
@@ -22,7 +21,6 @@ const LINKS = [
     { label: 'Ceremony', to: '/ceremony' },
     { label: 'Roadmap', to: '/roadmap' },
     { label: 'Security', to: '/security' },
-    { label: 'Toolbox', to: '/toolbox' },
 ]
 
 function isActive(to: string) {
