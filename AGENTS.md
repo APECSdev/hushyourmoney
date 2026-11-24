@@ -37,6 +37,14 @@ ON-CHAIN**: SHIELD 1,000,000 `582cefee…` (block 345,415) → refill `de98e0df�
 750,000 shielded onward). Final state: root `19318325…`, balance 750,000, notes at tree 6,7. Remaining follow-up:
 the nito.cash client integration (their committed VK 27f6ea03… + 7-input shape differ — asset swap + 3-input
 builder; their client is the user's final approval per standing directive) and the /research/shielded-pool site record.
+**CLIENT-INTEGRATION SECURITY NOTE (user-surfaced 2026-11-24 PM):** the role-2 pool binds NO author to its
+action (no signatures exist — TXINPUTCOUNT==3; the old pools bound the depositor via the signed P2PKH funding
+input). Standing fuel UTXOs can be consumed by any valid action (fee theft-of-service), and a standing FT
+deposit can be front-run by any note-holder as their shield's input 0 (real theft while it stands). Exposure
+window = between lock-confirmation and action-confirmation ONLY. Client rule until fixed: broadcast lock +
+action together (the action spends the lock's UNCONFIRMED outputs; first-seen wins). Durable fix = hook
+revision tagging lock outputs with H(nf0‖nf1) NFT commitments + matching hook checks — NOT implemented;
+full build/red-team/sweep gates required before any redeploy.
 
 **EXPLORER POLICY (user directive 2026-11-24 PM, supersedes the 2026-11-13 fallback):** chipnet transaction
 links are `https://explorer.selene.cash/tx/<txid>?network=chipnet` PRIMARY (verified 200 on all 8 role-2-pool
