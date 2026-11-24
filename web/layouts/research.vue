@@ -1,5 +1,6 @@
 <!-- web/layouts/research.vue — shared shell for the /research suite
-     (index + shielded-pool + cashfusion + shielded-addresses + coinjoin)
+     (index + shielded-pool + cashfusion + shielded-addresses + coinjoin
+      + bn254 + bls12-381)
      and the /playground experiments page. -->
 
 <script setup lang="ts">

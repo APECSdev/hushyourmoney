@@ -379,7 +379,7 @@ If everything goes well, all the clients will disconnect when shuffling is compl
                 </NuxtLink>
                 <NuxtLink to="/ceremony" class="pager-link right">
                     <span class="pager-dir">next topic →</span>
-                    <span class="pager-title">Trusted Setup · The Hush Ceremony</span>
+                    <span class="pager-title">BN254</span>
                 </NuxtLink>
             </div>
         </section>

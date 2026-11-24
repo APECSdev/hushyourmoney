@@ -9,11 +9,11 @@ definePageMeta({
 /* OpenGraph + Twitter + canonical (shared composable; per-page poster). */
 useOg({
     title: `Research — Hush Your Money`,
-    description: `UTXO privacy research hub: the Groth16 shielded pool (built and measured on chipnet), CashFusion (including our coordinator-free P2P fusion research over Nostr), ECDH shielded addresses and CoinJoin. Our numbers are measured; third-party claims are cited.`,
+    description: `UTXO privacy research hub: the Groth16 shielded pool (built and measured on chipnet), CashFusion (including our coordinator-free P2P fusion research over Nostr), ECDH shielded addresses, CoinJoin, and the two pairing curves a pool can be built on (BN254 and BLS12-381). Our numbers are measured; third-party claims are cited.`,
     path: '/research',
     image: '/posters/research.jpg',
     type: 'website',
-    imageAlt: `Privacy Research — five layers of the UTXO privacy stack on Hush Your Money`,
+    imageAlt: `Privacy Research — seven layers of the UTXO privacy stack on Hush Your Money`,
 })
 
 /* Scroll-reveal (shared composable). */
@@ -25,7 +25,9 @@ const TOPICS = [
     { n: '02', title: 'CashFusion', blurb: 'Bitcoin Cash\'s CoinJoin-style mixing tool, with a real adoption history, an active red-team discussion, and our coordinator-free P2P fusion research over Nostr.', chip: 'survey + our research · G1–G3L', chipClass: 'topic-violet', badgeClass: 'badge-mid', to: '/research/cashfusion' },
     { n: '03', title: 'Shielded Addresses', blurb: 'ECDH one-time addresses on standard P2PKH — receiver privacy with no new opcodes. External implementation, surveyed here.', chip: 'external · survey', chipClass: 'topic-cyan', badgeClass: 'badge-live', to: '/research/shielded-addresses' },
     { n: '04', title: 'CoinJoin', blurb: 'Collaborative transactions that break the input-to-output link. The base technique — live on BCH through CashFusion.', chip: 'technique', chipClass: 'topic-violet', badgeClass: 'badge-mid', to: '/research/coinjoin' },
-    { n: '05', title: 'Trusted Setup', blurb: 'The ceremony: a multi-party Powers-of-Tau setup gating any mainnet deployment of the pool.', chip: 'gate 7 · in design', chipClass: 'topic-white', badgeClass: 'badge-wait', to: '/ceremony' },
+    { n: '05', title: 'BN254', blurb: 'The 254-bit curve the pool was built on: what it measures, the two verifier generations (one withdrawn, one reviewed), and what it gives up.', chip: 'the curve we shipped on', chipClass: 'topic-violet', badgeClass: 'badge-done', to: '/research/bn254' },
+    { n: '06', title: 'BLS12-381', blurb: 'The 381-bit curve with a reviewed on-chain verifier at 34,229 B in 4 inputs — and the ceremony it would force.', chip: 'the curve we have not shipped on', chipClass: 'topic-cyan', badgeClass: 'badge-live', to: '/research/bls12-381' },
+    { n: '07', title: 'Trusted Setup', blurb: 'The ceremony: a multi-party Powers-of-Tau setup gating any mainnet deployment of the pool — and the step at which the curve is chosen.', chip: 'gate 7 · in design', chipClass: 'topic-white', badgeClass: 'badge-wait', to: '/ceremony' },
 ]
 
 /* ── Related discussions (all topics verified live 2026-11-13/16) ───── */
@@ -62,10 +64,10 @@ const THREADS = [
         </p>
 
         <p class="animate-rise mt-8 max-w-2xl text-base leading-relaxed text-slate-100 sm:text-lg" style="animation-delay: 0.44s">
-            Five layers of the privacy stack, each with its own dedicated page — from
+            Seven layers of the privacy stack, each with its own dedicated page — from
             zero-knowledge pools to address-level unlinkability, collaborative mixing, our
-            coordinator-free P2P fusion research over Nostr, and the trusted setup that gates
-            mainnet. Our own work — <strong class="font-semibold text-white">the shielded pool</strong>
+            coordinator-free P2P fusion research over Nostr, the two pairing curves a pool can be
+            built on, and the trusted setup that gates mainnet. Our own work — <strong class="font-semibold text-white">the shielded pool</strong>
             and <strong class="font-semibold text-white">the P2P fusion harness</strong> — is documented gate-by-gate with every number
             traceable to a chain artifact or a reproducible test.
         </p>
@@ -123,7 +125,7 @@ const THREADS = [
     <!-- ── Related discussions ── -->
     <section id="threads" class="relative z-10 mx-auto w-full max-w-5xl px-6 pb-28 sm:pb-36">
         <div class="reveal text-center">
-            <p class="font-mono text-[0.8rem] uppercase tracking-[0.45em] text-cyan-200">05 · conversations</p>
+            <p class="font-mono text-[0.8rem] uppercase tracking-[0.45em] text-cyan-200">07 · conversations</p>
             <h2 class="mt-5 font-display text-[clamp(1.9rem,5vw,3.4rem)] font-bold leading-[1.08] text-white">Related Discussions</h2>
             <p class="mt-2 font-mono text-xs text-slate-300">bitcoincashresearch.org threads this research sits inside</p>
         </div>
