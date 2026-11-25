@@ -1,7 +1,7 @@
 /* web/assets/css/research.css — shared styles for the /research suite
    (index + shielded-pool + cashfusion + shielded-addresses + coinjoin
     + bn254 + bls12-381)
-   and the /playground experiments page.
+   and the /playground experiments page and the /daemons orchestration page.
    Imported NON-scoped by web/layouts/research.vue and fully namespaced
    under `.research-page` (scoped layout styles cannot reach slot content). */
 

@@ -13,6 +13,8 @@
                 <span class="text-slate-300">|</span>
                 <NuxtLink to="/playground" class="footer-link">playground</NuxtLink>
                 <span class="text-slate-300">|</span>
+                <NuxtLink to="/daemons" class="footer-link">daemons</NuxtLink>
+                <span class="text-slate-300">|</span>
                 <NuxtLink to="/roadmap" class="footer-link">roadmap</NuxtLink>
                 <span class="text-slate-300">|</span>
                 <NuxtLink to="/readme" class="footer-link">readme</NuxtLink>

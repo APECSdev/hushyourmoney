@@ -543,6 +543,10 @@ onBeforeUnmount(() => {
             <NuxtLink to="/research/cashfusion" class="btn-ghost">
                 Read the research
             </NuxtLink>
+
+            <NuxtLink to="/daemons" class="btn-ghost">
+                The daemons
+            </NuxtLink>
         </div>
 
         <div class="animate-rise mt-16 flex items-center gap-3 font-mono text-[0.78rem] uppercase tracking-[0.3em] text-slate-300" style="animation-delay: 0.7s">

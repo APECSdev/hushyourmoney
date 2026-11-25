@@ -1,7 +1,7 @@
 <!-- web/layouts/research.vue — shared shell for the /research suite
      (index + shielded-pool + cashfusion + shielded-addresses + coinjoin
       + bn254 + bls12-381)
-     and the /playground experiments page. -->
+     and the /playground experiments page and the /daemons orchestration page. -->
 
 <script setup lang="ts">
 /* Shared research-suite layout: dark shell + aurora backdrop + GitHub banner +
