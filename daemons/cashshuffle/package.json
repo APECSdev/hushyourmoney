@@ -1,0 +1,21 @@
+{
+  "name": "@hushyourmoney/cashshuffle-daemon",
+  "private": true,
+  "type": "module",
+  "version": "0.1.0",
+  "main": "./src/main.js",
+  "scripts": {
+    "start": "node src/main.js",
+    "test": "node --test test/*.test.js",
+    "check": "node --check src/main.js"
+  },
+  "engines": {
+    "node": ">=22"
+  },
+  "dependencies": {
+    "@bitauth/libauth": "^3.0.0",
+    "@hushyourmoney/daemon-shared": "file:../shared",
+    "@noble/curves": "^2.4.0",
+    "@noble/hashes": "^2.4.0"
+  }
+}

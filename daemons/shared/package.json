@@ -1,0 +1,25 @@
+{
+  "name": "@hushyourmoney/daemon-shared",
+  "private": true,
+  "type": "module",
+  "version": "0.1.0",
+  "main": "./src/index.js",
+  "exports": {
+    ".": "./src/index.js",
+    "./config": "./src/config.js",
+    "./metrics": "./src/metrics.js"
+  },
+  "scripts": {
+    "test": "node --test test/*.test.js"
+  },
+  "engines": {
+    "node": ">=22"
+  },
+  "dependencies": {
+    "@bitauth/libauth": "^3.0.0",
+    "@noble/ciphers": "^2.1.1",
+    "@noble/curves": "^2.4.0",
+    "@noble/hashes": "^2.4.0",
+    "@scure/base": "^2.4.0"
+  }
+}
