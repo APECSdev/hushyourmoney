@@ -68,7 +68,31 @@
         "blankReserve": 90,
         "bornGuarded": "future deploys lock the minting NFT straight into the guard (pool-deploy-role2.mjs)"
       },
-      "clientHandoff": "docs/POOL-HANDOFF-2026-11-24-NITO-ROLE2-TAGGED.md"
+      "clientHandoff": "docs/POOL-HANDOFF-2026-11-24-NITO-ROLE2-TAGGED.md",
+      "blankVending": {
+        "locking": "aa206b51396304b3bd4e0e9c254f84d1ee80d83a5c7ccaf3750883d00866480d981287",
+        "redeemLength": 157,
+        "priceSats": 1000,
+        "suite": "18/18 (blank-vending.mjs): underpay AND overpay (exact price), payment redirect, token-in-payment, third-party delivery, pre-tagged/wrong-capability/wrong-category blanks, FT-in-blank, float siphon both directions, token in funding input, foreign token at the machine, extra input, wrong output counts, token in change \u2014 all REJECT",
+        "policy": "permissionless first-come-first-served: the buyer's tokenless funding input pays the exact price to the pinned operator P2PKH and the blank is delivered to the FUNDING INPUT'S OWN LOCKING (the blank follows the money); no signature, no operator involvement",
+        "liveProof": {
+          "loadTxid": "460a6f2a1418e6312df2cb6bec12ef771cc913b507173c18cf74f3b9be535d18",
+          "loadBlock": 345663,
+          "strangerBuys": [
+            {
+              "txid": "bc2c326e9c86301cf20275a6a1e2374a04988a9c6cb1e9fb88159aaae718dec6",
+              "block": 345664
+            },
+            {
+              "txid": "49b184f58373833df14d98d27c83ed1f0d0b473e8f18e1b0da2e224f3470c201",
+              "block": 345666
+            }
+          ],
+          "strangerAddress": "bchtest:qpes4zff73dzqag897kh4hx5geqmtp0azq3w7sdpjp",
+          "note": "a fresh OS-CSPRNG key never seen by the operator bought both machine blanks using only its own signature; covenant executed on chain (7545 op consensus / 8057 op standard, both ACCEPT)"
+        },
+        "operatorBlankReserve": 88
+      }
     },
     {
       "name": "Chipnet role-2 pool \u2014 the reviewed sound verifier with the pool rules INSIDE role 2",

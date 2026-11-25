@@ -95,9 +95,28 @@ client:
   the same notes keep the same nullifiers, so the tag survives re-proving.
 - The blanks: mutable NFTs with EMPTY commitments, minted by the guard in batches of 64
   (K is pinned in the guard's script). They are plain P2PKH UTXOs — transferable,
-  user-held. **For multi-user operation, distribute blanks to users** (each user holds
-  their own, like postage stamps) so the operator cannot censor anyone's unshield.
-  Current operator-held reserve: 90 blanks.
+  user-held. **Acquisition is PERMISSIONLESS via the vending covenant** (`blank-vending.mjs`,
+  suite 18/18; §4.1 below): the operator loads blanks into a P2SH32 machine and anyone
+  takes one by paying the exact pinned price on-chain — no signature, no permission, the
+  blank follows the money. Proven live by a total stranger (never seen by the operator)
+  buying both machine blanks with only its own key. Current operator-held reserve: 88
+  blanks (2 sold through the machine; the machine itself is empty — reload with
+  `pool-vend-load-role2.mjs`).
+
+### 4.1 Blank vending — the permissionless acquisition layer (LIVE)
+
+Machine locking `aa206b51396304b3bd4e0e9c254f84d1ee80d83a5c7ccaf3750883d00866480d981287`
+(redeem 157 B, price 1,000 sats, category-pinned). Shape: buyer's tokenless funding input
+`in1` pays the exact price to the pinned operator P2PKH; the blank (category + mutable +
+empty commitment + 0 FT, float preserved) is delivered to **the funding input's own
+locking**; tokenless change to the buyer. No operator signature anywhere — the script is the
+authorization. Live record: load `460a6f2a…` (block 345,663, 2 blanks + demo-stranger
+funding), stranger buys `bc2c326e…` (345,664) + `49b184f5…` (345,666), covenant executing
+on chain (7,545 op consensus / 8,057 op standard). Why post-mint: the deployed guard is
+self-pinning and immortal, so the live category's mint is permanently operator-destined —
+permissionlessness lives one hop downstream, and the operator's residual discretion is only
+stock depth. Blanks, once bought, are the buyer's plain UTXOs — resellable, giftable — and
+any blank-holder can run their own machine instance with the same published script.
 
 ## 5. The minting guard (custody, settled)
 
@@ -149,7 +168,10 @@ UNSHIELD payout public-by-design. Mitigations, in order:
    drawn from the user's FT UTXO).
 4. **Note delivery**: off-chain (the pinned output count leaves no room for your old
    out[6] encrypted carrier).
-5. **Blank handling**: acquire blanks from the operator (or hold your own); spend 2 per lock.
+5. **Blank handling**: acquire through the vending covenant (self-service, §4.1) — or any
+   p2p transfer; spend 2 per lock. Your wallet should recognize the exact blank shape
+   (pool category + mutable NFT + EMPTY commitment + 0 FT), count held blanks as
+   "actions remaining", and treat the vending locking as a buyable UTXO source.
 6. **Fee hygiene** per §6.
 
 ## 8. Verification contract

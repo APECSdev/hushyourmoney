@@ -406,3 +406,9 @@ until an op set confirms.
 
 Open item: the multi-asset tree uses a category-agnostic zero leaf
 `Poseidon(6)(0,0,0,0,0,0)`; the per-asset seed policy for production is still open.
+- **Blank vending — permissionless acquisition (2026-11-24 night, live)**: the blank-vending
+  covenant (blank-vending.mjs, 18/18 suite): pay the exact pinned price on-chain, the blank
+  follows the money — no signature, no operator involvement. Proven live by a fresh key
+  never seen by the operator: load `460a6f2a…` (block 345,663) → stranger buys
+  `bc2c326e…` (345,664) + `49b184f5…` (345,666). Record: POOL-DEPLOYMENT.md §18;
+  client package §4.1 of the 2026-11-24 Nito handoff.

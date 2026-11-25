@@ -715,3 +715,59 @@ For multi-user operation, blanks should be distributed to users (postage-stamp m
 the operator cannot censor anyone's unshield. The client-integration delivery package —
 including the guard, the tags, the fee policy, and the nito.cash work items — is
 `docs/POOL-HANDOFF-2026-11-24-NITO-ROLE2-TAGGED.md`.
+
+## 18. Blank vending — permissionless acquisition (2026-11-24 night, LIVE: load block 345,663; stranger buys 345,664/345,666)
+
+§17 left the operator as the sole distribution hop — one party controlling access to the
+pool's raw material. That is now closed by a **vending covenant** (`blank-vending.mjs`,
+suite 18/18 on the BCH-2026 VM): a P2SH32 machine per blank UTXO with **no signature
+anywhere**. Its shape:
+
+```
+in0  the machine's blank (category + mutable NFT + EMPTY commitment + 0 FT, at the machine's locking)
+in1  the buyer's funding input — ANY locking, must be TOKENLESS
+out0 the blank RECREATED at the FUNDING INPUT'S OWN LOCKING  ("the blank follows the money")
+out1 EXACTLY priceSats, tokenless, to the operator's pinned P2PKH
+out2 tokenless change, anywhere the buyer directs
+```
+
+The script pins everything the buyer may not choose — price (exact: no underpay, no overpay),
+payment destination, blank shape (mutable + empty commitment + 0 FT + float preserved),
+delivery to the payer — and rejects: payment redirects, tokens smuggled in any output,
+pre-tagged or wrong-capability or foreign-category "blanks", float siphoning in either
+direction, extra inputs/outputs. The buyer only chooses where their change goes, and pays the
+fee. Blanks are inert at a P2PKH (an action still needs proof knowledge of notes + tags +
+the user's own sats), so blank inflation is not value inflation; spam-resistance is priced
+by fees.
+
+**Live proof — acquisition by a total stranger:** load tx `460a6f2a…` (657 B, block 345,663)
+placed 2 blanks in the machine (locking
+`aa206b51396304b3bd4e0e9c254f84d1ee80d83a5c7ccaf3750883d00866480d981287`, redeem 157 B,
+price 1,000 sats) and funded a fresh OS-CSPRNG key `bchtest:qpes4zff…` — never seen by the
+operator — with 50,000 sats. The stranger then bought both blanks with **only its own key**:
+`bc2c326e…` (block 345,664) and `49b184f5…` (block 345,666), each 487 B, the covenant
+executing on chain (7,545 op consensus / 8,057 op standard, both ACCEPT). The only signature
+in each buy is the stranger's own. End state: the stranger holds 2 blanks (= one complete
+action) + 45,826 sats, acquired with zero permission.
+
+Why the layer sits after the mint: the deployed minting guard is **self-pinning and
+immortal** (out0's locking equals the active input's own UTXOBYTECODE), so the live category's
+blanks can never be minted anywhere but the operator's P2PKH — permissionlessness must be a
+post-mint covenant, and the operator loads it. The operator's residual discretion is now only
+**stock depth** (how many blanks the machine holds). Blanks, once bought, are plain UTXOs at
+the buyer's address — resellable, giftable — and anyone holding blanks can run their own
+machine instance with the same published script.
+
+Tooling: `pool-vend-load-role2.mjs` (operator load + optional demo-stranger funding in the
+same tx; records `state.vending`), `blank-buy.mjs` (buyer-side self-service: rebuilds the
+covenant from published parameters, asserts the rebuilt locking equals the recorded one —
+source-drift refusal — and VM-evals the covenant input in both modes before broadcast).
+Landmines recorded in source: a signature-free covenant must end with an explicit `OP_1`
+(all checks are `*VERIFY`, which push nothing, and P2SH needs a truthy final stack); electrum
+scripthash = **single** sha256, byte-reversed (hash256 returns an empty machine); this
+libauth's `hash160` takes `{ripemd160, sha256}` objects.
+
+Future-pool design option (not deployed): a **born-permissionless guard** — batch blanks paid
+to the batch's funding input's locking, no operator signature; the mint itself becomes
+self-service. Only new categories can adopt it; the live pool is fully served by the vending
+layer.
