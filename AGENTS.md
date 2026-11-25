@@ -38,6 +38,27 @@ ON-CHAIN**: SHIELD 1,000,000 `582cefee…` (block 345,415) → refill `de98e0df�
 the nito.cash client integration (their committed VK 27f6ea03… + 7-input shape differ — asset swap + 3-input
 builder; their client is the user's final approval per standing directive) and the /research/shielded-pool site record.
 
+**MILESTONE 3 — THE MINTING GUARD IS LIVE (2026-11-24 PM): burn + FT-inflation are now CONSENSUS-IMPOSSIBLE, and the COMPLETE SOLUTION is packaged for Nito Cash.** The guard covenant
+(minting-guard.mjs, suite 14/14): the category's minting NFT is locked to P2SH32 `aa2066a2…`
+(redeem 5,103 B, K=64); the ONLY spendable shape recreates the minting NFT AT THE GUARD +
+minits exactly K NFT-only empty-commitment blanks to the operator + one tokenless change;
+the operator signature gates batch timing only. Consensus-impossible forever: burning the
+minting NFT, minting ANY FT (the 100M supply is frozen), pre-tagged/redirected blanks,
+token substitution at the guard locking. ADOPTED LIVE with no redeploy: adopt `a5d73b4e…`
+(block 345,503) moved the minting NFT `b087507b:0` into the guard; first guarded batch
+`ad1d7845…` (9,830 B, block 345504) executed the guard ON CHAIN (consensus 157,733 op /
+standard 178,853 op, both ACCEPT) and minted 64 blanks — reserve 90 ≈ 45 actions.
+Future deploys are BORN GUARDED (pool-deploy-role2.mjs locks the minting NFT into the guard
+at deploy). Landmines recorded: pushNum(0) must be OP_0 (0x50 = OP_RESERVED); OP_SIZE
+non-popping struck AGAIN (commitment checks now byte-compare against OP_0); the guarded
+batch's fee probe must use the exact deterministic unlocking length (the 100-B placeholder
+underestimates the 5,103-B redeem push — first attempt died on min-relay code 66); probe-
+verified capability bytes minting=+0x02, mutable=+0x01, none/bare=bare reversed category,
+tokenless=empty push. **THE NITO DELIVERY PACKAGE: docs/POOL-HANDOFF-2026-11-24-NITO-ROLE2-TAGGED.md** — the v2-vs-v4 table, the action shape, the tag/lock flow, the guard, the
+BARE fee policy, the fee-privacy ladder (CashShuffle-style browser rounds per user
+directive), and their six work items (VK swap, 3-input builder, lock tx, note delivery,
+blank handling, fee hygiene). Their client remains the final approval.
+
 **MILESTONE 2 — THE DEPOSIT-TAGGED POOL v2 IS DEPLOYED (2026-11-24 PM, deploy block 345,467).** The durable
 fix for the author-binding gap, LIVE end-to-end: hook checks 4c+4g (both fuel inputs carry the pool category
 as mutable NFTs whose commitments = SHA256(carrier[0..64]) = H(nf0‖nf1) of the funded action — only the action

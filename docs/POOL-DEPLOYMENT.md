@@ -665,3 +665,53 @@ supply and the 250,000 FT unshield payout. The §15 pool remains live but SUPERS
 `/home/apecs/cov/role2-pool-state-v1-untagged.json`). Registry: `chipnet-role2-pool-v2-tagged`
 first entry, v1 marked superseded. Full implementation record:
 `pusd-shielded-pool/wip-role2-hook/STATUS.md`.
+
+## 17. The minting guard — burn and FT-inflation made consensus-impossible (2026-11-24 PM, ADOPTED LIVE + first guarded batch confirmed)
+
+§15/§16 left one custody question open: while the category's minting NFT sits at an
+operator P2PKH, the operator key IS the minting policy — a careless spend burns it (exactly
+how the v1 pool lost it), and a compromised key mints unlimited FT of the category.
+
+**The fix — a guard covenant (P2SH32), `pusd-shielded-pool/wip-role2-hook/minting-guard.mjs`
+(suite 14/14 on the BCH-2026 VM).** The minting NFT is locked to the guard, and the ONLY
+transaction shape that can ever spend it is:
+
+```
+in0  the guard UTXO (the minting NFT)          in1  operator sats (P2PKH)
+out0 the minting NFT RECREATED at the guard's own locking  (read back via UTXOBYTECODE —
+     the guard follows the NFT forever; it can never leave, never die)
+out1..K   exactly K blanks: category + MUTABLE NFT + EMPTY commitment + 0 FT → operator P2PKH
+out[K+1]  ONE tokenless change output → operator P2PKH
++ operator signature — gates batch TIMING only (anti-griefing); NOT the security boundary
+```
+
+Consensus-impossible, forever: **burning the minting NFT; minting any fungible amount**
+(every category output is amount-pinned to 0 and the change must be tokenless — the 100M
+supply is frozen); **pre-tagged or wrong-capability blanks; redirecting blanks; substituting
+another token at the guard locking** (the active input's own category/capability/commitment/
+amount are self-checked first); extra inputs or outputs (counts pinned). A fully
+compromised operator key can only choose WHEN a batch runs.
+
+**Adopted live with no redeploy** (a custody upgrade — program, state NFT, category and
+notes untouched): adopt `a5d73b4e…` (404 B, block 345,503) moved the minting NFT
+`b087507b:0` into the guard `aa2066a238ad4109a3093c34fd4cf9b4167b0058375d4ad1c5cc44cd253d3664f0c187`
+(redeem 5,103 B, K=64). **First guarded batch `ad1d7845…` (9,830 B, block 345,504)**: the
+guard script executed on chain (consensus 157,733 op / standard 178,853 op, both ACCEPT),
+minted 64 blanks (reserve now 90 ≈ 45 actions) and passed the minting NFT forward at the
+guard. `pool-deploy-role2.mjs` now locks the minting NFT straight into the guard at deploy —
+**future pools are born guarded**.
+
+Engineering notes recorded in the source: (1) `pushNum(0)` must be OP_0 — 0x50 is
+OP_RESERVED, and the first suite run died on it; (2) OP_SIZE is non-popping on this VM
+(the STATUS.md finding struck again — commitment/emptiness checks now compare by direct byte
+equality against OP_0); (3) the guarded batch's fee probe must use the exact deterministic
+unlocking length (65-B sig push + the 5,103-B redeem push) — a 100-B placeholder
+underestimates by the whole redeem and the first broadcast died on min-relay (code 66);
+(4) probe-verified introspection bytes: minting = reverse(category)+`0x02`, mutable =
++`0x01`, none/bare = bare reversed category, tokenless = empty push.
+
+Blanks remain plain P2PKH UTXOs — transferable, user-held; the LOCK tool is unchanged.
+For multi-user operation, blanks should be distributed to users (postage-stamp model) so
+the operator cannot censor anyone's unshield. The client-integration delivery package —
+including the guard, the tags, the fee policy, and the nito.cash work items — is
+`docs/POOL-HANDOFF-2026-11-24-NITO-ROLE2-TAGGED.md`.

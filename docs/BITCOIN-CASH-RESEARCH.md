@@ -170,6 +170,13 @@ and it is not quantum-resistant.
   `1829766…`, balance 750,000. The first pool (b6ee4196…) is superseded: untagged, and
   its minting NFT was burned so it can never tag. Record: POOL-DEPLOYMENT.md §16 +
   pusd-shielded-pool/wip-role2-hook/STATUS.md.
+- **The minting guard (2026-11-24 PM, adopted live)**: the v2 pool's minting NFT now lives
+  inside a guard covenant (P2SH32 `aa2066a2…`, suite 14/14) whose ONLY spendable shape
+  recreates the minting NFT at the guard and mints NFT-only empty-commitment blanks — burn
+  and FT-inflation are CONSENSUS-IMPOSSIBLE and the 100M supply is frozen; adopt
+  `a5d73b4e…` (block 345,503), first guarded batch `ad1d7845…` (block 345,504), future
+  deploys born guarded. Record: POOL-DEPLOYMENT.md §17; client package:
+  docs/POOL-HANDOFF-2026-11-24-NITO-ROLE2-TAGGED.md.
 - **Sized, priced, and red-teamed under our key (2026-11-24, same day):** pool-shaped
   fill sizing puts the acceptance controls at exactly 94.0% of the per-input budget
   (the stock sizer builds tokenless source outputs and cannot size the hooked program

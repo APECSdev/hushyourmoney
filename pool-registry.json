@@ -54,7 +54,21 @@
         ]
       },
       "feePolicy": "BARE per user directive 2026-11-24: no fee-market headroom (blocks empty); 15k sats x 2 fuel per action (~28.1 KB actions at 1.03-1.07 sat/B); prove-first flow makes exact sizing possible; every action was broadcast ATOMICALLY with its lock (lock --no-wait -> action spends the lock's UNCONFIRMED outputs \u2014 the recorded client rule, theft window ~zero)",
-      "notes": "Deployed 2026-11-24 PM, runner-free, funded from the APECS faucet hot wallet (142,168 sats total for the v2 chain: deploy chain + 32-blank batch + 3 locks; wallet 310,334 -> 168,166 sats; it also holds the 99M FT supply and the 250,000 FT unshield payout of THIS category, plus v1's tokens). Full lifecycle: SHIELD -> TRANSFER -> UNSHIELD, every action a real witness under our ceremony zkey, complete tagged program VM-ACCEPTED consensus+standard on all 3 inputs pre-broadcast, FT conserved, 2 tag NFTs burned per action (burn-by-omission, consensus-proven 3x on chain). v1 pool (b6ee4196\u2026) remains live but SUPERSEDED."
+      "notes": "Deployed 2026-11-24 PM, runner-free, funded from the APECS faucet hot wallet (142,168 sats total for the v2 chain: deploy chain + 32-blank batch + 3 locks; wallet 310,334 -> 168,166 sats; it also holds the 99M FT supply and the 250,000 FT unshield payout of THIS category, plus v1's tokens). Full lifecycle: SHIELD -> TRANSFER -> UNSHIELD, every action a real witness under our ceremony zkey, complete tagged program VM-ACCEPTED consensus+standard on all 3 inputs pre-broadcast, FT conserved, 2 tag NFTs burned per action (burn-by-omission, consensus-proven 3x on chain). v1 pool (b6ee4196\u2026) remains live but SUPERSEDED.",
+      "mintingGuard": {
+        "locking": "aa2066a238ad4109a3093c34fd4cf9b4167b0058375d4ad1c5cc44cd253d3664f0c187",
+        "redeemLength": 5103,
+        "K": 64,
+        "adoptTxid": "a5d73b4e4d4645eb8d014c59fb5ce40d58f8a661b45ccb00e40530e58bc034e4",
+        "adoptBlock": 345503,
+        "firstGuardedBatchTxid": "ad1d7845cc53013ac0d0f2001b87fd78ecf2e8dcd344c3853ee242c62d3fa165",
+        "firstGuardedBatchBlock": 345504,
+        "suite": "14/14 (minting-guard.mjs): burn attempts, de-guard, all four FT-mint variants, blank shape/redirect, token substitution, extra input, no signature \u2014 all REJECT",
+        "policy": "only possible spend: recreate the minting NFT at the guard's own locking + mint exactly K NFT-only empty-commitment blanks to the operator + one tokenless change; operator signature gates batch TIMING only. Burn and FT-mint are consensus-impossible; the 100M supply is frozen.",
+        "blankReserve": 90,
+        "bornGuarded": "future deploys lock the minting NFT straight into the guard (pool-deploy-role2.mjs)"
+      },
+      "clientHandoff": "docs/POOL-HANDOFF-2026-11-24-NITO-ROLE2-TAGGED.md"
     },
     {
       "name": "Chipnet role-2 pool \u2014 the reviewed sound verifier with the pool rules INSIDE role 2",
