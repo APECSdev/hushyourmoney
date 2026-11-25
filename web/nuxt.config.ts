@@ -11,7 +11,7 @@ export default defineNuxtConfig({
             viewport: 'width=device-width, initial-scale=1',
             title: `Hush Your Money — Spend Privately. Fearlessly!`,
             meta: [
-                { name: 'description', content: `Hush Your Money is a free, open-source, non-custodial UTXO privacy toolkit. Shuffle and fuse your coins with the CashShuffle and CashFusion CoinJoin protocols — spend privately, fearlessly.` },
+                { name: 'description', content: `Free, open-source, non-custodial UTXO privacy toolkit. Shuffle and fuse your coins with CashShuffle and CashFusion CoinJoin — spend privately, fearlessly.` },
                 { property: 'og:type', content: 'website' },
                 { property: 'og:site_name', content: 'Hush Your Money' },
                 { property: 'og:title', content: `Hush Your Money — Spend Privately. Fearlessly!` },

@@ -7,9 +7,12 @@ definePageMeta({
 })
 
 useHead({
+    link: [
+        { rel: 'canonical', href: 'https://hushyourmoney.com/legal' },
+    ],
     title: `Terms of Service — Hush Your Money`,
     meta: [
-        { name: 'description', content: `Terms of service and disclaimer for Hush Your Money — free, open-source, non-custodial UTXO privacy software. Provided as-is, with no warranty and no custody of funds.` },
+        { name: 'description', content: `Terms of service for Hush Your Money — free, open-source, non-custodial UTXO privacy software. Provided as-is, no warranty, no custody of funds.` },
     ],
 })
 

@@ -10,7 +10,7 @@ definePageMeta({
    NOTE: reuses the hub poster — a dedicated bls12-381 poster is a follow-up. */
 useOg({
     title: `BLS12-381 — Hush Your Money`,
-    description: `BLS12-381 on Bitcoin Cash: the 381-bit pairing-friendly curve with a reviewed on-chain Groth16 verifier at 34,229 B in 4 inputs. What it costs against BN254, why it forces a separate trusted-setup ceremony, and why the curve decision belongs with Gate 7.`,
+    description: `BLS12-381 on Bitcoin Cash: a reviewed on-chain Groth16 verifier at 34,229 B in 4 inputs, its cost against BN254, and why the curve choice waits on Gate 7.`,
     path: '/research/bls12-381',
     image: '/posters/research.jpg',
     type: 'article',

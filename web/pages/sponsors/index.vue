@@ -7,6 +7,9 @@ definePageMeta({
 })
 
 useHead({
+    link: [
+        { rel: 'canonical', href: 'https://hushyourmoney.com/sponsors' },
+    ],
     title: `Sponsors — Hush Your Money`,
     meta: [
         { name: 'description', content: `Support Hush Your Money. Donation addresses for Bitcoin, Bitcoin Cash and Nexa — with Monero, Zcash (shielded) and Dash slots reserved.` }

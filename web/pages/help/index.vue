@@ -4,9 +4,12 @@ definePageMeta({
 })
 
 useHead({
+    link: [
+        { rel: 'canonical', href: 'https://hushyourmoney.com/help' },
+    ],
     title: `Support Center — Hush Your Money`,
     meta: [
-        { name: 'description', content: `Hush Your Money makes spending safu.` }
+        { name: 'description', content: `Support center: frequently asked questions about Hush Your Money, plus the guides we publish for Bitcoin Cash wallet integration.` }
     ],
 })
 

@@ -9,7 +9,7 @@ definePageMeta({
 /* OpenGraph + Twitter + canonical (shared composable; per-page poster). */
 useOg({
     title: `Research — Hush Your Money`,
-    description: `UTXO privacy research hub: the Groth16 shielded pool (built and measured on chipnet), CashFusion (including our coordinator-free P2P fusion research over Nostr), ECDH shielded addresses, CoinJoin, and the two pairing curves a pool can be built on (BN254 and BLS12-381). Our numbers are measured; third-party claims are cited.`,
+    description: `UTXO privacy research: a measured Groth16 shielded pool, CashFusion over Nostr, shielded addresses, CoinJoin, and the BN254 vs BLS12-381 curve choice.`,
     path: '/research',
     image: '/posters/research.jpg',
     type: 'website',

@@ -10,7 +10,7 @@ definePageMeta({
    NOTE: reuses the hub poster — a dedicated bn254 poster is a follow-up. */
 useOg({
     title: `BN254 — Hush Your Money`,
-    description: `BN254 (alt_bn128): the 254-bit pairing-friendly curve the shielded pool was built on. Circuit, verifier generations, measured op-costs, the trusted-setup transcript, and the soundness withdrawal that forced a replacement — with every number sourced.`,
+    description: `BN254 (alt_bn128): the curve the shielded pool was built on — circuit, verifier generations, measured op-costs, the setup transcript, and the withdrawal.`,
     path: '/research/bn254',
     image: '/posters/research.jpg',
     type: 'article',

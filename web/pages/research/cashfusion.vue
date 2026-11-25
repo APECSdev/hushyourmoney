@@ -9,7 +9,7 @@ definePageMeta({
 /* OpenGraph + Twitter + canonical (shared composable; per-page poster). */
 useOg({
     title: `CashFusion — Hush Your Money`,
-    description: `CashFusion: Bitcoin Cash's CoinJoin-style mixing tool, with a measured adoption history and our coordinator-free P2P fusion research over Nostr — six phases, gate evidence G1–G3L, and the BCH Schnorr findings.`,
+    description: `CashFusion on Bitcoin Cash: measured adoption history plus our coordinator-free P2P fusion over Nostr — six phases, gate evidence, Schnorr findings.`,
     path: '/research/cashfusion',
     image: '/posters/research-cashfusion.jpg',
     type: 'article',

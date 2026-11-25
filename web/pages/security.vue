@@ -4,9 +4,12 @@ definePageMeta({
 })
 
 useHead({
+    link: [
+        { rel: 'canonical', href: 'https://hushyourmoney.com/security' },
+    ],
     title: `Security — Hush Your Money`,
     meta: [
-        { name: 'description', content: `Security is VERY important and MUST NOT be underestimated.` }
+        { name: 'description', content: `Verify the build you run: gateway options for Hush Your Money — self-compiled source from Gogs, GitHub or GitLab, plus IPFS self-hosted and trusted gateways.` }
     ],
 })
 

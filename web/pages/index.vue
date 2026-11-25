@@ -35,6 +35,9 @@ const FAQS = [
 ]
 
 useHead({
+    link: [
+        { rel: 'canonical', href: 'https://hushyourmoney.com/' },
+    ],
     script: [
         {
             type: 'application/ld+json',

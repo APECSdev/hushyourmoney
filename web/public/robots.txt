@@ -1,0 +1,11 @@
+# web/public/robots.txt — Hush Your Money
+
+User-agent: *
+Allow: /
+
+# The API surface is a stub catch-all (server/api/[...].ts returns "ok");
+# crawling it wastes budget and exposes nothing.
+Disallow: /api/
+Disallow: /_nuxt/
+
+Sitemap: https://hushyourmoney.com/sitemap.xml

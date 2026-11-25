@@ -7,9 +7,12 @@ definePageMeta({
 })
 
 useHead({
+    link: [
+        { rel: 'canonical', href: 'https://hushyourmoney.com/readme' },
+    ],
     title: `README — Hush Your Money`,
     meta: [
-        { name: 'description', content: `The Hush README: a practical, add-on privacy solution for UTXO-based networks — CashShuffle & CashFusion CoinJoins, zero-knowledge research, and the BCHDevCon3 origin story.` }
+        { name: 'description', content: `The Hush README: a practical add-on privacy solution for UTXO networks — CashShuffle and CashFusion CoinJoins, zero-knowledge research, and the origin story.` }
     ],
 })
 

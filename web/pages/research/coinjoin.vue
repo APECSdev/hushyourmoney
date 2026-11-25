@@ -11,7 +11,7 @@ definePageMeta({
 /* OpenGraph + Twitter + canonical (shared composable; per-page poster). */
 useOg({
     title: `CoinJoin on Bitcoin Cash — Hush Your Money`,
-    description: `CoinJoin: collaborative transactions that break the input-to-output link. The base privacy technique — live on Bitcoin Cash today through CashFusion — plus the full CashShuffle wire specification.`,
+    description: `CoinJoin: collaborative transactions that break the input-to-output link. The base privacy technique, plus the full CashShuffle wire specification.`,
     path: '/research/coinjoin',
     image: '/posters/research-coinjoin.jpg',
     type: 'article',

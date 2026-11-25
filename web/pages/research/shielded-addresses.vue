@@ -9,7 +9,7 @@ definePageMeta({
 /* OpenGraph + Twitter + canonical (shared composable; per-page poster). */
 useOg({
     title: `Shielded Addresses — Hush Your Money`,
-    description: `ECDH stealth addresses on Bitcoin Cash: one-time P2PKH addresses derived per payment — receiver privacy with no new opcodes, no script changes. Survey of the live external implementation and how it composes with the shielded pool.`,
+    description: `ECDH stealth addresses on Bitcoin Cash: one-time P2PKH addresses derived per payment. Receiver privacy with no new opcodes and no script changes.`,
     path: '/research/shielded-addresses',
     image: '/posters/research-shielded-addresses.jpg',
     type: 'article',

@@ -15,7 +15,7 @@ definePageMeta({
    follow-up once the page has a stable visual identity. */
 useOg({
     title: `Playground — Hush Your Money`,
-    description: `Live experiments from the Hush Your Money research: an interactive CashFusion-over-Nostr round simulator, an opt-in relay reachability probe, and the real chipnet gate evidence behind the protocol.`,
+    description: `Live experiments: an interactive CashFusion-over-Nostr round simulator, an opt-in relay probe, and the real chipnet gate evidence behind the protocol.`,
     path: '/playground',
     image: '/posters/research-cashfusion.jpg',
     type: 'website',

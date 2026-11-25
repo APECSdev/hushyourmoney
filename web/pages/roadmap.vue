@@ -4,9 +4,12 @@ definePageMeta({
 })
 
 useHead({
+    link: [
+        { rel: 'canonical', href: 'https://hushyourmoney.com/roadmap' },
+    ],
     title: `Roadmap — Hush Your Money`,
     meta: [
-        { name: 'description', content: `Hush Your Money makes spending safu.` }
+        { name: 'description', content: `The Hush Your Money roadmap: the privacy work we ship, the research gates behind it, and what is next for the shielded pool and the trusted-setup ceremony.` }
     ],
 })
 

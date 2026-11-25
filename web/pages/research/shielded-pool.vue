@@ -9,7 +9,7 @@ definePageMeta({
 /* OpenGraph + Twitter + canonical (shared composable; per-page poster). */
 useOg({
     title: `The Shielded Pool — Hush Your Money`,
-    description: `A Groth16 shielded pool for CashTokens — built, deployed and measured on Bitcoin Cash chipnet and mainnet. 183,472-constraint joinsplit circuit, 2 public inputs, and the pool rules running inside an independently reviewed on-chain verifier. No consensus changes.`,
+    description: `A Groth16 shielded pool for CashTokens, built and measured on Bitcoin Cash chipnet and mainnet. 183,472 constraints, 2 public inputs, no consensus changes.`,
     path: '/research/shielded-pool',
     image: '/posters/research-shielded-pool.jpg',
     type: 'article',

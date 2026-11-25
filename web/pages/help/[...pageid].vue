@@ -30,9 +30,12 @@ if (!isKnown) {
 }
 
 useHead({
+    link: [
+        { rel: 'canonical', href: 'https://hushyourmoney.com/help/bch/wallet-integration' },
+    ],
     title: `BCH Wallet Integration — Hush Your Money`,
     meta: [
-        { name: 'description', content: `How a Bitcoin Cash wallet integrates with Hush Your Money.` }
+        { name: 'description', content: `Guide: how a Bitcoin Cash wallet integrates with Hush Your Money — the interfaces a wallet exposes and what each one is for.` }
     ],
 })
 </script>
