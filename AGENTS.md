@@ -14,12 +14,25 @@
 - Make ample use of figures and diagrams when documenting or discussing technical designs and implementations (ASCII/Mermaid in repo docs; rendered diagrams on the site).
 - Published technical claims must satisfy the verification contract (file path, command output, or cited source). Where a quantity has not been measured, mark it UNMEASURED rather than estimating.
 
-## CURRENT HANDOFF — 2026-11-24 (role-2 pool DEPLOYED ON CHIPNET; op 1 SHIELD live; review gate REMOVED per user directive)
+## CURRENT HANDOFF — 2026-11-24 SESSION END (the COMPLETE SOLUTION is LIVE on chipnet: role-2 tagged pool v2, full SHIELD→TRANSFER→UNSHIELD lifecycle, minting guard, permissionless blank vending — all proven on chain; the Nito Cash delivery package is written)
 
-**This session's mission:** implement the role-2 `COVENANT` hook so the pool rules live INSIDE the
-reviewed sound verifier (design: `pusd-shielded-pool/ROLE2-POOL-HOOK-DESIGN.md`), per the user's
-directives: ignore all "live risk today" concerns (nobody uses the pools), and treat Nito Cash's
-own client as the FINAL approval for any deployed result.
+**The session's mission grew by user directive through the day and every part is DONE** (the user
+confirmed at session end: "I BELIEVE YOU'VE ADDRESSED ALL OF MY CONCERNS"): (1) implement the
+role-2 hook so the pool rules live INSIDE the reviewed sound verifier; (2) deploy the new pool,
+runner-free; (3) the durable author-binding fix for the theft gap the user surfaced — deposit
+tags; (4) protect the minting NFT — answered by implementation: the minting guard, adopted live;
+(5) "there MUST be an efficient and permissionless way to acquire BLANKS" — the vending covenant,
+proven by a total stranger. Standing directives honored throughout: NO runner, BARE fees, Nito
+Cash's own client is the FINAL approval for any deployed result, explorer links Selene-primary.
+
+**NEXT SESSION'S MISSION — the nito.cash client integration**, working from the delivery package
+`docs/POOL-HANDOFF-2026-11-24-NITO-ROLE2-TAGGED.md` (§2 pool facts, §3 action shape, §4 tags/locks,
+§4.1 vending, §5 guard, §6 fee-privacy ladder, §7 their six work items): proving-asset swap
+(their VK `27f6ea03…` → ours `05250429…` + ceremony zkey/wasm), their 7-input tx builder → our
+3-input tagged shape, the client lock tx, off-chain note delivery, blank handling through the
+vending machine. ALSO PENDING: the `/research/shielded-pool` site record (still blocked on the
+other session's in-flight `web/` changes — never touch or commit those), and Gate 7 (MPC
+ceremony → mainnet) remains mandatory before mainnet value.
 
 **MILESTONE — THE NEW SHIELDED POOL IS DEPLOYED ON CHIPNET (2026-11-24, block 345,413).**
 Runner-free per user directive: anchor `b6ee4196…` (= the category) → mint `48d458b8…` (minting NFT + 100M FT)
@@ -34,9 +47,9 @@ pool-deploy-role2.mjs / pool-op-role2.mjs / pool-refill-role2.mjs (bench dir), r
 role2-seeds.mjs (pusd root); state file /home/apecs/cov/role2-pool-state.json. **THE FULL LIFECYCLE IS CONFIRMED
 ON-CHAIN**: SHIELD 1,000,000 `582cefee…` (block 345,415) → refill `de98e0df…` (345,417) → TRANSFER `17f1322b…`
 (345,423) → refill `fe9e1aad…` (345,426) → UNSHIELD 250,000 `24cd6b42…` (345,427; 250,000 FT paid out publicly,
-750,000 shielded onward). Final state: root `19318325…`, balance 750,000, notes at tree 6,7. Remaining follow-up:
-the nito.cash client integration (their committed VK 27f6ea03… + 7-input shape differ — asset swap + 3-input
-builder; their client is the user's final approval per standing directive) and the /research/shielded-pool site record.
+750,000 shielded onward). Final state: root `19318325…`, balance 750,000, notes at tree 6,7. (This v1 pool was
+SUPERSEDED same day by the deposit-tagged v2 — milestone 2 below; its 750,000 shielded FT remain spendable,
+state backup `/home/apecs/cov/role2-pool-state-v1-untagged.json`.)
 
 **MILESTONE 4 — PERMISSIONLESS BLANK ACQUISITION IS LIVE (2026-11-24 night; load block 345,663; stranger buys 345,664/345,666).** User directive: "No automated distribution mechanism is built — that is a BIG problem. We cannot allow ONE party to CONTROL the use of the pool. There MUST be an efficient and permissionless way to acquire BLANKS." Fixed WITHOUT touching anything live: the deployed guard is self-pinning and immortal (out0's locking == its own UTXOBYTECODE), so the live category's mint is permanently operator-destined — the permissionless layer sits one hop AFTER the mint. **The blank-vending covenant** (blank-vending.mjs, suite 18/18): a P2SH32 machine per blank, NO signature anywhere — the buyer's tokenless funding input pays the EXACT pinned price (1,000 sats) to the operator's P2PKH and the blank is delivered to the FUNDING INPUT'S OWN LOCKING ("the blank follows the money"); tokenless change to the buyer; shape fully pinned (rejects underpay AND overpay, redirects, token smuggling, pre-tagged/minting/foreign blanks, float siphons, wrong counts). **Proven live by a total stranger**: load `460a6f2a…` (block 345,663) put 2 blanks in machine locking `aa206b51…` + funded a FRESH OS-CSPRNG key `bchtest:qpes4zff…` with 50,000 sats; the stranger bought BOTH blanks (`bc2c326e…` 345,664 + `49b184f5…` 345,666, 487 B each) using only its own signature — covenant executed on chain, 7,545/8,057 op both ACCEPT. Operator reserve now 88 blanks. Blanks are postage stamps: once bought, resellable/giftable at the buyer's P2PKH. Tooling: pool-vend-load-role2.mjs (load + optional demo-stranger funding), blank-buy.mjs (self-service; rebuilds the covenant from published params + source-drift pin; VM-evals both modes pre-broadcast). Landmines recorded: a signature-free covenant needs an explicit final OP_1 (all checks are *VERIFY and push nothing — P2SH wants a truthy final stack); electrum scripthash = SINGLE sha256 byte-reversed (hash256 → empty machine); hash160 takes {ripemd160, sha256} objects. Future-pool design option recorded (not deployed): born-permissionless guard — batch blanks to the batch payer's locking, no operator signature.
 
