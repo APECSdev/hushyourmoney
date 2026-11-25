@@ -46,7 +46,7 @@ const DAEMONS = [
         status: 'orchestration · M1–M5',
         badge: 'badge-mid',
         numClass: 'topic-lime',
-        body: 'A permanent peer and possible coordinator for CashShuffle-over-Nostr. Equal inputs, onion-wrapped outputs, a verify-before-sign phase, and BCH Schnorr signatures. The first daemon to ship.',
+        body: 'A permanent peer and possible coordinator for CashShuffle-over-Nostr. Equal inputs, onion-wrapped outputs, a verify-before-sign phase, and BCH Schnorr signatures. The first daemon milestone.',
         points: [
             '5-peer equal-output round; coordinator = lowest ephemeral pubkey',
             'NIP-59 gift wrap + NIP-44 over a relay pool',
@@ -340,6 +340,12 @@ const SOURCES = [
         cls: 'text-cyan-300',
     },
     {
+        title: 'Nito unblock handoff',
+        href: 'https://github.com/APECSdev/hushyourmoney/blob/master/docs/DAEMONS-NITO-UNBLOCK-HANDOFF-2026-11-25.md',
+        body: 'The twelve decisions and handovers that unblock the daemon implementation, plus the four-round agenda.',
+        cls: 'text-violet-300',
+    },
+    {
         title: 'P2P-FUSION-DESIGN.md',
         href: 'https://github.com/APECSdev/hushyourmoney/blob/master/docs/P2P-FUSION-DESIGN.md',
         body: 'The measured CashFusion constants, the relay findings, the 80 ms pacing and the six-phase design.',
@@ -401,7 +407,7 @@ const SOURCES = [
 
         <p class="animate-rise mt-8 max-w-2xl text-base leading-relaxed text-slate-100 sm:text-lg" style="animation-delay: 0.42s">
             Two daemons: <strong class="font-semibold text-white">CashShuffle</strong> and
-            <strong class="font-semibold text-white">CashFusion</strong>. They join the Nostr relay pool,
+            <strong class="font-semibold text-white">CashFusion</strong>. They are designed to join the Nostr relay pool,
             hold a capped chipnet float, and run the round logic as peers — not as servers. This page is the
             public record of the orchestration: what is built, what is planned, and what the Nito Cash client
             must approve before anything is deployed.
@@ -462,8 +468,8 @@ const SOURCES = [
                 <p>
                     CashShuffle and CashFusion are peer-to-peer protocols. A browser tab is a good
                     user-facing peer, but it is not a reliable counterparty: it closes, it sleeps, and it
-                    cannot provide liquidity at 03:00. The daemons fill that gap with a small, capped float
-                    and an always-on relay connection.
+                    cannot provide liquidity at 03:00. The daemons are designed to fill that gap with a small,
+                    capped float and an always-on relay connection.
                 </p>
                 <p>
                     They are <strong class="font-semibold text-white">Nostr clients, not servers</strong>.
@@ -508,7 +514,7 @@ const SOURCES = [
             </h2>
             <p class="mx-auto mt-4 max-w-2xl text-base leading-relaxed text-slate-200">
                 The shared transport and wallet are the same. The round logic is different: CashShuffle
-                is the equal-output shuffle; CashFusion is the six-phase mix. CashShuffle ships first.
+                is the equal-output shuffle; CashFusion is the six-phase mix. CashShuffle is the first milestone.
             </p>
         </div>
 
@@ -691,10 +697,10 @@ const SOURCES = [
         <div class="reveal text-center">
             <p class="font-mono text-[0.8rem] uppercase tracking-[0.45em] text-violet-200">07 · the composition</p>
             <h2 class="mt-5 font-display text-[clamp(1.9rem,5vw,3.4rem)] font-bold leading-[1.08] text-white">
-                The shuffle can pay the pool.
+                The shuffle is designed to pay the pool.
             </h2>
             <p class="mx-auto mt-4 max-w-2xl text-base leading-relaxed text-slate-200">
-                Pool-native batching makes the round outputs the role-2 tagged fuel UTXOs. The tag binds
+                Pool-native batching is the design that makes the round outputs the role-2 tagged fuel UTXOs. The tag binds
                 each fuel pair to the action that will spend it. The arithmetic is exact, and the earlier
                 “5 outputs → 5 actions” version was wrong.
             </p>
