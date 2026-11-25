@@ -157,9 +157,19 @@ and it is not quantum-resistant.
   locked fuel + the 10,000-sat state float that stays live on the state NFT), 310,334
   sats + the 99M FT supply + the 250,000 FT payout remain. In the demo one key played three
   roles (issuer / operator / demo user) that production must separate. KNOWN LIMIT (user-
-  surfaced, recorded in both AGENTS): actions bind no author — standing fuel/deposit UTXOs
-  are grabbable between lock- and action-confirmation; client rule = atomic lock+act,
-  durable fix = deposit tagging via hook revision (full re-test gates first).
+  surfaced, recorded in both AGENTS) — RESOLVED IN PRODUCTION THE SAME DAY: hook checks
+  4c+4g (deposit tagging) bind every fuel/deposit UTXO to SHA256(carrier[0..64]) =
+  H(nf0‖nf1) of the funded action; only the action whose witness spends those nullifiers can
+  consume it. All gates re-run (acceptance 20/20 incl. the theft replay, red team 146/0,
+  sweep 69/0) and **chipnet-role2-pool-v2-tagged DEPLOYED 2026-11-24 PM** (deploy
+  `2eaeb97f…`, block 345,467; category `480e30ff…`): anchor→mint→deploy with the minting
+  NFT passed forward + a 32-blank tag batch (`b087507b…`), then the full lifecycle with
+  TAGGED locks broadcast atomically with their actions — SHIELD 1,000,000 `9d9aa97a…`,
+  TRANSFER `5262417b…`, UNSHIELD 250,000 `e54d19fb…` (payout executed) — each ~28.1 KB at
+  1.03–1.07 sat/B (BARE fee policy per user directive), FT conserved, final root
+  `1829766…`, balance 750,000. The first pool (b6ee4196…) is superseded: untagged, and
+  its minting NFT was burned so it can never tag. Record: POOL-DEPLOYMENT.md §16 +
+  pusd-shielded-pool/wip-role2-hook/STATUS.md.
 - **Sized, priced, and red-teamed under our key (2026-11-24, same day):** pool-shaped
   fill sizing puts the acceptance controls at exactly 94.0% of the per-input budget
   (the stock sizer builds tokenless source outputs and cannot size the hooked program

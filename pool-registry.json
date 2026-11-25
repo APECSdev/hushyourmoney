@@ -5,6 +5,58 @@
   "updated": "2026-11-24",
   "pools": [
     {
+      "name": "Chipnet role-2 pool v2 \u2014 DEPOSIT-TAGGED (the durable author-binding fix, deployed)",
+      "network": "chipnet",
+      "poolCategory": "480e30ff1d3f5f0b6fe9dd2dbe363b1776f61566f29a395628d0b50abd01b9d0",
+      "poolLocking": "aa203e40b64cff154d4b3305e8c8cc4e3174bc595ad74342a8445a9a7798b7be3a2987",
+      "treeRootLE": "551108f63731bcc628dda2697d70219d103a8c1bf203f2d4aaec6bbea5b4510f",
+      "assetCategory": "480e30ff1d3f5f0b6fe9dd2dbe363b1776f61566f29a395628d0b50abd01b9d0",
+      "setupGrade": "disclosed 1-of-1 solo ceremony (2026-11-13, entropy published) \u2014 Gate 7 MPC remains mandatory before mainnet",
+      "walletProverCompatible": false,
+      "anchorTxid": "480e30ff1d3f5f0b6fe9dd2dbe363b1776f61566f29a395628d0b50abd01b9d0",
+      "mintTxid": "5ea499fff3d2946c27272fcb87be8cf81d76c68b64b49647a2a7bb0ce9ca79a7",
+      "deployTxid": "2eaeb97fc85b2ff0fdd6c6afd1d807f8a715bd92a40258fae9f0e6ce50fe83b8",
+      "deployBlock": 345467,
+      "mintingNFT": "PASSED FORWARD (deploy out1 \u2014 unlike v1, which burned it): the tag supply's source",
+      "tagBatchTxid": "b087507b253f22df3acd8fbfd6f0f3ed7d68bf15b53ea9a4355a169b79f29cd9",
+      "tagBlanksMinted": 32,
+      "depositTag": "hook checks 4c+4g: every fuel/deposit UTXO carries a mutable NFT whose commitment = SHA256(carrier[0..64]) = SHA256(nf0||nf1) of the funded action; only the action whose witness spends those exact nullifiers can consume the fuel \u2014 the author binding the old pools got from their signed funding input, recreated as a commitment",
+      "gates": "acceptance 20/20 (incl. THEFT replay: valid proof consuming fuel tagged for ANOTHER action REJECTS at 4g) \u00b7 red team 146/0, controls accepted \u00b7 sweep 69 cases/0 failed, input 2 at 6.00% std \u00b7 hook price 37,198 op std / 36,046 cons / 524 B of role-2 code; program 7,834 B",
+      "lifecycle": [
+        {
+          "op": "SHIELD 1000000",
+          "lockTxid": "97d135f96d9b555523e15e0c414a24a7b7964ec59689ef1a81151806f4d70346",
+          "txid": "9d9aa97a1ccdcd6662eb934fd55c72dff17ddba8c6c152a506871f795026ccf0",
+          "fee": "30000 sats (1.067 sat/B)",
+          "tag": "9b15436ae6d6d9bc\u2026"
+        },
+        {
+          "op": "TRANSFER (notes 2,3 -> 4,5)",
+          "lockTxid": "5db06be7fe471c0fec1fa2e537bd7f711be6f996e9a6f5e33aeafe409a2ce57f",
+          "txid": "5262417b7fff1b0e9f9cd60ab80625e573ac565a916ff1d451369d433bd09987",
+          "fee": "30000 sats (1.063 sat/B)",
+          "tag": "620e282442536be3\u2026"
+        },
+        {
+          "op": "UNSHIELD 250000 (payout executed)",
+          "lockTxid": "70ab2a1f27de52cfeb31ffc58fe2d1990b7bdf04be7c14f6b58502e174d5dfc4",
+          "txid": "e54d19fb751f60a0955ba92a0af75ad87083b2e1cb1648b4fa08312b901d8eab",
+          "fee": "29000 sats (1.029 sat/B)",
+          "tag": "cec1170edfba5908\u2026"
+        }
+      ],
+      "finalState": {
+        "root": "182976650573917854\u2026",
+        "balance": "750000",
+        "notesAtTree": [
+          6,
+          7
+        ]
+      },
+      "feePolicy": "BARE per user directive 2026-11-24: no fee-market headroom (blocks empty); 15k sats x 2 fuel per action (~28.1 KB actions at 1.03-1.07 sat/B); prove-first flow makes exact sizing possible; every action was broadcast ATOMICALLY with its lock (lock --no-wait -> action spends the lock's UNCONFIRMED outputs \u2014 the recorded client rule, theft window ~zero)",
+      "notes": "Deployed 2026-11-24 PM, runner-free, funded from the APECS faucet hot wallet (142,168 sats total for the v2 chain: deploy chain + 32-blank batch + 3 locks; wallet 310,334 -> 168,166 sats; it also holds the 99M FT supply and the 250,000 FT unshield payout of THIS category, plus v1's tokens). Full lifecycle: SHIELD -> TRANSFER -> UNSHIELD, every action a real witness under our ceremony zkey, complete tagged program VM-ACCEPTED consensus+standard on all 3 inputs pre-broadcast, FT conserved, 2 tag NFTs burned per action (burn-by-omission, consensus-proven 3x on chain). v1 pool (b6ee4196\u2026) remains live but SUPERSEDED."
+    },
+    {
       "name": "Chipnet role-2 pool \u2014 the reviewed sound verifier with the pool rules INSIDE role 2",
       "network": "chipnet",
       "poolCategory": "b6ee4196da1b0e3d548a03ea86a63d61445cd38d74300b2f7a8725eea05ceb72",
@@ -53,7 +105,8 @@
         "spentBreakdown": "chain fees (anchor/mint/deploy/2 locks/3 actions) + locked fuel burned by the actions + the 10,000-sat state float that stays live on the state NFT",
         "alsoHeld": "99,000,000 FT supply + the 250,000 FT unshield payout",
         "note": "one key played three demo roles (issuer / operator / demo user) that production must separate; tooling takes --secrets <path> for any funded key"
-      }
+      },
+      "status": "SUPERSEDED 2026-11-24 PM by chipnet-role2-pool-v2-tagged: this pool runs the UNTAGGED hook (standing fuel/deposit grabbable between lock- and action-confirmation \u2014 user-surfaced) and its minting NFT was burned in the deploy, so it can never mint tag blanks. Its 750,000 shielded FT remain spendable; state backup /home/apecs/cov/role2-pool-state-v1-untagged.json."
     },
     {
       "name": "chipnet-pusd-v4-covenant0",

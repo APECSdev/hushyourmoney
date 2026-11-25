@@ -37,14 +37,34 @@ ON-CHAIN**: SHIELD 1,000,000 `582cefee…` (block 345,415) → refill `de98e0df�
 750,000 shielded onward). Final state: root `19318325…`, balance 750,000, notes at tree 6,7. Remaining follow-up:
 the nito.cash client integration (their committed VK 27f6ea03… + 7-input shape differ — asset swap + 3-input
 builder; their client is the user's final approval per standing directive) and the /research/shielded-pool site record.
+
+**MILESTONE 2 — THE DEPOSIT-TAGGED POOL v2 IS DEPLOYED (2026-11-24 PM, deploy block 345,467).** The durable
+fix for the author-binding gap, LIVE end-to-end: hook checks 4c+4g (both fuel inputs carry the pool category
+as mutable NFTs whose commitments = SHA256(carrier[0..64]) = H(nf0‖nf1) of the funded action — only the action
+whose witness spends those nullifiers can consume the fuel; the author binding the old pools got from signatures,
+recreated as a commitment). All gates re-run: acceptance **20/20** (the THEFT replay — valid proof consuming fuel
+tagged for ANOTHER action — REJECTS at 4g), red team **146/0**, sweep **69/0** (input 2 at 6.00% std), hook
+price 37,198/36,046 op, program 7,834 B pin d71851a1…. Deploy chain: anchor `480e30ff…` (= category) → mint
+`5ea499ff…` → deploy `2eaeb97f…` with the **minting NFT PASSED FORWARD** (v1's deploy burned it — why v1 can
+never tag) + tag-batch `b087507b…` (32 blank mutable NFTs; pool-tagbatch-role2.mjs). Full lifecycle, every op =
+prove → TAGGED LOCK → action, broadcast **atomically** (lock unconfirmed; client rule): SHIELD 1,000,000
+`9d9aa97a…` (lock `97d135f9…`, fee 30,000 = 1.067 sat/B) → TRANSFER `5262417b…` (lock `5db06be7…`, 30,000 =
+1.063) → UNSHIELD 250,000 `e54d19fb…` (lock `70ab2a1f…`, 29,000 = 1.029; payout executed). All VM-ACCEPTED
+consensus+standard on all 3 inputs pre-broadcast; FT conserved; 2 tag NFTs burned per action (consensus-proven
+3×). Final: root `1829766…`, balance 750,000, notes tree 6,7. **Fee policy per user directive: BARE** — 15k×2
+fuel (~28.1 KB actions at 1.03–1.07 sat/B), no fee-market headroom, prove-first flow sizes exactly. Wallet
+310,334 → 168,166 sats for the whole v2 chain. State file /home/apecs/cov/role2-pool-state.json (v1 backup:
+role2-pool-state-v1-untagged.json). Registry entry chipnet-role2-pool-v2-tagged added; v1 marked superseded.
 **CLIENT-INTEGRATION SECURITY NOTE (user-surfaced 2026-11-24 PM):** the role-2 pool binds NO author to its
 action (no signatures exist — TXINPUTCOUNT==3; the old pools bound the depositor via the signed P2PKH funding
 input). Standing fuel UTXOs can be consumed by any valid action (fee theft-of-service), and a standing FT
 deposit can be front-run by any note-holder as their shield's input 0 (real theft while it stands). Exposure
 window = between lock-confirmation and action-confirmation ONLY. Client rule until fixed: broadcast lock +
 action together (the action spends the lock's UNCONFIRMED outputs; first-seen wins). Durable fix = hook
-revision tagging lock outputs with H(nf0‖nf1) NFT commitments + matching hook checks — NOT implemented;
-full build/red-team/sweep gates required before any redeploy.
+revision tagging lock outputs with H(nf0‖nf1) NFT commitments + matching hook checks — **✅ IMPLEMENTED AND
+DEPLOYED 2026-11-24 PM: chipnet-role2-pool-v2-tagged** (see the v2 milestone below). The v1 pool (b6ee4196…)
+is SUPERSEDED — untagged, and its minting NFT was burned in the deploy so it can never tag; its 750,000
+shielded FT remain spendable (state backup role2-pool-state-v1-untagged.json on the VM).
 **FEE-PRIVACY LADDER (user-corrected 2026-11-24 PM — do NOT dismiss CashShuffle; the earlier
 CashFusion-only framing was transport-blind):** the transfer's actor leaks via the fee lock (structural:
 fees are BCH, the shielded value is FT, so a transparent fee input must exist). Per-action: SHIELD deposit

@@ -598,3 +598,70 @@ Tooling (committed in pusd-shielded-pool): `pool-deploy-role2.mjs`, `pool-op-rol
 pool state file `/home/apecs/cov/role2-pool-state.json`. Registry entry: `chipnet-role2-pool`
 in `pool-registry.json`. Full implementation record:
 `pusd-shielded-pool/wip-role2-hook/STATUS.md`.
+
+## 16. chipnet-role2-pool-v2-tagged — deposit tagging, the durable author-binding fix (2026-11-24 PM, DEPLOYED, FULL LIFECYCLE CONFIRMED)
+
+§15's two caveats are now resolved in production shape. The user surfaced that §15's pool
+binds NO author to an action (no signatures exist; the old pools bound the depositor via the
+signed funding input), so standing fuel was consumable by any valid action and a standing FT
+deposit could be front-run by any note-holder. The durable fix — deposit tagging — was
+implemented, gated, and deployed the same day.
+
+**The mechanism (hook checks 4c+4g):** every fuel/deposit UTXO carries a mutable NFT of the
+pool category whose commitment is `SHA256(nf0 ‖ nf1)` — literally SHA256 of the action's own
+169-byte carrier's first 64 bytes (the same raw-LE fold as the nullifier hash). The lock tx
+spends two pre-minted "blank" mutable NFTs, mutates their commitments to the tag, and locks
+them at the program P2SH32; the hook recomputes the tag from the on-chain carrier and
+requires both fuel commitments to equal it. Only the action whose witness spends exactly
+those nullifiers can consume the fuel — and producing them requires the victim's note keys.
+This is the author binding the old pools got from signatures, recreated as a commitment.
+A consequence recorded for clients: the tag makes fuel SINGLE-PURPOSE — an abandoned lock
+strands its fuel (postage-stamp semantics; ~30k sats), and re-proves with the same notes
+keep the same nullifiers, so tags survive re-proving.
+
+**Gates (all re-run for the revision):** acceptance suite **20/20** — the original 14 plus
+six tag classes, headlined by the THEFT replay: a valid proof consuming fuel tagged for
+ANOTHER action REJECTS at the 4g compare. Red team **146 runs / 0 accepted** (both positive
+controls accepted). Sweep **69 cases / 0 failed** (input 2 binds at 6.00% std; max at-cap
+6,754,094 op = 15.92% cap margin). Hook price 37,198 op standard / 36,046 consensus, 524 B
+of role-2 code; program 7,834 B, drift pin `d71851a1…`.
+
+**Why a fresh deployment was mandatory:** the §15 pool's minting NFT was BURNED in its
+deploy (no passthrough output), so that category can never mint tag NFTs. The v2 deploy
+therefore passes the minting NFT forward (deploy out1) and pre-mints blank batches:
+`pool-tagbatch-role2.mjs` spends the minting NFT once to mint 32 blanks (recreating the
+minting NFT in the same tx — `b087507b…`); each lock consumes two.
+
+**The deployment (runner-free, APECS faucet hot wallet):** anchor `480e30ff…` (= the new
+category) → mint `5ea499ff…` → deploy `2eaeb97f…` (block 345,467) — state NFT at :0 with
+the public bootstrap root, minting NFT at :1, 100M FT supply at :2. Program locking
+`aa203e40b64cff154d4b3305e8c8cc4e3174bc595ad74342a8445a9a7798b7be3a2987`.
+
+**The lifecycle — every op = prove → TAGGED LOCK → action, broadcast atomically:**
+- SHIELD 1,000,000 — lock `97d135f9…` (tag `9b15436a…`, 908 B) + action `9d9aa97a…`
+  (28,127 B, fee 30,000 sats = 1.067 sat/B); balance 0 → 1,000,000.
+- TRANSFER — lock `5db06be7…` (tag `620e2824…`) + action `5262417b…` (28,211 B, fee
+  30,000 = 1.063 sat/B).
+- UNSHIELD 250,000 — lock `70ab2a1f…` (tag `cec1170e…`) + action `e54d19fb…` (28,175 B,
+  fee 29,000 = 1.029 sat/B; the payout output executed, 250,000 FT to the wallet).
+
+Every action: real witness under our solo-ceremony zkey, the complete tagged program
+VM-ACCEPTED in consensus AND standard on all 3 inputs before broadcast, FT conserved
+exactly, and 2 tag NFTs burned per action (burn-by-omission — consensus-proven on chain
+three times). The action spends its lock's UNCONFIRMED outputs (broadcast seconds apart):
+the recorded client rule, closing the theft window to ~zero. Final state: root `1829766…`,
+balance 750,000, notes at tree 6,7.
+
+**Fee policy (user directive 2026-11-24): BARE.** No fee-market headroom — BCH blocks are
+nearly empty; 1 sat/B is the standardness floor and confirms fine. The prove-first flow
+(the tag requires the op file before the lock) makes the action's serialized size exactly
+known at lock time, so clients can size fuel precisely; the deployed default is 15,000 sats
+per fuel UTXO (30k total ≈ 1.03–1.07 sat/B on the observed ~28.1 KB actions).
+
+**Ledger:** the hot wallet went 310,334 → 168,166 sats for the whole v2 chain (deploy chain
++ the 33k blank batch + three locks' fuel and fees); it also holds this category's 99M FT
+supply and the 250,000 FT unshield payout. The §15 pool remains live but SUPERSEDED (its
+750,000 shielded FT stay spendable; the v1 state file is backed up at
+`/home/apecs/cov/role2-pool-state-v1-untagged.json`). Registry: `chipnet-role2-pool-v2-tagged`
+first entry, v1 marked superseded. Full implementation record:
+`pusd-shielded-pool/wip-role2-hook/STATUS.md`.
