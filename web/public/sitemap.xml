@@ -84,9 +84,7 @@
         <changefreq>monthly</changefreq>
         <priority>0.5</priority>
     </url>
-    <url>
-        <loc>https://hushyourmoney.com/help/bch/wallet-integration</loc>
-        <changefreq>monthly</changefreq>
-        <priority>0.5</priority>
-    </url>
+<!-- /help/bch/wallet-integration is deliberately EXCLUDED: its body is still
+     placeholder text (components/Help/BCH/WalletIntegration.vue:39 "Lorem ipsum
+     dolor sit amet..."). Re-add this entry once the guide has real content. -->
 </urlset>
