@@ -27,7 +27,7 @@ const System = useSystemStore()
 
 <template>
     <DocsShell>
-        <main class="flex flex-col gap-8">
+        <main id="main-content" tabindex="-1" class="flex flex-col gap-8">
             <h1 class="font-display text-4xl font-bold text-white sm:text-5xl">
                 Security
             </h1>

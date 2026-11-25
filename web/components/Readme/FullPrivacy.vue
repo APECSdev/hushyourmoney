@@ -19,7 +19,7 @@ const props = defineProps({
 </script>
 
 <template>
-    <main class="flex flex-col gap-5">
+    <div class="flex flex-col gap-5">
         <h2 class="font-display text-3xl font-bold text-white">
             You NEVER Go FULL Privacy
         </h2>
@@ -57,5 +57,5 @@ const props = defineProps({
                 </svg>
             </NuxtLink> assets are available for trading on Decentralized Exchanges (DEXs).
         </p>
-    </main>
+    </div>
 </template>

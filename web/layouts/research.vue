@@ -22,7 +22,7 @@
     <div class="min-h-screen bg-[#060a10]">
         <SiteNav />
 
-        <main class="research-page relative min-h-screen w-full overflow-x-clip bg-[#060a10] font-sans text-slate-200 antialiased selection:bg-lime-300 selection:text-slate-900">
+        <main id="main-content" tabindex="-1" class="research-page relative min-h-screen w-full overflow-x-clip bg-[#060a10] font-sans text-slate-200 antialiased selection:bg-lime-300 selection:text-slate-900">
 
             <AuroraBackdrop />
 

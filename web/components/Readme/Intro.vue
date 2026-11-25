@@ -19,7 +19,7 @@ const props = defineProps({
 </script>
 
 <template>
-    <main class="flex flex-col gap-5">
+    <div class="flex flex-col gap-5">
         <h2 class="font-display text-3xl font-bold text-white">
             Introduction
         </h2>
@@ -36,5 +36,5 @@ const props = defineProps({
             <li>Privatize <span class="font-bold">YOUR</span> assets <span class="font-bold">AHEAD OF TIME</span> using ANY <span class="font-bold">HYM Club pool</span>.</li>
             <li>Transfer <span class="font-bold">ANY</span> asset (in real-time) <span class="font-bold">THROUGH</span> ANY <span class="font-bold">HYM Club pool</span>.</li>
         </ol>
-    </main>
+    </div>
 </template>

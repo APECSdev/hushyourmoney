@@ -19,7 +19,7 @@ const props = defineProps({
 </script>
 
 <template>
-    <main class="flex flex-col gap-5">
+    <div class="flex flex-col gap-5">
         <h2 class="font-display text-3xl font-bold text-white">
             Ephemeral Database: ZERO Logs
         </h2>
@@ -28,5 +28,5 @@ const props = defineProps({
             100% of HYM Club data is stored in "ephemeral" data storage.
             Seeders and fast-sync allow Clubs to "spin-up" near instantly, ready to serve the community.
         </p>
-    </main>
+    </div>
 </template>

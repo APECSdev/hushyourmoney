@@ -61,7 +61,7 @@ onBeforeUnmount(() => {
 </script>
 
 <template>
-    <main class="relative min-h-screen w-full overflow-x-clip bg-[#060a10] font-sans text-slate-200 antialiased selection:bg-lime-300 selection:text-slate-900">
+    <main id="main-content" tabindex="-1" class="relative min-h-screen w-full overflow-x-clip bg-[#060a10] font-sans text-slate-200 antialiased selection:bg-lime-300 selection:text-slate-900">
 
         <AuroraBackdrop />
 
@@ -94,7 +94,7 @@ onBeforeUnmount(() => {
             <div class="animate-rise mt-10 flex flex-col items-center gap-4 sm:flex-row" style="animation-delay: 0.56s">
                 <a href="#join" class="btn-primary btn-pulse">
                     Reserve Your Slot
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="h-4 w-4">
+                    <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="h-4 w-4">
                         <path d="M5 12h14M13 6l6 6-6 6" />
                     </svg>
                 </a>

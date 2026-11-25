@@ -336,7 +336,7 @@ const LIFECYCLE = [
             <div class="animate-rise mt-10 flex flex-col items-center gap-4 sm:flex-row" style="animation-delay: 0.58s">
                 <a href="#evidence" class="btn-primary btn-pulse">
                     Read the Evidence
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="h-4 w-4">
+                    <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="h-4 w-4">
                         <path d="M5 12h14M13 6l6 6-6 6" />
                     </svg>
                 </a>
@@ -387,7 +387,7 @@ const LIFECYCLE = [
                                 <a :href="EXPLORER + s.txFull + MAINNET_NETQ" target="_blank" rel="noopener" class="tx-btn tx-btn-lg">
                                     <span class="tx-chip">{{ s.network }}</span>
                                     <span class="tx-id">{{ s.tx }}</span>
-                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="h-3 w-3">
+                                    <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="h-3 w-3">
                                         <path d="M7 17L17 7M9 7h8v8" />
                                     </svg>
                                 </a>
@@ -434,7 +434,7 @@ const LIFECYCLE = [
                                 <a :href="EXPLORER + s.txFull + NETQ" target="_blank" rel="noopener" class="tx-btn tx-btn-lg">
                                     <span class="tx-chip">{{ s.network }}</span>
                                     <span class="tx-id">{{ s.tx }}</span>
-                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="h-3 w-3">
+                                    <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="h-3 w-3">
                                         <path d="M7 17L17 7M9 7h8v8" />
                                     </svg>
                                 </a>
@@ -610,9 +610,9 @@ const LIFECYCLE = [
                 <table class="data-table min-w-[720px]">
                     <thead>
                         <tr>
-                            <th>quantity</th>
-                            <th>value</th>
-                            <th>source</th>
+                            <th scope="col">quantity</th>
+                            <th scope="col">value</th>
+                            <th scope="col">source</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -655,14 +655,14 @@ const LIFECYCLE = [
                         <a v-if="g.href" :href="g.href" target="_blank" rel="noopener" class="tx-btn">
                             <span class="tx-chip">tx</span>
                             <span class="tx-id">{{ g.hrefLabel }}</span>
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="h-3 w-3">
+                            <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="h-3 w-3">
                                 <path d="M7 17L17 7M9 7h8v8" />
                             </svg>
                         </a>
                         <NuxtLink v-if="g.to" :to="g.to" class="tx-btn tx-btn-ghost">
                             <span class="tx-chip">gate 7</span>
                             <span class="tx-id">the Hush Ceremony</span>
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="h-3 w-3">
+                            <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="h-3 w-3">
                                 <path d="M5 12h14M13 6l6 6-6 6" />
                             </svg>
                         </NuxtLink>
@@ -1056,7 +1056,7 @@ const LIFECYCLE = [
                 <div class="mt-10 flex flex-col items-center justify-center gap-4 sm:flex-row">
                     <NuxtLink to="/ceremony" class="btn-primary btn-pulse">
                         The Hush Ceremony
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="h-4 w-4">
+                        <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="h-4 w-4">
                             <path d="M5 12h14M13 6l6 6-6 6" />
                         </svg>
                     </NuxtLink>

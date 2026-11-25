@@ -13,13 +13,13 @@
     "postinstall": "nuxt prepare"
   },
   "dependencies": {
-    "@noble/ciphers": "^2.4.0",
-    "@noble/curves": "^2.4.0",
-    "@noble/hashes": "^2.4.0",
     "@nexajs/crypto": "24.9.5",
     "@nexajs/privacy": "24.9.22",
     "@nexajs/rostrum": "24.6.23",
     "@nexajs/wallet": "24.11.1",
+    "@noble/ciphers": "^2.4.0",
+    "@noble/curves": "^2.4.0",
+    "@noble/hashes": "^2.4.0",
     "@pinia/nuxt": "0.4.7",
     "@psf/bch-js": "6.8.0",
     "async-mutex": "0.5.0",
@@ -37,9 +37,7 @@
     "uuid": "11.1.0"
   },
   "devDependencies": {
-    "@kevinmarrec/nuxt-pwa": "0.17.0",
     "@nuxtjs/i18n": "8.0.0-rc.2",
-    "@nuxtjs/plausible": "1.0.0",
     "@nuxtjs/tailwindcss": "6.4.1",
     "vite-plugin-node-polyfills": "0.22.0"
   }

@@ -66,7 +66,7 @@ useReveal()
 </script>
 
 <template>
-    <main class="relative min-h-screen w-full overflow-x-clip bg-[#060a10] font-sans text-slate-200 antialiased selection:bg-lime-300 selection:text-slate-900">
+    <main id="main-content" tabindex="-1" class="relative min-h-screen w-full overflow-x-clip bg-[#060a10] font-sans text-slate-200 antialiased selection:bg-lime-300 selection:text-slate-900">
 
         <AuroraBackdrop />
 
@@ -78,7 +78,7 @@ useReveal()
 
             <!-- Floating glyph chips (pure CSS motion, decorative) -->
             <div class="glyph glyph-lock float-a" aria-hidden="true">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" class="h-6 w-6">
+                <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" class="h-6 w-6">
                     <rect x="5" y="10" width="14" height="10" rx="2.5" />
                     <path d="M8 10V7.5a4 4 0 0 1 8 0V10" />
                     <circle cx="12" cy="15" r="1.6" fill="currentColor" stroke="none" />
@@ -87,7 +87,7 @@ useReveal()
             </div>
 
             <div class="glyph glyph-shuffle float-b" aria-hidden="true">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" class="h-6 w-6">
+                <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" class="h-6 w-6">
                     <path d="M3 6h4l10 12h4" />
                     <path d="M18 15.5 21 18l-3 2.5" />
                     <path d="M3 18h4l3-3.6" />
@@ -98,7 +98,7 @@ useReveal()
             </div>
 
             <div class="glyph glyph-eye float-c" aria-hidden="true">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" class="h-6 w-6">
+                <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" class="h-6 w-6">
                     <path d="M3 12s3.5-6 9-6 8.5 6 9 6-3.5 6-9 6-8.5-6-9-6Z" />
                     <circle cx="12" cy="12" r="2.6" />
                     <path d="M4 4l16 16" stroke-width="2.2" />
@@ -107,7 +107,7 @@ useReveal()
             </div>
 
             <div class="glyph glyph-key float-d" aria-hidden="true">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" class="h-6 w-6">
+                <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" class="h-6 w-6">
                     <circle cx="8" cy="12" r="4" />
                     <path d="M12 12h9M17 12v4M20 12v3" />
                 </svg>
@@ -139,7 +139,7 @@ useReveal()
             <div class="animate-rise mt-10 flex flex-col items-center gap-4 sm:flex-row" style="animation-delay: 0.56s">
                 <NuxtLink to="/playground" class="btn-primary btn-pulse">
                     Enter the Playground
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="h-4 w-4">
+                    <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="h-4 w-4">
                         <path d="M5 12h14M13 6l6 6-6 6" />
                     </svg>
                 </NuxtLink>
@@ -280,7 +280,7 @@ useReveal()
 
                 <div class="mt-14 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
                     <div class="g-card reveal">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" class="h-8 w-8 text-lime-300">
+                        <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" class="h-8 w-8 text-lime-300">
                             <rect x="5" y="10" width="14" height="10" rx="2.5" /><path d="M8 10V7.5a4 4 0 0 1 8 0V10" />
                         </svg>
                         <h3 class="mt-4 font-display text-lg font-bold text-white">Zero Custody</h3>
@@ -291,7 +291,7 @@ useReveal()
                     </div>
 
                     <div class="g-card reveal" style="transition-delay: 0.08s">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" class="h-8 w-8 text-cyan-300">
+                        <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" class="h-8 w-8 text-cyan-300">
                             <path d="M8 4 3 12l5 8M16 4l5 8-5 8M13 3l-2.5 18" />
                         </svg>
                         <h3 class="mt-4 font-display text-lg font-bold text-white">Open Source</h3>
@@ -302,7 +302,7 @@ useReveal()
                     </div>
 
                     <div class="g-card reveal" style="transition-delay: 0.16s">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" class="h-8 w-8 text-violet-300">
+                        <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" class="h-8 w-8 text-violet-300">
                             <path d="M3 7h4l4 5-4 5H3" /><path d="M13 7h8" /><path d="M13 17h8" /><path d="M18 4.5 21 7l-3 2.5" /><path d="M18 14.5 21 17l-3 2.5" />
                         </svg>
                         <h3 class="mt-4 font-display text-lg font-bold text-white">CashShuffle &amp; CashFusion</h3>
@@ -313,7 +313,7 @@ useReveal()
                     </div>
 
                     <div class="g-card reveal">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" class="h-8 w-8 text-lime-300">
+                        <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" class="h-8 w-8 text-lime-300">
                             <rect x="3" y="4" width="18" height="13" rx="2" /><path d="M8 21h8M12 17v4" />
                         </svg>
                         <h3 class="mt-4 font-display text-lg font-bold text-white">Browser-Native</h3>
@@ -324,7 +324,7 @@ useReveal()
                     </div>
 
                     <div class="g-card reveal" style="transition-delay: 0.08s">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" class="h-8 w-8 text-cyan-300">
+                        <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" class="h-8 w-8 text-cyan-300">
                             <path d="M12 3 4 7v6c0 4 3.5 6.5 8 8 4.5-1.5 8-4 8-8V7l-8-4Z" /><path d="M9 11.5l2.2 2.5L15.5 9" />
                         </svg>
                         <h3 class="mt-4 font-display text-lg font-bold text-white">ZK Research Lab</h3>
@@ -336,7 +336,7 @@ useReveal()
                     </div>
 
                     <div class="g-card reveal" style="transition-delay: 0.16s">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" class="h-8 w-8 text-violet-300">
+                        <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" class="h-8 w-8 text-violet-300">
                             <path d="M6 17a3.5 3.5 0 0 1-.4-7A5 5 0 0 1 15.6 8 4 4 0 0 1 19 16.7" /><path d="M6 17h12" />
                         </svg>
                         <h3 class="mt-4 font-display text-lg font-bold text-white">Decentralized Infra</h3>
@@ -363,7 +363,7 @@ useReveal()
                     <summary class="flex cursor-pointer list-none items-center justify-between gap-6 px-6 py-5">
                         <span class="text-left font-display text-sm font-bold text-white sm:text-base">{{ f.q }}</span>
                         <span class="faq-chevron">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="h-4 w-4"><path d="M6 9l6 6 6-6" /></svg>
+                            <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="h-4 w-4"><path d="M6 9l6 6 6-6" /></svg>
                         </span>
                     </summary>
                     <p class="px-6 pb-6 text-sm leading-relaxed text-slate-200 sm:text-base">{{ f.a }}</p>
@@ -383,7 +383,7 @@ useReveal()
                 <div class="mt-10 flex justify-center">
                     <NuxtLink to="/playground" class="btn-primary btn-pulse">
                         Hush Your Money Now
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="h-4 w-4"><path d="M5 12h14M13 6l6 6-6 6" /></svg>
+                        <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="h-4 w-4"><path d="M5 12h14M13 6l6 6-6 6" /></svg>
                     </NuxtLink>
                 </div>
             </div>

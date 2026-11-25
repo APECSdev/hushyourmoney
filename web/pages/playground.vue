@@ -535,7 +535,7 @@ onBeforeUnmount(() => {
         <div class="animate-rise mt-10 flex flex-col items-center gap-4 sm:flex-row" style="animation-delay: 0.6s">
             <a href="#fusion-lab" class="btn-primary btn-pulse">
                 Run the fusion round
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="h-4 w-4">
+                <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="h-4 w-4">
                     <path d="M5 12h14M13 6l6 6-6 6" />
                 </svg>
             </a>
@@ -925,9 +925,9 @@ onBeforeUnmount(() => {
             <table class="data-table">
                 <thead>
                     <tr>
-                        <th>gate</th>
-                        <th>status</th>
-                        <th>record</th>
+                        <th scope="col">gate</th>
+                        <th scope="col">status</th>
+                        <th scope="col">record</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -982,9 +982,9 @@ onBeforeUnmount(() => {
             <table class="data-table">
                 <thead>
                     <tr>
-                        <th>surface</th>
-                        <th>status</th>
-                        <th>what it means</th>
+                        <th scope="col">surface</th>
+                        <th scope="col">status</th>
+                        <th scope="col">what it means</th>
                     </tr>
                 </thead>
                 <tbody>

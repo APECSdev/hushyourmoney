@@ -250,9 +250,9 @@ const SOURCES = [
             <table class="data-table min-w-[720px]">
                 <thead>
                     <tr>
-                        <th>quantity</th>
-                        <th>value</th>
-                        <th>tag</th>
+                        <th scope="col">quantity</th>
+                        <th scope="col">value</th>
+                        <th scope="col">tag</th>
                     </tr>
                 </thead>
                 <tbody>

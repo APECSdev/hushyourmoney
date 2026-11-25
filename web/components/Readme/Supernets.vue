@@ -19,7 +19,7 @@ const props = defineProps({
 </script>
 
 <template>
-    <main class="flex flex-col gap-5">
+    <div class="flex flex-col gap-5">
         <h2 class="font-display text-3xl font-bold text-white">
             Supernets: PoW Layer 1+ (Plus)
         </h2>
@@ -45,5 +45,5 @@ const props = defineProps({
                 <li>BigNum support for Zero Knowledge math primitives</li>
             </ol>
         </div>
-    </main>
+    </div>
 </template>

@@ -1,0 +1,54 @@
+/* web/assets/css/global.css — site-wide base styles.
+   Loaded for every route via `css: ['~/assets/css/global.css']` in nuxt.config.ts.
+   Plain CSS on purpose: this file must not depend on Tailwind's @layer resolution,
+   because it is also served on the error page, which renders outside the layouts. */
+
+/* ── Keyboard focus ─────────────────────────────────────────────────────────
+   WCAG 2.4.7 Focus Visible. No component in this repo sets `outline: none`
+   (verified: grep 'outline-none|outline: none' across pages, components,
+   layouts, assets returns 0), so this rule is purely additive — it replaces the
+   browser's default ring with one that stays legible on the #060a10 backdrop. */
+:focus-visible {
+    outline: 2px solid #bef264;
+    outline-offset: 2px;
+    border-radius: 0.35rem;
+}
+
+/* ── Skip link ──────────────────────────────────────────────────────────────
+   WCAG 2.4.1 Bypass Blocks. Rendered by SiteNav.vue; parked off-screen until it
+   receives keyboard focus, then pinned to the top-left corner. */
+.skip-link {
+    position: absolute;
+    left: 0.75rem;
+    top: -6rem;
+    z-index: 60;
+    border-radius: 0.5rem;
+    background: #bef264;
+    padding: 0.6rem 1rem;
+    font-family: "Space Mono", ui-monospace, monospace;
+    font-size: 0.78rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: #060a10;
+    text-decoration: none;
+    transition: top 0.18s ease;
+}
+
+.skip-link:focus {
+    top: 0.75rem;
+}
+
+/* ── Skip target ────────────────────────────────────────────────────────────
+   Every <main> carries id="main-content" tabindex="-1" so the skip link can move
+   focus there. tabindex="-1" targets are focused programmatically only, so the
+   ring would be noise; the skip link itself already announced the jump. */
+#main-content:focus {
+    outline: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .skip-link {
+        transition: none;
+    }
+}

@@ -60,8 +60,8 @@ onBeforeUnmount(() => {
     <div class="min-h-screen bg-[#060a10]">
         <SiteNav />
 
-        <main>
-            <slot />
-        </main>
+        <!-- No <main> here: every page in this layout renders its own <main>
+             landmark (9 pages). Wrapping the slot produced nested <main> elements. -->
+        <slot />
     </div>
 </template>

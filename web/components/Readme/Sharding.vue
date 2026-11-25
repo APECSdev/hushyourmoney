@@ -19,7 +19,7 @@ const props = defineProps({
 </script>
 
 <template>
-    <main class="flex flex-col gap-5">
+    <div class="flex flex-col gap-5">
         <h2 class="font-display text-3xl font-bold text-white">
             Sharding: A 256-bit Scaling Solution
         </h2>
@@ -48,5 +48,5 @@ const props = defineProps({
         <p>
             Additional CCs may be deployed to meet the growing needs of the Host's network.
         </p>
-    </main>
+    </div>
 </template>

@@ -32,34 +32,11 @@ export default defineNuxtConfig({
                 { rel: 'preconnect', href: 'https://fonts.gstatic.com', crossorigin: '' },
                 { rel: 'stylesheet', href: 'https://fonts.googleapis.com/css2?family=Unbounded:wght@200..900&family=Space+Grotesk:wght@300..700&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap' },
             ],
-            script: [
-                { src: '/js/polyfills.js' },
-            ],
         },
     },
 
-    /* Progressive Web Application Settings */
-    pwa: {
-        manifest: {
-            name: 'Hush Your Money — Spend Privately. Fearlessly!',
-            short_name: 'Hush Your Money',
-            description: `Spend Privately. Fearlessly!`,
-            lang: 'en',
-            theme_color: '#518c96',
-            background_color: '#518c96',
-            // useWebmanifestExtension: false,
-        },
-        meta: {
-            name: 'Hush Your Money — Spend Privately. Fearlessly!',
-            description: `Spend Privately. Fearlessly!`,
-            author: `Nexa contributors`,
-        },
-        // icon: false, // disables the icon module
-        workbox: {
-            // workboxURL: 'TBD',
-            // enabled: true, // FOR DEV PURPOSES ONLY
-        },
-    },
+    /* Global stylesheet (keyboard focus ring + skip link). */
+    css: ['~/assets/css/global.css'],
 
     /* Application Modules */
     modules: [
@@ -69,20 +46,9 @@ export default defineNuxtConfig({
         /* Pinia */
         '@pinia/nuxt',
 
-        /* Plausible */
-        '@nuxtjs/plausible',
-
         /* Internationalization for Nuxt */
         '@nuxtjs/i18n',
-
-        /* Progressive Web Application */
-        '@kevinmarrec/nuxt-pwa',
     ],
-
-    /* Plausible */
-    plausible: {
-        apiHost: 'https://plausible.hos.im',
-    },
 
     /* Route Rules */
     routeRules: {

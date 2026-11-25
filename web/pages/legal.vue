@@ -18,7 +18,7 @@ useReveal()
 </script>
 
 <template>
-    <main class="relative min-h-screen w-full overflow-x-clip bg-[#060a10] font-sans text-slate-200 antialiased selection:bg-lime-300 selection:text-slate-900">
+    <main id="main-content" tabindex="-1" class="relative min-h-screen w-full overflow-x-clip bg-[#060a10] font-sans text-slate-200 antialiased selection:bg-lime-300 selection:text-slate-900">
 
         <AuroraBackdrop />
 

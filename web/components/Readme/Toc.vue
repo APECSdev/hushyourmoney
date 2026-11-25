@@ -19,7 +19,7 @@ const props = defineProps({
 </script>
 
 <template>
-    <main class="flex flex-col gap-5">
+    <div class="flex flex-col gap-5">
         <h2 class="font-display text-3xl font-bold text-white">
             Table of Contents
         </h2>
@@ -41,5 +41,5 @@ const props = defineProps({
             <li>Counterparty and Protocol Discovery (CAPD)</li>
             <li>Ephemeral Database: ZERO Logs</li>
         </ol>
-    </main>
+    </div>
 </template>

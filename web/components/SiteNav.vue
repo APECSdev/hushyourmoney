@@ -32,10 +32,23 @@ function isActive(to: string) {
 }
 
 watch(() => route.fullPath, () => { mobileOpen.value = false })
+
+/* Escape closes the mobile panel (WCAG 2.1.2 — no keyboard trap). The listener is
+   only attached while the panel is open, and the toggle keeps focus, so the user
+   lands back on a real control. */
+function onKeydown(e: KeyboardEvent) {
+    if (e.key === 'Escape' && mobileOpen.value) mobileOpen.value = false
+}
+
+onMounted(() => window.addEventListener('keydown', onKeydown))
+onBeforeUnmount(() => window.removeEventListener('keydown', onKeydown))
 </script>
 
 <template>
     <header class="sticky top-0 z-40 border-b border-white/10 bg-[#060a10]/85 backdrop-blur">
+        <!-- WCAG 2.4.1 — first tab stop on every page; jumps to <main id="main-content">. -->
+        <a href="#main-content" class="skip-link">Skip to main content</a>
+
         <!-- Right padding reserves room for GithubBanner, which is hidden below `sm`. -->
         <nav class="mx-auto flex h-16 w-full max-w-7xl items-center justify-between gap-4 px-4 sm:px-6 sm:pr-32 lg:px-8" aria-label="Main navigation">
             <NuxtLink to="/" class="group flex items-center gap-2.5" aria-label="Hush Your Money — home">
@@ -46,7 +59,7 @@ watch(() => route.fullPath, () => { mobileOpen.value = false })
             <div class="hidden items-center gap-0.5 lg:flex">
                 <template v-for="l in LINKS" :key="l.to">
                     <div v-if="l.research" class="group relative">
-                        <NuxtLink :to="l.to" class="nav-link" :class="{ 'nav-link-active': isActive(l.to) }">
+                        <NuxtLink :to="l.to" class="nav-link" :class="{ 'nav-link-active': isActive(l.to) }" :aria-current="isActive(l.to) ? 'page' : undefined">
                             {{ l.label }}
                             <svg class="h-3 w-3 transition-transform group-hover:rotate-180" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
                                 <path d="m6 9 6 6 6-6" />
@@ -54,14 +67,14 @@ watch(() => route.fullPath, () => { mobileOpen.value = false })
                         </NuxtLink>
                         <div class="invisible absolute left-0 top-full w-72 pt-2 opacity-0 transition group-hover:visible group-hover:opacity-100 group-focus-within:visible group-focus-within:opacity-100">
                             <div class="overflow-hidden rounded-xl border border-white/10 bg-[#0a1018]/95 p-1.5 shadow-2xl backdrop-blur">
-                                <NuxtLink v-for="t in RESEARCH" :key="t.to" :to="t.to" class="flex items-center gap-3 rounded-lg px-3 py-2 transition hover:bg-white/5" :class="{ 'bg-white/5': route.path === t.to }">
+                                <NuxtLink v-for="t in RESEARCH" :key="t.to" :to="t.to" class="flex items-center gap-3 rounded-lg px-3 py-2 transition hover:bg-white/5" :class="{ 'bg-white/5': route.path === t.to }" :aria-current="route.path === t.to ? 'page' : undefined">
                                     <span class="font-mono text-xs text-lime-300/80">{{ t.n }}</span>
                                     <span class="text-sm text-slate-200">{{ t.label }}</span>
                                 </NuxtLink>
                             </div>
                         </div>
                     </div>
-                    <NuxtLink v-else :to="l.to" class="nav-link" :class="{ 'nav-link-active': isActive(l.to) }">{{ l.label }}</NuxtLink>
+                    <NuxtLink v-else :to="l.to" class="nav-link" :class="{ 'nav-link-active': isActive(l.to) }" :aria-current="isActive(l.to) ? 'page' : undefined">{{ l.label }}</NuxtLink>
                 </template>
             </div>
 
@@ -78,13 +91,13 @@ watch(() => route.fullPath, () => { mobileOpen.value = false })
         <div v-if="mobileOpen" id="site-nav-mobile" class="border-t border-white/10 bg-[#060a10]/95 lg:hidden">
             <div class="mx-auto w-full max-w-7xl px-4 py-4 sm:px-6">
                 <div class="grid gap-1 sm:grid-cols-2">
-                    <NuxtLink v-for="l in LINKS" :key="l.to" :to="l.to" class="mobile-link" :class="{ 'mobile-link-active': isActive(l.to) }">{{ l.label }}</NuxtLink>
+                    <NuxtLink v-for="l in LINKS" :key="l.to" :to="l.to" class="mobile-link" :class="{ 'mobile-link-active': isActive(l.to) }" :aria-current="isActive(l.to) ? 'page' : undefined">{{ l.label }}</NuxtLink>
                 </div>
 
                 <div class="mt-4 border-t border-white/10 pt-3">
                     <p class="px-3 font-mono text-xs uppercase tracking-[0.3em] text-slate-300">research topics</p>
                     <div class="mt-2 grid gap-1 sm:grid-cols-2">
-                        <NuxtLink v-for="t in RESEARCH" :key="t.to" :to="t.to" class="mobile-sub" :class="{ 'mobile-link-active': route.path === t.to }">
+                        <NuxtLink v-for="t in RESEARCH" :key="t.to" :to="t.to" class="mobile-sub" :class="{ 'mobile-link-active': route.path === t.to }" :aria-current="route.path === t.to ? 'page' : undefined">
                             <span class="font-mono text-xs text-lime-300/80">{{ t.n }}</span>
                             <span>{{ t.label }}</span>
                         </NuxtLink>

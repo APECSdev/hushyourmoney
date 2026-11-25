@@ -19,7 +19,7 @@ const props = defineProps({
 </script>
 
 <template>
-    <main class="flex flex-col gap-5">
+    <div class="flex flex-col gap-5">
         <h2 class="font-display text-3xl font-bold text-white">
             CoinJoins: à la CashFusion
         </h2>
@@ -54,5 +54,5 @@ const props = defineProps({
                 The PARN offers an assurance to each Guest that the Club Server (on its own) CANNOT compromise their financial privacy.
             </p>
         </section>
-    </main>
+    </div>
 </template>

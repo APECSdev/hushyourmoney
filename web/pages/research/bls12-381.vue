@@ -189,9 +189,9 @@ const SOURCES = [
             <table class="data-table min-w-[720px]">
                 <thead>
                     <tr>
-                        <th>quantity</th>
-                        <th>BN254</th>
-                        <th>BLS12-381</th>
+                        <th scope="col">quantity</th>
+                        <th scope="col">BN254</th>
+                        <th scope="col">BLS12-381</th>
                     </tr>
                 </thead>
                 <tbody>

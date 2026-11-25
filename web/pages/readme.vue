@@ -32,7 +32,7 @@ useReveal()
 </script>
 
 <template>
-    <main class="relative min-h-screen w-full overflow-x-clip bg-[#060a10] font-sans text-slate-200 antialiased selection:bg-lime-300 selection:text-slate-900">
+    <main id="main-content" tabindex="-1" class="relative min-h-screen w-full overflow-x-clip bg-[#060a10] font-sans text-slate-200 antialiased selection:bg-lime-300 selection:text-slate-900">
 
         <AuroraBackdrop />
 
@@ -68,7 +68,7 @@ FUNCTION : Tokenized Assets + Smart Contracts
                             <span class="text-gradient block text-4xl font-extrabold uppercase sm:text-6xl">Winner!</span>
                         </h3>
 
-                        <img src="~/assets/winner.gif" class="-my-2 h-36 w-auto sm:-mt-8 sm:-mb-8 sm:h-48" />
+                        <img src="~/assets/winner.gif" alt="BCHDEVCON3 hackathon — Hush Your Money took first place" class="-my-2 h-36 w-auto sm:-mt-8 sm:-mb-8 sm:h-48" />
                     </div>
                 </div>
 

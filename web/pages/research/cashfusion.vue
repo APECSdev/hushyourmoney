@@ -443,9 +443,9 @@ const SOURCES = [
                 <table class="data-table">
                     <thead>
                         <tr>
-                            <th>dimension</th>
-                            <th>classic CashFusion (in app)</th>
-                            <th>P2P over Nostr (this research)</th>
+                            <th scope="col">dimension</th>
+                            <th scope="col">classic CashFusion (in app)</th>
+                            <th scope="col">P2P over Nostr (this research)</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -591,9 +591,9 @@ const SOURCES = [
                 <table class="data-table">
                     <thead>
                         <tr>
-                            <th>constant</th>
-                            <th>value</th>
-                            <th>rationale</th>
+                            <th scope="col">constant</th>
+                            <th scope="col">value</th>
+                            <th scope="col">rationale</th>
                         </tr>
                     </thead>
                     <tbody>

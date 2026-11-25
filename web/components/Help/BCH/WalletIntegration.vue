@@ -19,7 +19,7 @@ const props = defineProps({
 </script>
 
 <template>
-    <main class="flex flex-col gap-4">
+    <div class="flex flex-col gap-4">
         <h1 class="font-display text-3xl font-bold italic text-lime-300 sm:text-5xl">
             Bitcoin Cash Wallet Integration Guide
         </h1>
@@ -38,5 +38,5 @@ const props = defineProps({
         <p class="leading-relaxed text-slate-200">
             Lorem ipsum dolor sit amet consectetur adipisicing elit. Magni error a, praesentium reprehenderit provident unde sapiente inventore, voluptas atque quidem qui quae repellat recusandae vel nulla, harum impedit adipisci non!
         </p>
-    </main>
+    </div>
 </template>
