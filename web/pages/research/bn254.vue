@@ -41,7 +41,7 @@ const STATS = [
     { value: '186,007', label: 'constraints · multi-asset', tag: 'measured', color: 'text-lime-300' },
     { value: '2', label: 'public inputs', tag: 'measured', color: 'text-cyan-300' },
     { value: '128 B', label: 'Groth16 proof', tag: 'derived', color: 'text-violet-300' },
-    { value: '27,624 B', label: 'reviewed sound verifier', tag: 'cited', color: 'text-white' },
+    { value: '27,624 B', label: 'reviewed sound verifier · deployed', tag: 'cited', color: 'text-white' },
 ]
 
 /* ── The two verifier generations we have touched ── */
@@ -54,7 +54,7 @@ const GENERATIONS = [
         inputs: '5 inputs',
         op: '24.3M op',
         redeem: '347 B covenant / 574 B exec / 6044 B genesis / 4415 B terminal',
-        note: 'The build every pool here deployed (gate3, gate6, gate6b, mainnet). Withdrawn by its author on 2026-10-26 under finding F6: the shared Miller event consumes slopes without the tangent/chord equations, and the terminal compares a value with itself instead of checking the B endpoint. Its vk_x MSM does repair the public-input binding — which is what our red-team numbers actually measured.',
+        note: 'The build every pool deployed before 2026-11-24 (gate3, gate6, gate6b, mainnet, nito v2/v4). Withdrawn by its author on 2026-10-26 under finding F6: the shared Miller event consumes slopes without the tangent/chord equations, and the terminal compares a value with itself instead of checking the B endpoint. Its vk_x MSM does repair the public-input binding — which is what our red-team numbers actually measured.',
     },
     {
         name: 'bch-groth16-bn254-sound-native',
@@ -64,7 +64,7 @@ const GENERATIONS = [
         inputs: '3 inputs',
         op: '20.72M op',
         redeem: '65 B, identical in all three inputs (locking aa20 d9ba…a11a 87)',
-        note: 'Independently reviewed 2026-10-26. Sound by construction: every accept-relevant value is computed on-chain, a baked VK constant, hash-committed before any challenge it meets, or fixed by an exact field or integer equation. Smaller, cheaper and two inputs fewer than the withdrawn build. Verifies the same relation under the same verifying key — so it needs NO new trusted setup. It is NOT a drop-in beside a covenant, though: its graph pins exactly 3 inputs, every one of them spending the same P2SH32, and forbids any funding or fee input with another locking. Our pool needs a covenant sibling and a fee input, so the route is to extend its third role with the pool rules (the README\'s supported integration point: "applications that release funds add output rules in role 2").',
+        note: 'Independently reviewed 2026-10-26. Sound by construction: every accept-relevant value is computed on-chain, a baked VK constant, hash-committed before any challenge it meets, or fixed by an exact field or integer equation. Smaller, cheaper and two inputs fewer than the withdrawn build. Verifies the same relation under the same verifying key — so it needed NO new trusted setup. It is NOT a drop-in beside a covenant, though: its graph pins exactly 3 inputs, every one of them spending the same P2SH32, and forbids any funding or fee input with another locking. So the route was to extend its third role with the pool rules (the README\'s supported integration point: "applications that release funds add output rules in role 2") — and that route is now SHIPPED: the chipnet role-2 pool (deployed 2026-11-24, block 345,467) runs this verifier with the pool rules as a role-2 hook — acceptance 20/20, red team 146/0, liveness sweep 69/0.',
     },
 ]
 
@@ -73,7 +73,8 @@ const LIMITS = [
     { k: 'script cap', v: '10,000 B per input — a full pairing check does not fit' },
     { k: 'op budget', v: '(41 + unlockingLength) × 800 per input — ≈ 8.03M for a max-size input' },
     { k: 'consequence', v: 'the verifier MUST be split across inputs and/or transactions' },
-    { k: 'our covenant', v: 'requires the verifier as sibling inputs in the SAME transaction' },
+    { k: 'generation 1', v: 'verifier as sibling inputs in the SAME transaction, beside the covenant' },
+    { k: 'generation 2 · deployed', v: 'pool rules INSIDE the verifier (role 2) — one program, no siblings' },
 ]
 
 /* ── Sources ── */
@@ -108,7 +109,8 @@ const SOURCES = [
             The 254-bit pairing-friendly curve the shielded pool was built on — Ethereum's
             <code class="text-violet-200">alt_bn128</code>, circom's default, and the curve with the
             cheapest on-chain verifier anyone has measured on Bitcoin Cash. This page records what it
-            costs, what it gives up, and the one verifier generation we had to retract.
+            costs, what it gives up, the one verifier generation we had to retract, and the reviewed
+            generation that replaced it — now deployed on chipnet.
         </p>
 
         <div class="animate-rise mt-9 flex flex-wrap items-center justify-center gap-3" style="animation-delay: 0.28s">
@@ -287,13 +289,13 @@ const SOURCES = [
                         <td class="font-mono text-[0.82rem] text-slate-200">measured</td>
                     </tr>
                     <tr>
-                        <td class="whitespace-nowrap font-mono text-[0.82rem] uppercase tracking-wider text-slate-200">verifier, as deployed</td>
+                        <td class="whitespace-nowrap font-mono text-[0.82rem] uppercase tracking-wider text-slate-200">verifier, generation 1</td>
                         <td class="text-slate-100">35,626 B · 5 inputs · 24.3M op · <strong class="text-rose-200">withdrawn</strong></td>
                         <td class="font-mono text-[0.82rem] text-slate-200">measured + cited</td>
                     </tr>
                     <tr>
-                        <td class="whitespace-nowrap font-mono text-[0.82rem] uppercase tracking-wider text-slate-200">verifier, reviewed sound</td>
-                        <td class="text-slate-100">27,624 B · 3 inputs · 20.72M op · not yet deployed</td>
+                        <td class="whitespace-nowrap font-mono text-[0.82rem] uppercase tracking-wider text-slate-200">verifier, generation 2</td>
+                        <td class="text-slate-100">27,624 B · 3 inputs · 20.72M op · <strong class="text-lime-200">deployed</strong> (role-2 pool, 2026-11-24)</td>
                         <td class="font-mono text-[0.82rem] text-slate-200">cited</td>
                     </tr>
                     <tr>
@@ -355,10 +357,11 @@ const SOURCES = [
         </div>
 
         <div class="reveal mt-10 rounded-2xl border border-rose-300/40 bg-rose-300/10 px-5 py-4 font-mono text-xs leading-relaxed text-rose-100">
-            every pool deployed on this site runs the withdrawn build · the reviewed replacement needs a
-            no new trusted setup · it is smaller AND cheaper than what we shipped · but its graph pins 3
-            inputs all spending the same P2SH32, so it composes by EXTENDING role 2, not by sitting beside
-            a covenant
+            every pool deployed before 2026-11-24 runs the withdrawn build — that record stands · the
+            reviewed replacement needed no new trusted setup · it is smaller AND cheaper than the
+            withdrawn build · its graph pins 3 inputs all spending the same P2SH32, so it composes by
+            EXTENDING role 2 — which is exactly what the chipnet role-2 pool now runs, deployed
+            2026-11-24 with the pool rules inside the verifier
         </div>
     </section>
 
@@ -475,8 +478,10 @@ const SOURCES = [
                     the sound build pins exactly three inputs, all spending the same P2SH32, and permits no
                     funding input with another locking — so a covenant cannot sit beside it. The pool rules
                     therefore move INTO the verifier's third role, which is the integration the artifact
-                    documents ("applications that release funds add output rules in role 2"). That is new
-                    code and needs its own review before it carries value.
+                    documents ("applications that release funds add output rules in role 2"). That code is
+                    now written, gated and deployed on chipnet (2026-11-24): the role-2 hook passes
+                    acceptance 20/20, red team 146/0 and a 69-scenario liveness sweep — and it remains our
+                    own code; Nito Cash's own client is the final approval before it carries real value.
                 </p>
             </details>
 
@@ -495,9 +500,10 @@ const SOURCES = [
             <details class="faq-card reveal">
                 <summary>Is BN254 still the right choice after all this?</summary>
                 <p>
-                    For the next deployment, yes — and for a reason that is not about the curve: the
-                    sound BN254 verifier is the smallest one that exists, it is reviewed, and it needs no
-                    new ceremony. The curve decision that actually matters is the one made alongside
+                    It is the deployed choice — the chipnet role-2 pool runs the reviewed sound BN254
+                    verifier — and for a reason that is not about the curve: it is the smallest sound
+                    verifier that exists, it is reviewed, and it needed no new ceremony. The curve
+                    decision that actually matters is the one made alongside
                     Gate 7, because that is the step which forces a new transcript either way. See
                     <NuxtLink to="/research/bls12-381" class="src-link">/research/bls12-381</NuxtLink>
                     for the comparison.

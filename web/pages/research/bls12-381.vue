@@ -391,9 +391,10 @@ const SOURCES = [
                 <summary>Does a BLS12-381 pool dodge the problems we found on BN254?</summary>
                 <p>
                     No. Neither the withdrawn densless verifier nor the covenant's missing sibling pin
-                    is curve-specific: the first is a construction, the second is our own script logic.
-                    A BLS12-381 pool built the same way would inherit both. Fix the construction and the
-                    covenant first; the curve is a separate axis.
+                    was curve-specific: the first is a construction, the second was our own script logic.
+                    Both are now fixed in the deployed BN254 role-2 pool — the reviewed sound verifier,
+                    with the pool rules inside role 2 and the sibling gone entirely. A BLS12-381 pool
+                    would need the same role-2 treatment; the curve is a separate axis.
                 </p>
             </details>
         </div>

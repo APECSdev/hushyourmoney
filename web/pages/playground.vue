@@ -66,7 +66,7 @@ const EXPERIMENTS = [
         badge: 'badge-done',
         numClass: 'topic-lime',
         to: '/research/shielded-pool',
-        body: 'The flagship Groth16 pool — deployed, measured and documented gate by gate, with the full on-chain verifier.',
+        body: 'The flagship Groth16 pool — two verifier generations, deployed and measured gate by gate; the current pool runs the pool rules inside the reviewed on-chain verifier.',
         meta: 'EXP-04 · flagship research',
     },
     {
@@ -139,7 +139,7 @@ const REAL_VS_MOCK = [
     { what: 'G2b transactions', verdict: 'real', cls: 'badge-live', detail: 'Chipnet funding and round transactions, linked to Selene. The only chain transactions in the gate record.' },
     { what: 'G3 / G3L txids', verdict: 'dry-run', cls: 'badge-wait', detail: 'Harness txids, not broadcast. The rounds used fixture UTXOs.' },
     { what: 'Mainnet fusion beta', verdict: 'not built', cls: 'badge-wait', detail: 'G4 is pending; no production fusion UI exists yet.' },
-    { what: 'Shielded pool', verdict: 'live on chipnet', cls: 'badge-done', detail: 'The pool is deployed and measured on chipnet; see /research/shielded-pool.' },
+    { what: 'Shielded pool', verdict: 'live on chipnet', cls: 'badge-done', detail: 'The role-2 pool is deployed with a full confirmed lifecycle on chipnet; see /research/shielded-pool.' },
 ]
 
 /* ── Lab notes (source: /research/cashfusion#lessons) ────────────── */

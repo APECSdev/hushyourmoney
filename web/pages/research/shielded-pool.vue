@@ -9,11 +9,11 @@ definePageMeta({
 /* OpenGraph + Twitter + canonical (shared composable; per-page poster). */
 useOg({
     title: `The Shielded Pool — Hush Your Money`,
-    description: `A Groth16 shielded pool for CashTokens — built, deployed and measured on Bitcoin Cash chipnet. 183,472-constraint joinsplit circuit, 2 public inputs, a 35,626-byte on-chain verifier, no consensus changes.`,
+    description: `A Groth16 shielded pool for CashTokens — built, deployed and measured on Bitcoin Cash chipnet and mainnet. 183,472-constraint joinsplit circuit, 2 public inputs, and the pool rules running inside an independently reviewed on-chain verifier. No consensus changes.`,
     path: '/research/shielded-pool',
     image: '/posters/research-shielded-pool.jpg',
     type: 'article',
-    imageAlt: `The Shielded Pool — 183,472 constraints, 2 public inputs, 35,626-byte on-chain verifier, live on chipnet`,
+    imageAlt: `The Shielded Pool — 183,472 constraints, 2 public inputs, reviewed sound on-chain verifier with the pool rules inside, live on chipnet`,
 })
 
 /* Scroll-reveal (shared composable). */
@@ -24,11 +24,11 @@ useReveal()
    (session log / on-chain decode / snarkjs output). No estimates. */
 const STATS = [
     { value: '183,472', label: 'constraints · single-asset circuit', tag: 'measured', color: 'text-lime-300' },
-    { value: '186,007', label: 'constraints · multi-asset circuit', tag: 'measured', color: 'text-lime-300' },
     { value: '2', label: 'public inputs', tag: 'measured', color: 'text-cyan-300' },
-    { value: '35,626 B', label: 'on-chain verifier · one standard tx', tag: 'measured', color: 'text-violet-300' },
-    { value: '26/26', label: 'red-team attacks rejected · public-input binding', tag: 'measured', color: 'text-white' },
-    { value: 'F6', label: 'verifier soundness · withdrawn', tag: 'disclosure', color: 'text-rose-300' },
+    { value: '27,624 B', label: 'reviewed sound verifier · deployed', tag: 'cited + measured', color: 'text-white' },
+    { value: '7,834 B', label: 'deployed program · pool rules inside the verifier', tag: 'measured', color: 'text-violet-300' },
+    { value: '20/20', label: 'acceptance suite · theft replay rejects', tag: 'measured', color: 'text-lime-300' },
+    { value: '146/0', label: 'red-team runs rejected · deployed program', tag: 'measured', color: 'text-white' },
 ]
 
 /* ── Measured results table ──────────────────────────────────────── */
@@ -36,10 +36,16 @@ const RESULTS = [
     { q: 'Circuit (single-asset)', v: '183,472 constraints · 107 private inputs · 181,959 wires', src: 'snarkjs r1cs info build256/pool.r1cs', href: 'https://github.com/APECSdev/pusd-shielded-pool' },
     { q: 'Public inputs', v: '2 — [merkleRoot, actionHash]', src: 'pool.r1cs + verification_key.json (ic.length = 3)', href: 'https://github.com/APECSdev/pusd-shielded-pool' },
     { q: 'Circuit (multi-asset, variant b)', v: '186,007 constraints (+1.38%) · Poseidon(6) commitments bind the full 256-bit category', src: 'circom 2.2.3 --O2 compile, 2026-11-01 build record', href: 'https://github.com/APECSdev/pusd-shielded-pool' },
-    { q: 'On-chain verifier size', v: '35,626 B inside ONE standard transaction', src: 'chipnet on-chain measurement', href: 'https://explorer.selene.cash/tx/b0a488db5b7e9bac07eebc45977523cd0730ddfe078571f2e17135231e30546b?network=chipnet' },
-    { q: 'Verifier soundness status', v: 'WITHDRAWN by its author 2026-10-26 — densless-msm, finding F6: the Miller slopes are not constrained by the tangent/chord equations and the terminal compares a value with itself instead of checking the B endpoint', src: 'groth16_cashscript chunked/bn254/densless-msm README · issue #32', href: 'https://github.com/mr-zwets/groth16_cashscript/tree/main/chunked/bn254/densless-msm' },
-    { q: 'Reviewed sound replacement (not yet deployed)', v: 'bch-groth16-bn254-sound-native — 27,624 B, 3 inputs, one standard tx, independently reviewed 2026-10-26', src: 'groth16_cashscript verifiers.md', href: 'https://github.com/mr-zwets/groth16_cashscript/blob/main/verifiers.md' },
-    { q: 'Covenant verifier-sibling pin', v: 'MISSING in every deployed pool — spend() read the genesis sibling\'s unlocking at fixed offsets and never checked that input\'s locking bytecode, so a 1-byte OP_1 script at that index was ACCEPTED on the BCH-2026 VM. Fixed in source (358 B, covenant op-cost 36,805 → 42,478), NOT yet deployed', src: 'pin-sibling-test.mjs — 6/6 cases', href: 'https://github.com/APECSdev/pusd-shielded-pool' },
+    { q: 'On-chain verifier · generation 1', v: '35,626 B inside ONE standard transaction (densless-msm — withdrawn, see below)', src: 'chipnet on-chain measurement', href: 'https://explorer.selene.cash/tx/b0a488db5b7e9bac07eebc45977523cd0730ddfe078571f2e17135231e30546b?network=chipnet' },
+    { q: 'Verifier soundness · generation 1', v: 'WITHDRAWN by its author 2026-10-26 — densless-msm, finding F6: the Miller slopes are not constrained by the tangent/chord equations and the terminal compares a value with itself instead of checking the B endpoint. Carried by every pool deployed before 2026-11-24 (gate3, gate6, gate6b, mainnet, nito v2/v4)', src: 'groth16_cashscript chunked/bn254/densless-msm README · issue #32', href: 'https://github.com/mr-zwets/groth16_cashscript/tree/main/chunked/bn254/densless-msm' },
+    { q: 'Deployed verifier · generation 2', v: 'bch-groth16-bn254-sound-native — 27,624 B, 3 inputs, one standard tx, independently reviewed 2026-10-26 — DEPLOYED 2026-11-24 inside chipnet-role2-pool-v2-tagged (block 345,467) with the pool rules as a role-2 hook', src: 'chipnet deploy 2eaeb97f… · verifiers.md', href: 'https://explorer.selene.cash/tx/2eaeb97fc85b2ff0fdd6c6afd1d807f8a715bd92a40258fae9f0e6ce50fe83b8?network=chipnet' },
+    { q: 'Covenant verifier-sibling pin', v: 'MISSING in every pool deployed before 2026-11-24 — spend() read the genesis sibling\'s unlocking at fixed offsets and never checked that input\'s locking bytecode, so a 1-byte OP_1 script at that index was ACCEPTED on the BCH-2026 VM. Resolved two ways: the generation-1 covenant got the sibling pin in source (358 B, covenant op-cost 36,805 → 42,478; gate 6/6) — and the deployed role-2 pool eliminated the sibling entirely, moving the pool rules INSIDE the verifier', src: 'pin-sibling-test.mjs — 6/6 cases · role-2 deployment 2026-11-24', href: 'https://github.com/APECSdev/pusd-shielded-pool' },
+    { q: 'Role-2 hook price', v: '37,198 op standard / 36,046 op consensus · 524 B of role-2 code inside the 7,834-B program (code pin d71851a1…)', src: 'pool-cost.mjs statement→slices diff · pool-registry.json', href: 'https://github.com/APECSdev/pusd-shielded-pool/blob/master/wip-role2-hook/STATUS.md' },
+    { q: 'Role-2 acceptance suite', v: '20/20 — including the theft replay: a valid proof consuming fuel tagged for ANOTHER action REJECTS at check 4g (deposit tags bind fuel to the funded action\'s own nullifiers)', src: 'wip-role2-hook/STATUS.md · pool-registry.json', href: 'https://github.com/APECSdev/pusd-shielded-pool/blob/master/wip-role2-hook/STATUS.md' },
+    { q: 'Red team · deployed program', v: '146 runs, 0 accepted · both positive controls accepted', src: 'pool-redteam-tagged-report.json (verified from the committed report)', href: 'https://github.com/APECSdev/pusd-shielded-pool/blob/master/wip-role2-hook/pool-redteam-tagged-report.json' },
+    { q: 'Liveness sweep · deployed program', v: '69 funded-pool scenarios, 0 failed · worst per-input margin 6.00% standard / 6.49% consensus · max proof nq 123', src: 'pool-sweep-tagged-report.json (verified from the committed report)', href: 'https://github.com/APECSdev/pusd-shielded-pool/blob/master/wip-role2-hook/pool-sweep-tagged-report.json' },
+    { q: 'Role-2 action size + fee', v: '~28.1–28.2 KB per action · BARE fees 29,000–30,000 sats ≈ 1.03–1.07 sat/B, prepaid by the user\'s lock tx', src: 'POOL-DEPLOYMENT.md §16', href: 'https://github.com/APECSdev/hushyourmoney/blob/master/docs/POOL-DEPLOYMENT.md' },
+    { q: 'Witness generation (role-2)', v: '22.8 s for the deployed SHIELD witness under our ceremony zkey', src: 'wip-role2-hook/STATUS.md', href: 'https://github.com/APECSdev/pusd-shielded-pool/blob/master/wip-role2-hook/STATUS.md' },
     { q: 'Covenant redeem bytecode', v: '347 B — identical for every asset (category = constructor param)', src: 'decoded from transfer tx input 0 witness', href: 'https://explorer.selene.cash/tx/b0a488db5b7e9bac07eebc45977523cd0730ddfe078571f2e17135231e30546b?network=chipnet' },
     { q: 'Proof generation', v: '16.967 s (183,472) / 17.6 s (186,007) · build runner (hardware spec UNMEASURED)', src: 'snarkjs fullProve, session records', href: null },
     { q: 'Covenant op-cost (Gate 6, input 0)', v: '84,819 / 556,800 budget (15.2%)', src: 'libauth BCH-2026 VM debug on the broadcast tx', href: 'https://explorer.selene.cash/tx/fc585fc9bf6499024c89c73a2bcb945de2ec212fb36f8ffc5acb617b6636912f?network=chipnet' },
@@ -175,12 +181,130 @@ const MAINNET_LIFECYCLE = [
     },
 ]
 
+/* ── The CURRENT pool: role-2, deposit-tagged (deployed 2026-11-24) ──
+   Sources: pool-registry.json (chipnet-role2-pool-v2-tagged) + docs/POOL-DEPLOYMENT.md
+   §16–§18 + docs/POOL-HANDOFF-2026-11-24-NITO-ROLE2-TAGGED.md. Every txid below is a
+   CONFIRMED chipnet transaction (Selene-verified 200 this session). The minting-guard
+   adoption is a custody upgrade — program, state NFT, category and notes untouched. */
+const ROLE2_LIFECYCLE = [
+    {
+        stage: 'Deploy',
+        cls: 'stage-lime',
+        dot: '#bef264',
+        network: 'chipnet',
+        kicker: 'the pool is born',
+        bullets: [
+            'anchor 480e30ff… = the category → mint 5ea499ff… → deploy',
+            'state NFT at :0 — the PUBLIC bootstrap root 551108f6…510f ‖ zeros',
+            'minting NFT passed forward at :1 — the tag supply\'s source',
+        ],
+        meta: ['chipnet', 'block 345,467', 'program 7,834 B'],
+        tx: '2eaeb97f…83b8',
+        txFull: '2eaeb97fc85b2ff0fdd6c6afd1d807f8a715bd92a40258fae9f0e6ce50fe83b8',
+    },
+    {
+        stage: 'Shield',
+        cls: 'stage-cyan',
+        dot: '#67e8f9',
+        network: 'chipnet',
+        kicker: '1,000,000 units enter, tagged',
+        bullets: [
+            'lock 97d135f9… tags the fuel: SHA256(nf0‖nf1) as NFT commitments',
+            'action broadcast ATOMICALLY with its unconfirmed lock — 28,127 B',
+            'balance 0 → 1,000,000 FT in the state NFT; 2 tag NFTs burned',
+        ],
+        meta: ['chipnet', 'fee 30,000 sats · 1.067 sat/B'],
+        tx: '9d9aa97a…ccf0',
+        txFull: '9d9aa97a1ccdcd6662eb934fd55c72dff17ddba8c6c152a506871f795026ccf0',
+    },
+    {
+        stage: 'Transfer',
+        cls: 'stage-violet',
+        dot: '#c48dff',
+        network: 'chipnet',
+        kicker: 'private notes change hands',
+        bullets: [
+            'lock 5db06be7… (tag 620e2824…) + action, atomic',
+            '28,211 B · 30,000 sats (1.063 sat/B) · public value moved: zero',
+            'sender, receiver, amount: invisible on chain',
+        ],
+        meta: ['chipnet', 'fee 30,000 sats · 1.063 sat/B'],
+        tx: '5262417b…9987',
+        txFull: '5262417b7fff1b0e9f9cd60ab80625e573ac565a916ff1d451369d433bd09987',
+    },
+    {
+        stage: 'Unshield',
+        cls: 'stage-lime',
+        dot: '#bef264',
+        network: 'chipnet',
+        kicker: '250,000 units exit, proven honest',
+        bullets: [
+            'lock 70ab2a1f… (tag cec1170e…) + action, atomic',
+            'the public payout output EXECUTED: 250,000 FT to the wallet',
+            '28,175 B · 29,000 sats (1.029 sat/B) · final root 1829766…, balance 750,000',
+        ],
+        meta: ['chipnet', 'payout executed'],
+        tx: 'e54d19fb…8eab',
+        txFull: 'e54d19fb751f60a0955ba92a0af75ad87083b2e1cb1648b4fa08312b901d8eab',
+    },
+]
+
+/* Minting guard + blank vending — the custody and distribution layers (all live). */
+const ROLE2_INFRA = [
+    {
+        kicker: 'custody, settled',
+        title: 'The minting guard',
+        body: 'The category\'s minting NFT is locked at the guard P2SH32 aa2066a2…, and the ONLY spendable shape recreates it at the guard\'s own locking while minting exactly K=64 NFT-only empty-commitment blanks. Burning the minting NFT and minting any fungible amount are consensus-impossible — the 100M supply is frozen; a fully compromised operator key can only choose WHEN a batch runs. Adopted live with no redeploy (block 345,503); the first guarded batch executed on chain at block 345,504 — consensus 157,733 op / standard 178,853 op, both ACCEPT.',
+        buttons: [
+            { label: 'adopt a5d73b4e…', href: 'https://explorer.selene.cash/tx/a5d73b4e4d4645eb8d014c59fb5ce40d58f8a661b45ccb00e40530e58bc034e4?network=chipnet' },
+            { label: 'batch ad1d7845…', href: 'https://explorer.selene.cash/tx/ad1d7845cc53013ac0d0f2001b87fd78ecf2e8dcd344c3853ee242c62d3fa165?network=chipnet' },
+        ],
+    },
+    {
+        kicker: 'permissionless acquisition',
+        title: 'The blank vending machine',
+        body: 'A P2SH32 machine per blank with NO signature anywhere: the buyer\'s tokenless funding input pays the exact pinned price (1,000 sats) to the operator\'s P2PKH and the blank is delivered to the funding input\'s OWN locking — the blank follows the money. Proven live by a total stranger: the load put 2 blanks in the machine (block 345,663) and a key never seen by the operator bought BOTH (blocks 345,664 and 345,666) using only its own signature — the covenant executed on chain, 7,545 op consensus / 8,057 op standard, both ACCEPT.',
+        buttons: [
+            { label: 'load 460a6f2a…', href: 'https://explorer.selene.cash/tx/460a6f2a1418e6312df2cb6bec12ef771cc913b507173c18cf74f3b9be535d18?network=chipnet' },
+            { label: 'buy bc2c326e…', href: 'https://explorer.selene.cash/tx/bc2c326e9c86301cf20275a6a1e2374a04988a9c6cb1e9fb88159aaae718dec6?network=chipnet' },
+        ],
+    },
+]
+
 /* ── Live pools (from pool-registry.json) ────────────────────────── */
 /* Explorer: Selene (user directive 2026-11-13 — imaginary.cash is FALLBACK ONLY, never primary). */
 const EXPLORER = 'https://explorer.selene.cash/tx/'
 const NETQ = '?network=chipnet'
 const MAINNET_NETQ = '?network=mainnet'
 const POOLS = [
+    {
+        name: 'chipnet-role2-pool-v2-tagged',
+        cat: '480e30ff…b9d0',
+        catFull: '480e30ff1d3f5f0b6fe9dd2dbe363b1776f61566f29a395628d0b50abd01b9d0',
+        locking: 'aa203e40…2987',
+        lockingFull: 'aa203e40b64cff154d4b3305e8c8cc4e3174bc595ad74342a8445a9a7798b7be3a2987',
+        root: '551108f6…510f',
+        firstOp: 'DEPLOYED 2026-11-24 · role-2 · reviewed sound verifier · block 345,467',
+        tx: '2eaeb97f…83b8',
+        txFull: '2eaeb97fc85b2ff0fdd6c6afd1d807f8a715bd92a40258fae9f0e6ce50fe83b8',
+        badge: 'badge-done',
+        badgeLabel: 'deployed · current',
+        note: 'The current generation: the pool rules run INSIDE the independently reviewed sound verifier as a role-2 hook (program 7,834 B, locking aa203e40…). Signature-free 3-input actions — every pool UTXO spends the one program P2SH32; there is no separate covenant and no step fleet. Deposit tags (checks 4c+4g) bind the fuel to the funded action\'s own nullifiers — the theft replay REJECTS at 4g. Minting guard + permissionless blank vending live (see above). Full lifecycle confirmed: SHIELD 9d9aa97a… → TRANSFER 5262417b… → UNSHIELD 250,000 e54d19fb… (payout executed), each broadcast atomically with its tagged lock. Under OUR solo-ceremony VK (sha256 05250429…).',
+    },
+    {
+        name: 'chipnet-role2-pool',
+        cat: 'b6ee4196…eb72',
+        catFull: 'b6ee4196da1b0e3d548a03ea86a63d61445cd38d74300b2f7a8725eea05ceb72',
+        locking: 'aa20cd37…cd87',
+        lockingFull: 'aa20cd37fe80b308ae414c2d342dae482256548f7280918b4b1946057f1b631d4acd87',
+        root: '551108f6…510f',
+        firstOp: 'DEPLOYED 2026-11-24 · role-2 · untagged · block 345,413',
+        tx: 'f8f215c3…3319',
+        txFull: 'f8f215c3826b763805c71f0ee281b406cfa2e0d944f541dfdc3ae56e473b3319',
+        badge: 'badge-wait',
+        badgeLabel: 'superseded',
+        note: 'The first role-2 deployment — full lifecycle confirmed on chain (SHIELD 582cefee… block 345,415 → TRANSFER 17f1322b… 345,423 → UNSHIELD 250,000 24cd6b42… 345,427, payout executed; final root 19318325…, balance 750,000). Superseded the same day by the tagged v2: its hook binds no author (standing fuel was consumable by any valid action between lock- and action-confirmation — user-surfaced), and its minting NFT was burned in the deploy, so it can never mint tag blanks. Its 750,000 shielded FT remain spendable.',
+    },
     {
         name: 'chipnet-pusd-v4-covenant0',
         cat: '0d31da75…d664',
@@ -322,8 +446,9 @@ const LIFECYCLE = [
 
             <p class="animate-rise mt-8 max-w-2xl text-base leading-relaxed text-slate-100/95 sm:text-lg" style="animation-delay: 0.42s">
                 A complete Groth16 shielded pool for CashTokens — note commitments, nullifiers,
-                a Merkle tree, a covenant state machine and a full on-chain Groth16 verifier —
-                deployed and measured on Bitcoin Cash, chipnet and <strong class="font-semibold text-white">mainnet</strong>. <strong class="font-semibold text-white">It runs
+                a Merkle tree, and the pool rules running <strong class="font-semibold text-white">inside</strong> a full
+                on-chain Groth16 verifier — deployed and measured on Bitcoin Cash, chipnet and
+                <strong class="font-semibold text-white">mainnet</strong>. <strong class="font-semibold text-white">It runs
                 today</strong>: one standard transaction, one scripting VM, no fork required.
             </p>
 
@@ -331,6 +456,7 @@ const LIFECYCLE = [
                 <span class="status-chip status-lime">live on mainnet</span>
                 <span class="status-chip status-cyan">no consensus changes</span>
                 <span class="status-chip status-violet">asset-generic — category is a private witness</span>
+                <span class="status-chip status-lime">reviewed sound verifier — deployed</span>
             </div>
 
             <div class="animate-rise mt-10 flex flex-col items-center gap-4 sm:flex-row" style="animation-delay: 0.58s">
@@ -358,6 +484,158 @@ const LIFECYCLE = [
             </div>
         </section>
 
+        <!-- ── Featured: the CURRENT pool (role-2, deposit-tagged) ── -->
+        <section id="role2" class="relative z-10 mx-auto w-full max-w-6xl px-6 pb-28 sm:pb-36">
+            <div class="reveal text-center">
+                <p class="font-mono text-[0.8rem] uppercase tracking-[0.45em] text-lime-200">live · chipnet · the current generation</p>
+                <h2 class="mt-5 font-display text-[clamp(1.9rem,5vw,3.4rem)] font-bold leading-[1.08] text-white">
+                    The Current Pool:<br />Rules Inside the Verifier
+                </h2>
+                <p class="mx-auto mt-5 max-w-3xl text-base leading-relaxed text-slate-100 sm:text-lg">
+                    The successor to every pool below: the independently reviewed
+                    <span class="font-mono text-xs text-lime-300">bch-groth16-bn254-sound-native</span>
+                    verifier with the pool rules running as a <strong class="font-semibold text-white">role-2 hook inside the same
+                    program</strong> — no separate covenant, no step-UTXO fleet. Every pool UTXO (state NFT, deposits,
+                    fee fuel) is locked to the one program P2SH32, and every action is a
+                    <strong class="font-semibold text-white">signature-free 3-input spend</strong>: the script satisfaction
+                    is its own authorization. Deployed on chipnet 2026-11-24 under our solo-ceremony
+                    VK, with deposit tags binding fuel to the funded action, a minting guard making
+                    burn and FT-inflation consensus-impossible, and permissionless blank vending —
+                    all confirmed on chain.
+                </p>
+            </div>
+
+            <div class="reveal mt-12">
+                <svg viewBox="0 0 960 584" class="h-auto w-full" role="img" aria-label="Role-2 pool architecture: three signature-free inputs — two tagged fuel UTXOs and the state NFT — all spending one program P2SH32 that contains the reviewed sound verifier plus the role-2 hook with the pool rules; outputs are the 169-byte OP_RETURN carrier, the new state NFT, and the unshield payout.">
+                    <defs>
+                        <marker id="arr2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+                            <path d="M0 0L10 5L0 10z" fill="#7dd3a8" />
+                        </marker>
+                    </defs>
+
+                    <!-- Private band -->
+                    <rect x="40" y="24" width="880" height="80" rx="16" fill="rgba(190,242,100,0.04)" stroke="rgba(190,242,100,0.35)" stroke-dasharray="7 5" />
+                    <text x="60" y="50" font-family="Space Mono, monospace" font-size="13" fill="#bef264" letter-spacing="3">PRIVATE — WITNESSES + PROOF, NEVER ON-CHAIN</text>
+                    <text x="60" y="76" font-family="Space Mono, monospace" font-size="12" fill="#e2e8f0">notes cm&#7522; · nullifiers nf&#7522; · Groth16 proof 128 B (22.8 s witness)</text>
+
+                    <!-- Arrow: private -> program -->
+                    <line x1="480" y1="104" x2="480" y2="138" stroke="#7dd3a8" stroke-width="2" marker-end="url(#arr2)" />
+                    <text x="494" y="126" font-family="Space Mono, monospace" font-size="11" fill="#94a3b8">witness + proof ride the unlocking</text>
+
+                    <!-- The one program -->
+                    <rect x="230" y="144" width="500" height="168" rx="16" fill="rgba(103,232,249,0.05)" stroke="rgba(103,232,249,0.45)" />
+                    <text x="480" y="176" text-anchor="middle" font-family="Space Mono, monospace" font-size="14" fill="#67e8f9" letter-spacing="2">THE ONE PROGRAM — P2SH32 aa203e40…2987</text>
+                    <text x="480" y="202" text-anchor="middle" font-family="Space Mono, monospace" font-size="12" fill="#cbd5e1">reviewed sound verifier · 27,624 B · roles 1/2/3</text>
+                    <text x="480" y="224" text-anchor="middle" font-family="Space Mono, monospace" font-size="12" fill="#bef264">role-2 hook = THE POOL RULES · 524 B · 37,198 op</text>
+                    <text x="480" y="246" text-anchor="middle" font-family="Space Mono, monospace" font-size="12" fill="#94a3b8">carrier binding · tags 4c/4g · nullifier archive · payout</text>
+                    <rect x="330" y="262" width="300" height="16" rx="8" fill="rgba(190,242,100,0.14)" />
+                    <text x="480" y="274" text-anchor="middle" font-family="Space Mono, monospace" font-size="11" fill="#bef264">signature-free — the script satisfaction IS the authorization</text>
+
+                    <!-- Inputs (left) -->
+                    <rect x="40" y="340" width="200" height="56" rx="10" fill="rgba(255,255,255,0.04)" stroke="rgba(255,255,255,0.12)" />
+                    <text x="140" y="362" text-anchor="middle" font-family="Space Mono, monospace" font-size="11" fill="#e2e8f0">in0 · FUEL UTXO</text>
+                    <text x="140" y="380" text-anchor="middle" font-family="Space Mono, monospace" font-size="10" fill="#94a3b8">tag = SHA256(nf0‖nf1)</text>
+                    <rect x="40" y="416" width="200" height="56" rx="10" fill="rgba(255,255,255,0.04)" stroke="rgba(255,255,255,0.12)" />
+                    <text x="140" y="438" text-anchor="middle" font-family="Space Mono, monospace" font-size="11" fill="#e2e8f0">in1 · FUEL UTXO</text>
+                    <text x="140" y="456" text-anchor="middle" font-family="Space Mono, monospace" font-size="10" fill="#94a3b8">tag = SHA256(nf0‖nf1)</text>
+                    <rect x="40" y="492" width="200" height="56" rx="10" fill="rgba(196,141,255,0.05)" stroke="rgba(196,141,255,0.4)" />
+                    <text x="140" y="514" text-anchor="middle" font-family="Space Mono, monospace" font-size="11" fill="#c48dff">in2 · STATE NFT</text>
+                    <text x="140" y="532" text-anchor="middle" font-family="Space Mono, monospace" font-size="10" fill="#94a3b8">root ‖ nullifier set · FT = balance</text>
+
+                    <!-- Arrows: inputs -> program -->
+                    <line x1="240" y1="368" x2="230" y2="250" stroke="#7dd3a8" stroke-width="2" marker-end="url(#arr2)" />
+                    <line x1="240" y1="444" x2="230" y2="270" stroke="#7dd3a8" stroke-width="2" marker-end="url(#arr2)" />
+                    <line x1="240" y1="520" x2="230" y2="290" stroke="#7dd3a8" stroke-width="2" marker-end="url(#arr2)" />
+                    <text x="252" y="470" font-family="Space Mono, monospace" font-size="11" fill="#94a3b8">3 inputs, one locking</text>
+
+                    <!-- Outputs (right) -->
+                    <rect x="720" y="340" width="200" height="56" rx="10" fill="rgba(190,242,100,0.05)" stroke="rgba(190,242,100,0.3)" />
+                    <text x="820" y="362" text-anchor="middle" font-family="Space Mono, monospace" font-size="11" fill="#bef264">out0 · OP_RETURN carrier</text>
+                    <text x="820" y="380" text-anchor="middle" font-family="Space Mono, monospace" font-size="10" fill="#94a3b8">nf0‖nf1‖cm0‖cm1‖root‖pv‖sign</text>
+                    <rect x="720" y="416" width="200" height="56" rx="10" fill="rgba(196,141,255,0.05)" stroke="rgba(196,141,255,0.4)" />
+                    <text x="820" y="438" text-anchor="middle" font-family="Space Mono, monospace" font-size="11" fill="#c48dff">out1 · NEW STATE NFT</text>
+                    <text x="820" y="456" text-anchor="middle" font-family="Space Mono, monospace" font-size="10" fill="#94a3b8">newRoot ‖ newNull · FT = newBalance</text>
+                    <rect x="720" y="492" width="200" height="56" rx="10" fill="rgba(103,232,249,0.05)" stroke="rgba(103,232,249,0.4)" />
+                    <text x="820" y="514" text-anchor="middle" font-family="Space Mono, monospace" font-size="11" fill="#67e8f9">out2 · PAYOUT (unshield)</text>
+                    <text x="820" y="532" text-anchor="middle" font-family="Space Mono, monospace" font-size="10" fill="#94a3b8">pv FT → any address · public by design</text>
+
+                    <!-- Arrows: program -> outputs -->
+                    <line x1="730" y1="250" x2="720" y2="368" stroke="#7dd3a8" stroke-width="2" marker-end="url(#arr2)" />
+                    <line x1="730" y1="270" x2="720" y2="444" stroke="#7dd3a8" stroke-width="2" marker-end="url(#arr2)" />
+                    <line x1="730" y1="290" x2="720" y2="520" stroke="#7dd3a8" stroke-width="2" marker-end="url(#arr2)" />
+                    <text x="700" y="470" font-family="Space Mono, monospace" font-size="11" fill="#94a3b8">2 + sign outputs</text>
+
+                    <!-- Bottom strip: chipnet context -->
+                    <rect x="120" y="556" width="720" height="24" rx="12" fill="rgba(190,242,100,0.1)" stroke="rgba(190,242,100,0.4)" />
+                    <text x="480" y="572" text-anchor="middle" font-family="Space Mono, monospace" font-size="12" fill="#bef264">chipnet · deploy 2eaeb97f… block 345,467 · minting guard aa2066a2… · blank vending aa206b51…</text>
+                </svg>
+            </div>
+
+            <div class="reveal mt-14">
+                <div class="grid grid-cols-1 gap-6 md:grid-cols-2">
+                    <template v-for="(s, i) in ROLE2_LIFECYCLE" :key="s.stage">
+                        <div class="life-stage">
+                            <div class="stage-dot" :class="s.cls" :style="{ animationDelay: (i * 2) + 's' }">
+                                <span class="font-display text-lg font-extrabold">{{ String(i + 1).padStart(2, '0') }}</span>
+                            </div>
+                            <h3 class="mt-5 font-display text-xl font-bold text-white">{{ s.stage }}</h3>
+                            <p class="mt-1 font-mono text-[0.78rem] uppercase tracking-[0.22em] text-slate-200">{{ s.kicker }}</p>
+                            <ul class="life-points" :style="{ '--dot': s.dot }">
+                                <li v-for="b in s.bullets" :key="b">{{ b }}</li>
+                            </ul>
+                            <div class="mt-4 flex flex-wrap justify-center gap-2">
+                                <span v-for="m in s.meta" :key="m" class="life-meta">{{ m }}</span>
+                            </div>
+                            <div class="mt-6 flex justify-center">
+                                <a :href="EXPLORER + s.txFull + NETQ" target="_blank" rel="noopener" class="tx-btn tx-btn-lg">
+                                    <span class="tx-chip">{{ s.network }}</span>
+                                    <span class="tx-id">{{ s.tx }}</span>
+                                    <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="h-3 w-3">
+                                        <path d="M7 17L17 7M9 7h8v8" />
+                                    </svg>
+                                </a>
+                            </div>
+                        </div>
+                    </template>
+                </div>
+            </div>
+
+            <p class="reveal mt-8 text-center font-mono text-[0.8rem] leading-relaxed text-slate-200">
+                every tx confirmed on chipnet [measured] · each action was broadcast ATOMICALLY with
+                its tagged lock (the action spends the lock's unconfirmed outputs — first-seen wins,
+                closing the theft window to ~zero) · fees are BARE per the fee policy: 1 sat/B floor,
+                fuel prepaid in the lock · final state: root 1829766…, balance 750,000, notes at tree 6,7
+            </p>
+
+            <!-- Guard + vending -->
+            <div class="reveal mt-14">
+                <div class="grid gap-6 lg:grid-cols-2">
+                    <div v-for="infra in ROLE2_INFRA" :key="infra.title" class="fact-card">
+                        <p class="font-mono text-[0.72rem] uppercase tracking-[0.3em] text-lime-200">{{ infra.kicker }}</p>
+                        <h3 class="mt-3 font-display text-xl font-bold text-white">{{ infra.title }}</h3>
+                        <p class="mt-3 text-sm leading-relaxed text-slate-100">{{ infra.body }}</p>
+                        <div class="mt-5 flex flex-wrap gap-3">
+                            <a v-for="b in infra.buttons" :key="b.href" :href="b.href" target="_blank" rel="noopener" class="tx-btn">
+                                <span class="tx-chip">tx</span>
+                                <span class="tx-id">{{ b.label }}</span>
+                                <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="h-3 w-3">
+                                    <path d="M7 17L17 7M9 7h8v8" />
+                                </svg>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <p class="reveal mt-8 text-center font-mono text-[0.8rem] leading-relaxed text-slate-200">
+                client integration: the nito.cash wallet is committed to its own VK (27f6ea03…) and the
+                7-input shape — the proving-asset swap to our VK (05250429…) plus the 3-input tagged
+                builder are the delivery package's work items ·
+                <a href="https://github.com/APECSdev/hushyourmoney/blob/master/docs/POOL-HANDOFF-2026-11-24-NITO-ROLE2-TAGGED.md" target="_blank" rel="noopener" class="src-link">the delivery package ↗</a> ·
+                their client is the final approval
+            </p>
+        </section>
+
         <!-- ── Featured: MAINNET matrix (PREP → GENESIS → DEPLOY → TRANSFER) ── -->
         <section id="mainnet-matrix" class="relative z-10 mx-auto w-full max-w-6xl px-6 pb-28 sm:pb-36">
             <div class="reveal text-center">
@@ -365,7 +643,7 @@ const LIFECYCLE = [
                 <h2 class="mt-5 font-display text-[clamp(1.9rem,5vw,3.4rem)] font-bold leading-[1.08] text-white">
                     Live on Bitcoin Cash mainnet
                 </h2>
-                <p class="mt-3 font-mono text-xs text-slate-200">real PUSD · real Groth16 proof · every stage linked to its mainnet transaction [measured]</p>
+                <p class="mt-3 font-mono text-xs text-slate-200">real PUSD · real Groth16 proof · every stage linked to its mainnet transaction [measured] · the first generation's architecture, demo grade</p>
             </div>
 
             <div class="reveal mt-14">
@@ -408,11 +686,11 @@ const LIFECYCLE = [
         <!-- ── Featured: the lifecycle (SHIELD → TRANSFER → UNSHIELD) ── -->
         <section id="lifecycle" class="relative z-10 mx-auto w-full max-w-6xl px-6 pb-28 sm:pb-36">
             <div class="reveal text-center">
-                <p class="font-mono text-[0.8rem] uppercase tracking-[0.45em] text-lime-200">01 · the lifecycle · chipnet matrix</p>
+                <p class="font-mono text-[0.8rem] uppercase tracking-[0.45em] text-lime-200">01 · the first lifecycle · chipnet 2026-10</p>
                 <h2 class="mt-5 font-display text-[clamp(1.9rem,5vw,3.4rem)] font-bold leading-[1.08] text-white">
                     Shield, Transfer, Unshield
                 </h2>
-                <p class="mt-3 font-mono text-xs text-slate-200">one full pass through the pool on chipnet — every stage linked to the transaction that performed it [measured]</p>
+                <p class="mt-3 font-mono text-xs text-slate-200">the sibling-split generation's first full pass through the pool — every stage linked to the transaction that performed it [measured]</p>
             </div>
 
             <div class="reveal mt-14 overflow-x-auto">
@@ -502,7 +780,7 @@ const LIFECYCLE = [
             <div id="architecture" class="reveal mt-24 text-center">
                 <p class="font-mono text-[0.8rem] uppercase tracking-[0.45em] text-cyan-200">03 · the machine</p>
                 <h2 class="mt-5 font-display text-[clamp(1.9rem,5vw,3.4rem)] font-bold leading-[1.08] text-white">Architecture</h2>
-                <p class="mt-3 font-mono text-xs text-slate-200">rendered from the design docs — GENERALIZED-SHIELDING.md / COVENANT-DESIGN.md</p>
+                <p class="mt-3 font-mono text-xs text-slate-200">generation 1 — verifier as sibling inputs · rendered from GENERALIZED-SHIELDING.md / COVENANT-DESIGN.md · the current generation is diagrammed in the role-2 section above</p>
             </div>
 
             <div class="reveal mt-12">
@@ -572,8 +850,9 @@ const LIFECYCLE = [
                     <h3 class="mt-4 font-display text-lg font-bold text-white">Prove</h3>
                     <p class="mt-3 text-sm leading-relaxed text-slate-200">
                         The wallet builds the action locally, generates the Groth16 witness
-                        and proof (16.967 s measured for the full joinsplit on our build
-                        runner) and assembles one transaction.
+                        and proof — 22.8 s measured for the deployed role-2 witness under our
+                        ceremony zkey (16.967 s for the same circuit on the build runner) —
+                        and assembles one transaction.
                     </p>
                 </div>
 
@@ -581,8 +860,10 @@ const LIFECYCLE = [
                     <div class="step-num text-cyan-300">2</div>
                     <h3 class="mt-4 font-display text-lg font-bold text-white">Verify</h3>
                     <p class="mt-3 text-sm leading-relaxed text-slate-200">
-                        Sibling script-inputs run the on-chain verifier (35,626 B total);
-                        vk_x is recomputed in-script so public inputs can never be forged.
+                        The action has three inputs, all spending the one program P2SH32 — the
+                        reviewed sound verifier (27,624 B) runs inside it, and the role-2 hook
+                        checks the pool rules in the same script. No signature: the script
+                        satisfaction is the authorization.
                     </p>
                 </div>
 
@@ -590,9 +871,9 @@ const LIFECYCLE = [
                     <div class="step-num text-violet-300">3</div>
                     <h3 class="mt-4 font-display text-lg font-bold text-white">Settle</h3>
                     <p class="mt-3 text-sm leading-relaxed text-slate-200">
-                        The covenant checks the actionHash, archives the nullifiers, adopts
-                        the new tree root in its state NFT and pays the unshield leg —
-                        all in the same transaction.
+                        The hook recomputes the actionHash from the on-chain carrier and binds
+                        it to the proof, archives the nullifiers, adopts the new tree root in
+                        the state NFT and pays the unshield leg — all in the same transaction.
                     </p>
                 </div>
             </div>
@@ -629,7 +910,7 @@ const LIFECYCLE = [
             </div>
 
             <p class="reveal mt-4 font-mono text-[0.8rem] leading-relaxed text-slate-200">
-                build records: APECSdev/pusd-shielded-pool (CHIPNET.md) · hushyourmoney (POOL-DEPLOYMENT.md) — all measured on chipnet, 2026-10/11.
+                build records: APECSdev/pusd-shielded-pool (CHIPNET.md · wip-role2-hook/STATUS.md) · hushyourmoney (POOL-DEPLOYMENT.md §15–§18) — measured on chipnet 2026-10/11 and 2026-11-24.
             </p>
         </section>
 
@@ -715,7 +996,8 @@ const LIFECYCLE = [
             <p class="reveal mt-6 text-sm leading-relaxed text-slate-200">
                 A fifth pool (Gate 6b) demonstrates the full two-asset lifecycle — SHIELD A, SHIELD B,
                 TRANSFER, UNSHIELD — on a single multi-asset instance; its operations were VM-verified and
-                broadcast 2026-11-10/11 and are pending confirmation at last check. Registry entry to follow.
+                broadcast 2026-11-10/11 but never confirmed: the op set was RBF-replaced with a fresh set
+                and the replacements also remain unconfirmed on chain, so there is no explorer link.
                 Full registry: <a href="https://github.com/APECSdev/hushyourmoney/blob/master/pool-registry.json" target="_blank" rel="noopener" class="src-link">pool-registry.json ↗</a>
             </p>
         </section>
@@ -809,6 +1091,23 @@ const LIFECYCLE = [
                         covenant is shape-agnostic; the program around it is not.
                     </p>
                 </div>
+
+                <div class="fact-card reveal">
+                    <p class="font-mono text-[0.72rem] uppercase tracking-[0.3em] text-lime-200">the successor</p>
+                    <h3 class="mt-3 font-display text-xl font-bold text-white">The role-2 pool is the next integration</h3>
+                    <p class="mt-3 text-sm leading-relaxed text-slate-100">
+                        The current generation changes the client surface again, deliberately: the
+                        nito.cash wallet is committed to its own verifying key
+                        (<span class="font-mono text-xs">27f6ea03…</span>) and builds the 7-input
+                        covenant-at-input-0 shape, while the role-2 pool runs our solo-ceremony VK
+                        (<span class="font-mono text-xs">05250429…</span>) and a signature-free 3-input
+                        tagged shape with off-chain note delivery and blanks acquired through the
+                        vending machine. The proving-asset swap and the new builder are the delivery
+                        package's work items —
+                        <a href="https://github.com/APECSdev/hushyourmoney/blob/master/docs/POOL-HANDOFF-2026-11-24-NITO-ROLE2-TAGGED.md" target="_blank" rel="noopener" class="src-link">POOL-HANDOFF-2026-11-24-NITO-ROLE2-TAGGED.md ↗</a>.
+                        Per the standing directive, their client is the final approval for any deployed result.
+                    </p>
+                </div>
             </div>
 
             <div class="reveal mt-10 rounded-2xl border border-cyan-300/25 bg-cyan-300/5 px-5 py-5 font-mono text-xs leading-relaxed text-cyan-100">
@@ -830,22 +1129,30 @@ const LIFECYCLE = [
 
                 <div class="reveal space-y-6 text-base leading-relaxed text-slate-100 sm:text-lg" style="transition-delay: 0.12s">
                     <p>
-                        <strong class="font-semibold text-white">What was attacked:</strong> the on-chain
-                        verifier survived a red-team pass on its <em>public-input binding</em> — 5/5 valid
-                        proofs accepted, 9/9 mutated public inputs rejected, 26/26 red-team runs rejected.
-                        vk_x is recomputed in-script, so the public-input vector cannot be forged by a
-                        malicious spender.
+                        <strong class="font-semibold text-white">What was attacked:</strong> the first
+                        generation's on-chain verifier survived a red-team pass on its <em>public-input
+                        binding</em> — 5/5 valid proofs accepted, 9/9 mutated public inputs rejected, 26/26
+                        red-team runs rejected. vk_x is recomputed in-script, so the public-input vector
+                        cannot be forged by a malicious spender. The deployed role-2 program carries its
+                        own gates under our verifying key: acceptance <strong class="text-white">20/20</strong>
+                        (the theft replay REJECTS at check 4g), red team <strong class="text-white">146/0</strong>,
+                        and a 69-scenario liveness sweep with <strong class="text-white">0 failures</strong>
+                        — worst per-input margin 6.00% standard / 6.49% consensus, re-verified from the
+                        committed reports.
                     </p>
                     <p>
-                        <strong class="font-semibold text-white">What is NOT established:</strong> the
-                        pairing check itself. The verifier every pool here deployed is the
+                        <strong class="font-semibold text-white">What was withdrawn — and what replaced it:</strong>
+                        the first generation's verifier is the
                         <span class="font-mono text-xs">densless-msm</span> construction, and its author
                         <strong class="text-rose-200">withdrew the soundness claims on 2026-10-26</strong>:
                         the shared Miller event consumes slopes without the tangent/chord equations, and the
                         terminal's carried-R predicate compares a value with itself instead of checking the
-                        B endpoint (finding F6). Our fixture results do not repair that. No end-to-end
-                        false acceptance has been demonstrated — but the argument that a forged witness
-                        cannot pass is gone, and the pool's value conservation rests on it.
+                        B endpoint (finding F6). Every pool deployed before 2026-11-24 — gate3, gate6,
+                        gate6b, mainnet, nito v2/v4 — still runs it, and that record stands. The
+                        <strong class="text-white">current pool does not</strong>: it runs the independently
+                        reviewed <span class="font-mono text-xs">bch-groth16-bn254-sound-native</span>
+                        (27,624 B, reviewed 2026-10-26), which verifies the same relation under the same
+                        verifying key — no new trusted setup — with the pool rules as a role-2 hook.
                     </p>
                     <p>
                         <strong class="font-semibold text-white">A second, independent gap — ours.</strong>
@@ -860,20 +1167,22 @@ const LIFECYCLE = [
                         <code class="text-rose-200">UTXOBYTECODE</code> read. A one-byte
                         <code class="text-rose-200">OP_1</code> script at that index was
                         <strong class="text-rose-200">ACCEPTED</strong> on the BCH-2026 VM: no proof, no
-                        verifier, full drain. The fix pins all five step lockings and the genesis input
-                        index as constructor arguments; the regression gate is 6/6 (honest transaction
-                        accepted, both substitutions rejected). It is fixed in source and
-                        <strong class="text-rose-200">not yet deployed</strong>.
+                        verifier, full drain. Resolved on both routes: the generation-1 covenant got the
+                        sibling pin in source (all five step lockings and the genesis index as constructor
+                        arguments; regression gate 6/6), and the deployed role-2 pool went further — the
+                        sibling is <strong class="text-white">gone entirely</strong>, because the pool rules
+                        moved inside the verifier and every input of an action spends the one program
+                        locking. There is no script position left to substitute.
                     </p>
                     <div class="rounded-2xl border border-rose-300/40 bg-rose-300/10 px-5 py-4 font-mono text-xs leading-relaxed text-rose-100">
-                        DISCLOSURE · (1) the deployed verifier (densless-msm) is WITHDRAWN by its author
-                        under finding F6 · (2) the covenant did not pin its verifier sibling, so a
-                        substituted script was accepted — fixed in source, not deployed · every pool
-                        deployed here — gate3, gate6, gate6b, mainnet — carries BOTH · the reviewed
-                        replacement (27,624 B, 3 inputs) verifies the same relation under the same
-                        verifying key, so it needs no new trusted setup — but it cannot be dropped in
-                        beside a covenant (its graph pins exactly 3 inputs, all the same locking), so the
-                        route is to extend its third role with the pool rules
+                        DISCLOSURE · (1) the first generation's verifier (densless-msm) is WITHDRAWN by
+                        its author under finding F6 — every pool deployed before 2026-11-24 still carries
+                        it · (2) that generation's covenant did not pin its verifier sibling, so a
+                        substituted script was accepted — pinned in source, and eliminated structurally
+                        by the role-2 redesign · the current pool (chipnet-role2-pool-v2-tagged, deployed
+                        2026-11-24) carries the reviewed sound verifier with the rules inside role 2 —
+                        but the hook is our own code, with no independent review: the bar it must clear
+                        is Nito Cash's own client as the final approval · and every setup remains 1-of-1
                     </div>
                     <p class="font-mono text-[0.8rem] leading-relaxed text-slate-200">
                         withdrawal record:
@@ -969,9 +1278,10 @@ const LIFECYCLE = [
                     <p>
                         No. The Groth16 verifier runs as an ordinary script inside one standard
                         transaction on the BCH 2026 VM, using CashTokens and P2SH32 — all shipped
-                        features. The measured verifier transaction is 35,626 bytes. That is the
-                        point of the exercise: the existence proof came before any proposal. Whether
-                        that particular program is <em>sound</em> is a separate question — see
+                        features. The withdrawn generation measured 35,626 bytes; the reviewed sound
+                        verifier now deployed is 27,624 bytes. That is the point of the exercise:
+                        the existence proof came before any proposal. Which programs are
+                        <em>sound</em> is a separate question — see
                         <a href="#limits" class="src-link">08 · posture</a>.
                     </p>
                 </details>
@@ -983,6 +1293,35 @@ const LIFECYCLE = [
                         Gate 4 negative test, moving a single unit across categories was rejected
                         at witness generation. The covenant additionally enforces per-category
                         holdings continuity on-chain.
+                    </p>
+                </details>
+
+                <details class="faq-card reveal">
+                    <summary>Why did the pool rules move inside the verifier?</summary>
+                    <p>
+                        Because the reviewed sound build forced the question. Its graph pins exactly
+                        three inputs, every one of them spending the same P2SH32, and forbids any
+                        funding or fee input with another locking — so a covenant cannot sit beside it.
+                        The artifact documents the integration itself: applications that release funds
+                        add output rules in role 2. The pool's state machine, carrier binding, deposit
+                        tags and payout rules are that hook — 524 B of role-2 code, priced at 37,198 op.
+                        A side effect worth stating: the old sibling-substitution hole is structurally
+                        gone, because there is no sibling left to substitute.
+                    </p>
+                </details>
+
+                <details class="faq-card reveal">
+                    <summary>Can the operator censor users or inflate the supply?</summary>
+                    <p>
+                        Both are closed on chain. The minting NFT lives in the minting guard, whose
+                        only spendable shape recreates the NFT at the guard and mints exactly K=64
+                        NFT-only, empty-commitment blanks — burning it and minting fungible tokens are
+                        consensus-impossible, so the 100M supply is frozen. A compromised operator key
+                        can only choose when a batch runs. And acquisition is permissionless: the blank
+                        vending machine delivers a blank to any buyer's funding input against the exact
+                        pinned price, with no signature and no operator involvement — proven live by a
+                        total stranger who bought both machine blanks with only its own key. The
+                        operator's residual discretion is machine stock depth only.
                     </p>
                 </details>
 
@@ -1009,17 +1348,17 @@ const LIFECYCLE = [
                 <details class="faq-card reveal">
                     <summary>Is the on-chain verifier sound?</summary>
                     <p>
-                        <strong class="text-rose-200">Not as deployed.</strong> Every pool here runs
-                        <span class="font-mono text-xs">densless-msm</span>, whose author withdrew the
-                        full-verifier soundness claims on 2026-10-26 (finding F6): the shared Miller event
-                        consumes slopes without the tangent/chord equations, and the terminal compares a
-                        value with itself instead of checking the B endpoint. Our own tests measure the
-                        <em>public-input binding</em> — which that variant does repair — not the pairing.
-                        No false acceptance has been demonstrated end-to-end. The fix is a reviewed sound
-                        verifier (<span class="font-mono text-xs">bch-groth16-bn254-sound-native</span>,
-                        27,624 B, 3 inputs, one standard tx, reviewed 2026-10-26) which verifies the same
-                        relation under the same verifying key — so it needs a pool redeploy and
-                        <strong>no new trusted setup</strong>. See
+                        The current pool's verifier is the reviewed sound build
+                        (<span class="font-mono text-xs">bch-groth16-bn254-sound-native</span>, 27,624 B,
+                        3 inputs, one standard tx, independently reviewed 2026-10-26): every
+                        accept-relevant value is computed on-chain, a baked VK constant, hash-committed
+                        before any challenge it meets, or fixed by an exact field or integer equation.
+                        The first generation ran <span class="font-mono text-xs">densless-msm</span>, whose
+                        author withdrew the full-verifier soundness claims on 2026-10-26 (finding F6) —
+                        every pool deployed before 2026-11-24 still runs it, and that record stands. The
+                        swap needed <strong>no new trusted setup</strong>: both builds verify the same
+                        relation under the same verifying key. Still not established: the role-2 hook is
+                        our own code with no independent review, and every setup so far is 1-of-1. See
                         <a href="#limits" class="src-link">08 · posture</a>.
                     </p>
                 </details>
@@ -1035,7 +1374,10 @@ const LIFECYCLE = [
                         action emits seven inputs. That failure and its fix are recorded in
                         <a href="#integration" class="src-link">07 · integration</a> rather than
                         quietly replaced — the same pool, re-deployed under the same verifying
-                        key, is now spendable.
+                        key, is now spendable. The role-2 pool is the next integration: it runs our
+                        solo-ceremony VK, so the wallet needs the proving-asset swap plus the
+                        3-input tagged builder — the delivery package's work items. Their client
+                        remains the final approval.
                     </p>
                 </details>
             </div>
