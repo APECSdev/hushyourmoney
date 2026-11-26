@@ -1,7 +1,7 @@
 <!-- daemons/cashshuffle/PLAN.md -->
 # CashShuffle daemon plan
 
-Status: M0 done; M1 transport done and Nito chose official NIP-44 (`ac61542`); M2 round partial (state machine + VERIFY; Nito added the client VERIFY; signature verification, timeouts and persistence pending); M3 selection/caps + BCH signer partial; M4 carrier/lock/action partial (2N shape confirmed; Nito witness acceptance PASSED `a304d3c`; store/UI wiring + web acceptance pending). CS-1–CS-4 implemented; CS-5–CS-7 partial; CS-8–CS-12 not started.
+Status: M0 done; M1 transport done and Nito chose official NIP-44 (`ac61542`); M2 classic round partial (state machine + VERIFY; Nito added the client VERIFY; signature verification, timeouts and persistence pending); M3 selection/caps + BCH signer partial; M4 carrier/lock/action + **2N round primitive** partial (2N shape confirmed; builder/verifier/state machine pass 15 tests; Nito witness acceptance PASSED `a304d3c`; network loop, Nito store/UI, VM-eval and web acceptance pending). CS-1–CS-4 implemented; CS-5–CS-7 partial; CS-8–CS-12 not started.
 
 Owner key: **H** = Hush, **N** = Nito, **J** = joint.
 
@@ -15,16 +15,16 @@ Owner key: **H** = Hush, **N** = Nito, **J** = joint.
 | CS-4 | Relay pool: N relays, 80 ms per-connection outbox, dedupe by event id, reconnect/backoff, resubscribe, NIP-42 AUTH | H | CS-1 | Mock-relay tests pass; no network in unit tests |
 | CS-5 | Protocol engine: phases, `VERIFY` before `SIGNING`, signature verification, timeouts, blame, duplicate handling, round persistence | H | CS-4 | **state machine + VERIFY done** (16 tests, A2 unit test passes); signature verification, timeouts, persistence and A1/A2 end-to-end pending |
 | CS-6 | Wallet: equal-amount UTXO selection, BCH Schnorr 0x41 signing, broadcast, balance/caps | H | CS-4 | **selection/caps + BCH signer done** (9 tests: 5 wallet + 4 p2pkh); Electrum broadcast pending; A7 pending |
-| CS-7 | Role-2 pool adapter: tag pairs, blank acquisition, lock + action, atomic broadcast, VM-eval, off-chain note delivery | J | CS-6; Nito proving assets; Nito 3-input builder | **carrier/tag/pair/cost + lock/action builders done** (14 tests: 7 pool + 7 lock/action); web-platform acceptance, store/UI wiring, VM-eval, note delivery and A5/A6 pending |
+| CS-7 | Role-2 pool adapter: tag pairs, blank acquisition, lock + action, atomic broadcast, VM-eval, off-chain note delivery | J | CS-6; Nito proving assets; Nito 3-input builder | **carrier/tag/pair/cost + lock/action builders + 2N round primitive done** (15 new tests: 8 role2-round + 7 round-2n; 14 earlier lock/action/pool tests); web-platform acceptance, store/UI wiring, VM-eval, note delivery and A5/A6 pending |
 | CS-8 | Operations: hardened systemd, metrics endpoint, journald cap, backup/restore, runbook | H | CS-5, CS-6 | A9 hardening check passes |
-| CS-9 | 5-peer chipnet round with Nito browser peers | J | CS-5, CS-6 | A1 passes |
-| CS-10 | Malicious-coordinator negative test: coordinator presents a tx that omits a peer’s output | J | CS-5 | A2 passes; no signature; no broadcast |
+| CS-9 | 5-peer chipnet 2N round with Nito browser peers | J | CS-5, CS-6, CS-7 | A1 passes; 5 actions / 10 fuel outputs |
+| CS-10 | Malicious-coordinator negative test: coordinator presents a 2N tx that omits or retags a peer’s fuel pair | J | CS-5, CS-7 | A2 passes; no signature; no broadcast |
 | CS-11 | 24 h soak + 10 consecutive rounds within cap | H | CS-9 | A3 and A4 pass |
 | CS-12 | Nito client final approval | N | CS-7, CS-9 | Written approval recorded |
 
 ## 2. Task detail
 
-**Status 2026-11-26:** CS-1–CS-4 are implemented in `daemons/shared/src/nostr/` (44/44 shared tests); Nito chose official NIP-44 (`ac61542`) and wired NIP-42 (`d85bade`). CS-5 is implemented as a state machine + VERIFY in `cashshuffle/src/round.js` (16 round tests, including the malicious-coordinator case); Nito added the client VERIFY; signature verification, timeouts, persistence and the transport loop that drives `handleMessage()` are pending. CS-6 selection/funding/caps are implemented in `cashshuffle/src/wallet.js` (5 tests); the BCH P2PKH signer is implemented (4 p2pkh tests); Electrum broadcast is pending. CS-7 carrier/tag/pair/cost helpers are implemented in `cashshuffle/src/pool.js` and the lock/action builders in `cashshuffle/src/role2-{lock,action}.js` (14 tests: 7 pool + 7 lock/action); the 2N shape is confirmed, Nito’s role-2 witness acceptance PASSED (`a304d3c`), and the 3-input builders are done; the store/UI wiring, web-platform acceptance, VM-eval, note delivery, atomic broadcast and A5/A6 remain. CS-8–CS-12 remain.
+**Status 2026-11-26:** CS-1–CS-4 are implemented in `daemons/shared/src/nostr/` (44/44 shared tests); Nito chose official NIP-44 (`ac61542`) and wired NIP-42 (`d85bade`). CS-5 is implemented as a state machine + VERIFY in `cashshuffle/src/round.js` (16 round tests, including the malicious-coordinator case); Nito added the client VERIFY; signature verification, timeouts, persistence and the transport loop that drives `handleMessage()` are pending. CS-6 selection/funding/caps are implemented in `cashshuffle/src/wallet.js` (5 tests); the BCH P2PKH signer is implemented (4 p2pkh tests); Electrum broadcast is pending. CS-7 carrier/tag/pair/cost helpers are implemented in `cashshuffle/src/pool.js`; the lock/action builders are in `cashshuffle/src/role2-{lock,action}.js`; the **2N round primitive** is in `cashshuffle/src/role2-round.js` (builder, per-input signer, assembler, 2N verifier) and `cashshuffle/src/round-2n.js` (state machine). The 2N tests: 8 role2-round + 7 round-2n = 15. The 2N shape is confirmed, Nito’s role-2 witness acceptance PASSED (`a304d3c`), and the 3-input builders are done; the store/UI wiring, web-platform acceptance, network loop, VM-eval, note delivery, atomic broadcast and A5/A6 remain. CS-8–CS-12 remain.
 
 ### CS-1 — reference pin
 
@@ -65,11 +65,12 @@ Owner key: **H** = Hush, **N** = Nito, **J** = joint.
 - Implemented: one equal-amount input per round; tokenless funding selection; per-round/global caps; BCH Schnorr 0x41 P2PKH signing; never the Nostr BIP-340 signer.
 - Pending: token-aware UTXO refresh, Electrum broadcast, balance/cap gauges in the metrics snapshot.
 
-### CS-7 — role-2 adapter
+### CS-7 — role-2 adapter and 2N round
 
-- Implemented: `tag = SHA256(carrier[0..64])`; carrier parse/build; fuel-pair check; cost arithmetic; lock with 2 tagged fuel UTXOs, 2 blanks and optional FT deposit; 3-input action with 169-B carrier, new state and optional payout.
+- Implemented: `tag = SHA256(carrier[0..64])`; carrier parse/build; fuel-pair check; cost arithmetic; single-participant lock with 2 tagged fuel UTXOs, 2 blanks and optional FT deposit; 3-input action with 169-B carrier, new state and optional payout.
+- **2N round implemented:** `role2-round.js` builds the unsigned round (2N fuel outputs, 2 blanks per action, optional FT deposit/change, per-participant fee share, BCH change), signs per-input, applies signatures, assembles, and verifies the 2N shape (tags, fuel amounts, blanks, supplies, FT conservation, change, fee). `round-2n.js` runs the shared phase table with 2N registration/verify/sign/broadcast. Tests: `role2-round.test.js` 8, `round-2n.test.js` 7.
 - Nito confirmed the 2N shape, pinned the proving assets and PASSED the role-2 witness acceptance (`a304d3c`); the 3-input builders are done.
-- Pending: the store/UI wiring, web-platform SHIELD→TRANSFER→UNSHIELD, VM-eval in consensus and standard modes, off-chain note delivery, atomic lock+action broadcast.
+- Pending: the network loop that drives `handleMessage()`, the Nito client 2N UI, the store/UI wiring, web-platform SHIELD→TRANSFER→UNSHIELD, VM-eval in consensus and standard modes, off-chain note delivery, atomic lock+action broadcast, and the participant→tag blind for the coordinator.
 
 ### CS-8 — operations
 

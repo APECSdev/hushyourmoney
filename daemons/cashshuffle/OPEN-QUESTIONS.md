@@ -1,7 +1,7 @@
 <!-- daemons/cashshuffle/OPEN-QUESTIONS.md -->
 # CashShuffle daemon — open questions for the Nito rounds
 
-Each question has a proposed default. The Nito response of 2026-11-26 resolves Q1–Q6, Q9, Q10, Q12, Q13 and Q15; Q7, Q8, Q11 and Q14 remain open.
+Each question has a proposed default. The Nito response of 2026-11-26 resolves Q1–Q6, Q9, Q10, Q12, Q13 and Q15; Q7, Q8, Q11, Q14 and Q16 remain open.
 
 ## Q1. NIP-44 KDF + padding: official v2 or a versioned private variant?
 
@@ -51,7 +51,7 @@ Each question has a proposed default. The Nito response of 2026-11-26 resolves Q
 
 **Owner:** Joint.
 
-**Resolved 2026-11-26:** Nito confirmed 2N outputs (10 for 5 actions), with each participant contributing two equal inputs and receiving two same-tag outputs. The design is final in `docs/CASHSHUFFLE-NOSTR-DESIGN.md`.
+**Resolved 2026-11-26:** Nito confirmed 2N outputs (10 for 5 actions), with each participant contributing two equal inputs and receiving two same-tag outputs. The design is final in `docs/CASHSHUFFLE-NOSTR-DESIGN.md`. **Implemented 2026-11-26:** `role2-round.js` (builder/signer/assembler/verifier) and `round-2n.js` (state machine) pass 15 tests; see `2N-ROUND.md`. The network loop, Nito client 2N UI, VM-eval and A1/A2 remain.
 
 ## Q6. Fee accounting
 
@@ -61,7 +61,7 @@ Each question has a proposed default. The Nito response of 2026-11-26 resolves Q
 
 **Owner:** Joint.
 
-**Resolved 2026-11-26:** Nito confirmed the split and accepted the 400,000-sat cap for 10 actions.
+**Resolved 2026-11-26:** Nito confirmed the split and accepted the 400,000-sat cap for 10 actions. **2N implementation:** the builder keeps the fuel outputs at exactly 15,000 sats and pays the lock fee from the inputs; the fee is rounded to a multiple of N so every participant's change is exact; the per-round cap is `CASHSHUFFLE_MAX_LOCK_FEE_SATS` (5,000). BCH change is allowed and is a privacy leak; exact funding is the privacy-preserving choice.
 
 ## Q7. Blame behavior
 
@@ -125,7 +125,7 @@ Each question has a proposed default. The Nito response of 2026-11-26 resolves Q
 
 **Owner:** Nito.
 
-**Resolved 2026-11-26:** the 3-input builders (`role2-carrier.js`, `role2-lock.js`, `role2-action.js`, `role2-actions.js`) are done; the store/UI wiring and role-2 scan remain.
+**Resolved 2026-11-26:** the 3-input builders (`role2-carrier.js`, `role2-lock.js`, `role2-action.js`, `role2-actions.js`) are done; the store/UI wiring and role-2 scan remain. **2N client:** the Nito `protocol.js`/`round-runner.js` are still classic 1-in/1-out; the Desk 2N shape is pending.
 
 ## Q14. Metrics exposure
 
@@ -144,3 +144,13 @@ Each question has a proposed default. The Nito response of 2026-11-26 resolves Q
 **Owner:** Hush.
 
 **Resolved 2026-11-26:** Nito confirmed Hush owns the host sign-off; no Nito credentials are needed.
+
+## Q16. 2N coordinator/tag link
+
+**Why:** the 2N round's tag is public in the fuel output; the coordinator sees the participants' inputs and tags. If it learns which participant supplied which tag or blank, it can link the action pair to the funder. The design goal is that the tag identifies the fuel pair, not the funder (`docs/CASHSHUFFLE-NOSTR-DESIGN.md:77-78`); the classic CashShuffle onion hides the input-output mapping.
+
+**Proposed default:** the participants send their tag/blank assignment through the onion (or a blind), so the coordinator builds the outputs without learning the participant→tag mapping. The verifier checks its own pair; the coordinator never sees the mapping in clear. A test coordinator that knows the mapping must not be able to reduce the peer's anonymity set.
+
+**Owner:** Joint.
+
+**Status:** open. The 2N builder/verifier are implemented; the blind is not.

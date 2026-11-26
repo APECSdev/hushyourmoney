@@ -48,7 +48,7 @@ These rules apply to every file under `daemons/`.
 - `blackhost` has 2 CPU cores, 3.8 GiB RAM, and 2.8 GiB free on a 93%-full disk (verified 2026-11-25). The unit sets `MemoryMax=512M`, `CPUQuota=50%`, and the journald cap is part of the runbook.
 - `blackhost` Node is `/usr/local/bin/node` (v22.20.0).
 
-Dependencies: the transport tests need `@noble/ciphers`, `@noble/curves` and `@noble/hashes`; the P2PKH and role-2 tests need `@bitauth/libauth`. The web image’s `node_modules` does not include `@bitauth`; the full 97-test run on `blackhost` uses the Nito `apps/web/node_modules`, or install the daemon dependencies on the `apecsdev` VM. Current counts: 44 shared, 42 CashShuffle, 11 CashFusion.
+Dependencies: the transport tests need `@noble/ciphers`, `@noble/curves` and `@noble/hashes`; the P2PKH, role-2 and 2N tests need `@bitauth/libauth`. The web image’s `node_modules` does not include `@bitauth`; the full 112-test run on `blackhost` uses the Nito `apps/web/node_modules`, or install the daemon dependencies on the `apecsdev` VM. Current counts: 44 shared, 57 CashShuffle, 11 CashFusion.
 
 ## 6. Commit rules
 

@@ -1,7 +1,7 @@
 <!-- daemons/README.md -->
 # Daemons — permanent CashShuffle and CashFusion liquidity
 
-**Status:** shared transport (M1), CashShuffle round state machine + VERIFY (M2 partial), wallet selection + BCH P2PKH signer (M3 partial) and role-2 carrier/lock/action builders (M4 partial) implemented and tested (97/97 on blackhost); the network loop, signature verification/timeouts/persistence, Electrum broadcast, VM-eval, note delivery, CashFusion round and deployment are not implemented. No daemon is running or funded.
+**Status:** shared transport (M1), CashShuffle round state machine + VERIFY (M2 partial), wallet selection + BCH P2PKH signer (M3 partial), role-2 carrier/lock/action builders and the **pool-native 2N round** (M4 partial) implemented and tested (112/112 on blackhost); the network loop, signature verification/timeouts/persistence, Electrum broadcast, VM-eval, note delivery, CashFusion round and deployment are not implemented. No daemon is running or funded.
 **Source handoff:** `docs/CASHSHUFFLE-DAEMON-HANDOFF-2026-11-25.md`.
 **Reference implementation:** `../nito.cash/apps/web/src/lib/cashshuffle/`, `../nito.cash/apps/web/src/lib/nostr/`, `../nito.cash/apps/web/src/lib/pool/`.
 **Design:** `../nito.cash/docs/CASHSHUFFLE-NOSTR-DESIGN.md`.
@@ -86,6 +86,8 @@ daemons/
       pool.test.js
       role2-lock.test.js
       role2-action.test.js
+      role2-round.test.js
+      round-2n.test.js
   cashfusion/
     README.md
     PLAN.md
@@ -145,7 +147,7 @@ No blocker to the implemented cores. The remaining items block the first working
 
 **Never build on this host.** Build and test on the `apecsdev` VM; deploy to `blackhost`.
 
-The p2pkh and role-2 tests need `@bitauth/libauth`. The web image’s `node_modules` does not include it; the full 97-test run on `blackhost` uses the Nito `apps/web/node_modules`, or install the daemon dependencies on the `apecsdev` VM.
+The p2pkh, role-2 and 2N tests need `@bitauth/libauth`. The web image’s `node_modules` does not include it; the full 112-test run on `blackhost` uses the Nito `apps/web/node_modules`, or install the daemon dependencies on the `apecsdev` VM.
 
 ```bash
 # On the apecsdev VM, from the repository root:

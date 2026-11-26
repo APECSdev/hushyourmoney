@@ -1,7 +1,7 @@
 <!-- daemons/cashshuffle/README.md -->
 # CashShuffle daemon
 
-**Status:** shared transport (M1) done; round state machine + VERIFY (M2 partial; signature verification, timeouts and persistence pending); wallet selection/caps + BCH P2PKH signer (M3 partial); carrier/tag/fuel-pair/cost + lock/action builders (M4 partial). Nito answered the checklist: official NIP-44 (`ac61542`), NIP-59 adopted, client `VERIFY` added, 2N shape confirmed, fee split confirmed, proving assets pinned + role-2 witness acceptance PASSED (`a304d3c`), 3-input builders done, NIP-42 wired (`d85bade`). Remaining: Nito store/UI wiring + web-platform acceptance; Hush signature verification/timeouts/persistence, network loop, Electrum broadcast, VM-eval, note delivery and deployment. No float, no deployment.
+**Status:** shared transport (M1) done; classic round state machine + VERIFY (M2 partial; signature verification, timeouts and persistence pending); wallet selection/caps + BCH P2PKH signer (M3 partial); carrier/tag/fuel-pair/cost + lock/action builders and the **pool-native 2N round** (M4 partial: builder, per-input signer, assembler, 2N verifier and state machine pass 15 unit tests). Nito answered the checklist: official NIP-44 (`ac61542`), NIP-59 adopted, client `VERIFY` added, 2N shape confirmed, fee split confirmed, proving assets pinned + role-2 witness acceptance PASSED (`a304d3c`), 3-input builders done, NIP-42 wired (`d85bade`). Remaining: Nito store/UI wiring + web-platform acceptance; Hush signature verification/timeouts/persistence, network loop, Electrum broadcast, VM-eval, note delivery and deployment. No float, no deployment.
 **Source handoff:** `docs/CASHSHUFFLE-DAEMON-HANDOFF-2026-11-25.md`.
 **Design:** `../nito.cash/docs/CASHSHUFFLE-NOSTR-DESIGN.md`.
 **Reference:** `../nito.cash/apps/web/src/lib/cashshuffle/`, `../nito.cash/apps/web/src/lib/nostr/`.
@@ -23,11 +23,13 @@ Non-goals for M1–M4: mainnet, CashFusion, the existing CashFusion pool, a publ
 main.js
   ├─ config.js        validated env (CASHSHUFFLE_* + shared keys)
   ├─ relay-pool.js    shared N-relay pool, 80 ms outbox, dedupe, reconnect, NIP-42
-  ├─ round.js         REGISTER → POOL → ANNOUNCEMENT → SHUFFLE → VERIFY → SIGNING → BROADCAST / BLAME
+  ├─ round.js         classic 1-in/1-out: REGISTER → POOL → ANNOUNCEMENT → SHUFFLE → VERIFY → SIGNING → BROADCAST / BLAME
+  ├─ round-2n.js      pool-native 2N state machine: 2 tagged fuel UTXOs per action
   ├─ wallet.js        equal-amount selection, funding, caps, BCH P2PKH signer; broadcast pending
   ├─ pool.js          role-2 carrier/tag/fuel-pair/cost; VM-eval pending
-  ├─ role2-lock.js    signed lock: 2 tagged fuel UTXOs, 2 blanks, optional FT deposit
+  ├─ role2-lock.js    single-participant lock: 2 tagged fuel UTXOs, 2 blanks, optional FT deposit
   ├─ role2-action.js  3-input action: carrier, new state, optional payout
+  ├─ role2-round.js   2N builder/signer/assembler/verifier
   └─ metrics.js       counters/gauges
 ```
 
@@ -78,6 +80,8 @@ One role-2 action needs:
 - **a lock/shuffle transaction fee** — separate from the 30,000-sat action fee, paid by the funding input.
 
 A plain 5-peer round with one 15,000-sat output per participant produces **five outputs with five different tags**. No pair matches, so it funds **zero** actions. A pool-native round needs **two tagged outputs per action**: 10 outputs for 5 actions, or 2 outputs per participant. This is the corrected arithmetic; the handoff’s “5 outputs → 5 actions” does not hold (`role2-action.js:56,75`).
+
+**The 2N round is implemented as a daemon primitive.** `role2-round.js` builds the unsigned round (2N fuel outputs, 2 blanks per action, per-participant fee share), signs each participant's inputs, assembles the signed transaction and verifies the 2N shape; `round-2n.js` runs the same phase table as the classic round. See `2N-ROUND.md` for the shape, API, checks and current limits. The network loop, the Nito client 2N UI, the BCH-2026 VM-eval and the chipnet 5-peer acceptance remain.
 
 The proposed default cap is 400,000 sats: 10 actions at 30,000 sats of fuel (300,000) + 20,000 sats of blanks + up to 50,000 sats of lock fees at the 5,000-sat per-lock cap. The cap is open question Q10.
 

@@ -1,19 +1,19 @@
 <!-- daemons/cashshuffle/ACCEPTANCE.md -->
 # CashShuffle daemon acceptance
 
-Status: transport tests pass (44/44 shared), the A2 unit test passes (16 round tests), wallet selection/caps pass (5 tests), the BCH P2PKH signer passes (4 tests) and the pool/lock/action helpers pass (14 tests: 7 pool + 7 lock/action). Nito answered the checklist on 2026-11-26: official NIP-44 (`ac61542`), NIP-59 adopted, client VERIFY added, 2N shape confirmed, fee split confirmed, proving assets pinned + role-2 witness acceptance PASSED (`a304d3c`), 3-input builders done, NIP-42 wired (`d85bade`). The end-to-end gates A1–A10 remain. Each test records the evidence listed in `daemons/CONVENTIONS.md` §8.
+Status: transport tests pass (44/44 shared), the classic A2 unit test passes (16 round tests), wallet selection/caps pass (5 tests), the BCH P2PKH signer passes (4 tests), the pool/lock/action helpers pass (14 tests: 7 pool + 7 lock/action) and the **2N round primitive passes 15 tests** (8 role2-round + 7 round-2n). Nito answered the checklist on 2026-11-26: official NIP-44 (`ac61542`), NIP-59 adopted, client VERIFY added, 2N shape confirmed, fee split confirmed, proving assets pinned + role-2 witness acceptance PASSED (`a304d3c`), 3-input builders done, NIP-42 wired (`d85bade`). The end-to-end gates A1–A10 remain. Each test records the evidence listed in `daemons/CONVENTIONS.md` §8.
 
 ## A1 — 5-peer chipnet round
 
-**Pass:** five peers (daemon + four Nito browser peers) produce 5 equal inputs → 5 equal outputs, all BCH Schnorr signatures, one broadcast txid, and no relay sees a wallet key.
+**Pass:** five peers (daemon + four Nito browser peers) produce the **2N round**: two equal BCH inputs + two blanks per participant → 10 tagged fuel outputs (5 actions × 2 same-tag fuel UTXOs), all BCH Schnorr signatures, one broadcast txid, and no relay sees a wallet key.
 
 **Evidence:** txid on Selene (`https://explorer.selene.cash/tx/<txid>?network=chipnet`), all five signatures verified, relay logs, metrics snapshot, daemon commit, Nito client commit.
 
 ## A2 — malicious coordinator
 
-**Pass:** a test coordinator builds a transaction that omits one peer’s output. The peer’s `VERIFY` fails, no signature is produced, the round aborts before broadcast, and no funds move.
+**Pass:** a test coordinator builds a 2N transaction that omits or retags one peer’s fuel pair. The peer’s `VERIFY` fails, no signature is produced, the round aborts before broadcast, and no funds move.
 
-**Evidence:** the failing transaction hex, the `VERIFY` error, the absence of a signature, the abort log. **Current:** the unit test `a malicious coordinator cannot make a peer sign a transaction without its output` passes in `daemons/cashshuffle/test/round.test.js`; Nito added the client `VERIFY` (own output, duplicate outpoints/addresses); the end-to-end run is pending.
+**Evidence:** the failing transaction hex, the `VERIFY` error, the absence of a signature, the abort log. **Current:** the classic test passes in `daemons/cashshuffle/test/round.test.js`; the 2N test `a malicious coordinator tag change is rejected before any signature` passes in `daemons/cashshuffle/test/round-2n.test.js`; Nito added the client `VERIFY`; the end-to-end run is pending.
 
 ## A3 — 24 h uptime
 
@@ -31,7 +31,7 @@ Status: transport tests pass (44/44 shared), the A2 unit test passes (16 round t
 
 **Pass:** the round produces **two tagged fuel UTXOs per action** with the same tag. Five actions require **10 tagged fuel outputs**, not 5. The Nito client scans the outputs; every action passes the BCH-2026 VM in consensus and standard modes; the tags match `SHA256(nf0_LE ‖ nf1_LE)`.
 
-**Evidence:** the round tx, the tag values, the 10 outputs, the VM-eval report for every action, the Nito scan output. **Current:** the 2N shape is confirmed, the lock/action builders pass 7 tests, the proving assets are pinned and the role-2 witness acceptance PASSED (`a304d3c`); the web-platform SHIELD→TRANSFER→UNSHIELD, daemon VM-eval and Nito scan are pending.
+**Evidence:** the round tx, the tag values, the 10 outputs, the VM-eval report for every action, the Nito scan output. **Current:** the 2N builder/verifier/state machine pass 15 tests (`role2-round.test.js` 8, `round-2n.test.js` 7); the proving assets are pinned and the role-2 witness acceptance PASSED (`a304d3c`); the network loop, Nito client 2N UI, web-platform SHIELD→TRANSFER→UNSHIELD, daemon VM-eval and Nito scan are pending.
 
 **Correction:** the handoff’s “5 outputs → 5 actions” does not hold. One output per participant produces five distinct tags and zero pairs (`../nito.cash/apps/web/src/lib/pool/role2-action.js:56,75`; `role2-lock.js:6-9,86,106`).
 
