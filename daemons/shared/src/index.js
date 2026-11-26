@@ -52,5 +52,6 @@ export {
 
 export { RELAY_STATES, Relay } from './nostr/relay.js'
 export { RelayPool } from './nostr/relay-pool.js'
+export { CASHSHUFFLE_KIND, CashShuffleTransport } from './cashshuffle/transport.js'
 
 export const SHARED_VERSION = '0.1.0'

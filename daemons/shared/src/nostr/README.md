@@ -1,7 +1,7 @@
 <!-- daemons/shared/src/nostr/README.md -->
 # Nostr transport contract
 
-Status: implemented in `src/nostr/`; 35 shared tests pass (M1).
+Status: implemented in `src/nostr/`; 40 shared tests pass (M1).
 
 Reference: `../nito.cash/apps/web/src/lib/nostr/` and `../nito.cash/apps/web/src/lib/cashshuffle/transport.js`.
 
@@ -34,7 +34,7 @@ The official v2 KDF and padding are the default:
 
 The current Nito code uses the raw ECDH x-coordinate as the conversation key, HKDF with salt `nip44-v2` for the message keys, a 4-byte prefix and next-power padding (`../nito.cash/apps/web/src/lib/nostr/nip44.js`). `NIP44_MODE=nito-v0` preserves that wire for a mixed deployment; both peers must set it and the payload is labelled as a private variant, not NIP-44 v2.
 
-The official vectors are in `https://github.com/paulmillr/nip44` (`nip44.vectors.json`). The test suite runs them in `official` mode: 35 tests, including `getConversationKey`, `getMessageKeys`, `calcPaddedLen`, encrypt/decrypt, long messages and invalid payloads.
+The official vectors are in `https://github.com/paulmillr/nip44` (`nip44.vectors.json`). The test suite runs them in `official` mode: 35 conversation-key cases, 10 encrypt/decrypt cases, 24 padding cases, long messages and invalid payloads.
 
 ## 4. NIP-59
 
@@ -68,4 +68,4 @@ The official vectors are in `https://github.com/paulmillr/nip44` (`nip44.vectors
 - NIP-59 round-trip, unsigned rumor, independent timestamps, sender/recipient checks, two-day window.
 - Mock relay: publish, quorum, dedupe, 80 ms pacing, reconnect/resubscribe, AUTH challenge.
 - No live relay in unit tests; live relay tests are opt-in integration tests.
-- Current shared suite: 35/35.
+- Current shared suite: 40/40.

@@ -1,7 +1,7 @@
 <!-- daemons/cashshuffle/PLAN.md -->
 # CashShuffle daemon plan
 
-Status: M0 orchestration + M1 transport core + M2 round core. CS-1–CS-4 are implemented in `daemons/shared/src/nostr/` and covered by 35 shared tests; CS-5 is implemented as a state machine with 16 tests (the network loop is pending); CS-6–CS-12 are not started.
+Status: M0 orchestration + M1 transport core + M2 round core. CS-1–CS-4 are implemented in `daemons/shared/src/nostr/` and covered by 40 shared tests; CS-5 is implemented as a state machine with 16 tests (the network loop is pending); CS-6–CS-12 are not started.
 
 Owner key: **H** = Hush, **N** = Nito, **J** = joint.
 
@@ -24,7 +24,7 @@ Owner key: **H** = Hush, **N** = Nito, **J** = joint.
 
 ## 2. Task detail
 
-**Status 2026-11-25:** CS-1–CS-4 are implemented in `daemons/shared/src/nostr/` (35/35 shared tests). CS-5 is implemented in `cashshuffle/src/round.js` (16 round tests, including the malicious-coordinator case); the transport loop that drives `handleMessage()` is pending. CS-6–CS-12 remain.
+**Status 2026-11-25:** CS-1–CS-4 are implemented in `daemons/shared/src/nostr/` (40/40 shared tests). CS-5 is implemented in `cashshuffle/src/round.js` (16 round tests, including the malicious-coordinator case); the transport loop that drives `handleMessage()` is pending. CS-6–CS-12 remain.
 
 ### CS-1 — vendor pin
 

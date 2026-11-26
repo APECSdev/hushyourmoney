@@ -12,7 +12,8 @@
     "./nostr/nip44": "./src/nostr/nip44.js",
     "./nostr/nip59": "./src/nostr/nip59.js",
     "./nostr/relay": "./src/nostr/relay.js",
-    "./nostr/relay-pool": "./src/nostr/relay-pool.js"
+    "./nostr/relay-pool": "./src/nostr/relay-pool.js",
+    "./cashshuffle/transport": "./src/cashshuffle/transport.js"
   },
   "scripts": {
     "test": "node --test test/*.test.js"

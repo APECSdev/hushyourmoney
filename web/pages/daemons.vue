@@ -151,7 +151,7 @@ const REAL_VS_PLANNED = [
         surface: 'Nostr transport',
         state: 'implemented',
         badge: 'badge-done',
-        detail: 'Shared transport: official NIP-44 v2 KDF/padding passes the 35 official vectors; nito-v0 preserves the Nito wire; NIP-59 timestamps; relay pool with 80 ms pacing, dedupe, reconnect and NIP-42. 35 shared tests.',
+        detail: 'Shared transport: official NIP-44 v2 KDF/padding passes the official `nip44.vectors.json`; nito-v0 preserves the Nito wire; NIP-59 timestamps; relay pool with 80 ms pacing, dedupe, reconnect and NIP-42; CashShuffle transport wrapper. 40 shared tests.',
     },
     {
         surface: 'CashShuffle round',
@@ -232,7 +232,7 @@ const POOL_FACTS = [
 /* ── Roadmap ──────────────────────────────────────────────────────── */
 const ROADMAP = [
     { id: 'M0', title: 'Orchestration', status: 'done', badge: 'badge-done', body: 'Tree, plans, acceptance, open questions, config/metrics, stubs, units. This commit.' },
-    { id: 'M1', title: 'Shared transport', status: 'in progress', badge: 'badge-mid', body: 'Official NIP-44 v2 KDF/padding + nito-v0; NIP-59 timestamps; relay pool with 80 ms pacing, dedupe, reconnect, NIP-42. 35 shared tests; Nito client mode pending.' },
+    { id: 'M1', title: 'Shared transport', status: 'in progress', badge: 'badge-mid', body: 'Official NIP-44 v2 KDF/padding + nito-v0; NIP-59 timestamps; relay pool with 80 ms pacing, dedupe, reconnect, NIP-42; CashShuffle transport wrapper. 40 shared tests; Nito client mode pending.' },
     { id: 'M2', title: 'CashShuffle round', status: 'in progress', badge: 'badge-mid', body: 'Round state machine + VERIFY before SIGNING; 16 tests including the malicious-coordinator case. Network loop, wallet and A1/A2 end-to-end pending.' },
     { id: 'M3', title: 'Wallet and liquidity', status: 'not started', badge: 'badge-wait', body: 'Equal-amount UTXO selection, BCH Schnorr 0x41, broadcast, caps, metrics.' },
     { id: 'M4', title: 'Pool-native batching', status: 'not started', badge: 'badge-wait', body: 'Tag-pair lock builder, blank acquisition, atomic lock+action, VM-eval, off-chain note delivery.' },

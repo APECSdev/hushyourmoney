@@ -10,6 +10,7 @@
 | `src/config.js` | implemented | Common env parsing and redaction (`DAEMON_*`, `NOSTR_*`). |
 | `src/metrics.js` | implemented | In-process counters and gauges; deterministic snapshots. |
 | `src/nostr/` | implemented | Event signing, NIP-44 (official + nito-v0), NIP-59, relay, relay pool. |
+| `src/cashshuffle/transport.js` | implemented | CashShuffle round transport: gift-wrapped packets over the relay pool. |
 | `src/bch/` | contract only | BCH Schnorr signing, UTXO selection, broadcast, role-2 helpers. |
 
 ## 2. Vendor pin
@@ -31,7 +32,7 @@ The Nito implementation is not the official NIP-44 v2 wire format. It differs in
 
 The shared package exposes one of two modes:
 
-1. `NIP44_MODE=official` — the official v2 KDF and padding. This is the default and passes `nip44.vectors.json` from `https://github.com/paulmillr/nip44` (35 tests).
+1. `NIP44_MODE=official` — the official v2 KDF and padding. This is the default and passes `nip44.vectors.json` from `https://github.com/paulmillr/nip44` (35 conversation-key cases, 10 encrypt/decrypt cases, 24 padding cases).
 2. `NIP44_MODE=nito-v0` — the Nito reference KDF and padding, explicitly versioned as a private variant. Both peers must set it.
 
 The daemon refuses to start if the two peers disagree. The official mode is the interoperability target; the private mode exists for a mixed deployment with the current Nito tree.
@@ -98,7 +99,7 @@ Keys are sorted; labels are sorted inside the key. The snapshot is safe to log.
 
 ## 9. Test plan
 
-- `node --test shared/test/*.test.js` — 35 tests; no network.
+- `node --test shared/test/*.test.js` — 40 tests; no network.
 - Official NIP-44 vectors: `getConversationKey`, `getMessageKeys`, `calcPaddedLen`, encrypt/decrypt, long messages, invalid payloads.
 - NIP-59 round-trip, unsigned rumor, independent timestamps, two-day window, sender/recipient checks, `nito-v0` round-trip.
 - Mock relay: publish, quorum, dedupe, 80 ms pacing, reconnect/resubscribe, NIP-42 AUTH.
