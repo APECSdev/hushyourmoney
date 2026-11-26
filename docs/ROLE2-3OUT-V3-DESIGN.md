@@ -210,6 +210,41 @@ FT publicly and creates three change notes. The pool is a **demo**: 1-of-1 setup
 bootstrap in-notes on the first action, no real nullifier set and no encrypted
 note delivery. Gate 7 remains mandatory for mainnet.
 
+### 6.1 Permissionless 3-out blank acquisition (live 2026-11-26)
+
+The 3-out category's vending machine is deployed and proven by a stranger buy.
+This is the standing "there MUST be an efficient and permissionless way to
+acquire BLANKS" requirement applied to the v3 category: the minting guard pins
+every batch-minted blank to the operator's P2PKH forever, so the permissionless
+layer sits one hop after the mint.
+
+| Item | Value |
+|---|---|
+| Vending locking | `aa2020bd0ad169a6343ebe86673df2f84fbb6e65a41e14f8891c96a24d10fefbf2d287` |
+| Redeem | 157 B (`blank-vending.mjs`, 18/18 suite) |
+| Price | **1,000 sats**, exact (underpay and overpay both reject) |
+| Operator (price destination) | `bchtest:qzzu85xnl99u534d9z40yu7c494hknppx5lu29gl8t` (wallet A) |
+| Load | `784ef9c4eac4c6925c455ad2b699b2a86ffffc6445b4b5d8ca4c73600d67bd30` (6 blanks, 1,499 B) |
+| First buy | `569a6e6d4e4f3364bba23802e6b0927144e1704f9775f7588cb19c3b0f196884`, block **348,775**, 487 B |
+| Buyer | `bchtest:qpes4zff73dzqag897kh4hx5geqmtp0azq3w7sdpjp` — a key the operator never saw |
+| VM | input 0 (the covenant, **no signature**) ACCEPT consensus 7,545 / standard 8,057 of 4,170,400 |
+| Machine stock after the buy | **5 blanks** (5,000 sats of float) |
+
+Blank conservation across the whole chain: 12 at wallet A + 5 in the machine + 1
+at the stranger = **18**, exactly the 18 remaining from the 64-blank tag batch
+`8e3eaf71…`. Nothing was minted or burned by the vending layer.
+
+The rule is `OUTBYTECODE(0) == UTXOBYTECODE(1)` — whoever pays receives. The
+covenant pins the price, the payment destination, the blank's shape (category +
+mutable + **empty** commitment + 0 FT), the float and delivery to the funding
+input's own locking. There is **no CHECKSIG anywhere**: the script is the
+authorization. The buyer chooses only where their change goes and pays the fee.
+
+The op-cost being byte-identical to the 2-out machine (7,545 / 8,057) is the
+expected result: the covenant code is unchanged and only the
+category/price/operator constructor bytes differ, so one reviewed script serves
+every category.
+
 ## 7. Community presentation
 
 Present the current role-2 pool as a **2-in/2-out demo** with a 1-of-1 setup,

@@ -82,17 +82,28 @@ mandatory for mainnet.
 
 - Address: `bchtest:qzzu85xnl99u534d9z40yu7c494hknppx5lu29gl8t`
   (`/home/apecs/.secrets/wallet-a-role2-demo.json`).
-- **1 plain UTXO: 2,523 sats** (`11b9416c…:2`).
-- **18 blanks** (18,000 sats).
-- **99,999,300 FT** of `bc607a96…` (`4f49c1cb…:3` 99,999,000 + `ec31a41c…:2`
-  300). The pool holds 700 FT; total 100,000,000.
-- **The next lock is NOT fundable as it stands.** `pool-refill-role2.mjs`
+- **State at the 2026-11-26 handoff:** 1 plain UTXO, **2,523 sats**
+  (`11b9416c…:2`); **18 blanks** (18,000 sats); **99,999,300 FT** of
+  `bc607a96…` (`4f49c1cb…:3` 99,999,000 + `ec31a41c…:2` 300). The pool holds
+  700 FT; total 100,000,000.
+- **The next lock was NOT fundable at the handoff.** `pool-refill-role2.mjs`
   checks `inSats >= fixed + 2,400` where `inSats = plain[0] + blanks[0] +
   blanks[1]`; a transfer has `fixed = 30,000`, so 32,400 sats are needed and
-  wallet A has 4,523. Recover sats first:
-  `wallet-consolidate.mjs`, `blank-sweep.mjs --count N`, and
-  `token-sats-recover.mjs --min-value 60000 --count 1` (wallet A also holds
-  seven 20M tPUSD demo UTXOs at 60,000 sats each; burning one is **DEMO ONLY**).
+  wallet A had 4,523.
+- **RESOLVED later the same day** — see §10. Wallet A now holds **3 plain
+  UTXOs / 61,054 sats**, **12 blanks**, 99,999,300 FT; the next lock IS
+  fundable.
+- Recovery tooling (all on `apecsdev`, from
+  `~/zkb/groth16_cashscript/chunked/bn254/bn-native-sound/`):
+  `wallet-consolidate.mjs` (needs ≥2 plain UTXOs), `blank-sweep.mjs --count N`
+  (burns blanks), and `token-sats-recover.mjs --category … --min-value 60000
+  --count 1` (burns one demo token UTXO by omission; **DEMO ONLY**).
+  **Correction to this handoff's first revision:** wallet A held **six** 20M
+  demo-token UTXOs at 60,000 sats each (categories `0717e1a1d4db…`,
+  `07a020e92df6…`, `00081625dae9…`, `135dc9ed975f…`, `1d3414ac0ea6…`,
+  `1fafc6070ae8…`) plus seven more 20M UTXOs at 1,000 sats each — not
+  "seven … at 60,000 sats each". Verified with
+  `blockchain.address.listunspent [addr, include_tokens]` at tip 348,771.
 
 ---
 
@@ -240,10 +251,14 @@ return HTTP 200 with the exact sizes). Worker deploy version `34e48677…`;
 - **UI pool selector** — `Wallet.vue` still computes `role2Pool` as
   `getPools(...).find(p => p.id === 'chipnet-pusd-role2')`; the 3-out entry is
   not selectable. The store action already accepts `poolId`.
-- **3-out blanks** — the Nito user needs two blanks of the `bc607a96…`
-  category. Wallet A has 18; the 3-out vending machine is not loaded (the
-  2-out vending `aa206b51…` is category-specific and not valid for the 3-out
-  category). The 3-out guard is `aa20e33c…`.
+- **3-out blanks** — ~~the 3-out vending machine is not loaded~~ **DONE
+  2026-11-26 (§10):** the 3-out machine is live at
+  `aa2020bd0ad169a6343ebe86673df2f84fbb6e65a41e14f8891c96a24d10fefbf2d287`,
+  price **1,000 sats**, operator wallet A. 5 blanks remain; the first
+  permissionless stranger buy is `569a6e6d…` (block 348,775). The Nito user
+  acquires two blanks with `blank-buy.mjs` (buyer key only — no operator
+  involvement). The 2-out vending `aa206b51…` is category-specific and does
+  **not** dispense `bc607a96…` blanks. The 3-out guard is `aa20e33c…`.
 - **Browser acceptance** — the SHIELD → TRANSFER → UNSHIELD run through the
   Nito UI has not been performed; `walletProverCompatible` stays **false**
   until it is. The live 2-out browser acceptance is `1ca58773… → 50644d00… →
@@ -311,17 +326,25 @@ return HTTP 200 with the exact sizes). Worker deploy version `34e48677…`;
 
 ## 6. Remaining work — prioritized
 
-1. **Nito 3-out UI / blanks / browser acceptance** (see §3.6). This is the
-   final 3-out client step; `walletProverCompatible` stays false until it
-   passes.
+1. **Nito 3-out UI / browser acceptance** (see §3.6). This is the final 3-out
+   client step; `walletProverCompatible` stays false until it passes. The
+   blank half of this item is **done** (§10).
 2. **v3 core** — deposit path (0-in/2-out onboarding), real nullifier set
    (Merkle membership), encrypted note delivery (NIP-44/Nostr or dedicated).
    All are design/UNMEASURED (see `docs/ROLE2-3OUT-V3-DESIGN.md` §3).
 3. **Gate 7 MPC → mainnet**, then migrate the Hush 750,000/762,400 notes and
    the wallet A notes into the 3-out pool. The 3-out demo is 1-of-1 and not
    mainnet-ready.
-4. **Wallet A sats recovery** before the next lock (see §1).
+4. ~~**Wallet A sats recovery** before the next lock (see §1).~~ **DONE**
+   2026-11-26 (§10): 61,054 plain sats; the next lock is fundable.
 5. **Flux owner update** — image `d8495fa…`.
+6. **Zero-value dummy third note** — `circuits/pool3.circom:188` only
+   constrains `sumIn + signedPublic === sumOut`, and each out value gets a
+   `RangeCheck`, so a 0-value third note is circuit-legal; but
+   `role2-op-witness-3out.mjs:86` hard-codes the 40/30/30 split, so a 2-out
+   flow expressed through the 3-out circuit is **NOT built** (UNMEASURED on
+   chain). §2.4 of the design doc calls it representable; representable ≠
+   exercised.
 
 ---
 
@@ -414,12 +437,170 @@ curl -s https://hub.docker.com/v2/repositories/nyusternie/hushyourmoney/tags/lat
 
 ## 9. What is explicitly NOT done
 
-- The Nito 3-out UI pool selector and 3-out blank acquisition.
+- The Nito 3-out UI pool selector.
 - The Nito 3-out browser acceptance (so `walletProverCompatible` is false).
 - The deposit path (onboarding), the real nullifier set and encrypted note
   delivery (the v3 core).
 - Gate 7 MPC and the mainnet deployment.
 - Migration of the Hush 750,000/762,400 notes and the wallet A notes.
 - The Flux owner update for the site image `d8495fa…`.
+- A 2-out-shaped action through the 3-out circuit (zero-value dummy third
+  note) — circuit-legal, not built into the witness generator.
 
 Do not claim any of the above as complete.
+
+---
+
+## 10. Session update — 2026-11-26 (later): sats recovery + 3-out vending live
+
+Two documented blockers were closed on chain. Every number below is a command
+output from the `apecsdev` VM at chipnet tip 348,771–348,776.
+
+### 10.1 Wallet A sats recovery (handoff §1, §6 item 4)
+
+```bash
+cd ~/zkb/groth16_cashscript/chunked/bn254/bn-native-sound
+export PATH=/home/apecs/bin:$PATH
+node token-sats-recover.mjs \
+  --category 0717e1a1d4db6c1f06d99f4578f5c4ab54085f4169e5ff6c94ea109d27f9d9a4 \
+  --min-value 60000 --count 1
+```
+
+Output:
+
+```
+recovering 1 token UTXO(s), 60000 sats: 87252082a35d:0
+burn 1 demo token UTXO(s) (60000 sats) → one 59630-sat plain output · fee 370 · 185 B
+tx 3b7838c7d61589411caaebbd9ff9c39b75351eb3987ba830850984f6e2d53567
+RESULT: 3b7838c7d61589411caaebbd9ff9c39b75351eb3987ba830850984f6e2d53567
+```
+
+Burning a token **by omission** is consensus-legal for a fungible amount; the
+20,000,000 units of `0717e1a1d4db…` are demo/test tokens with no value. The
+category is referenced nowhere in this repo (verified by `grep` over `*.json`,
+`*.md`, `*.vue`). **DEMO ONLY** — never run this against a valued asset.
+
+### 10.2 The 3-out vending machine is LOADED (handoff §3.6)
+
+```bash
+node pool-vend-load-role2.mjs --count 6 --price 1000 \
+  --state /home/apecs/cov/role2-pool3-state.json \
+  --secrets /home/apecs/.secrets/wallet-a-role2-demo.json
+```
+
+```
+vending: redeem 157B · locking aa2020bd0ad169a6343ebe86673df2f84fbb6e65a41e14f8891c96a24d10fefbf2d287
+         · price 1000 sats · category bc607a96…
+load tx 784ef9c4eac4c6925c455ad2b699b2a86ffffc6445b4b5d8ca4c73600d67bd30 · 1499B
+RESULT: 784ef9c4eac4c6925c455ad2b699b2a86ffffc6445b4b5d8ca4c73600d67bd30
+state updated: 6 blanks in the machine
+```
+
+### 10.3 The first permissionless 3-out blank buy (stranger key)
+
+```bash
+node blank-buy.mjs --key /home/apecs/cov/stranger-demo-key.json \
+  --state /home/apecs/cov/role2-pool3-state.json
+```
+
+```
+buyer: bchtest:qpes4zff73dzqag897kh4hx5geqmtp0azq3w7sdpjp — an unknown key to the operator
+consensus: ACCEPT · op 7545/4170400
+standard:  ACCEPT · op 8057/4170400
+buy tx 569a6e6d4e4f3364bba23802e6b0927144e1704f9775f7588cb19c3b0f196884 · 487B
+RESULT: 569a6e6d4e4f3364bba23802e6b0927144e1704f9775f7588cb19c3b0f196884
+CONFIRMED block 348775
+```
+
+Input 0 is the covenant with **no signature**; the only key in the transaction
+is the buyer's. The op-cost `7,545 / 8,057` is **byte-identical to the 2-out
+machine's** (`blank-vending.mjs` 18/18 demo, 2026-11-24), which is the expected
+result: the covenant code is unchanged and only the category/price/operator
+constructor bytes differ.
+
+### 10.4 Verified end state (tip 348,776)
+
+| Holder | Plain sats | `bc607a96…` blanks | FT |
+|---|---:|---:|---:|
+| Wallet A `qzzu85xn…` | 3 UTXOs / **61,054** | **12** | 99,999,300 |
+| Vending `aa2020bd…` | 5,000 (the blanks' float) | **5** | — |
+| Stranger `qpes4zff…` | 1 UTXO / 43,739 | **1** (`569a6e6d…:0`) | 0 |
+
+Blank conservation: **12 + 5 + 1 = 18** — the same 18 minted into wallet A by
+the tag batch `8e3eaf71…`. Nothing was minted or burned.
+
+Wallet A's plain sats (61,054) exceed the transfer refill requirement
+(`fixed 30,000 + 2,400`), so **the next 3-out action is fundable** — the
+`state.outpoints.actionInputs: []` condition can now be cleared with a refill.
+
+### 10.5 What this changes for the Nito user
+
+Acquisition is now permissionless for the 3-out category: the Nito user runs
+`blank-buy.mjs` (or any equivalent client that reproduces the 157-B redeem from
+the published parameters) with **only their own key**. There is no operator
+signature, no allowlist and no per-blank involvement. The machine holds 5
+blanks at 1,000 sats each; the buyer pays the exact price to wallet A and the
+blank is delivered to the buyer's own locking
+(`OUTBYTECODE(0) == UTXOBYTECODE(1)`).
+
+### 10.6 Explorer links (Selene primary, all HTTP 200)
+
+- recovery `3b7838c7…`: `https://explorer.selene.cash/tx/3b7838c7d61589411caaebbd9ff9c39b75351eb3987ba830850984f6e2d53567?network=chipnet`
+- load `784ef9c4…`: `https://explorer.selene.cash/tx/784ef9c4eac4c6925c455ad2b699b2a86ffffc6445b4b5d8ca4c73600d67bd30?network=chipnet`
+- buy `569a6e6d…`: `https://explorer.selene.cash/tx/569a6e6d4e4f3364bba23802e6b0927144e1704f9775f7588cb19c3b0f196884?network=chipnet`
+
+### 10.7 State file
+
+`/home/apecs/cov/role2-pool3-state.json` gained `vending` (locking, price,
+operator, load tx, `blanksLoaded: 6`, `remaining: 5`, the first buy record with
+its VM metrics) and `wallet` (3 plain UTXOs / 61,054 sats, 12 blanks,
+99,999,300 FT, the recovery tx). **Not committed** — it contains note nks.
+
+### 10.8 Site release (built + pushed, Flux pending)
+
+The stale published claims were corrected and the vending machine was added to
+the research record. Three SFCs changed:
+
+- `web/pages/research/shielded-pool.vue` — a new full-width card **“3-out
+  blanks: the machine is loaded”** (locking, 157-B redeem, price, load tx,
+  first stranger buy, the byte-identical op-cost argument, the conservation
+  count, and the warning that the 2-out machine `aa206b51…` does not dispense
+  `bc607a96…` blanks) with two Selene tx buttons; plus four stale-claim
+  corrections (the FAQ, the “the gate” card, the disclosure block and the two
+  summary paragraphs that said the 3-out blank path was not built).
+- `web/pages/research/bn254.vue` — the 3-out note corrected.
+- `web/pages/playground.vue` — the 3-out experiment row corrected.
+
+Verification (all on `apecsdev`, per the standing never-build-on-this-host
+rule):
+
+```
+SFC parse + compileScript + compileTemplate: OK ×3 (VM image + /tmp/check-sfc.cjs)
+docker build --network=host: success (yarn layers cached; package.json untouched)
+image 34524b4db756 · smoke on 127.0.0.1:3221:
+  / 200 · /research 200 · /research/shielded-pool 200 (186,041 B)
+  /research/bn254 200 · /playground 200 · /daemons 200
+markers on /research/shielded-pool: "3-out blanks: the machine is loaded" 1 ·
+  aa2020bd 2 · 569a6e6d 2 · 784ef9c4 1 · 348,775 1 ·
+  "blank conservation 12 + 5 + 1 = 18" 1
+stale claims (must be 0): "3-out blanks remain pending" 0 ·
+  "UI/blank path are NOT built" 0 · "UI/blanks are not" 0 ·
+  "3-out blanks and the browser acceptance remain" 0
+```
+
+Hub: digest
+`sha256:34524b4db756382d2dea15a84c0351ad64e20a9d48a23f350164a0dc908f0c75`,
+`last_updated 2026-11-26T21:17:25Z`. **Flux owner update still pending** — no
+owner credential on this host; the owner dashboard at
+`https://cloud.runonflux.io` is the only deployment action. Do not declare the
+live site updated until `/research/shielded-pool` serves the vending card.
+
+### 10.9 What is still open after this session
+
+- Nito **UI pool selector** and **browser acceptance** (external; the store
+  branch and the byte-exact witness path are done, the blanks are now
+  permissionless).
+- The **zero-value dummy third note** (a 2-out flow through the 3-out circuit):
+  circuit-legal, not in the witness generator.
+- **v3 core** (deposit path, nullifier set, encrypted note delivery), **Gate 7
+  MPC**, the **migration**, and the **Flux owner update**.

@@ -14,7 +14,55 @@
 - Make ample use of figures and diagrams when documenting or discussing technical designs and implementations (ASCII/Mermaid in repo docs; rendered diagrams on the site).
 - Published technical claims must satisfy the verification contract (file path, command output, or cited source). Where a quantity has not been measured, mark it UNMEASURED rather than estimating.
 
-## CURRENT HANDOFF — 2026-11-26 SESSION END — 3-OUT NOTES MANAGEMENT COMPLETE (demo + client witness path)
+## CURRENT HANDOFF — 2026-11-26 (LATEST) — 3-OUT VENDING LIVE + WALLET A SATS RECOVERED
+
+**FULL HANDOFF:** read `docs/HANDOFF-2026-11-26-3OUT-NOTES-MANAGEMENT.md` FIRST,
+§10 is this session. It contains the exact on-chain state, commands, commits,
+verification recipes and landmines. This section is the short version.
+
+**This session closed the two documented Hush-side blockers (all on chain,
+verified at chipnet tip 348,776):**
+
+- **Wallet A sats recovery — DONE.** `token-sats-recover.mjs` burned one
+  20,000,000 demo-token UTXO of `0717e1a1d4db…` (60,000 sats) by omission —
+  **DEMO ONLY** — tx `3b7838c7d61589411caaebbd9ff9c39b75351eb3987ba830850984f6e2d53567`,
+  recovering 59,630 sats. Wallet A now: **3 plain UTXOs / 61,054 sats**, **12
+  blanks**, 99,999,300 FT. **The next 3-out lock IS fundable** (transfer needs
+  `fixed 30,000 + 2,400`).
+- **3-out vending machine — LOADED and proven permissionless.** Locking
+  `aa2020bd0ad169a6343ebe86673df2f84fbb6e65a41e14f8891c96a24d10fefbf2d287`
+  (redeem 157 B, price **1,000 sats**, operator wallet A); load tx
+  `784ef9c4eac4c6925c455ad2b699b2a86ffffc6445b4b5d8ca4c73600d67bd30` (6
+  blanks). First stranger buy
+  `569a6e6d4e4f3364bba23802e6b0927144e1704f9775f7588cb19c3b0f196884`
+  (block **348,775**, 487 B, buyer `bchtest:qpes4zff73dzqag897kh4hx5geqmtp0azq3w7sdpjp`,
+  **no operator signature**); input 0 VM-ACCEPTED consensus 7,545 / standard
+  8,057 of 4,170,400 — byte-identical to the 2-out machine (same covenant
+  code, different constructor bytes). Machine now holds **5 blanks**; blank
+  conservation 12 + 5 + 1 = 18 (nothing minted or burned).
+- **Correction to the previous handoff:** wallet A held **six** 20M demo-token
+  UTXOs at 60,000 sats (not seven) plus seven more 20M UTXOs at 1,000 sats —
+  verified with `blockchain.address.listunspent [addr, include_tokens]`.
+- **Nito unblock:** the 3-out blanks are now acquirable by the Nito user with
+  **their own key only** (`blank-buy.mjs`); no allowlist, no per-blank
+  operator action. The remaining Nito work is the **UI pool selector** and the
+  **browser acceptance** (`walletProverCompatible` stays false until it
+  passes).
+- **Still open:** the zero-value dummy third note (2-out flow through the
+  3-out circuit) is circuit-legal (`pool3.circom:188` + `RangeCheck`) but
+  `role2-op-witness-3out.mjs:86` hard-codes the 40/30/30 split — NOT built.
+- **Site release this session:** image **`34524b4db756`**, Hub digest
+  `sha256:34524b4db756382d2dea15a84c0351ad64e20a9d48a23f350164a0dc908f0c75`
+  (`last_updated 2026-11-26T21:17:25Z`). `shielded-pool.vue` gained the
+  “3-out blanks: the machine is loaded” card + four stale-claim fixes;
+  `bn254.vue` + `playground.vue` corrected. SFC OK ×3, build OK, smoke 200 on
+  `/`, `/research`, `/research/shielded-pool`, `/research/bn254`, `/playground`,
+  `/daemons`; markers present, stale strings 0. **Flux owner update pending**
+  (no owner credential here) — the live site is still `d8495fa…`.
+
+---
+
+## PREVIOUS HANDOFF — 2026-11-26 SESSION END — 3-OUT NOTES MANAGEMENT COMPLETE (demo + client witness path)
 
 **FULL HANDOFF:** read `docs/HANDOFF-2026-11-26-3OUT-NOTES-MANAGEMENT.md` FIRST.
 It contains the exact on-chain state, commands, commits, verification recipes and
@@ -51,11 +99,12 @@ CI `45888835607` success.
 `34e48677…`, commit `c6ad077`, CI `45889707043` success).
 
 **Site / release:** the research pages carry the three confirmed actions, the
-final state and the Nito witness path; site image **`d8495faabd6d`**, Hub
-digest `sha256:d8495faabd6d64963d59f793f56d20931a515664ec93dd96c5ebb46a896d562e`
-(pushed 2026-11-26 20:18Z); smoke 200 on `/`, `/research`,
-`/research/shielded-pool`, `/research/bn254`, `/playground`. **Flux owner
-update pending** — no owner credential on blackhost.
+final state and the Nito witness path; site image at this handoff was
+**`d8495faabd6d`**, Hub digest
+`sha256:d8495faabd6d64963d59f793f56d20931a515664ec93dd96c5ebb46a896d562e`
+(pushed 2026-11-26 20:18Z) — **superseded later the same day by `34524b4db756`
+(see the LATEST handoff above)**. **Flux owner update pending** — no owner
+credential on blackhost.
 
 **Session commits:** `hushyourmoney` `6879ded`, `6877747`, `b7f8bb1`,
 `71d7f7c`, `9333734`, `fbd137f`, `6290af7`, `d71802a`; `nito.cash` `6ea8077`
@@ -64,11 +113,13 @@ update pending** — no owner credential on blackhost.
 
 **Remaining (priority order):**
 
-1. Nito 3-out **UI pool selector / 3-out blanks / browser acceptance**; the
-   store branch is wired but `walletProverCompatible` stays false until the
-   browser SHIELD → TRANSFER → UNSHIELD passes. The Nito user needs two
-   `bc607a96…` blanks; the 2-out vending `aa206b51…` is category-specific and
-   not valid for the 3-out category; the 3-out guard is `aa20e33c…`.
+1. Nito 3-out **UI pool selector / browser acceptance**; the store branch is
+   wired but `walletProverCompatible` stays false until the browser SHIELD →
+   TRANSFER → UNSHIELD passes. ~~The Nito user needs two `bc607a96…` blanks~~
+   **DONE 2026-11-26 later: the 3-out vending machine `aa2020bd…` is loaded
+   (price 1,000 sats) and a stranger buy is confirmed** — the Nito user buys
+   with `blank-buy.mjs` using only their own key. The 2-out vending
+   `aa206b51…` remains category-specific; the 3-out guard is `aa20e33c…`.
 2. **v3 core:** deposit path (0-in/2-out onboarding), real nullifier set
    (Merkle membership), encrypted note delivery — all design/UNMEASURED
    (`docs/ROLE2-3OUT-V3-DESIGN.md` §3).

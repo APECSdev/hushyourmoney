@@ -52,7 +52,33 @@
         "notesAtTree": [6, 7, 8, 9, 10]
       },
       "feePolicy": "BARE: 15k sats x 2 fuel per action; every action broadcast atomically with its lock (lock --no-wait -> action spends the lock's UNCONFIRMED outputs)",
-      "notes": "3-out demo deployed 2026-11-26 runner-free from the apecsdev VM with wallet A. SHIELD -> TRANSFER -> UNSHIELD confirmed; every input VM-ACCEPTED consensus+standard. Demo only: 1-of-1 setup, public bootstrap in-notes on the first action (indices 0/1), no real nullifier set, no encrypted note delivery; Gate 7 is the mainnet gate. The Nito client 3-out witness path is built and byte-exact against the live UNSHIELD; the store branch is wired (poolId + outs=3); the UI pool selector, 3-out blanks and the browser acceptance remain.",
+      "vending": {
+        "status": "LOADED 2026-11-26 - permissionless blank acquisition for THIS category is live",
+        "locking": "aa2020bd0ad169a6343ebe86673df2f84fbb6e65a41e14f8891c96a24d10fefbf2d287",
+        "redeemLength": 157,
+        "priceSats": 1000,
+        "operatorAddress": "bchtest:qzzu85xnl99u534d9z40yu7c494hknppx5lu29gl8t",
+        "loadTxid": "784ef9c4eac4c6925c455ad2b699b2a86ffffc6445b4b5d8ca4c73600d67bd30",
+        "blanksLoaded": 6,
+        "blanksRemaining": 5,
+        "firstBuyTxid": "569a6e6d4e4f3364bba23802e6b0927144e1704f9775f7588cb19c3b0f196884",
+        "firstBuyBlock": 348775,
+        "firstBuyBuyer": "bchtest:qpes4zff73dzqag897kh4hx5geqmtp0azq3w7sdpjp",
+        "firstBuyVm": "input 0 (the covenant, no signature) ACCEPT consensus 7545 / standard 8057 of 4170400",
+        "rule": "OUTBYTECODE(0) == UTXOBYTECODE(1): whoever pays receives. The price, the destination, the blank's shape (category + mutable + EMPTY commitment + 0 FT) and the float are all pinned; no CHECKSIG anywhere.",
+        "note": "This is the 3-out category machine. The 2-out machine aa206b51... is category-specific and does NOT dispense bc607a96... blanks."
+      },
+      "walletState": {
+        "address": "bchtest:qzzu85xnl99u534d9z40yu7c494hknppx5lu29gl8t",
+        "plainUtxos": 3,
+        "plainSats": 61054,
+        "blanks": 12,
+        "ft": "99999300",
+        "satsRecoveryTxid": "3b7838c7d61589411caaebbd9ff9c39b75351eb3987ba830850984f6e2d53567",
+        "satsRecoveryNote": "burned one 20,000,000 demo token UTXO of 0717e1a1d4db... (60,000 sats) by omission - DEMO ONLY; recovered 59,630 sats",
+        "nextActionFundable": true
+      },
+      "notes": "3-out demo deployed 2026-11-26 runner-free from the apecsdev VM with wallet A. SHIELD -> TRANSFER -> UNSHIELD confirmed; every input VM-ACCEPTED consensus+standard. Demo only: 1-of-1 setup, public bootstrap in-notes on the first action (indices 0/1), no real nullifier set, no encrypted note delivery; Gate 7 is the mainnet gate. The Nito client 3-out witness path is built and byte-exact against the live UNSHIELD; the store branch is wired (poolId + outs=3). 3-out BLANKS are now permissionless (vending loaded, first stranger buy confirmed 2026-11-26). Still open: the Nito UI pool selector and the browser acceptance (walletProverCompatible stays false until it passes).",
       "clientHandoff": "docs/ROLE2-3OUT-V3-DESIGN.md"
     },
     {
