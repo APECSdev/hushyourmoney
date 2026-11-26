@@ -101,9 +101,21 @@
         "satsRecoveryTxid2": "21ccad44a248ebb72fb950973694b765fd2de38722933788fec8e64691333085",
         "satsRecoveryNote2": "burned one 20,000,000 demo token UTXO of 07a020e92df6... (60,000 sats) by omission - DEMO ONLY; recovered 59,630 sats (funded the zero-dummy actions)",
         "nextActionFundable": false,
-        "nextActionNote": "a transfer refill needs plain[0] + 2 blanks >= 32,400 sats; the largest plain UTXO is 28,153 - recover sats first"
+        "nextActionNote": "a transfer refill needs plain[0] + 2 blanks >= 32,400 sats; the largest plain UTXO is 28,153 - CONSOLIDATE FIRST: wallet-consolidate.mjs folds the 4 plain UTXOs (61,928 total) into one ~61.9k UTXO, which makes the next lock fundable WITHOUT burning another demo token (the refill reads plain[0] only, pool-refill-role2.mjs:97)"
       },
       "notes": "3-out demo deployed 2026-11-26 runner-free from the apecsdev VM with wallet A. FIVE confirmed actions: SHIELD -> TRANSFER -> UNSHIELD -> zero-value-dummy TRANSFER (out 400+20+0) -> the zero note SPENT as an in-note (out 200+100+100); every input VM-ACCEPTED consensus+standard. The zero-value dummy is therefore MEASURED both ways: a 2-out flow through the 3-out circuit, and the dummy as a real spendable tree member (not a dead leaf). Demo only: 1-of-1 setup, public bootstrap in-notes on the first action (indices 0/1), no real nullifier set, no encrypted note delivery; Gate 7 is the mainnet gate. The Nito client 3-out witness path is built and byte-exact against the live UNSHIELD; the store branch is wired (poolId + outs=3). 3-out BLANKS are now permissionless (vending loaded, first stranger buy confirmed 2026-11-26). Still open: the Nito UI pool selector and the browser acceptance (walletProverCompatible stays false until it passes).",
+      "knownFindings": [
+        {
+          "id": "R2-NULLIFIER-DOUBLING",
+          "severity": "CRITICAL - demonstrated complete-balance theft",
+          "status": "PROVEN 2026-11-26, NOT executed on chain (proof /tmp/double.json on apecsdev, snarkjs verify OK against the deployed VK d4ed12ee...)",
+          "mechanism": "neither circuit constrains the two in-notes distinct; hook check 7 folds SHA256(oldNull||nf0||nf1) with no membership test; nPublic 2 means oldNull is not verifiable by the circuit. A single note loads as BOTH in-notes and its value counts twice.",
+          "impact": "this pool's whole 700 FT drains in 3 actions ([112,112]->224 -> [224,224]->448 -> [448,448] UNSHIELD 700). The 2-out pool drains in ONE action (see its entry).",
+          "fix": "the v3 nullifier set (docs/ROLE2-3OUT-V3-DESIGN.md section 3.2) with membership proofs + hook check; measure the SMT depth before any ceremony.",
+          "standingRule": "NO valued asset may enter any pool running the current hook; Gate 7 is not the only mainnet gate - the nullifier set is.",
+          "record": "docs/HANDOFF-2026-11-26-3OUT-NOTES-MANAGEMENT.md section 12"
+        }
+      ],
       "clientHandoff": "docs/ROLE2-3OUT-V3-DESIGN.md"
     },
     {
@@ -157,6 +169,18 @@
       },
       "feePolicy": "BARE per user directive 2026-11-24: no fee-market headroom (blocks empty); 15k sats x 2 fuel per action (~28.1 KB actions at 1.03-1.07 sat/B); prove-first flow makes exact sizing possible; every action was broadcast ATOMICALLY with its lock (lock --no-wait -> action spends the lock's UNCONFIRMED outputs \u2014 the recorded client rule, theft window ~zero)",
       "notes": "Deployed 2026-11-24 PM, runner-free, funded from the APECS faucet hot wallet (142,168 sats total for the v2 chain: deploy chain + 32-blank batch + 3 locks; wallet 310,334 -> 168,166 sats; it also holds the 99M FT supply and the 250,000 FT unshield payout of THIS category, plus v1's tokens). Full lifecycle: SHIELD -> TRANSFER -> UNSHIELD, every action a real witness under our ceremony zkey, complete tagged program VM-ACCEPTED consensus+standard on all 3 inputs pre-broadcast, FT conserved, 2 tag NFTs burned per action (burn-by-omission, consensus-proven 3x on chain). v1 pool (b6ee4196\u2026) remains live but SUPERSEDED.",
+      "knownFindings": [
+        {
+          "id": "R2-NULLIFIER-DOUBLING",
+          "severity": "CRITICAL - demonstrated complete-balance theft",
+          "status": "PROVEN 2026-11-26, NOT executed on chain (proof /tmp/drain-2out.json on apecsdev, snarkjs verify OK against the deployed VK 05250429...)",
+          "mechanism": "neither circuit constrains the two in-notes distinct; hook check 7 folds SHA256(oldNull||nf0||nf1) with no membership test; nPublic 2 means oldNull is not verifiable by the circuit. A single note loads as BOTH in-notes and its value counts twice.",
+          "impact": "THE WHOLE BALANCE DRAINS IN ONE ACTION: the 450,600-FT note (tree 46) as both in-notes gives inSum 901,200 >= balance 762,400, so a single UNSHIELD pays out the entire 762,400 FT. Current live state: balance 762,400, notes 600/400/450,600/300,400, state outpoint a722ef3b...:1.",
+          "fix": "the v3 nullifier set (docs/ROLE2-3OUT-V3-DESIGN.md section 3.2) with membership proofs + hook check; measure the SMT depth before any ceremony.",
+          "standingRule": "NO valued asset may enter any pool running the current hook; Gate 7 is not the only mainnet gate - the nullifier set is.",
+          "record": "docs/HANDOFF-2026-11-26-3OUT-NOTES-MANAGEMENT.md section 12"
+        }
+      ],
       "mintingGuard": {
         "locking": "aa2066a238ad4109a3093c34fd4cf9b4167b0058375d4ad1c5cc44cd253d3664f0c187",
         "redeemLength": 5103,

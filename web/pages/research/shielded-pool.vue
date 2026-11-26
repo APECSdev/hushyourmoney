@@ -41,7 +41,7 @@ const RESULTS = [
     { q: '3-out verifier + hook + witness', v: 'BUILT: plain sound verifier 7,310 B sha256 6ec7ca8e… (6.01% std margin); hooked program 7,848 B sha256 628207b1…, locking aa200240…; hook 39,082/37,930 op, 537 B; acceptance 21/21; red team 146/0; sweep 69/69 (min 6.00% std). The Nito client 3-out witness path is built and byte-exact against the live UNSHIELD (ec31a41c…); the UI and the browser acceptance remain, while 3-out blanks ARE permissionless (vending aa2020bd…, first stranger buy 569a6e6d…); the proving assets are live on prover.nito.cash.', src: 'POOL_3OUT=1 pool-info / pool-cost / pool-test / pool-redteam / pool-sweep, 2026-11-26', href: 'https://github.com/APECSdev/hushyourmoney/blob/master/docs/ROLE2-3OUT-V3-DESIGN.md' },
     { q: '3-out demo pool · chipnet', v: 'DEPLOYED 2f650791… (category bc607a96…, program 7,848 B sha256 73cb0ccb…, locking aa204a6c…); SHIELD e847ef56… (28,326 B, 1.059 sat/B), TRANSFER ef64f3dd… (28,389 B, 1.057 sat/B), UNSHIELD 300 ec31a41c… (28,368 B, 1.022 sat/B, out 112+84+84), a ZERO-VALUE-DUMMY transfer 30f0f9d4… (out 400+20+0) and the spend of that zero note cbfb0503… (out 200+100+100) confirmed; final state 700 FT, notes 112/84/84/20/200/100/100, 17 leaves', src: 'chipnet 2026-11-26 · docs/ROLE2-3OUT-V3-DESIGN.md §6', href: 'https://explorer.selene.cash/tx/cbfb05033282a3338fdddc6f837113a4b2ec3ad065589bc56d723f0d7ec7dadf?network=chipnet' },
     { q: 'Role-2 browser acceptance', v: 'SHIELD 1ca58773… → TRANSFER 50644d00… → UNSHIELD f52008f4… · state 760,400 FT · wallet A 19,986,800 + 600 FT, 128,323 plain, 0 blanks · pool history 48', src: 'nito.cash browser acceptance 2026-11-26 · docs/ROLE2-BROWSER-ACCEPTANCE-HANDOFF-2026-11-26.md', href: 'https://explorer.selene.cash/tx/f52008f44999f05261a905f8120900888a233e07d7cd489574909d51d0232b70?network=chipnet' },
-    { q: 'Notes management · v3', v: '3-out change splitting: BUILT + DEPLOYED as a chipnet demo (SHIELD e847ef56…, TRANSFER ef64f3dd…, UNSHIELD 300 ec31a41c…); deposit path (0-in/2-out onboarding), real nullifier set (Merkle membership) and encrypted note delivery remain DESIGN; UNMEASURED', src: 'docs/ROLE2-3OUT-V3-DESIGN.md §6', href: 'https://github.com/APECSdev/hushyourmoney/blob/master/docs/ROLE2-3OUT-V3-DESIGN.md' },
+    { q: 'Notes management · v3', v: '3-out change splitting: BUILT + DEPLOYED as a chipnet demo (SHIELD e847ef56…, TRANSFER ef64f3dd…, UNSHIELD 300 ec31a41c…); deposit path (0-in/2-out onboarding) and encrypted note delivery remain DESIGN; UNMEASURED. The nullifier gap is a DEMONSTRATED full-balance drain — see the R2-NULLIFIER-DOUBLING disclosure on this page', src: 'docs/ROLE2-3OUT-V3-DESIGN.md §6', href: 'https://github.com/APECSdev/hushyourmoney/blob/master/docs/ROLE2-3OUT-V3-DESIGN.md' },
     { q: 'Failed acceptance locks', v: '2,200 FT + 150,000 fuel sats standing: 3db76294… is public-bootstrap-tagged (1,000 FT + 30,000 sats, sweepable); 10f26fa3…, 1946084e…, c3e21c7a…, dff42ddb… carry lost notes (1,200 FT + 120,000 sats, stuck)', src: 'docs/ROLE2-BROWSER-ACCEPTANCE-REVIEW-2026-11-26.md', href: 'https://github.com/APECSdev/hushyourmoney/blob/master/docs/ROLE2-BROWSER-ACCEPTANCE-REVIEW-2026-11-26.md' },
     { q: 'Transfer note delivery', v: 'the TRANSFER 50644d00… 400 FT recipient note is UNDELIVERED; the 169-B carrier has no encrypted note; the 201-B 3-out carrier still cannot carry a full note — the off-chain channel is UNMEASURED', src: 'nito handoff caveat 1 · v3 design', href: 'https://github.com/APECSdev/hushyourmoney/blob/master/docs/ROLE2-BROWSER-ACCEPTANCE-HANDOFF-2026-11-26.md' },
     { q: 'Public inputs', v: '2 — [merkleRoot, actionHash]', src: 'pool.r1cs + verification_key.json (ic.length = 3)', href: 'https://github.com/APECSdev/pusd-shielded-pool' },
@@ -423,7 +423,7 @@ const LIFECYCLE = [
         bullets: [
             'note spent; covenant pays the public leg',
             'Groth16 proof authorizes the spend',
-            'nullifier set blocks double-spends; stale roots block replay',
+            'nullifier fold archives the spends (a hash chain, not a set — see the R2-NULLIFIER-DOUBLING disclosure); stale roots block replay',
         ],
         meta: ['block 329736', 'confirmed'],
         tx: 'e90b9a56…717d',
@@ -1031,6 +1031,42 @@ const LIFECYCLE = [
                 </p>
             </div>
 
+            <!-- ── DISCLOSURE: the demonstrated nullifier-doubling drain (R2-NULLIFIER-DOUBLING) ── -->
+            <div class="reveal mt-10 rounded-2xl border border-rose-300/30 bg-rose-300/5 px-5 py-5">
+                <p class="font-mono text-[0.72rem] uppercase tracking-[0.3em] text-rose-200">disclosure · measured 2026-11-26 · both role-2 pools</p>
+                <h3 class="mt-3 font-display text-xl font-bold text-rose-100">
+                    The nullifier fold permits a full-balance drain — demonstrated, not hypothetical
+                </h3>
+                <p class="mt-3 text-sm leading-relaxed text-slate-100">
+                    <strong class="text-rose-200">Finding R2-NULLIFIER-DOUBLING:</strong> a valid Groth16
+                    proof can use <strong class="text-white">one note as BOTH in-notes</strong>. Neither
+                    circuit (2-out or 3-out) constrains the two in-notes to be distinct, the on-chain hook's
+                    check 7 only <em>folds</em>
+                    <span class="font-mono text-xs">newNull = SHA256(oldNull ‖ nf0 ‖ nf1)</span> — a hash
+                    chain with no membership test — and both verifying keys have exactly 2 public inputs,
+                    so the nullifier archive is not verifiable by the proof system. The same note's value
+                    counts twice against the conservation law.
+                </p>
+                <p class="mt-3 text-sm leading-relaxed text-slate-100">
+                    <strong class="text-white">Measured, proven, not executed:</strong> two draining proofs
+                    exist (one per pool), both verify with snarkjs against their own deployed verifying
+                    keys, and neither was broadcast — no funds moved, the state was untouched. The worst
+                    case is the 2-out pool: its 450,600-FT note as both in-notes gives 901,200 ≥ the pool
+                    balance 762,400, so <strong class="text-rose-200">a single UNSHIELD action pays out the
+                    entire balance</strong>. The 3-out pool drains in three actions. Unlike the withdrawn
+                    verifier (F6 — soundness not established, no forged proof demonstrated), here the
+                    <strong class="text-white">honest prover</strong> produces the draining proof.
+                </p>
+                <p class="mt-3 text-sm leading-relaxed text-slate-100">
+                    <strong class="text-white">Standing rule until the v3 nullifier set ships: no valued
+                    asset may enter any pool running this hook.</strong> The nullifier set is now a mainnet
+                    gate alongside the MPC ceremony. Full record — proofs, commands, drain arithmetic:
+                    <a href="https://github.com/APECSdev/hushyourmoney/blob/master/docs/HANDOFF-2026-11-26-3OUT-NOTES-MANAGEMENT.md" target="_blank" rel="noopener" class="src-link">handoff §12 ↗</a>
+                    · the fix design:
+                    <a href="https://github.com/APECSdev/hushyourmoney/blob/master/docs/ROLE2-3OUT-V3-DESIGN.md" target="_blank" rel="noopener" class="src-link">v3 design §3.2 ↗</a>.
+                </p>
+            </div>
+
             <div class="mt-12 grid gap-6 md:grid-cols-3">
                 <div class="fact-card reveal">
                     <p class="font-mono text-[0.72rem] uppercase tracking-[0.3em] text-lime-200">measured · 2026-11-26</p>
@@ -1226,11 +1262,13 @@ in1 ─┴─▶ out0, out1                  in1 ─┴─▶ out0, out1, out2
                 </div>
                 <div class="fact-card reveal" style="transition-delay: 0.1s">
                     <p class="font-mono text-[0.72rem] uppercase tracking-[0.3em] text-rose-200">v3 core · double-spend</p>
-                    <h3 class="mt-3 font-display text-xl font-bold text-white">A real nullifier set</h3>
+                    <h3 class="mt-3 font-display text-xl font-bold text-white">A real nullifier set — now the drain fix</h3>
                     <p class="mt-3 text-sm leading-relaxed text-slate-100">
                         The current state is <span class="font-mono text-xs">root ‖ rolling nullifier hash</span>;
-                        hook check 7 only folds; the spent bootstrap notes were reusable. The v3 needs a
-                        Merkle nullifier tree with membership. <strong class="text-white">DESIGN — UNMEASURED.</strong>
+                        hook check 7 only folds — and the gap is no longer hypothetical: it is a
+                        <strong class="text-rose-200">demonstrated full-balance drain</strong> (see the disclosure above).
+                        The v3 needs a Merkle nullifier tree with membership.
+                        <strong class="text-white">DESIGN — UNMEASURED; the exploit is measured.</strong>
                     </p>
                 </div>
                 <div class="fact-card reveal">
@@ -1288,15 +1326,18 @@ in1 ─┴─▶ out0, out1                  in1 ─┴─▶ out0, out1, out2
                     <p class="mt-3 text-sm leading-relaxed text-slate-100">
                         The 3-out demo pool is deployed; the Hush 750,000 notes and the wallet A notes still
                         need to re-shield into it. The four stuck locks remain; the one public lock is swept;
-                        the new MPC (Gate 7), the deposit path, the nullifier set and note delivery are the
-                        gate. The current 2-out pool stays as a read-only historical record.
+                        the new MPC (Gate 7), the deposit path, the nullifier set (the demonstrated drain fix)
+                        and note delivery are the gate. The current 2-out pool stays as a read-only
+                        historical record — no valued asset may enter either pool until the nullifier set
+                        ships (see the R2-NULLIFIER-DOUBLING disclosure).
                     </p>
                 </div>
             </div>
 
             <div class="reveal mt-10 rounded-2xl border border-lime-300/25 bg-lime-300/5 px-5 py-5 font-mono text-xs leading-relaxed text-lime-100">
-                the 3-out is measured and deployed as a chipnet demo · the new MPC (Gate 7) is the mainnet
-                gate · the verifier/hook/witness are built; the Nito client witness path is built and byte-exact, the UI/blanks remain · the deposit path,
+                the 3-out is measured and deployed as a chipnet demo · the new MPC (Gate 7) is a mainnet
+                gate, and the nullifier set is now a second one (R2-NULLIFIER-DOUBLING is demonstrated) ·
+                the verifier/hook/witness are built; the Nito client witness path is built and byte-exact, the UI remains, the blanks are permissionless · the deposit path,
                 the nullifier set and note delivery are the v3 core · the community presentation is
                 docs/ROLE2-3OUT-V3-DESIGN.md
             </div>

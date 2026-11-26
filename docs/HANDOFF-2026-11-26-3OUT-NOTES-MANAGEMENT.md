@@ -750,7 +750,16 @@ Two more demo-token UTXOs were burned to fund the actions (DEMO ONLY):
 sats**, **8 blanks** (12 − 2 − 2), 99,999,300 FT. Four 60,000-sat demo-token
 UTXOs remain as fee reserve. **The next lock is NOT fundable as it stands** —
 a transfer refill needs `plain[0] + 2 blanks ≥ 32,400` and the largest plain
-UTXO is 28,153 sats; recover sats first (§1 tooling).
+UTXO is 28,153 sats.
+
+**Correction (2026-11-26 review): CONSOLIDATE, do not burn.**
+`wallet-consolidate.mjs` (§1 tooling) folds the 4 plain UTXOs into one
+~61.9k UTXO; the refill reads `plain[0]` only (`pool-refill-role2.mjs:97`),
+so after consolidation `61,900 + 1,000 + 1,000 = 63,900 ≥ 32,400` — the next
+lock is fundable **without burning another demo token**. The earlier
+"recover sats first" wording implied a burn; consolidation is the correct
+first move. A burn is only needed if the plain UTXOs are ever down to one
+small output.
 
 ### 11.6 Explorer links (Selene primary, all HTTP 200)
 
@@ -792,3 +801,143 @@ owner credential on this host. Do not declare the live site updated until
 - `pusd-shielded-pool`: the `--outs` / `--seed` / duplicate-guard change to
   `role2-op-witness-3out.mjs`.
 - `hushyourmoney`: site (this section's release) + docs/registry/AGENTS.
+
+---
+
+## 12. DEMONSTRATED FINDING — the nullifier fold permits a full-balance drain (both role-2 pools)
+
+**Status: MEASURED, PROVEN, NOT BROADCAST.** Two valid Groth16 proofs exist
+(one per pool generation) that use ONE note as BOTH in-notes. Both verify
+`snarkjs groth16 verify` against their own DEPLOYED verifying keys. The exploit
+was NOT executed on chain — no state was advanced, no funds moved. The proofs
+live in `/tmp/double.json` (3-out) and `/tmp/drain-2out.json` (2-out) on
+`apecsdev`; the op JSONs contain hypothetical out-note `nk` values for notes
+that were never created, so they grant nothing — but reproduce them with the
+commands below rather than trusting the files.
+
+### 12.1 The mechanism (three verified facts)
+
+1. **Neither circuit constrains the two in-notes to be distinct.**
+   `circuits/pool.circom` and `circuits/pool3.circom` contain ZERO `IsEqual`
+   (or any equality) constraints on `nf` — each in-note independently gets
+   commitment / membership / nullifier / range checks, but nothing relates
+   in-note 0 to in-note 1. `--in 46,46` simply reads the same recorded note
+   twice.
+2. **Hook check 7 is a FOLD, not a SET** (`pool-hook.mjs:225-228`):
+   `newNull = SHA256(oldNull ‖ nf0 ‖ nf1)` — there is no membership test, so
+   spending the same nullifier twice folds it in twice and the chain accepts.
+3. **`oldNull` is not a public input** (both VKs have `nPublic 2`:
+   `[merkleRoot, actionHash]`), so the circuit CANNOT constrain the set — the
+   nullifier archive is unreadable by the verifier and the hook.
+
+The circuit's conservation law `sumIn + signedPublic === sumOut` is the only
+value check, and doubling a note satisfies it by counting the same value twice.
+Hook check 8 caps a payout at the pool's own balance — which is exactly what
+the exploit pays out.
+
+### 12.2 The proofs (commands + outputs, `apecsdev`)
+
+```bash
+cd ~/zkb/pusd-shielded-pool
+export PATH=/home/apecs/bin:$PATH
+
+# 3-OUT pool (live state: notes 112/84/84/20/200/100/100, balance 700):
+node role2-op-witness-3out.mjs --action transfer --in 8,8 \
+  --outs 224,0,0 --seed probe-double-spend --out /tmp/double.json
+# → transfer pv=0 sign=0 · inSum=224 → out 224+0+0
+#   nf0: 97889a5a97dd9dc69c66980ad8defd65e34d5e1c2d26ceae0c445ac197882118
+#   nf1: 97889a5a97dd9dc69c66980ad8defd65e34d5e1c2d26ceae0c445ac197882118   (== nf0)
+
+# 2-OUT pool (live state: notes 600/400/450,600/300,400, balance 762,400):
+node role2-op-witness.mjs --action unshield --amount 762400 --in 46,46 \
+  --out /tmp/drain-2out.json
+# → unshield pv=762400 sign=1 · inSum=901200 → out 83280+55520
+#   (in-notes: the 450,600 note counted TWICE)
+
+# Verify both against their DEPLOYED VKs:
+node node_modules/snarkjs/cli.js groth16 verify \
+  --vkfile build3/verification_key.json --public /tmp/d-pub.json --proof /tmp/d-proof.json
+# → [INFO] snarkJS: OK!        (3-out VK d4ed12ee…)
+
+node node_modules/snarkjs/cli.js groth16 verify \
+  --vkfile build/verification_key.json --public /tmp/d2-pub.json --proof /tmp/d2-proof.json
+# → [INFO] snarkJS: OK!        (2-out VK 05250429…, the ceremony key)
+```
+
+`publicSignals[0]` equals the LIVE root of each pool in both proofs — these
+are proofs against the current on-chain state, not stale fixtures.
+
+### 12.3 The drain arithmetic (worst case first)
+
+- **2-OUT pool — the whole balance in ONE action.** Note 46 (450,600 FT) used
+  as both in-notes gives inSum 901,200 ≥ the pool balance 762,400, so a single
+  UNSHIELD pays out the entire 762,400 FT publicly. The proof exists and
+  verifies (§12.2). Cost to the attacker: 1 refill lock + ~30,000 sats + 2
+  blanks.
+- **3-OUT pool — the whole balance in THREE actions.** From the 112 note:
+  `[112,112]→224`, `[224,224]→448`, then `[448,448]` UNSHIELD 700 (896 ≥ 700).
+  ≈90,000 sats + 6 blanks.
+- The bootstrap-note reuse already recorded in the browser-acceptance review
+  (2026-11-26) was this same mechanism in a milder form. The escalation is
+  that ANY note works, on BOTH pools, and the arithmetic compounds.
+
+### 12.4 Severity and standing rule
+
+This is a **demonstrated, complete-balance theft** in the current role-2
+architecture — strictly sharper than the withdrawn-verifier disclosure (F6:
+"soundness not established, no forged proof demonstrated"), because here the
+HONEST prover produces the draining proof. Every pool running the current
+hook is affected: `chipnet-role2-pool-v2-tagged` (762,400 FT) and
+`chipnet-role2-pool3-3out` (700 FT), plus all historical role-2 deployments.
+Demo/test funds only are at risk today because both live pools hold chipnet
+demo value.
+
+**Standing rule until the nullifier set ships: NO VALUED ASSET may enter any
+pool running this hook. Do not advertise the pools as production-ready. Gate 7
+is not the only mainnet gate anymore — the nullifier set is.**
+
+### 12.5 The fix is already the design — but its priority is now absolute
+
+`docs/ROLE2-3OUT-V3-DESIGN.md` §3.2 (nullifier set with membership proofs in
+the circuit + a hook check) moves from "the double-spend fix" to "the fix for
+a demonstrated full-balance drain." Build it together with the deposit path in
+ONE circuit revision (one MPC ceremony, one `vk.ic[0]` bake — the ceremony
+economics do not change). The SMT-depth measurement (can a collision-free
+sparse tree keyed by `H(nf)` fit the on-chain budget?) is the first task — it
+decides in-circuit membership vs a hook-level set, and it must be measured
+BEFORE any ceremony is scheduled.
+
+### 12.6 Site release (built + pushed, Flux pending)
+
+The disclosure is now on the site, in the same style as the F6 disclosure:
+
+- `web/pages/research/shielded-pool.vue` — a rose **DISCLOSURE block at the top
+  of the notes-management section** (finding id `R2-NULLIFIER-DOUBLING`,
+  mechanism, worst case, measured/proven/not-executed status, the standing
+  rule, links to handoff §12 + design §3.2); the "v3 core · double-spend" card
+  escalated to "the drain fix"; the migration card and the section summary bar
+  now name the nullifier set as a second mainnet gate; the generation-1
+  lifecycle bullet "nullifier set blocks double-spends" was **corrected** to
+  "nullifier fold archives the spends (a hash chain, not a set — see the
+  R2-NULLIFIER-DOUBLING disclosure)".
+- `pool-registry.json` — `knownFindings` added to BOTH live role-2 entries
+  (2-out: the one-action drain with the live note/balance figures; 3-out: the
+  three-action drain), with the standing rule and the §12 record pointer.
+- `docs/ROLE2-3OUT-V3-DESIGN.md` §3.2 — escalated from "missing feature" to
+  "the fix for a DEMONSTRATED full-balance drain", worst case first.
+- The funding note was **corrected**: consolidate (`wallet-consolidate.mjs`)
+  before any further burn (§11.5 correction).
+
+Verification: SFC parse + compileScript + compileTemplate **OK**; build on
+`apecsdev`; image **`e1bbb2116496`**; smoke on `127.0.0.1:3223/3224`: 8 routes
+200; `/research/shielded-pool` **190,921 B** with all disclosure markers
+(`R2-NULLIFIER-DOUBLING` 2, "full-balance drain" 2, "one note as BOTH
+in-notes" 1, "a single UNSHIELD action pays out the entire balance" 1, the
+standing rule 1, 901,200 1, 762,400 1) and stale strings 0.
+
+Hub: digest
+`sha256:e1bbb21164962f07de0ac927b38ed0675dbbcad9cd1ec89d4e1d32b920ca2648`,
+`last_updated 2026-11-26T21:56:37Z`. **Flux owner update pending** — no owner
+credential on this host; the owner dashboard at `https://cloud.runonflux.io`
+is the only deployment action. Do not declare the disclosure live until
+`/research/shielded-pool` serves `R2-NULLIFIER-DOUBLING`.

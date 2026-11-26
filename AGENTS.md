@@ -14,7 +14,82 @@
 - Make ample use of figures and diagrams when documenting or discussing technical designs and implementations (ASCII/Mermaid in repo docs; rendered diagrams on the site).
 - Published technical claims must satisfy the verification contract (file path, command output, or cited source). Where a quantity has not been measured, mark it UNMEASURED rather than estimating.
 
-## CURRENT HANDOFF — 2026-11-26 (LATEST) — 3-OUT VENDING LIVE + WALLET A SATS RECOVERED
+## CURRENT HANDOFF — 2026-11-26 (LATEST) — DEMONSTRATED NULLIFIER-DOUBLING DRAIN (R2-NULLIFIER-DOUBLING); NEXT MISSION = THE V3 NULLIFIER SET
+
+**FULL HANDOFF:** read `docs/HANDOFF-2026-11-26-3OUT-NOTES-MANAGEMENT.md` FIRST,
+**§12 is the finding that now governs everything.** It contains the exact
+on-chain state, commands, commits, verification recipes and landmines.
+
+**THE FINDING (measured, proven, NOT executed on chain):** valid Groth16 proofs
+exist — one per pool generation — that use ONE note as BOTH in-notes, and both
+verify `snarkjs groth16 verify` against their own DEPLOYED VKs. Mechanism
+(three verified facts): (1) neither `circuits/pool.circom` nor
+`circuits/pool3.circom` has ANY equality constraint on `nf` — `--in 46,46`
+just loads the same recorded note twice; (2) hook check 7
+(`pool-hook.mjs:225-228`) is a FOLD `newNull = SHA256(oldNull‖nf0‖nf1)` with
+no membership test; (3) `nPublic 2` on both VKs — `oldNull` is not a public
+input, so the circuit cannot constrain the set.
+
+**Worst case — the 2-out pool drains in ONE action:** the 450,600-FT note
+(tree 46) as both in-notes gives inSum 901,200 ≥ balance 762,400, so a single
+UNSHIELD pays out the entire 762,400 FT (proof `/tmp/drain-2out.json` on
+`apecsdev`, snarkjs OK against the 2-out ceremony VK `05250429…`). The 3-out
+pool (700 FT) drains in three actions (proof `/tmp/double.json`, snarkjs OK
+against `d4ed12ee…`). Both proofs target the LIVE roots. The exploit was NOT
+broadcast; the op JSONs contain hypothetical nks for notes never created.
+
+**Severity:** sharper than F6 — F6 was "soundness not established, no forged
+proof demonstrated"; here the HONEST prover produces the draining proof.
+Affects `chipnet-role2-pool-v2-tagged` (762,400 FT), `chipnet-role2-pool3-3out`
+(700 FT) and every historical role-2 deployment. Demo/test funds only are at
+risk today (both live pools hold chipnet demo value).
+
+**STANDING RULE until the v3 nullifier set ships: NO VALUED ASSET may enter
+any pool running the current hook. Do not advertise the pools as
+production-ready. Gate 7 is not the only mainnet gate anymore — the
+nullifier set is.**
+
+**NEXT SESSION'S MISSION — the v3 nullifier set (+ the deposit path in the
+SAME circuit revision):**
+
+1. **Measure the SMT depth question FIRST** — can a collision-free sparse
+   tree keyed by `H(nf)` (depth ≈ 254) fit the on-chain budget? That single
+   number decides in-circuit membership (Poseidon, ~depth hashes/nullifier in
+   the R1CS) vs a hook-level set (SHA256 in script; the budget is self-funding:
+   `(41 + unlockingLen) × 800`). It must be measured BEFORE any ceremony is
+   scheduled. This is a design spike, not a build.
+2. **One circuit revision, one ceremony:** fold the deposit path (0-in/2-out
+   onboarding) into the same revision — every R1CS change resets Gate 7, and
+   the phase-2 setup is per-R1CS (the phase-1 PPOT `ppot_0080_18.ptau` is
+   reusable). One `vk.ic[0]` bake = one program family.
+3. Then: new VK → new verifier program → new hook → acceptance/red-team/sweep
+   → new demo deploy → migration. The existing tooling chain is the template.
+
+**Parallel (no circuit change):** encrypted note delivery (fixes the
+undelivered 400 FT note); Nito UI pool selector (their repo); Flux owner
+update (image `5b36bc6543b0`; the R2-NULLIFIER-DOUBLING disclosure is in the
+built-but-undeployed image).
+
+**Funding note (corrected in review):** before any further 3-out demo action,
+run `wallet-consolidate.mjs` — it folds wallet A's 4 plain UTXOs (61,928 sats)
+into one ~61.9k UTXO, which makes the next lock fundable WITHOUT burning
+another demo token (`pool-refill-role2.mjs:97` reads `plain[0]` only).
+Burn only if plain is down to one small output.
+
+**Site/registry state:** the finding is disclosed on
+`/research/shielded-pool` (rose DISCLOSURE block in the notes-management
+hero, F6-style), in `pool-registry.json` (`knownFindings` on both role-2
+entries), in the design doc §3.2 and handoff §12. Site image
+**`e1bbb2116496`** carries it; Hub
+`sha256:e1bbb21164962f07de0ac927b38ed0675dbbcad9cd1ec89d4e1d32b920ca2648`
+(`last_updated 2026-11-26T21:56:37Z`; smoke 8 routes 200,
+`/research/shielded-pool` 190,921 B, all disclosure markers present, stale
+strings 0). **Flux owner update pending** (no owner credential here) — the
+live site is still the pre-disclosure build.
+
+---
+
+## PREVIOUS HANDOFF — 2026-11-26 (LATEST) — 3-OUT VENDING LIVE + WALLET A SATS RECOVERED
 
 **FULL HANDOFF:** read `docs/HANDOFF-2026-11-26-3OUT-NOTES-MANAGEMENT.md` FIRST,
 §10 is this session. It contains the exact on-chain state, commands, commits,

@@ -136,7 +136,22 @@ onboarding path; the current SHIELD cannot serve it because its in-notes must
 already exist. Constraint count, proof time, setup and verifier are
 UNMEASURED.
 
-### 3.2 Nullifier set — the double-spend fix
+### 3.2 Nullifier set — the fix for a DEMONSTRATED full-balance drain
+
+**Escalated 2026-11-26 (measured):** this is no longer a missing feature; it is
+a demonstrated, complete-balance theft. Two valid Groth16 proofs — one per
+pool generation — use ONE note as BOTH in-notes and both verify against their
+own DEPLOYED VKs (`snarkjs groth16 verify` → OK). Neither circuit has ANY
+equality constraint on `nf` (the same recorded note simply loads twice), hook
+check 7 is a fold (`newNull = SHA256(oldNull ‖ nf0 ‖ nf1)`, no membership
+test), and `oldNull` is not a public input (`nPublic 2`), so the circuit cannot
+constrain the set.
+
+The worst case is the 2-out pool: its 450,600-FT note as both in-notes gives
+inSum 901,200 ≥ balance 762,400, so **one UNSHIELD action pays out the entire
+762,400 FT** (proof `/tmp/drain-2out.json` on `apecsdev`, verified). The 3-out
+pool drains in three actions. The exploit was NOT executed on chain. Full
+record: handoff §12.
 
 The current state commitment is `root ‖ nullifierSetHash`; the hash is a
 rolling chain and hook check 7 only folds
@@ -144,6 +159,12 @@ rolling chain and hook check 7 only folds
 spent bootstrap notes were reusable. The v3 state needs a Merkle nullifier
 tree (or an on-chain set) with membership proofs in the circuit and a hook
 check. The circuit, the state commitment and the hook are UNMEASURED.
+
+**Standing rule until this ships: no valued asset may enter any pool running
+the current hook; Gate 7 is not the only mainnet gate — the nullifier set is.**
+The SMT-depth measurement (does a collision-free sparse tree keyed by `H(nf)`
+fit the on-chain budget?) decides in-circuit membership vs a hook-level set
+and must be measured before any ceremony.
 
 ### 3.3 Encrypted note delivery — the usability fix
 
