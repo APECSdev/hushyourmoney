@@ -73,10 +73,12 @@ daemons/
       config.js
       relay-pool.js
       round.js
+      round-2n.js
       wallet.js
       pool.js
       role2-lock.js
       role2-action.js
+      role2-round.js
       metrics.js
     test/
       README.md
