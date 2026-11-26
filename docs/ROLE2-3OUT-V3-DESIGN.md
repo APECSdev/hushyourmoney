@@ -114,8 +114,11 @@ standard; the at-cap maximum is 7,080,373 op (11.86% cap margin).
 ### 2.4 Client and action size
 
 The 3-out witness generator is built (`role2-op-witness-3out.mjs`: three
-out-notes, `cm2`, the 201-B carrier, the 9-field actionHash). The Nito store
-still needs the 3-out path. Measured on chipnet: SHIELD **28,326 B**, TRANSFER
+out-notes, `cm2`, the 201-B carrier, the 9-field actionHash). The Nito client
+3-out witness path is built and reproduces the live UNSHIELD byte-exactly
+(`pool-accept.mjs --pool role2-3out --txid ec31a41c`: fuel0 9,488 B / fuel1
+9,490 B / state 8,821 B); the store branch, the UI, the proving-asset mirror
+and the 3-out blanks remain. Measured on chipnet: SHIELD **28,326 B**, TRANSFER
 **28,389 B**, fee 30,000 sats (**1.059 / 1.057 sat/B**); the fuel policy (2 ×
 15,000 sats) still covers it. The 2-out flows remain representable with a
 zero-value dummy third note.

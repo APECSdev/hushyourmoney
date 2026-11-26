@@ -159,6 +159,32 @@ BN_VK_FIXTURES=/home/apecs/cov/our-3out.fixtures.json POOL_3OUT=1 \
   (indices 0/1), no real nullifier set, no encrypted note delivery; Gate 7 is
   the mainnet gate.
 
+### Nito client 3-out path (built 2026-11-26)
+
+- Repo: `/Workspace/apecsdev/nito.cash`; build host `apecsdev`
+  (`~/apps/nito.cash`). New `apps/web/src/lib/pool/role2-3out/` vendors the
+  3-out program builder under the 3-out VK (`d4ed12ee…`);
+  `verifier-role2-3out.js` exposes `role2Program3out` +
+  `produceRole2Inputs3out`. The program reproduces the deployed demo exactly:
+  code 7,848 B sha256 `73cb0ccb…`, R 65 B, locking `aa204a6c…` (category
+  `bc607a96…`).
+- **Acceptance:** `node scripts/pool-accept.mjs --pool role2-3out --txid
+  ec31a41c` reports all three unlockings BYTE-EXACT (fuel0 9,488 B / fuel1
+  9,490 B / state 8,821 B) against the live UNSHIELD.
+- Carrier 169/201 B + 8/9-field actionHash (`role2-carrier.js`);
+  `role2-action.js` / `role2-actions.js` accept 201; `prover.js`
+  `buildPoolWitness3out`; `notes.js` `actionHash3out`; `decode.js` / `scan.js`
+  handle the 201-B carrier, cm2 and the 3-leaf append; the store
+  `submitRole2Action` takes `poolId` and branches on `pool.outputs === 3`;
+  registry entry `chipnet-pusd-role2-3out` (`walletProverCompatible: false`,
+  awaiting the browser acceptance).
+- Tests **695/695** on `apecsdev`; coverage 89.04% statements / 89.99% lines;
+  `pnpm build` OK. The 3-out vendored builder + verifier are excluded from
+  coverage like the 2-out `verifier-role2.js`.
+- Remaining: host `pool3.wasm` / `pool3_final.zkey` on the `prover.nito.cash`
+  mirror, add the UI pool selector, provide 3-out blanks (guard/vending), and
+  run the browser SHIELD → TRANSFER → UNSHIELD acceptance.
+
 ### Wallet A / sats state (important for the next action)
 
 - The 3-out deploy spent 6 plain UTXOs (82,715 sats) but the change returned;
@@ -241,7 +267,14 @@ BN_VK_FIXTURES=/home/apecs/cov/our-3out.fixtures.json POOL_3OUT=1 \
 2. ✅ Site image rebuilt + pushed (`d1b87bfa995b`, Hub digest
    `sha256:d1b87bfa…`); the Flux owner update remains the only deployment
    action.
-3. Nito client 3-out path (201-B carrier, 9-field actionHash, three out-notes).
+3. Nito client 3-out path — **WITNESS BYTE-EXACT** (2026-11-26): the vendored
+   `role2-3out` program reproduces code 7,848 B sha256 `73cb0ccb…` / locking
+   `aa204a6c…`, and `pool-accept.mjs --pool role2-3out --txid ec31a41c`
+   regenerates all three live UNSHIELD unlockings byte-exactly. The carrier
+   (201 B), actionHash (9 fields), prover (`buildPoolWitness3out`), notes
+   (`actionHash3out`), decode/scan, store branch and registry entry are built;
+   the UI, `prover.nito.cash` 3-out asset mirror, 3-out blanks and the browser
+   acceptance remain.
 4. Deposit path (onboarding), real nullifier set (Merkle membership),
    encrypted note delivery — the v3 core.
 5. Gate 7 MPC → mainnet; migrate the Hush 750,000/762,400 notes and the
