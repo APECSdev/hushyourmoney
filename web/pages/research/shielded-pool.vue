@@ -38,7 +38,7 @@ const RESULTS = [
     { q: 'Circuit (single-asset)', v: '183,472 constraints · 107 private inputs · 181,959 wires', src: 'snarkjs r1cs info build256/pool.r1cs', href: 'https://github.com/APECSdev/pusd-shielded-pool' },
     { q: 'Circuit (3-out v3)', v: '184,528 constraints (+1,056, +0.58%) · 112 private inputs · 183,017 wires · 2 public inputs · 20.2 s compile', src: 'circom 2.2.3 --O2 on apecsdev, 2026-11-26 · circuits/pool3.circom', href: 'https://github.com/APECSdev/pusd-shielded-pool/blob/master/circuits/pool3.circom' },
     { q: '3-out carrier + actionHash', v: 'carrier 169 → 201 B · actionHash 8 → 9 fields (cm2) · action +32 B · r1cs 39,449,264 B · wasm 3,380,815 B', src: 'measured 2026-11-26 · v3 design', href: 'https://github.com/APECSdev/hushyourmoney/blob/master/docs/ROLE2-3OUT-V3-DESIGN.md' },
-    { q: '3-out verifier + hook + witness', v: 'BUILT: plain sound verifier 7,310 B sha256 6ec7ca8e… (6.01% std margin); hooked program 7,848 B sha256 628207b1…, locking aa200240…; hook 39,082/37,930 op, 537 B; acceptance 21/21; red team 146/0; sweep 69/69 (min 6.00% std). The Nito client 3-out witness path is built and byte-exact against the live UNSHIELD (ec31a41c…); the UI, proving-asset mirror and 3-out blanks remain.', src: 'POOL_3OUT=1 pool-info / pool-cost / pool-test / pool-redteam / pool-sweep, 2026-11-26', href: 'https://github.com/APECSdev/hushyourmoney/blob/master/docs/ROLE2-3OUT-V3-DESIGN.md' },
+    { q: '3-out verifier + hook + witness', v: 'BUILT: plain sound verifier 7,310 B sha256 6ec7ca8e… (6.01% std margin); hooked program 7,848 B sha256 628207b1…, locking aa200240…; hook 39,082/37,930 op, 537 B; acceptance 21/21; red team 146/0; sweep 69/69 (min 6.00% std). The Nito client 3-out witness path is built and byte-exact against the live UNSHIELD (ec31a41c…); the UI, 3-out blanks and the browser acceptance remain; the proving assets are live on prover.nito.cash.', src: 'POOL_3OUT=1 pool-info / pool-cost / pool-test / pool-redteam / pool-sweep, 2026-11-26', href: 'https://github.com/APECSdev/hushyourmoney/blob/master/docs/ROLE2-3OUT-V3-DESIGN.md' },
     { q: '3-out demo pool · chipnet', v: 'DEPLOYED 2f650791… (category bc607a96…, program 7,848 B sha256 73cb0ccb…, locking aa204a6c…); SHIELD e847ef56… (28,326 B, 1.059 sat/B), TRANSFER ef64f3dd… (28,389 B, 1.057 sat/B) and UNSHIELD 300 ec31a41c… (28,368 B, 1.022 sat/B, out 112+84+84) confirmed; final state 700 FT, notes 210/210/112/84/84, 11 leaves', src: 'chipnet 2026-11-26 · docs/ROLE2-3OUT-V3-DESIGN.md §6', href: 'https://explorer.selene.cash/tx/ec31a41c591c4af4ad95c2fab76c1ad2bb34b483393bce53758982a9d8e9de03?network=chipnet' },
     { q: 'Role-2 browser acceptance', v: 'SHIELD 1ca58773… → TRANSFER 50644d00… → UNSHIELD f52008f4… · state 760,400 FT · wallet A 19,986,800 + 600 FT, 128,323 plain, 0 blanks · pool history 48', src: 'nito.cash browser acceptance 2026-11-26 · docs/ROLE2-BROWSER-ACCEPTANCE-HANDOFF-2026-11-26.md', href: 'https://explorer.selene.cash/tx/f52008f44999f05261a905f8120900888a233e07d7cd489574909d51d0232b70?network=chipnet' },
     { q: 'Notes management · v3', v: '3-out change splitting: BUILT + DEPLOYED as a chipnet demo (SHIELD e847ef56…, TRANSFER ef64f3dd…, UNSHIELD 300 ec31a41c…); deposit path (0-in/2-out onboarding), real nullifier set (Merkle membership) and encrypted note delivery remain DESIGN; UNMEASURED', src: 'docs/ROLE2-3OUT-V3-DESIGN.md §6', href: 'https://github.com/APECSdev/hushyourmoney/blob/master/docs/ROLE2-3OUT-V3-DESIGN.md' },
@@ -1058,8 +1058,8 @@ const LIFECYCLE = [
                     <p class="mt-3 text-sm leading-relaxed text-slate-100">
                         The 1-of-1 demo setup is built (new VK d4ed12ee…, zkey b0177dbe…, wasm c806e561…);
                         the 3-out verifier program, the 201-B hook, the 9-field actionHash and the 3-out
-                        witness are built and measured. The new MPC (Gate 7) and the Nito client UI/assets/blank
-                        path remain pending; the 3-out witness path is built and byte-exact. A demo pool is deployed on chipnet.
+                        witness are built and measured. The new MPC (Gate 7), the Nito client UI and 3-out blanks
+                        remain pending; the 3-out witness path is built and byte-exact, and the proving assets are live. A demo pool is deployed on chipnet.
                     </p>
                     <p class="mt-3 font-mono text-xs leading-relaxed text-slate-200">demo ≠ mainnet · Gate 7 is the gate</p>
                 </div>
@@ -1246,7 +1246,7 @@ in1 ─┴─▶ out0, out1                  in1 ─┴─▶ out0, out1, out2
 
             <div class="reveal mt-10 rounded-2xl border border-lime-300/25 bg-lime-300/5 px-5 py-5 font-mono text-xs leading-relaxed text-lime-100">
                 the 3-out is measured and deployed as a chipnet demo · the new MPC (Gate 7) is the mainnet
-                gate · the verifier/hook/witness are built; the Nito client witness path is built and byte-exact, the UI/assets/blanks remain · the deposit path,
+                gate · the verifier/hook/witness are built; the Nito client witness path is built and byte-exact, the UI/blanks remain · the deposit path,
                 the nullifier set and note delivery are the v3 core · the community presentation is
                 docs/ROLE2-3OUT-V3-DESIGN.md
             </div>
@@ -1445,7 +1445,7 @@ in1 ─┴─▶ out0, out1                  in1 ─┴─▶ out0, out1, out2
                         with no independent review · the 3-out v3 is measured AND deployed as a chipnet
                         demo (SHIELD e847ef56… → TRANSFER ef64f3dd… → UNSHIELD ec31a41c…; 184,528 constraints, +0.58%): the
                         3-out verifier, the 201-B hook, the 9-field actionHash and the witness are built;
-                        the new MPC (Gate 7) and the Nito client UI/assets/blanks are not; the 3-out witness path is built and byte-exact · the 400 FT transfer note is
+                        the new MPC (Gate 7) and the Nito client UI/blanks are not; the 3-out witness path is built and byte-exact, and the proving assets are live · the 400 FT transfer note is
                         UNDELIVERED · four failed locks (1,200 FT + 120,000 sats) are STUCK; one
                         (3db76294…, 1,000 FT + 30,000 sats) is public-bootstrap-tagged and sweepable ·
                         the deposit path, nullifier set and note delivery are DESIGN and UNMEASURED ·
@@ -1478,7 +1478,7 @@ in1 ─┴─▶ out0, out1                  in1 ─┴─▶ out0, out1, out2
                         d4ed12ee…, zkey b0177dbe…, wasm c806e561…), and the 3-out verifier, the
                         201-B hook, the 9-field actionHash and the witness are BUILT; a demo pool is
                         deployed on chipnet (SHIELD e847ef56… → TRANSFER ef64f3dd… → UNSHIELD ec31a41c…). The new MPC
-                        (Gate 7) and the Nito client UI/assets/blank path are NOT built; the 3-out witness path is built and byte-exact. The deposit
+                        (Gate 7) and the Nito client UI/blank path are NOT built; the 3-out witness path is built and byte-exact, and the proving assets are live. The deposit
                         path (onboarding) and encrypted note delivery are DESIGN and UNMEASURED.
                         The browser acceptance's 400 FT transfer note is undelivered; four failed
                         locks (1,200 FT + 120,000 sats) are stuck, one public lock
@@ -1662,7 +1662,7 @@ in1 ─┴─▶ out0, out1                  in1 ─┴─▶ out0, out1, out2
                         SHIELD e847ef56… (out 400+300+300) → TRANSFER ef64f3dd… (out 280+210+210) →
                         UNSHIELD 300 ec31a41c… (out 112+84+84, 300 FT payout), all confirmed; the
                         3-out verifier, 201-B hook, 9-field actionHash and witness are
-                        built; the new MPC (Gate 7) and the Nito client UI/assets/blank path are not; the 3-out witness path is built and byte-exact. See
+                        built; the new MPC (Gate 7) and the Nito client UI/blank path are not; the 3-out witness path is built and byte-exact, and the proving assets are live. See
                         <a href="#notes-management" class="src-link">07 · notes management</a>.
                     </p>
                 </details>

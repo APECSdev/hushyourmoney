@@ -163,7 +163,8 @@ BN_VK_FIXTURES=/home/apecs/cov/our-3out.fixtures.json POOL_3OUT=1 \
 ### Nito client 3-out path (built 2026-11-26)
 
 - Repo: `/Workspace/apecsdev/nito.cash`; build host `apecsdev`
-  (`~/apps/nito.cash`); commit `6ea8077`. New `apps/web/src/lib/pool/role2-3out/` vendors the
+  (`~/apps/nito.cash`); commits `6ea8077` (client path) + `c6ad077` (prover
+  mirror). New `apps/web/src/lib/pool/role2-3out/` vendors the
   3-out program builder under the 3-out VK (`d4ed12ee…`);
   `verifier-role2-3out.js` exposes `role2Program3out` +
   `produceRole2Inputs3out`. The program reproduces the deployed demo exactly:
@@ -182,9 +183,14 @@ BN_VK_FIXTURES=/home/apecs/cov/our-3out.fixtures.json POOL_3OUT=1 \
 - Tests **695/695** on `apecsdev`; coverage 89.04% statements / 89.99% lines;
   `pnpm build` OK. The 3-out vendored builder + verifier are excluded from
   coverage like the 2-out `verifier-role2.js`.
-- Remaining: host `pool3.wasm` / `pool3_final.zkey` on the `prover.nito.cash`
-  mirror, add the UI pool selector, provide 3-out blanks (guard/vending), and
-  run the browser SHIELD → TRANSFER → UNSHIELD acceptance.
+- The 3-out proving assets are published in the
+  `role2-proving-assets-3out-v1` GitHub release and served at
+  `https://prover.nito.cash/assets/` (`pool3.wasm` 3,380,815 B sha256
+  `c806e561…`; `pool3_final.zkey` 98,190,141 B sha256 `b0177dbe…`;
+  `verification_key_3out.json` 3,111 B sha256 `d4ed12ee…`); the Worker
+  `nito-prover` was deployed 2026-11-26 (version `34e48677…`).
+- Remaining: the UI pool selector, 3-out blanks (guard/vending), and the
+  browser SHIELD → TRANSFER → UNSHIELD acceptance.
 
 ### Wallet A / sats state (important for the next action)
 
