@@ -14,283 +14,84 @@
 - Make ample use of figures and diagrams when documenting or discussing technical designs and implementations (ASCII/Mermaid in repo docs; rendered diagrams on the site).
 - Published technical claims must satisfy the verification contract (file path, command output, or cited source). Where a quantity has not been measured, mark it UNMEASURED rather than estimating.
 
-## CURRENT HANDOFF — 2026-11-26 (later session) — 3-out v3 BUILT + DEPLOYED DEMO
+## CURRENT HANDOFF — 2026-11-26 SESSION END — 3-OUT NOTES MANAGEMENT COMPLETE (demo + client witness path)
 
-**Where we are:** the 3-out feature is no longer design-only. The 3-out
-verifier program (under the new VK), the 201-B role-2 hook, the 3-out witness
-generator, the acceptance suite, the red team and the **full 69-case liveness
-sweep** are built and measured; a **3-out demo pool is deployed on chipnet**
-and its **SHIELD, TRANSFER and UNSHIELD are confirmed**. The site research pages are
-updated with the measured/deployed record. The 2-out generation is
-byte-identical (the hooked 2-out program still hashes `d71851a1…`), so the live
-2-out pool and its tooling are unaffected.
+**FULL HANDOFF:** read `docs/HANDOFF-2026-11-26-3OUT-NOTES-MANAGEMENT.md` FIRST.
+It contains the exact on-chain state, commands, commits, verification recipes and
+landmines. This section is the short version.
 
-**Session commits:** `hushyourmoney` `21c799e` (docs/site/handoff), `6879ded`
-(the 3-out UNSHIELD record + final state), `b7f8bb1` (the Nito 3-out witness
-path), `9333734` (the live 3-out proving assets); `nito.cash` `6ea8077`
-(the 3-out v3 client path) + `c6ad077` (the prover mirror); `pusd-shielded-pool`
-`5f645c3` (3-out tooling + evidence) + the `role2-proving-assets-3out-v1`
-release. The site image `d8495faabd6d` / Hub
-`sha256:d8495faabd6d64963d59f793f56d20931a515664ec93dd96c5ebb46a896d562e`
-(pushed 2026-11-26 20:18Z) carries the 21/21 + 69/69 + UNSHIELD + Nito 3-out
-+ live-assets text; Flux owner update pending.
+**Where we are:** the 3-out v3 note-management feature is complete through the
+chipnet demo and the Nito client witness path. The 3-out demo pool
+(`bc607a96…`, program 7,848 B sha256 `73cb0ccb…`, locking `aa204a6c…`) ran the
+full lifecycle **SHIELD `e847ef56…` → TRANSFER `ef64f3dd…` → UNSHIELD 300
+`ec31a41c…`**; every input VM-ACCEPTED consensus + standard. Final state root
+`142282…`, balance **700 FT**, notes **210/210/112/84/84**, **11 leaves**; the
+state outpoint is `ec31a41c…:1` (10,000 sats, 700 FT) and
+`state.outpoints.actionInputs` is `[]` (the next action needs a refill).
+Wallet A: **2,523 plain sats**, **18 blanks**, **99,999,300 FT** — the next
+lock is NOT fundable until sats are recovered (see the full handoff §1/§7).
 
-### Hosts / paths (continue here)
+**Nito 3-out client path (built, byte-exact):** `nito.cash` commit `6ea8077`
+adds `apps/web/src/lib/pool/role2-3out/` + `verifier-role2-3out.js`; the
+program reproduces the deployed demo exactly (code 7,848 B sha256
+`73cb0ccb…`, locking `aa204a6c…`). `node scripts/pool-accept.mjs --pool
+role2-3out --txid ec31a41c` reports all three live UNSHIELD unlockings
+**BYTE-EXACT** (fuel0 9,488 B / fuel1 9,490 B / state 8,821 B). The carrier
+(169/201 B), 8/9-field actionHash, `buildPoolWitness3out`, `actionHash3out`,
+decode/scan, the store `poolId`/`outs=3` branch and the registry entry
+`chipnet-pusd-role2-3out` (`walletProverCompatible: false`) are built. Tests
+**695/695**; coverage **89.04% statements / 89.99% lines**; `pnpm build` OK;
+CI `45888835607` success.
 
-- VM: `ssh apecsdev`; node is `/home/apecs/bin/node` (`export PATH=/home/apecs/bin:$PATH`).
-- Bench: `~/zkb/groth16_cashscript/chunked/bn254/bn-native-sound/` (the hooked
-  program, tests, sweeps, deploy/op tooling).
-- Pool repo: `~/zkb/pusd-shielded-pool/` (`build3/` = the 3-out setup;
-  `role2-op-witness-3out.mjs`, `gen-our-proofs-3out.mjs`,
-  `gen-sweep-proofs-3out.mjs`).
-- Runtime state: `/home/apecs/cov/role2-pool-state.json` (the live 2-out pool);
-  `/home/apecs/cov/role2-pool3-state.json` (**the 3-out demo pool; contains
-  note nks — NOT committed**); `/home/apecs/cov/role2-op3.json` (SHIELD),
-  `/home/apecs/cov/role2-op3-transfer.json` (TRANSFER),
-  `/home/apecs/cov/role2-op3-unshield.json` (UNSHIELD 300); the 3-out fixtures
-  `/home/apecs/cov/our-3out.fixtures.json` and proofs
-  `/home/apecs/cov/our-3out-proofs.json`; the 64 minted proofs
-  `/home/apecs/cov/our-3out-sweep-a.json` (seed `sweep-3out-v1a`) and
-  `-b.json` (seed `sweep-3out-v1b`); the full sweep report
-  `/home/apecs/cov/pool3-sweep-report.json`.
-- Wallet A (the 3-out demo funder): `/home/apecs/.secrets/wallet-a-role2-demo.json`,
-  `bchtest:qzzu85xnl99u534d9z40yu7c494hknppx5lu29gl8t`. The hot wallet
-  `/home/apecs/.secrets/faucet-hot-wallet.json` (`bchtest:qzmux3gx…`) has
-  ~5,917 plain sats; the 3-out deploy deliberately used wallet A.
+**3-out proving assets are live:** GitHub release
+`role2-proving-assets-3out-v1` (`pool3.wasm` 3,380,815 B sha256 `c806e561…`;
+`pool3_final.zkey` 98,190,141 B sha256 `b0177dbe…`;
+`verification_key_3out.json` 3,111 B sha256 `d4ed12ee…`), served at
+`https://prover.nito.cash/assets/` (all 200; Worker `nito-prover` version
+`34e48677…`, commit `c6ad077`, CI `45889707043` success).
 
-### Exact commands (all from `bn-native-sound/` unless noted)
+**Site / release:** the research pages carry the three confirmed actions, the
+final state and the Nito witness path; site image **`d8495faabd6d`**, Hub
+digest `sha256:d8495faabd6d64963d59f793f56d20931a515664ec93dd96c5ebb46a896d562e`
+(pushed 2026-11-26 20:18Z); smoke 200 on `/`, `/research`,
+`/research/shielded-pool`, `/research/bn254`, `/playground`. **Flux owner
+update pending** — no owner credential on blackhost.
 
-```bash
-# 3-out proofs / fixtures (from ~/zkb/pusd-shielded-pool, build3 paths)
-node gen-our-proofs-3out.mjs
-node ~/cov/mkfixtures.mjs ~/zkb/pusd-shielded-pool/build3/verification_key.json \
-     /home/apecs/cov/our-3out-proofs.json /home/apecs/cov/our-3out.fixtures.json
+**Session commits:** `hushyourmoney` `6879ded`, `6877747`, `b7f8bb1`,
+`71d7f7c`, `9333734`, `fbd137f`, `6290af7`, `d71802a`; `nito.cash` `6ea8077`
++ `c6ad077`; `pusd-shielded-pool` `5f645c3` + release
+`role2-proving-assets-3out-v1`.
 
-# build + gates (BN_VK_FIXTURES is mandatory; POOL_3OUT=1 selects 201-B/9-field)
-BN_VK_FIXTURES=/home/apecs/cov/our-3out.fixtures.json node build.mjs
-BN_VK_FIXTURES=/home/apecs/cov/our-3out.fixtures.json POOL_3OUT=1 node pool-info.mjs
-BN_VK_FIXTURES=/home/apecs/cov/our-3out.fixtures.json POOL_3OUT=1 node pool-cost.mjs
-BN_VK_FIXTURES=/home/apecs/cov/our-3out.fixtures.json POOL_3OUT=1 node pool-test.mjs
-BN_VK_FIXTURES=/home/apecs/cov/our-3out.fixtures.json POOL_3OUT=1 node pool-redteam.mjs
-BN_VK_FIXTURES=/home/apecs/cov/our-3out.fixtures.json POOL_3OUT=1 node pool-sweep.mjs \
-     /home/apecs/cov/pool3-sweep-report.json \
-     /home/apecs/cov/our-3out-sweep-a.json /home/apecs/cov/our-3out-sweep-b.json
+**Remaining (priority order):**
 
-# deploy the 3-out demo pool (already done; the dry run is deterministic)
-BN_VK_FIXTURES=/home/apecs/cov/our-3out.fixtures.json POOL_3OUT=1 \
-  node pool-deploy-role2.mjs --secrets /home/apecs/.secrets/wallet-a-role2-demo.json \
-  --state-out /home/apecs/cov/role2-pool3-state.json
+1. Nito 3-out **UI pool selector / 3-out blanks / browser acceptance**; the
+   store branch is wired but `walletProverCompatible` stays false until the
+   browser SHIELD → TRANSFER → UNSHIELD passes. The Nito user needs two
+   `bc607a96…` blanks; the 2-out vending `aa206b51…` is category-specific and
+   not valid for the 3-out category; the 3-out guard is `aa20e33c…`.
+2. **v3 core:** deposit path (0-in/2-out onboarding), real nullifier set
+   (Merkle membership), encrypted note delivery — all design/UNMEASURED
+   (`docs/ROLE2-3OUT-V3-DESIGN.md` §3).
+3. **Gate 7 MPC → mainnet**, then migrate the Hush 750,000/762,400 notes and
+   the wallet A notes into the 3-out pool. The 3-out demo is 1-of-1; not
+   mainnet-ready.
+4. **Wallet A sats recovery** before the next lock (`wallet-consolidate.mjs`,
+   `blank-sweep.mjs --count N`, `token-sats-recover.mjs --min-value 60000
+   --count 1`; the seven 20M tPUSD demo UTXOs at 60,000 sats each are DEMO
+   ONLY).
+5. **Flux owner update** — image `d8495fa…`.
 
-# per action: prove -> tagged lock -> action (the demo's exact flow)
-cd ~/zkb/pusd-shielded-pool
-node role2-op-witness-3out.mjs --action shield --amount 1000 --in 0,1 \
-  --state /home/apecs/cov/role2-pool3-state.json --out /home/apecs/cov/role2-op3.json
-cd ~/zkb/groth16_cashscript/chunked/bn254/bn-native-sound
-node pool-refill-role2.mjs --op /home/apecs/cov/role2-op3.json \
-  --state /home/apecs/cov/role2-pool3-state.json \
-  --secrets /home/apecs/.secrets/wallet-a-role2-demo.json --no-wait
-BN_VK_FIXTURES=/home/apecs/cov/our-3out.fixtures.json POOL_3OUT=1 \
-  node pool-op-role2.mjs --3out --op /home/apecs/cov/role2-op3.json \
-  --state /home/apecs/cov/role2-pool3-state.json
-```
-
-### Built + measured
-
-- **Plain 3-out sound verifier** under the new VK: code **7,310 B** sha256
-  `6ec7ca8e713c3d79e45d5a393546c2bf28cb25b23545b904e8476f13c583f8b9`; R 65 B;
-  fixture-0 n_q 111, fills 93/22/133, unlocking 9,313 / 9,243 / 8,763 B,
-  margins **6.46% consensus / 6.01% standard**, score 27,573.
-- **Hooked 3-out program** (fixture category): code **7,848 B** sha256
-  `628207b197ae2cea8b069198f9b454d12fa7e50a19bb1ffa5822cfe5ab533f73`;
-  locking `aa2002409194a2d8c043002fc946274c71776996c30fb26f188b63b915e9873ef93087`;
-  role code 804 / 720 / 2,911 B; prologue 7,843; pieces 4,036 / 3,812.
-- **Hook price**: **39,082 op standard / 37,930 op consensus**; 537 B of
-  role-2 code (2-out: 37,198 / 36,046, 524 B).
-- **Acceptance**: **21/21** (3 controls + 18 rejection classes; the 3-out adds
-  the `cm2` carrier tamper). The 2-out suite is still **20/20**.
-- **Red team**: **146 runs / 0 accepted**, both positive controls accepted
-  (`wip-role2-hook/pool-redteam-3out-report.json`).
-- **Full liveness sweep**: **69 cases / 0 failed** — 5 committed fixtures +
-  64 minted random proofs (seeds `sweep-3out-v1a` / `sweep-3out-v1b`).
-  - consensus min margins: input 0 **7.86%** (`sweep-3out-v1b unshield #2`),
-    input 1 **8.54%** (`fixture 4`), input 2 **6.49%**
-    (`sweep-3out-v1b shield #10`).
-  - standard min margins: input 0 **7.40%** (`sweep-3out-v1b unshield #2`),
-    input 1 **8.07%** (`fixture 4`), input 2 **6.00%**
-    (`sweep-3out-v1a shield #1`).
-  - max at-cap op **7,080,373** (standard input 0, **11.86% cap margin**);
-    input 2 at-cap max 6,752,799 (**15.93%**); cap rule all true.
-  - Report: `wip-role2-hook/pool3-sweep-report.json` (141 KB, committed);
-    the 5-fixture subset is `wip-role2-hook/pool3-sweep-fixtures.json`.
-- **2-out regression**: `POOL_3OUT` unset rebuilds code sha256 `d71851a1…`,
-  7,834 B; `BN_VK_FIXTURES=our.fixtures.json node pool-test.mjs` still **20/20**.
-
-### Deployed 3-out demo pool (chipnet, 2026-11-26)
-
-- Category (anchor) `bc607a96c8a21a1400263d437005d3f434c3c60674018119995dc6200072e635`
-  (anchor 924 B); mint `62d91e4cf541f8c7a710cfcecd566fd99f91b0d6615afddaaf074217b739132e`
-  (326 B); deploy `2f65079182cf1ecd736e897afad741b9218c6afd16f711042ba4cacf5dd8aa7e`
-  (761 B); all confirmed in chipnet block **348,569**.
-- Program code 7,848 B sha256 `73cb0ccb01791d37bea2289fc809211296685896ed8ca16ea260a666ede67971`,
-  locking `aa204a6ce339fb62b7b2ebb502c9bf642d3221620e6f5ded619ce8a39110e35182ea87`;
-  guard `aa20e33ce1810617ea549e24b7aa66c9291c9e9b79aa8dc006501d8a2b2b2990dce887`
-  (redeem 5,103 B, K=64, born guarded).
-- Tag batch `8e3eaf7170240f5fa632879df7e6896a365f6ac5f7c89355db791e158df55526`
-  (9,830 B, 64 blanks; guard passthrough).
-- **SHIELD 1,000** `e847ef567bd06ec6585e4d7384d0eb28ca77913c7b8813beb52a9194e83017e0`
-  (28,326 B, 30,000 sats, 1.059 sat/B; out **400+300+300**; lock
-  `4f49c1cb94bf0588a0d064a86884cfcab5790c2d23eaa5092cc25fa260292d54`).
-- **TRANSFER** `ef64f3dda71ed0110f488ea366e8fab79ff214649586c00ccba14d12da46e325`
-  (28,389 B, 30,000 sats, 1.057 sat/B; spends notes 2+3; out **280+210+210**;
-  lock `f52502b4a8713e6feb9b76054d4e7a8c13e61ae0dfcdf3b1a0cc4da039d0935a`).
-- **UNSHIELD 300** `ec31a41c591c4af4ad95c2fab76c1ad2bb34b483393bce53758982a9d8e9de03`
-  (28,368 B, 29,000 sats, 1.022 sat/B; spends notes 4+5; out **112+84+84**;
-  300 FT payout at `:2`; lock
-  `11b9416cc71ac5331060de58f26cdfc47f07519ac693e0d3f5e3d9be7b121088`).
-- Every action input VM-ACCEPTED consensus + standard. Final state root
-  `14228234475601541117315008857991396106432351016727521101710528622096584678627`
-  (LE `e31cd294…`); balance **700 FT**; notes **210 (index 6) / 210 (7) /
-  112 (8) / 84 (9) / 84 (10)**; 11 leaves. On-chain state `ec31a41c…:1`
-  decodes to category `bc607a96…`, amount 700, mutable NFT commitment
-  `e31cd294…`.
-- All 10 txs (anchor/mint/deploy/tagbatch/3 locks/SHIELD/TRANSFER/UNSHIELD)
-  return **200 on Selene** `https://explorer.selene.cash/tx/<txid>?network=chipnet`.
-- The three actions are the note-management proof: one action creates three
-  notes; the next spends two and creates three with change splitting; the
-  unshield spends two, pays 300 FT publicly and creates three change notes.
-- Demo only: 1-of-1 setup, **public bootstrap in-notes on the first action**
-  (indices 0/1), no real nullifier set, no encrypted note delivery; Gate 7 is
-  the mainnet gate.
-
-### Nito client 3-out path (built 2026-11-26)
-
-- Repo: `/Workspace/apecsdev/nito.cash`; build host `apecsdev`
-  (`~/apps/nito.cash`); commits `6ea8077` (client path) + `c6ad077` (prover
-  mirror). New `apps/web/src/lib/pool/role2-3out/` vendors the
-  3-out program builder under the 3-out VK (`d4ed12ee…`);
-  `verifier-role2-3out.js` exposes `role2Program3out` +
-  `produceRole2Inputs3out`. The program reproduces the deployed demo exactly:
-  code 7,848 B sha256 `73cb0ccb…`, R 65 B, locking `aa204a6c…` (category
-  `bc607a96…`).
-- **Acceptance:** `node scripts/pool-accept.mjs --pool role2-3out --txid
-  ec31a41c` reports all three unlockings BYTE-EXACT (fuel0 9,488 B / fuel1
-  9,490 B / state 8,821 B) against the live UNSHIELD.
-- Carrier 169/201 B + 8/9-field actionHash (`role2-carrier.js`);
-  `role2-action.js` / `role2-actions.js` accept 201; `prover.js`
-  `buildPoolWitness3out`; `notes.js` `actionHash3out`; `decode.js` / `scan.js`
-  handle the 201-B carrier, cm2 and the 3-leaf append; the store
-  `submitRole2Action` takes `poolId` and branches on `pool.outputs === 3`;
-  registry entry `chipnet-pusd-role2-3out` (`walletProverCompatible: false`,
-  awaiting the browser acceptance).
-- Tests **695/695** on `apecsdev`; coverage 89.04% statements / 89.99% lines;
-  `pnpm build` OK. The 3-out vendored builder + verifier are excluded from
-  coverage like the 2-out `verifier-role2.js`.
-- The 3-out proving assets are published in the
-  `role2-proving-assets-3out-v1` GitHub release and served at
-  `https://prover.nito.cash/assets/` (`pool3.wasm` 3,380,815 B sha256
-  `c806e561…`; `pool3_final.zkey` 98,190,141 B sha256 `b0177dbe…`;
-  `verification_key_3out.json` 3,111 B sha256 `d4ed12ee…`); the Worker
-  `nito-prover` was deployed 2026-11-26 (version `34e48677…`).
-- Remaining: the UI pool selector, 3-out blanks (guard/vending), and the
-  browser SHIELD → TRANSFER → UNSHIELD acceptance.
-
-### Wallet A / sats state (important for the next action)
-
-- The 3-out deploy spent 6 plain UTXOs (82,715 sats) but the change returned;
-  the tag batch then consumed the 78,563-sat consolidated UTXO.
-- **40 of the 64 blanks were burned to recover 28,632 sats**; a 2-UTXO
-  consolidation made a 32,113-sat UTXO; the SHIELD, TRANSFER and UNSHIELD locks
-  each spent 2 blanks, so **18 blanks remain** (18,000 sats) at wallet A. The
-  UNSHIELD lock spent the last large plain UTXO (31,901 sats) and returned
-  **2,523 plain sats**; the next lock is NOT fundable from wallet A as it
-  stands. **Recover sats before the next lock**:
-  `wallet-consolidate.mjs`, `blank-sweep.mjs --count N`, and
-  `token-sats-recover.mjs --min-value 60000 --count 1` (wallet A also holds
-  seven 20M tPUSD demo UTXOs at 60,000 sats each; burning one is DEMO ONLY).
-- The hot wallet has ~5,917 plain sats; the PUSD mint key
-  `bchtest:qpt2lckk…` has 8,806 plain sats + token UTXOs; the x402 receiving
-  wallet has 10,000 plain sats. Do not use mainnet funds.
-- The 3-out pool's FT supply change (99,999,000 FT) sits at wallet A
-  `4f49c1cb…:3` (1,000 sats); the UNSHIELD paid 300 FT to wallet A at
-  `ec31a41c…:2` (1,000 sats), so wallet A holds **99,999,300 FT** and the pool
-  holds 700 FT (100,000,000 total); the pool's state float is 10,000 sats.
-
-### Tooling / files (repo)
-
-- `pusd-shielded-pool`: `gen-our-proofs-3out.mjs` (5 fixtures),
-  `gen-sweep-proofs-3out.mjs` (seeded minter), `role2-op-witness-3out.mjs`
-  (CLI witness + proof + 3 out-notes; 40/30/30 split; `--state`, `--out`,
-  `--wasm`, `--zkey`), `wip-role2-hook/pool-hook.mjs` (`outs` parameter;
-  2-out byte-identical), `pool-tx.mjs` (`outs`), `pool-test.mjs`
-  (`POOL_3OUT=1`, cm2 tamper), `pool-redteam.mjs`, `pool-sweep.mjs`
-  (`POOL_3OUT=1`, code pin `628207b1…`), `pool-cost.mjs`,
-  `pool-op-role2.mjs` (`--3out`), `pool-deploy-role2.mjs` (`POOL_3OUT=1`,
-  `--state-out`, top-level `guard` alias), `pool-info.mjs` (hooked build
-  code/R/locking; stock `build.mjs` cannot smoke-test the hook),
-  `wallet-consolidate.mjs`, `blank-sweep.mjs`, `token-sats-recover.mjs`.
-- Reports/records committed: `pool-redteam-3out-report.json`,
-  `pool3-sweep-report.json` (69 cases), `pool3-sweep-fixtures.json`
-  (5 cases), `build.3out-plain.json`, `our-3out.fixtures.json`,
-  `our-3out-proofs.json`, `our-3out-sweep-a.json`, `our-3out-sweep-b.json`.
-- Landmines (also in `wip-role2-hook/STATUS.md`):
-  1. `pool-tagbatch-role2.mjs` reads **`state.guard` (top-level)**; a
-     born-guarded deploy wrote only `outpoints.guard`. Fixed in
-     `pool-deploy-role2.mjs` (alias) + the live state file.
-  2. A token-spending P2PKH signature must include each source output's
-     **token data** in the signing serialization; a tokenless `sourceOutputs`
-     entry produces a signature the network rejects with code 16
-     (`Signature must be zero for failed CHECK(MULTI)SIG`). Fixed in
-     `blank-sweep.mjs` / `token-sats-recover.mjs`.
-  3. `pool-refill-role2.mjs` sizes from **`plain[0]` only**; consolidate /
-     recover sats before locking.
-  4. The deploy script's console line labelled “sha256” prints the first 16
-     hex chars of the **code**, not the hash; the real hash is in the state
-     file / `pool-info.mjs` (`73cb0ccb…` for the deployed category).
-
-### Site / release
-
-- `web/pages/research/shielded-pool.vue` `#notes-management` now carries the
-  measured 3-out program, the 3-out gates, the deployed demo pool and the three
-  confirmed actions (Selene links).
-- `web/pages/research/bn254.vue`, `web/pages/daemons.vue`,
-  `web/pages/playground.vue`, `web/pages/research/index.vue` updated from
-  “measured, not deployed” to the chipnet demo record.
-- All changed SFCs pass the `@vue/compiler-sfc` parse + compile check (VM
-  image + `/tmp/check-sfc.cjs`).
-- **Site image `d8495faabd6d` / Hub
-  `sha256:d8495faabd6d64963d59f793f56d20931a515664ec93dd96c5ebb46a896d562e`
-  (pushed 2026-11-26 20:18Z)**: rebuilt after the live 3-out proving-asset
-  record; the smoke on `127.0.0.1:3215` returned 200 for `/`, `/research`,
-  `/research/shielded-pool`, `/research/bn254`, `/playground`, and the
-  shielded-pool page carries `Three confirmed 3-out actions`, `ec31a41c`,
-  `3-out witness path is built and byte-exact`, `proving assets are live on
-  prover.nito.cash`. The previous Hub images `a49aa80c…`, `d1b87bfa…` and
-  `cc99fbd0…` are superseded.
-- **Flux:** no owner credential on blackhost; the owner dashboard update is
-  the remaining deployment action.
-
-### Next session order
-
-1. ✅ Full 3-out sweep DONE (69/69); re-run red team/sweep only if the hook
-   changes. ✅ The 3-out demo lifecycle is complete (SHIELD → TRANSFER →
-   UNSHIELD 300); the final state is 700 FT / 11 leaves.
-2. ✅ Site image rebuilt + pushed (`d8495faabd6d`, Hub digest
-   `sha256:d8495fa…`); the Flux owner update remains the only deployment
-   action.
-3. Nito client 3-out path — **WITNESS BYTE-EXACT** (2026-11-26): the vendored
-   `role2-3out` program reproduces code 7,848 B sha256 `73cb0ccb…` / locking
-   `aa204a6c…`, and `pool-accept.mjs --pool role2-3out --txid ec31a41c`
-   regenerates all three live UNSHIELD unlockings byte-exactly. The carrier
-   (201 B), actionHash (9 fields), prover (`buildPoolWitness3out`), notes
-   (`actionHash3out`), decode/scan, store branch and registry entry are built;
-   the UI, `prover.nito.cash` 3-out asset mirror, 3-out blanks and the browser
-   acceptance remain.
-4. Deposit path (onboarding), real nullifier set (Merkle membership),
-   encrypted note delivery — the v3 core.
-5. Gate 7 MPC → mainnet; migrate the Hush 750,000/762,400 notes and the
-   wallet A notes into the 3-out pool.
-6. Re-check wallet A sats (18 blanks + 2,523 plain + demo tPUSD UTXOs) before
-   the next lock; recover sats first.
+**Landmines:** the full handoff §7 has the complete list. The critical ones:
+`pool-refill-role2.mjs` sizes from `plain[0]` only; token-spending P2PKH
+signatures must include token data (code 16); `pool-tagbatch-role2.mjs` reads
+top-level `state.guard`; pass only plain `Uint8Array`s into the BCH-2026 VM
+(Node `Buffer` aliases via `slice()`); `OP_SIZE` is non-popping; 3-out carrier
+offsets are cm2@128 / newRoot@160 / pv@192 / sign@200 and the actionHash is
+9 fields; the Nito 3-out `math.mjs` uses the static `our-3out.fixtures.json`
+and the on-chain category `35e67200…`; the Nito coverage excludes
+`role2-3out/**` + `verifier-role2-3out.js`; do not reuse the spent bootstrap
+notes; do not flip `walletProverCompatible` before the browser acceptance; do
+not run a non-frozen `pnpm install` on `hushyourmoney`.
 
 ---
 
