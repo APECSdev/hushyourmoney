@@ -169,7 +169,7 @@ UNSHIELD payout public-by-design. Mitigations, in order:
 4. **Note delivery**: off-chain (the pinned output count leaves no room for your old
    out[6] encrypted carrier).
 5. **Blank handling**: acquire through the vending covenant (self-service, §4.1) — or any
-   p2p transfer; spend 2 per lock. Your wallet should recognize the exact blank shape
+   p2p transfer; spend 2 per lock. Your wallet must recognize the exact blank shape
    (pool category + mutable NFT + EMPTY commitment + 0 FT), count held blanks as
    "actions remaining", and treat the vending locking as a buyable UTXO source.
 6. **Fee hygiene** per §6.
@@ -183,5 +183,12 @@ pool-op-role2}.mjs` in `pusd-shielded-pool`), the gate reports
 (`pool-redteam-tagged-report.json`, `pool-sweep-tagged.json`), and the deployment records
 (`docs/POOL-DEPLOYMENT.md` §15–§17, `wip-role2-hook/STATUS.md`). Unmeasured quantities are
 marked; nothing here is estimated.
+
+## 9. Daemon-side integration
+
+The daemon transport, round, wallet and role-2 builders are documented in
+`docs/DAEMONS-NITO-UNBLOCK-HANDOFF-2026-11-25.md` (updated 2026-11-26). That handoff lists the
+NIP-44 mode, NIP-59 timestamps, client-side verify-before-sign, the pool-native round shape, the
+proving-asset acceptance and the 3-input builder.
 
 — APECS Dev, 2026-11-24. The nito.cash client is the final approval for any deployed result.

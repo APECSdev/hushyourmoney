@@ -43,10 +43,12 @@ These rules apply to every file under `daemons/`.
 ## 5. Build and test hosts
 
 - **Never build on this host.** The `pnpm`/`astro`/compile rule applies to this repository.
-- Build and test on the `apecsdev` VM.
+- Build and test on the `apecsdev` VM. The dependency-bearing p2pkh/role-2 tests also run on `blackhost` with the Nito `apps/web/node_modules`.
 - Deploy to `blackhost`; the daemon is an outbound WebSocket client and needs no inbound port.
 - `blackhost` has 2 CPU cores, 3.8 GiB RAM, and 2.8 GiB free on a 93%-full disk (verified 2026-11-25). The unit sets `MemoryMax=512M`, `CPUQuota=50%`, and the journald cap is part of the runbook.
 - `blackhost` Node is `/usr/local/bin/node` (v22.20.0).
+
+Dependencies: the transport tests need `@noble/ciphers`, `@noble/curves` and `@noble/hashes`; the P2PKH and role-2 tests need `@bitauth/libauth`. The web image’s `node_modules` does not include `@bitauth`; the full 97-test run on `blackhost` uses the Nito `apps/web/node_modules`, or install the daemon dependencies on the `apecsdev` VM. Current counts: 44 shared, 42 CashShuffle, 11 CashFusion.
 
 ## 6. Commit rules
 
@@ -55,7 +57,7 @@ These rules apply to every file under `daemons/`.
 - Do not leave deletions staged.
 - Commit message prefix: `daemons: `.
 - A docs-only change needs no site build and no Docker image.
-- A code change is tested on the apecsdev VM before it is pushed.
+- A code change is tested on the `apecsdev` VM or `blackhost` (with the Nito `apps/web/node_modules` for `@bitauth`) before it is pushed.
 
 ## 7. Data and secrets
 

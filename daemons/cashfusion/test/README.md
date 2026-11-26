@@ -1,7 +1,7 @@
 <!-- daemons/cashfusion/test/README.md -->
 # CashFusion tests
 
-Status: M0 unit tests only. The round and wallet are stubs.
+Status: 11 tests pass (config 5, phase table/coordinator policy 6). The CashFusion round and wallet are still stubs; the shared transport is tested in `daemons/shared/test/`.
 
 ## Layers
 
@@ -15,16 +15,14 @@ Status: M0 unit tests only. The round and wallet are stubs.
 ## Run
 
 ```bash
-# On the apecsdev VM, never this host:
+# On blackhost, with the Nito apps/web/node_modules for @bitauth/@noble:
+cd /root/tmp/daemons-test
+node --test shared/test/*.test.js cashshuffle/test/*.test.js cashfusion/test/*.test.js
+
+# On the apecsdev build VM, after installing the daemon dependencies:
 cd daemons
 npm install
 npm test
-```
-
-The current tests require no dependencies and run with plain `node --test`:
-
-```bash
-node --test daemons/cashfusion/test/*.test.js
 ```
 
 ## Fixtures

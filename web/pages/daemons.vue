@@ -67,7 +67,7 @@ const DAEMONS = [
         id: '02',
         name: 'CashFusion',
         subtitle: 'The six-phase mix',
-        status: 'orchestration · M6',
+        status: 'M6 · not started',
         badge: 'badge-wait',
         numClass: 'topic-violet',
         body: 'The later mode: a six-phase CashFusion round over the same relay pool and wallet. Coordinator privacy is explicit — the daemon defaults to avoiding the coordinator role, because the CashFusion coordinator sees the mapping.',
@@ -128,7 +128,7 @@ const MATRIX = [
     },
     {
         dimension: 'status',
-        shuffle: 'M1–M2 done; M3–M4 partial; M5 not started',
+        shuffle: 'M1 done; M2–M4 partial; M5 not started',
         fusion: 'orchestration; M6 not started',
     },
 ]
@@ -139,13 +139,13 @@ const REAL_VS_PLANNED = [
         surface: 'Orchestration tree',
         state: 'real',
         badge: 'badge-done',
-        detail: 'Commit 239d66c: plans, acceptance gates, open questions, config parsers, metrics, stubs, hardened units.',
+        detail: 'Commits 239d66c + M1–M4: plans, transport, round, wallet signer, pool builders, tests, hardened units.',
     },
     {
         surface: 'Daemon process',
         state: 'planned',
         badge: 'badge-wait',
-        detail: 'src/main.js loads the config and exits with “not implemented”; the round, wallet selection, BCH P2PKH signer, pool helpers and lock/action builders exist, but the network loop and Electrum broadcast are pending.',
+        detail: 'src/main.js loads the config and exits with “not implemented”; the round state machine, wallet selection, BCH P2PKH signer, pool helpers and lock/action builders exist, but signature verification/timeouts/persistence, the network loop and Electrum broadcast are pending.',
     },
     {
         surface: 'Nostr transport',
@@ -157,7 +157,7 @@ const REAL_VS_PLANNED = [
         surface: 'CashShuffle round',
         state: 'core implemented',
         badge: 'badge-mid',
-        detail: 'Round state machine + VERIFY before SIGNING; 16 tests including the malicious-coordinator case. The network loop, Electrum broadcast and end-to-end A1/A2 are pending.',
+        detail: 'Round state machine + VERIFY before SIGNING; 16 tests including the malicious-coordinator case. Signature verification, timeouts, persistence, the network loop, Electrum broadcast and end-to-end A1/A2 are pending.',
     },
     {
         surface: 'CashFusion round',
@@ -169,7 +169,7 @@ const REAL_VS_PLANNED = [
         surface: 'Pool-native batching',
         state: 'builders implemented',
         badge: 'badge-mid',
-        detail: 'Carrier/tag/fuel-pair/cost helpers and the lock/action builders are implemented and tested (7 tests). Proving assets, VM-eval and note delivery are pending.',
+        detail: 'Carrier/tag/fuel-pair/cost helpers and the lock/action builders are implemented and tested (14 tests: 7 pool + 7 lock/action). Proving assets, VM-eval and note delivery are pending.',
     },
     {
         surface: 'blackhost deployment',
@@ -233,9 +233,9 @@ const POOL_FACTS = [
 const ROADMAP = [
     { id: 'M0', title: 'Orchestration', status: 'done', badge: 'badge-done', body: 'Tree, plans, acceptance, open questions, config/metrics, stubs, units. This commit.' },
     { id: 'M1', title: 'Shared transport', status: 'in progress', badge: 'badge-mid', body: 'Official NIP-44 v2 KDF/padding + nito-v0; NIP-59 timestamps; relay pool with 80 ms pacing, dedupe, reconnect, NIP-42; CashShuffle transport wrapper. 44 shared tests; Nito client mode pending.' },
-    { id: 'M2', title: 'CashShuffle round', status: 'in progress', badge: 'badge-mid', body: 'Round state machine + VERIFY before SIGNING; 16 tests including the malicious-coordinator case. Network loop, Electrum broadcast and A1/A2 end-to-end pending.' },
+    { id: 'M2', title: 'CashShuffle round', status: 'in progress', badge: 'badge-mid', body: 'Round state machine + VERIFY before SIGNING; 16 tests including the malicious-coordinator case. Signature verification, timeouts, persistence, network loop, Electrum broadcast and A1/A2 end-to-end pending.' },
     { id: 'M3', title: 'Wallet and liquidity', status: 'in progress', badge: 'badge-mid', body: 'Equal-amount selection, funding selection and caps implemented (5 tests); BCH P2PKH signer implemented (4 tests); Electrum broadcast pending.' },
-    { id: 'M4', title: 'Pool-native batching', status: 'in progress', badge: 'badge-mid', body: 'Carrier/tag/fuel-pair/cost helpers and lock/action builders implemented (7 tests); proving assets, VM-eval and note delivery pending.' },
+    { id: 'M4', title: 'Pool-native batching', status: 'in progress', badge: 'badge-mid', body: 'Carrier/tag/fuel-pair/cost helpers and lock/action builders implemented (14 tests: 7 pool + 7 lock/action); proving-asset acceptance, VM-eval and note delivery pending.' },
     { id: 'M5', title: 'Operations', status: 'not started', badge: 'badge-wait', body: 'Hardened systemd, metrics endpoint, journald caps, backup/restore, 24 h soak.' },
     { id: 'M6', title: 'CashFusion', status: 'not started', badge: 'badge-wait', body: 'Six-phase round, measured constants, coordinator avoidance, G4 testnet.' },
     { id: 'M7', title: 'Production', status: 'not started', badge: 'badge-wait', body: 'Security review, mainnet opt-in beta, Gate 7 ceremony for the pool, Nito final approval.' },
@@ -301,7 +301,7 @@ const ROUNDS = [
 const FAQ = [
     {
         q: 'Are the daemons live?',
-        a: 'No. The orchestration tree is committed (239d66c); no daemon process is implemented, deployed, or funded. The page marks every surface as real, reference-only, or planned.',
+        a: 'No. The daemon cores are implemented (M1–M4), but no daemon process is running, deployed, or funded. The page marks every surface as real, implemented, partial, or planned.',
     },
     {
         q: 'Why run a daemon at all?',
@@ -321,7 +321,7 @@ const FAQ = [
     },
     {
         q: 'Is CashFusion live?',
-        a: 'No. CashFusion is M6. The six-phase round is planned, the measured constants are recorded, and G4 (mainnet opt-in beta) is not built.',
+        a: 'No. CashFusion is M6. Only the shared transport and coordinator policy are implemented; the six-phase round is planned, the measured constants are recorded, and G4 (mainnet opt-in beta) is not built.',
     },
 ]
 
@@ -409,7 +409,7 @@ const SOURCES = [
             Two daemons: <strong class="font-semibold text-white">CashShuffle</strong> and
             <strong class="font-semibold text-white">CashFusion</strong>. They are designed to join the Nostr relay pool,
             hold a capped chipnet float, and run the round logic as peers — not as servers. This page is the
-            public record of the orchestration: what is built, what is planned, and what the Nito Cash client
+            public record of the implementation: what is built, what is partial, what is planned, and what the Nito Cash client
             must approve before anything is deployed.
         </p>
 
@@ -430,7 +430,7 @@ const SOURCES = [
         </div>
 
         <p class="animate-rise mt-8 font-mono text-[0.7rem] uppercase tracking-[0.25em] text-slate-400" style="animation-delay: 0.7s">
-            no daemon is running · the plans and gates are public
+            no daemon is running · the cores and gates are public
         </p>
     </section>
 
@@ -459,7 +459,7 @@ const SOURCES = [
                     A round needs a peer that stays online.
                 </h2>
                 <div class="mt-6 flex flex-wrap gap-2">
-                    <span class="badge badge-mid">orchestration only</span>
+                    <span class="badge badge-mid">M1–M4 partial</span>
                     <span class="badge badge-wait">not deployed</span>
                 </div>
             </div>
@@ -478,9 +478,9 @@ const SOURCES = [
                     No other peer’s key is ever held.
                 </p>
                 <p>
-                    This page is deliberately early. The tree is committed; the daemon process is not.
-                    The value of the page is the boundary: every capability is marked real, reference-only,
-                    or planned, and every acceptance gate is named before the code exists.
+                    This page is deliberately early. The cores are implemented; the daemon process is not.
+                    The value of the page is the boundary: every capability is marked real, implemented, partial,
+                    or planned, and every acceptance gate is named before deployment.
                 </p>
             </div>
         </div>
@@ -488,7 +488,7 @@ const SOURCES = [
         <div class="mt-12 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
             <div class="stat-card reveal">
                 <p class="font-display text-3xl font-extrabold text-lime-300">2</p>
-                <p class="mt-1 font-mono text-[0.7rem] uppercase tracking-[0.2em] text-slate-300">daemons planned</p>
+                <p class="mt-1 font-mono text-[0.7rem] uppercase tracking-[0.2em] text-slate-300">daemons in progress</p>
             </div>
             <div class="stat-card reveal" style="transition-delay: 0.06s">
                 <p class="font-display text-3xl font-extrabold text-cyan-300">0</p>
@@ -541,7 +541,7 @@ const SOURCES = [
         </div>
 
         <p class="reveal mt-4 font-mono text-xs text-slate-300">
-            [status · orchestration only; no daemon process is implemented or deployed]
+            [status · M1–M4 cores implemented; no daemon process is running or deployed]
         </p>
     </section>
 
@@ -597,7 +597,7 @@ const SOURCES = [
 │                                                                                 │
 │   cashshuffle-daemon.service                 cashfusion-daemon.service          │
 │   User=cashshuffle · 512M · 50% CPU          User=cashfusion · 512M · 50% CPU   │
-│   M1–M5                                       M6                                 │
+│   M1–M4 partial                               M6                                 │
 │                                                                                 │
 └───────────────────────────────────┬─────────────────────────────────────────────┘
                                     │ outbound WSS · NIP-59 gift wrap
@@ -641,7 +641,7 @@ const SOURCES = [
         <div class="reveal text-center">
             <p class="font-mono text-[0.8rem] uppercase tracking-[0.45em] text-lime-200">05 · the boundary</p>
             <h2 class="mt-5 font-display text-[clamp(1.9rem,5vw,3.4rem)] font-bold leading-[1.08] text-white">
-                Real, reference, or planned.
+                Real, implemented, partial, or planned.
             </h2>
             <p class="mx-auto mt-4 max-w-2xl text-base leading-relaxed text-slate-200">
                 The page is useful only if the boundary is explicit. Nothing here is marked live that is not live.
@@ -737,7 +737,7 @@ const SOURCES = [
         </div>
         <p class="reveal mt-4 text-sm leading-relaxed text-slate-200">
             The carrier, tag, fuel-pair and cost helpers and the BCH lock/action builders are implemented and
-            tested (7 tests); the proving assets, VM-eval and note delivery are pending.
+            tested (14 tests: 7 pool + 7 lock/action); the proving-asset acceptance, VM-eval and note delivery are pending.
         </p>
         <p class="reveal mt-3 font-mono text-xs text-slate-300">
             [source · docs/POOL-HANDOFF-2026-11-24-NITO-ROLE2-TAGGED.md §3–§4; pool-registry.json]
@@ -753,7 +753,8 @@ const SOURCES = [
             </h2>
             <p class="mx-auto mt-4 max-w-2xl text-base leading-relaxed text-slate-200">
                 The transport and round cores are implemented; the wallet selection and pool helpers are partial.
-                The Electrum broadcast, network loop, proving assets, VM-eval and deployment remain. The roadmap is ordered by
+                Signature verification, timeouts, persistence, the Electrum broadcast, network loop, proving-asset acceptance,
+                VM-eval and deployment remain. The roadmap is ordered by
                 dependency: transport, then round, then wallet, then the pool composition, then operations, then
                 CashFusion, then production.
             </p>

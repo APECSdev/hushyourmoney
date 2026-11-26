@@ -1,7 +1,7 @@
 <!-- daemons/README.md -->
 # Daemons — permanent CashShuffle and CashFusion liquidity
 
-**Status:** shared transport (M1) and CashShuffle round core (M2) implemented and tested; the network loop, wallet, pool adapter, and deployment are not implemented. No daemon is running or funded.
+**Status:** shared transport (M1), CashShuffle round state machine + VERIFY (M2 partial), wallet selection + BCH P2PKH signer (M3 partial) and role-2 carrier/lock/action builders (M4 partial) implemented and tested (97/97 on blackhost); the network loop, signature verification/timeouts/persistence, Electrum broadcast, VM-eval, note delivery, CashFusion round and deployment are not implemented. No daemon is running or funded.
 **Source handoff:** `docs/CASHSHUFFLE-DAEMON-HANDOFF-2026-11-25.md`.
 **Reference implementation:** `../nito.cash/apps/web/src/lib/cashshuffle/`, `../nito.cash/apps/web/src/lib/nostr/`, `../nito.cash/apps/web/src/lib/pool/`.
 **Design:** `../nito.cash/docs/CASHSHUFFLE-NOSTR-DESIGN.md`.
@@ -16,7 +16,7 @@ The Nito Cash client remains the final approval for any deployed result.
 
 ---
 
-## 2. What this commit contains
+## 2. What this tree contains
 
 | Path | Purpose |
 |---|---|
@@ -24,11 +24,11 @@ The Nito Cash client remains the final approval for any deployed result.
 | `daemons/ROADMAP.md` | Milestones M0–M7 and workstreams W1–W8. |
 | `daemons/CONVENTIONS.md` | Runtime, config, logging, security, and build-host rules. |
 | `daemons/package.json` | npm workspace root for the shared package and both daemons. |
-| `daemons/shared/` | Shared config/metrics modules, plus the Nostr and BCH contracts. |
-| `daemons/cashshuffle/` | CashShuffle daemon plan, acceptance, open questions, config, stubs, unit, `.env.example`, systemd unit. |
-| `daemons/cashfusion/` | CashFusion daemon plan, acceptance, open questions, config, stubs, unit, `.env.example`, systemd unit. |
+| `daemons/shared/` | Shared config/metrics, the Nostr transport, the CashShuffle transport wrapper, and the BCH P2PKH signer. |
+| `daemons/cashshuffle/` | CashShuffle round, wallet selection/signer, role-2 pool/lock/action, plans, acceptance, open questions, config, `.env.example`, systemd unit. |
+| `daemons/cashfusion/` | CashFusion plan, acceptance, open questions, config, stubs for the round/wallet, unit, `.env.example`, systemd unit. |
 
-**Not yet implemented:** the network loop, the BCH wallet, the role-2 pool adapter, the CashFusion round, the proving-asset handover, and any deployment. The shared Nostr transport is implemented in `shared/src/nostr/`; the CashShuffle round state machine and verify-before-sign are implemented in `cashshuffle/src/round.js`.
+**Not yet implemented:** the network loop, signature verification/timeouts/persistence, Electrum broadcast, role-2 VM-eval, off-chain note delivery, the CashFusion round, and any deployment. The shared Nostr transport is implemented in `shared/src/nostr/`; the CashShuffle round, wallet selection/signer, and role-2 lock/action builders are implemented in `cashshuffle/src/`.
 
 ---
 
@@ -49,9 +49,17 @@ daemons/
       index.js
       nostr/README.md
       bch/README.md
+      bch/p2pkh.js
+      cashshuffle/transport.js
     test/
       config.test.js
       metrics.test.js
+      nip44.test.js
+      nip59.test.js
+      event.test.js
+      relay-pool.test.js
+      cashshuffle-transport.test.js
+      p2pkh.test.js
   cashshuffle/
     README.md
     PLAN.md
@@ -67,12 +75,17 @@ daemons/
       round.js
       wallet.js
       pool.js
+      role2-lock.js
+      role2-action.js
       metrics.js
     test/
       README.md
       config.test.js
       round.test.js
+      wallet.test.js
       pool.test.js
+      role2-lock.test.js
+      role2-action.test.js
   cashfusion/
     README.md
     PLAN.md
@@ -108,14 +121,14 @@ These are not open for the first Nito round; they are the baseline the implement
 6. **BCH Schnorr is not Nostr BIP-340.** Nostr events use BIP-340 (`../nito.cash/apps/web/src/lib/nostr/event.js:15-35`); BCH inputs use BCH Schnorr with the 0x41 sighash byte (`../nito.cash/apps/web/src/lib/bch/crypto.js:221-257`). `AGENTS.md:238` records “BCH Schnorr ≠ final BIP-340.” The wallet module uses the BCH path only.
 7. **NIP-59 timestamps are tweaked.** The current Nito seal copies the rumor’s `created_at` and the gift wrap uses `now` (`../nito.cash/apps/web/src/lib/nostr/nip59.js:37,42-55,76`). NIP-59 line 111 directs implementations to tweak every timestamp other than the rumor’s. The shared transport randomizes the seal and gift-wrap timestamps up to two days in the past and subscribes with `since = now - 172800 - 300` (the pattern in `web/stores/p2pfusion/round.ts:122`).
 8. **The daemon runs as a dedicated non-root user with hardening.** The unit uses `User=cashshuffle`, `NoNewPrivileges`, `ProtectSystem=strict`, `ProtectHome`, `PrivateTmp`, `StateDirectory`, `MemoryMax`, and `CPUQuota` (`daemons/cashshuffle/systemd/cashshuffle-daemon.service`). The host has 2 CPU cores, 3.8 GiB RAM, and 2.8 GiB free on a 93%-full 38G disk (verified 2026-11-25 via `ssh blackhost 'nproc; free -h; df -h /'`).
-9. **Proving assets are a separate handover with an acceptance gate.** The Hush keypair is `VK 05250429…`, `zkey 4a4e2543…`, `wasm 8595b434…` (`AGENTS.md:699`); the Nito repo carries its own PPOT keypair (`VK 27f6ea03…`) and its role-2 registry entry is `walletProverCompatible: false`, `status: 'awaiting-proving-assets'` (`../nito.cash/apps/web/src/lib/pool/registry.js:88-93`). The zkey is 97 MB and cannot ship in the app bundle (`prover.js:41`); the distribution channel, CORS, caching, and the web-platform SHIELD→TRANSFER→UNSHIELD acceptance gate are defined in `daemons/cashshuffle/OPEN-QUESTIONS.md`.
+9. **Proving assets are a separate handover with an acceptance gate.** The Hush keypair is `VK 05250429…`, `zkey 4a4e2543…`, `wasm 8595b434…` (`AGENTS.md:699`); the Nito repo carries its own PPOT keypair (`VK 27f6ea03…`) and its role-2 registry entry was `walletProverCompatible: false`, `status: 'awaiting-proving-assets'` at the last Hush check (`../nito.cash/apps/web/src/lib/pool/registry.js:88-93`). The zkey is 97 MB and cannot ship in the app bundle (`prover.js:41`); the distribution channel, CORS, caching, and the web-platform SHIELD→TRANSFER→UNSHIELD acceptance gate are defined in `daemons/cashshuffle/OPEN-QUESTIONS.md`.
 10. **CashFusion coordinator privacy is explicit.** `AGENTS.md:110` records that the coordinator-sees critique applies to CashFusion, not CashShuffle. The CashFusion daemon defaults to `coordinatorPolicy=avoid` (`daemons/cashfusion/src/config.js`); it does not become the default coordinator.
 
 ---
 
 ## 5. Blockers for implementation
 
-No blocker to the orchestration tree. The following items block the first working round and need a Nito round:
+No blocker to the implemented cores. The following items block the first working round and need a Nito round:
 
 | Blocker | Owner | Why |
 |---|---|---|
@@ -123,9 +136,10 @@ No blocker to the orchestration tree. The following items block the first workin
 | NIP-44 mode for the Nito client | Joint | The daemon supports official v2 and `nito-v0`; the client must pick one. Official v2 is the interoperability target. |
 | Nito client verify-before-sign | Joint | The daemon implements `VERIFY` and the malicious-coordinator test; the Nito browser peer needs the same check or the coordinator can steal from it. |
 | Pool-native tag-pair round shape | Joint | One output per participant cannot fund a role-2 action. |
-| Proving assets + 3-input builder + note delivery | Nito | The client cannot prove or drive the 3-input shape until the handover and the builder swap. |
+| Proving assets + 3-input builder + note delivery | Nito | The client cannot prove or drive the 3-input shape until it pins the public handover and swaps the builder. |
 | Production relay set + NIP-42 policy | Joint | The current reference publishes on one relay and does not authenticate. |
 | `blackhost` ownership and capacity sign-off | Hush | 2 cores, 3.8 GiB RAM, 2.8 GiB free; the daemon shares the host with the rpsls build. |
+| Signature verification, timeouts, persistence, network loop, Electrum broadcast, VM-eval, note delivery | Hush | The cores exist; the runtime wiring, signature checks and chain path are the remaining Hush work. |
 | Nito final approval | Nito | The standing bar for any deployed result. |
 
 ---
@@ -133,6 +147,8 @@ No blocker to the orchestration tree. The following items block the first workin
 ## 6. Build and run
 
 **Never build on this host.** Build and test on the `apecsdev` VM; deploy to `blackhost`.
+
+The p2pkh and role-2 tests need `@bitauth/libauth`. The web image’s `node_modules` does not include it; the full 97-test run on `blackhost` uses the Nito `apps/web/node_modules`, or install the daemon dependencies on the `apecsdev` VM.
 
 ```bash
 # On the apecsdev VM, from the repository root:

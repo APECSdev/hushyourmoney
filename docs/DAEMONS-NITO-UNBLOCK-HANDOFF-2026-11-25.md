@@ -22,14 +22,14 @@ All of this is committed and pushed on `master`.
 
 | Area | Source | Tests |
 |---|---|---|
-| Shared transport: official NIP-44 v2 KDF/padding + `nito-v0`, NIP-59 timestamps, BIP-340 events, relay pool (N relays, 80 ms, dedupe, reconnect, NIP-42) | `daemons/shared/src/nostr/{nip44,nip59,event,relay,relay-pool}.js` | 44 shared |
+| Shared transport: official NIP-44 v2 KDF/padding + `nito-v0`, NIP-59 timestamps, BIP-340 events, relay pool (N relays, 80 ms, dedupe, reconnect, NIP-42) | `daemons/shared/src/nostr/{nip44,nip59,event,relay,relay-pool}.js` | 44 shared suite (incl. p2pkh) |
 | CashShuffle transport wrapper: gift-wrapped packets over the relay pool | `daemons/shared/src/cashshuffle/transport.js` | included above |
-| CashShuffle round: `REGISTER → POOL → ANNOUNCEMENT → SHUFFLE → VERIFY → SIGNING → BROADCAST`; verify-before-sign; blame | `daemons/cashshuffle/src/round.js` | 16 round |
-| Wallet: equal-amount selection, funding selection, caps, BCH P2PKH signer (`SIGHASH_ALL|FORKID`) | `daemons/cashshuffle/src/wallet.js`, `daemons/shared/src/bch/p2pkh.js` | 5 wallet + 4 p2pkh |
-| Role-2 pool: carrier parse/build, tag, fuel-pair check, cost, signed lock, 3-input action with injected unlockings | `daemons/cashshuffle/src/{pool,role2-lock,role2-action}.js` | 7 role-2 |
+| CashShuffle round: `REGISTER → POOL → ANNOUNCEMENT → SHUFFLE → VERIFY → SIGNING → BROADCAST`; verify-before-sign; blame. Signature verification, timeouts, persistence and the network loop are pending. | `daemons/cashshuffle/src/round.js` | 16 round |
+| Wallet: equal-amount selection, funding selection, caps, BCH P2PKH signer (`SIGHASH_ALL|FORKID`) | `daemons/cashshuffle/src/wallet.js`, `daemons/shared/src/bch/p2pkh.js` | 5 wallet (p2pkh in the shared suite) |
+| Role-2 pool: carrier parse/build, tag, fuel-pair check, cost, signed lock, 3-input action with injected unlockings | `daemons/cashshuffle/src/{pool,role2-lock,role2-action}.js` | 14 role-2 (7 pool + 7 lock/action) |
 | CashFusion: phase table and coordinator policy | `daemons/cashfusion/src/round.js` | 11 CashFusion |
 
-**96/96 daemon tests pass on `blackhost`** (44 shared + 41 CashShuffle + 11 CashFusion). The p2pkh/role-2 tests need `@bitauth/libauth`; they run on `blackhost` with the Nito `apps/web/node_modules`, or on the `apecsdev` build VM with the daemon dependencies installed.
+**97/97 daemon tests pass on `blackhost`** (44 shared + 42 CashShuffle + 11 CashFusion). The p2pkh/role-2 tests need `@bitauth/libauth`; they run on `blackhost` with the Nito `apps/web/node_modules`, or on the `apecsdev` build VM with the daemon dependencies installed.
 
 Commits:
 
@@ -170,13 +170,14 @@ npm install
 npm test
 ```
 
-The p2pkh and role-2 tests require `@bitauth/libauth`. The web image’s node_modules does not include it; the full 96-test run needs the Nito tree or an installed daemon dependency set.
+The p2pkh and role-2 tests require `@bitauth/libauth`. The web image’s node_modules does not include it; the full 97-test run needs the Nito tree or an installed daemon dependency set.
 
 ---
 
 ## 8. What Hush does next
 
 - Wire the network loop (`main.js` / daemon class) to the transport and round.
+- Add signature verification, per-phase timeouts and round persistence.
 - Add the Electrum broadcast path and the token-aware UTXO refresh.
 - Add the role-2 VM-eval (`createVirtualMachineBch2026` consensus + standard) before broadcast.
 - Add off-chain note delivery and the pool-native 2N verifier.

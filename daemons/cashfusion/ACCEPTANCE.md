@@ -1,7 +1,7 @@
 <!-- daemons/cashfusion/ACCEPTANCE.md -->
 # CashFusion daemon acceptance
 
-Status: not started. Each test records the evidence listed in `daemons/CONVENTIONS.md` §8.
+Status: 11 unit tests pass (config + phase table + coordinator policy); the end-to-end gates CF-A1–CF-A7 are not started. Each test records the evidence listed in `daemons/CONVENTIONS.md` §8.
 
 ## CF-A1 — 5-party chipnet round
 

@@ -1,7 +1,7 @@
 <!-- daemons/cashshuffle/README.md -->
 # CashShuffle daemon
 
-**Status:** shared transport (M1), the round state machine with verify-before-sign (M2), wallet selection/caps + BCH P2PKH signer (M3 partial) and carrier/tag/fuel-pair/cost + lock/action builders (M4 partial) implemented; the network loop, Electrum broadcast, proving assets, VM-eval, note delivery, and deployment are not implemented. No float, no deployment.
+**Status:** shared transport (M1) done; round state machine + VERIFY (M2 partial; signature verification, timeouts and persistence pending); wallet selection/caps + BCH P2PKH signer (M3 partial); carrier/tag/fuel-pair/cost + lock/action builders (M4 partial). The network loop, Electrum broadcast, proving-asset acceptance, VM-eval, note delivery and deployment are not implemented. No float, no deployment.
 **Source handoff:** `docs/CASHSHUFFLE-DAEMON-HANDOFF-2026-11-25.md`.
 **Design:** `../nito.cash/docs/CASHSHUFFLE-NOSTR-DESIGN.md`.
 **Reference:** `../nito.cash/apps/web/src/lib/cashshuffle/`, `../nito.cash/apps/web/src/lib/nostr/`.
@@ -13,7 +13,7 @@
 
 A permanent CashShuffle-over-Nostr peer on `blackhost` that can coordinate a round when its ephemeral key is the lowest in the pool. It holds a capped chipnet liquidity float, joins rounds, verifies the final transaction, signs, and broadcasts exactly like a browser peer. It never holds another peer’s key and never signs for another peer.
 
-Non-goals for M1–M3: mainnet, CashFusion, the existing CashFusion pool, a public metrics port, and any inbound listener.
+Non-goals for M1–M4: mainnet, CashFusion, the existing CashFusion pool, a public metrics port, and any inbound listener.
 
 ---
 
@@ -24,12 +24,14 @@ main.js
   ├─ config.js        validated env (CASHSHUFFLE_* + shared keys)
   ├─ relay-pool.js    shared N-relay pool, 80 ms outbox, dedupe, reconnect, NIP-42
   ├─ round.js         REGISTER → POOL → ANNOUNCEMENT → SHUFFLE → VERIFY → SIGNING → BROADCAST / BLAME
-  ├─ wallet.js        equal-amount UTXO selection, BCH Schnorr 0x41, broadcast, caps
-  ├─ pool.js          role-2 tag pairs, blanks, lock + action, VM-eval
+  ├─ wallet.js        equal-amount selection, funding, caps, BCH P2PKH signer; broadcast pending
+  ├─ pool.js          role-2 carrier/tag/fuel-pair/cost; VM-eval pending
+  ├─ role2-lock.js    signed lock: 2 tagged fuel UTXOs, 2 blanks, optional FT deposit
+  ├─ role2-action.js  3-input action: carrier, new state, optional payout
   └─ metrics.js       counters/gauges
 ```
 
-The shared transport is `daemons/shared/src/nostr/`; the shared BCH contract is `daemons/shared/src/bch/`.
+The shared transport is `daemons/shared/src/nostr/` and `daemons/shared/src/cashshuffle/transport.js`; the BCH signer is `daemons/shared/src/bch/p2pkh.js`.
 
 ---
 
@@ -116,7 +118,7 @@ The unit is `systemd/cashshuffle-daemon.service`:
 - `/usr/local/bin/node` (verified on blackhost 2026-11-25);
 - `MemoryMax=512M`, `CPUQuota=50%`;
 - `StateDirectory=cashshuffle-daemon`, `ProtectSystem=strict`, `ProtectHome`, `PrivateTmp`, `NoNewPrivileges`;
-- `Restart=on-failure` with a start limit; the skeleton is not deployed.
+- `Restart=on-failure` with a start limit; the daemon is not deployed.
 
 `blackhost` has 2 CPU cores, 3.8 GiB RAM, and 2.8 GiB free on a 93%-full 38G disk (verified 2026-11-25). The runbook sets a journald cap before the daemon runs.
 

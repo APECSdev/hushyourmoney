@@ -20,7 +20,7 @@ The reference implementation is the Nito Cash tree at `../nito.cash/apps/web/src
 Current HEAD: `984ca4c` (`git -C ../nito.cash log --oneline -1`).
 `transport.js` and `cashshuffle-transport.spec.js` are untracked at that HEAD (`git -C ../nito.cash status --short`). That is a reference gap, not a blocker for the official mode: the shared transport is implemented from the NIP-44/NIP-59 contracts and the Nito reference, and the `nito-v0` mode preserves the reference tree's KDF and padding for a mixed deployment.
 
-The implemented modules are `src/nostr/event.js`, `src/nostr/nip44.js`, `src/nostr/nip59.js`, `src/nostr/relay.js`, and `src/nostr/relay-pool.js`. The Nito `protocol.js`/`transport.js` remain the reference for the round layer.
+The implemented modules are `src/nostr/event.js`, `src/nostr/nip44.js`, `src/nostr/nip59.js`, `src/nostr/relay.js`, `src/nostr/relay-pool.js`, `src/cashshuffle/transport.js` and `src/bch/p2pkh.js`. The Nito `protocol.js`/`transport.js` remain the reference for the round layer.
 
 ## 3. NIP-44 decision
 
@@ -35,7 +35,7 @@ The shared package exposes one of two modes:
 1. `NIP44_MODE=official` — the official v2 KDF and padding. This is the default and passes `nip44.vectors.json` from `https://github.com/paulmillr/nip44` (35 conversation-key cases, 10 encrypt/decrypt cases, 24 padding cases).
 2. `NIP44_MODE=nito-v0` — the Nito reference KDF and padding, explicitly versioned as a private variant. Both peers must set it.
 
-The daemon refuses to start if the two peers disagree. The official mode is the interoperability target; the private mode exists for a mixed deployment with the current Nito tree.
+The daemon and the Nito client must set the same mode; a mismatch fails at decrypt. The official mode is the interoperability target; the private mode exists for a mixed deployment with the current Nito tree.
 
 ## 4. NIP-59 timestamp rule
 
@@ -67,7 +67,7 @@ Implemented in `src/nostr/relay.js` and `src/nostr/relay-pool.js`; the mock-rela
 - Token-aware UTXO listing: `blockchain.scripthash.listunspent` with `include_tokens`/`tokens_only`.
 - Broadcast through the chipnet Electrum primary `wss://chipnet.bch.ninja:50004`, fallback `wss://chipnet.imaginary.cash:50004` (`AGENTS.md:511`).
 - Role-2 helpers: 169-B carrier, `tag = SHA256(carrier[0..64])`, two fuel UTXOs per action, two blanks per lock, 15,000 sats per fuel.
-- Every role-2 action is evaluated in `createVirtualMachineBch2026(false)` (consensus) and `(true)` (standard) before broadcast; any error rejects.
+- Every role-2 action is evaluated in `createVirtualMachineBch2026(false)` (consensus) and `(true)` (standard) before broadcast; any error rejects. The VM-eval is pending; the builders are implemented.
 
 ## 7. Config schema
 
@@ -103,5 +103,5 @@ Keys are sorted; labels are sorted inside the key. The snapshot is safe to log.
 - Official NIP-44 vectors: `getConversationKey`, `getMessageKeys`, `calcPaddedLen`, encrypt/decrypt, long messages, invalid payloads.
 - NIP-59 round-trip, unsigned rumor, independent timestamps, two-day window, sender/recipient checks, `nito-v0` round-trip.
 - Mock relay: publish, quorum, dedupe, 80 ms pacing, reconnect/resubscribe, NIP-42 AUTH.
-- BCH P2PKH signing vectors (4 tests; needs `@bitauth/libauth`) and a chipnet round-trip (M3).
-- Role-2 VM-eval fixtures (M4).
+- BCH P2PKH signing vectors (4 tests; needs `@bitauth/libauth`); the chipnet round-trip is pending (M3).
+- Role-2 lock/action tests (7 tests); the VM-eval fixtures are pending (M4).

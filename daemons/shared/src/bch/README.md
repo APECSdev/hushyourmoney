@@ -29,6 +29,7 @@ Reference: `../nito.cash/apps/web/src/lib/bch/crypto.js`, `../nito.cash/apps/web
 - Confirm with `blockchain.transaction.get [txid, true]`.
 - The coordinator broadcasts; every peer verifies the txid.
 - A failed broadcast aborts the round before any signature is reused.
+- Current: the wallet `broadcast()` delegates to an injected broadcaster or Electrum; the daemon’s Electrum client is pending.
 
 ## 4. Role-2 pool helpers
 
@@ -37,7 +38,7 @@ Reference: `../nito.cash/apps/web/src/lib/bch/crypto.js`, `../nito.cash/apps/web
 - Lock: 2 tagged fuel UTXOs at 15,000 sats each, 2 blanks spent, optional FT deposit, signed P2PKH funding input.
 - `TXINPUTCOUNT == 3` and `TXOUTPUTCOUNT == 2 + sign`.
 - The lock and action broadcast atomically; the action spends the lock’s unconfirmed outputs.
-- Every action is evaluated in `createVirtualMachineBch2026(false)` (consensus) and `(true)` (standard) before broadcast; any error rejects.
+- Every action is evaluated in `createVirtualMachineBch2026(false)` (consensus) and `(true)` (standard) before broadcast; any error rejects. The VM-eval is pending.
 - Implemented: `cashshuffle/src/role2-lock.js` (signed lock) and `cashshuffle/src/role2-action.js` (3-input action with injected unlockings).
 
 ## 5. Fees
@@ -49,8 +50,6 @@ Reference: `../nito.cash/apps/web/src/lib/bch/crypto.js`, `../nito.cash/apps/web
 
 ## 6. Tests
 
-- BCH Schnorr signing vectors (including the 0x41 byte).
-- A chipnet P2PKH round-trip.
-- Token-aware `listunspent` fixture.
-- Role-2 lock/action fixtures and VM-eval reports.
-- A negative test: a Nostr BIP-340 signature on a BCH input fails.
+- P2PKH signing: 4 tests — build, sign + verify against `@bitauth/libauth`, byte estimate, bad address.
+- Role-2 lock/action: 7 tests — two tagged fuel UTXOs + change, shield deposit/FT change, Schnorr signatures, shield/unshield shape, bad shapes.
+- Pending: chipnet P2PKH round-trip, token-aware `listunspent` fixture, VM-eval reports, BIP-340 negative test.

@@ -3,11 +3,11 @@
 
 Each question has a proposed default. A round resolves the question or records a deferral.
 
-## Q1. NIP-44 padding: official v2 or a versioned private variant?
+## Q1. NIP-44 KDF + padding: official v2 or a versioned private variant?
 
-**Why:** the Nito `nip44.js` uses a 4-byte length prefix and next-power padding (`../nito.cash/apps/web/src/lib/nostr/nip44.js:32-45`); official NIP-44 v2 uses a 2-byte u16 prefix below 65,536 and chunked padding (`https://github.com/nostr-protocol/nips/blob/master/44.md`, lines 166-168, 189-211). A standard peer cannot decrypt the current payload.
+**Why:** the Nito `nip44.js` differs in BOTH the KDF and the padding: it uses raw sharedX + HKDF with salt `nip44-v2`, a 4-byte length prefix and next-power padding (`../nito.cash/apps/web/src/lib/nostr/nip44.js`). Official NIP-44 v2 uses HKDF-Extract for the conversation key, HKDF-Expand for the message keys, a 2-byte u16 prefix and chunked padding (`https://github.com/nostr-protocol/nips/blob/master/44.md`). A standard peer cannot decrypt the current payload.
 
-**Proposed default:** official v2 in `daemons/shared`; `nito-v0` only as an explicit private mode with both peers set to it.
+**Proposed default:** official v2 in `daemons/shared`; the official mode passes `nip44.vectors.json`. `nito-v0` only as an explicit private mode with both peers set to it.
 
 **Owner:** Joint.
 
@@ -19,11 +19,11 @@ Each question has a proposed default. A round resolves the question or records a
 
 **Owner:** Joint.
 
-## Q3. Verify-before-sign: protocol core or daemon-only?
+## Q3. Verify-before-sign: the daemon has it; the Nito client must add it
 
 **Why:** the Nito protocol core has no transaction object and no output check (`../nito.cash/apps/web/src/lib/cashshuffle/protocol.js:17-24,109-115`). A malicious coordinator can present a transaction that omits a peer’s output.
 
-**Proposed default:** add `VERIFY` to the protocol core so the browser peers and the daemon share the check; the daemon adds it regardless.
+**Proposed default:** the daemon implements `VERIFY` (`cashshuffle/src/round.js`) and the malicious-coordinator test passes. The Nito browser peer must add the same check before it signs; the daemon does not depend on where the Nito client puts it.
 
 **Owner:** Joint.
 
@@ -39,7 +39,7 @@ Each question has a proposed default. A round resolves the question or records a
 
 **Why:** one role-2 action consumes two same-tag fuel UTXOs (`../nito.cash/apps/web/src/lib/pool/role2-action.js:56,75`); one output per participant produces five different tags and zero pairs. The handoff’s “5 outputs → 5 actions” does not hold.
 
-**Proposed default:** the pool-native round produces two tagged outputs per action (10 outputs for 5 actions), or each participant contributes two equal inputs and receives two same-tag outputs. The plain 5/5 round remains a separate mode.
+**Proposed default:** the pool-native round produces two tagged outputs per action (10 outputs for 5 actions), or each participant contributes two equal inputs and receives two same-tag outputs. The plain 5/5 round remains a separate mode. Our `role2-lock.js`/`role2-action.js` implement the pair; the round shape is still the open decision.
 
 **Owner:** Joint.
 
@@ -93,9 +93,9 @@ Each question has a proposed default. A round resolves the question or records a
 
 ## Q12. Proving-asset handover
 
-**Why:** the Hush keypair is `VK 05250429…`, `zkey 4a4e2543…`, `wasm 8595b434…` (`AGENTS.md:699`); the Nito repo carries its own PPOT keypair and its role-2 registry is `walletProverCompatible: false`, `status: 'awaiting-proving-assets'` (`../nito.cash/apps/web/src/lib/pool/registry.js:88-93`). The zkey is 97 MB (`prover.js:41`).
+**Why:** the Hush keypair is `VK 05250429…`, `zkey 4a4e2543…`, `wasm 8595b434…` (`AGENTS.md:699`); the Nito repo carries its own PPOT keypair and its role-2 registry was `walletProverCompatible: false`, `status: 'awaiting-proving-assets'` at the last Hush check (`../nito.cash/apps/web/src/lib/pool/registry.js:88-93`). The zkey is 97 MB (`prover.js:41`).
 
-**Proposed default:** a new GitHub Release tag (or a prover host with CORS) carrying the three files, with SHA-256 hashes, a browser caching plan, and the web-platform SHIELD→TRANSFER→UNSHIELD acceptance gate before the flag flips.
+**Proposed default:** use the public `role2-proving-assets-v1` release (the three files + SHA256SUMS), add a CORS-enabled prover host and a browser caching plan, run the web-platform SHIELD→TRANSFER→UNSHIELD acceptance, then flip the flag.
 
 **Owner:** Nito.
 
@@ -103,7 +103,7 @@ Each question has a proposed default. A round resolves the question or records a
 
 **Why:** the Nito client is built for the 7-input covenant-at-input-0 shape; the role-2 pool is 3 inputs and the carrier leaves no room for the old out[6] note (`docs/POOL-HANDOFF-2026-11-24-NITO-ROLE2-TAGGED.md` §3, §7).
 
-**Proposed default:** the Nito client adopts the 3-input builder and off-chain note delivery before the daemon’s pool-native acceptance (A5).
+**Proposed default:** the Nito client adopts the 3-input builder and off-chain note delivery before the daemon’s pool-native acceptance (A5). Our `role2-action.js` is the reference shape.
 
 **Owner:** Nito.
 

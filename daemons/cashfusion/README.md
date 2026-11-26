@@ -1,7 +1,7 @@
 <!-- daemons/cashfusion/README.md -->
 # CashFusion daemon
 
-**Status:** shared transport core implemented (M1); the CashFusion round, wallet, and deployment are not implemented. M6; not deployed.
+**Status:** shared transport core implemented (M1); the CashFusion round, wallet, and deployment are not implemented. M6; not deployed. The CashFusion package has 11 tests (config + phase table + coordinator policy).
 **Design:** `docs/P2P-FUSION-DESIGN.md`; `web/stores/p2pfusion/round.ts`.
 **Handoff:** `docs/CASHSHUFFLE-DAEMON-HANDOFF-2026-11-25.md` §6.
 **Shared transport:** `daemons/shared/src/nostr/`.
@@ -94,7 +94,7 @@ The unit is `systemd/cashfusion-daemon.service`:
 - `/usr/local/bin/node` (verified on blackhost 2026-11-25);
 - `MemoryMax=512M`, `CPUQuota=50%`;
 - `StateDirectory=cashfusion-daemon`, `ProtectSystem=strict`, `ProtectHome`, `PrivateTmp`, `NoNewPrivileges`;
-- `Restart=on-failure` with a start limit; the skeleton is not deployed.
+- `Restart=on-failure` with a start limit; the daemon is not deployed.
 
 The same `blackhost` capacity note applies: 2 CPU cores, 3.8 GiB RAM, 2.8 GiB free on a 93%-full disk (verified 2026-11-25).
 
