@@ -1,92 +1,34 @@
-# RESPONSE — Nito Cash answers the daemon unblock handoff
+# RESPONSE — Nito Cash to the M1–M4 daemon handoff (updated 2026-11-26)
 
 **From:** Nito Cash (APECSdev)
-**To:** Hush Your Money (APECS Dev)
-**Date:** 2026-11-25
-**Re:** `docs/DAEMONS-NITO-UNBLOCK-HANDOFF-2026-11-25.md`
+**To:** Hush Your Money
+**Re:** `docs/DAEMONS-NITO-UNBLOCK-HANDOFF-2026-11-25.md` (updated, `1c4946e`)
 
----
+## §9 checklist — answered
 
-## 1. Transport commit (item 1) — RESOLVED
+| # | Item | Nito answer |
+|---|---|---|
+| 1 | NIP-44 mode | **`official`** — nito.cash `lib/nostr/nip44.js` now uses the official v2 KDF (`hkdf(sha256, sharedX, "nip44-v2", nonce, 76)` = extract+expand), the 2-byte BE length prefix, and the chunked padding 32…65536 (commit `ac61542`). No `nito-v0` path. |
+| 2 | NIP-59 timestamps | **Adopted** — `randomizeCreatedAt()` for the seal and gift wrap (independent, up to two days in the past); the receiver rejects outside the two-day window (commit `ac61542`). |
+| 3 | Verify-before-sign | **Added** — `lib/cashshuffle/protocol.js` `VERIFY` (between SHUFFLE and SIGNING): `sumOut <= sumIn`, fee ≤ estBytes × 5 sat/B, optional expected output count. **Extended 2026-11-26**: the peer's own output must appear exactly once at the expected amount/address, no duplicate input outpoints, no duplicate output addresses. |
+| 4 | Registration fields | **Confirmed** — verification key + amount + protocol version, unsigned; the outpoint is revealed only at build/sign. |
+| 5 | Pool-native round shape | **Confirmed: 2N outputs** — each participant contributes two equal inputs and receives two same-tag outputs (10 outputs for 5 actions). The design is FINAL in `docs/CASHSHUFFLE-NOSTR-DESIGN.md`. |
+| 6 | Fee split | **Confirmed** — 30,000-sat action fuel (2 × 15,000) + 2,000-sat blanks (2 × 1,000) + the lock fee at the per-lock cap; the 400,000-sat CashShuffle cap for 10 actions is acceptable. |
+| 7 | Proving assets | **Pinned + acceptance PASS.** The three hashes are pinned in `verifier-program-role2.js`; `prover.js` and the `prover.nito.cash` Worker mirror point at `role2-proving-assets-v1`; `scripts/pool-accept.mjs --pool role2 --txid 9d9aa97a` reports **all three unlockings BYTE-EXACT** (fuel0 9481 B, fuel1 9483 B, state 8695 B, commit `a304d3c`). The registry flag flips after the web-platform SHIELD→TRANSFER→UNSHIELD. |
+| 8 | 3-input builder + note delivery | **Builders done** — `role2-carrier.js`, `role2-lock.js`, `role2-action.js`, `role2-actions.js` (the reference shape). The store/UI wiring is the remaining step. |
+| 9 | Relay set + NIP-42 | **Transport wired** — `lib/cashshuffle/transport.js` answers the relay's AUTH challenge with the session key (kind 22242, relay + challenge tags) under `authPolicy: none|optional|required` (commit `d85bade`). The production relay set and the policy remain open. |
+| 10 | Blackhost | **Confirmed** — Hush owns the host sign-off; no Nito credentials needed. |
+| 11 | Final approval | **Standing** — the nito.cash client is the final approval; the acceptance record goes in A10 / CF-A6. |
 
-The transport was committed after your snapshot. Pin:
+## Corrections to the handoff's descriptions
 
-- **`f88ed90`** — `feat(cashshuffle): Nostr transport bus` (`apps/web/src/lib/cashshuffle/transport.js` + `tests/unit/cashshuffle-transport.spec.js`, and the `Relay.subscribe` queue-while-connecting fix).
-- Later commits on the same line: `eb7882d` (round runner), `641d1cd` (Desk wiring), `eacee43` (current HEAD at the time of writing).
+- **Item 1** says the Nito tree "uses raw sharedX + HKDF with salt nip44-v2, a 4-byte prefix and next-power padding". That was the pre-`ac61542` state. The current tree is the official v2 (see the table).
+- **Item 2** says "the current Nito seal copies the rumor timestamp and the gift wrap uses now". Also pre-`ac61542`; both are now randomized.
+- **Item 3** says "the Nito protocol core has no transaction object and no output check". The `VERIFY` phase exists and now includes the own-output and duplicate checks.
 
-Vendor from `f88ed90` or the current HEAD; the transport has not changed shape since.
+## The two remaining Nito-side items
 
-## 2. NIP-44 padding (item 2) — FIXED to official v2
+1. **The store/UI wiring** for `submitRole2Action` (the `prove` chain: `buildPoolWitness` → `generateProof` → `produceRole2Inputs` with `scenarioArgs` → the carrier) and the role-2 scan (the 642-B STMT / the 169-B carrier).
+2. **The web-platform chipnet SHIELD → TRANSFER → UNSHIELD**, after which `walletProverCompatible` flips and the daemon-side A5/A6 can run.
 
-Decision: **official NIP-44 v2**, no `nito-v0` private mode.
-
-`apps/web/src/lib/nostr/nip44.js` now uses the official padding:
-
-- 2-byte big-endian length prefix;
-- the plaintext;
-- zero padding to the next chunk boundary;
-- chunk sizes `32, 64, 128, 256, 512, 1024, 2048, 4096, 8192, 16384, 32768, 65536`.
-
-The previous 4-byte/next-power form was a deviation and is gone. The round-trip, long-message, tamper and wrong-key tests still pass.
-
-## 3. NIP-59 timestamps (item 3) — ADOPTED
-
-Decision: the sender randomizes the seal and gift-wrap `created_at` up to **two days** in the past; the receiver accepts the two-day window.
-
-`nip59.js` now exports `randomizeCreatedAt` and uses it for both the seal and the gift wrap; `unwrapGift` rejects a gift wrap outside the two-day window.
-
-## 4. Verify-before-sign (item 4) — ADDED to the protocol core
-
-Decision: add `VERIFY` to the protocol core; the daemon adds it regardless.
-
-`protocol.js` now has the `VERIFY` phase between `SHUFFLE` and `SIGNING`, and `verify()` checks:
-
-- `sumOut <= sumIn`;
-- `fee <= estBytes * 5 sat/B`;
-- an optional expected output count.
-
-A failure aborts the round before any signature. The round runner routes `VERIFY` and advances to `SIGNING`.
-
-## 5. Registration fields (item 5) — CONFIRMED
-
-Registration = verification key + amount + version, unsigned; the input outpoint is revealed only at signing. Agreed.
-
-## 6. Pool-native round shape (item 6) — 2N OUTPUTS
-
-Decision: the round produces **two tagged outputs per action** (10 outputs for 5 actions). Each participant contributes two equal inputs and receives two same-tag outputs; the tag is `SHA256(nf0_LE ‖ nf1_LE)` of the funded action. A one-output-per-participant round cannot satisfy the role-2 action's two same-tag fuel UTXOs.
-
-## 7. Fee accounting (item 7) — CONFIRMED
-
-- 30,000 sats action fuel (2 × 15,000);
-- 2,000 sats blanks (2 × 1,000);
-- the lock fee at the per-lock cap.
-
-## 8. Proving assets (item 8) — STILL BLOCKED
-
-The Hush keypair (`VK 05250429…`, zkey `4a4e2543…`, wasm `8595b434…`) is still not in the nito repo; the role-2 registry remains `walletProverCompatible: false`, `status: 'awaiting-proving-assets'`. We need the three files, the SHA-256 hashes, a CORS distribution URL, a browser caching plan, and the web-platform SHIELD→TRANSFER→UNSHIELD result before the flag flips.
-
-## 9. 3-input builder + note delivery (item 9) — DONE
-
-`role2-lock.js`, `role2-action.js` and `role2-actions.js` implement the 3-input shape (fuel 0, fuel 1, state 2), the 169-B carrier, the deposit tags, the off-chain note delivery, and the prove-first → tag → lock → atomic-broadcast orchestration. Ready for A5.
-
-## 10. Relay set + NIP-42 (item 10) — NEXT
-
-The relay client captures the AUTH challenge; the transport does not yet wire it. We will wire NIP-42 into the transport and confirm the production relay set and the `none|optional|required` policy.
-
-## 11. `blackhost` capacity (item 11) — CONFIRMED
-
-`MemoryMax=512M`, `CPUQuota=50%`, journald cap. Hush owns the host sign-off; the daemon should not co-locate with the rpsls build.
-
-## 12. Final approval (item 12) — STANDING
-
-The nito.cash client is the final approval; record it in A10 / CF-A6.
-
----
-
-## Next
-
-- Nito: wire NIP-42 into the transport; add the official NIP-44 test vectors; the `VERIFY` output check in the daemon.
-- Hush: the proving assets (item 8); the `blackhost` sign-off (item 11).
-- Joint: the 2N-output round shape (item 6) in both the daemon and the Desk.
-
-— APECSdev / Nito Cash, 2026-11-25
+— APECS Dev / Nito Cash, 2026-11-26
