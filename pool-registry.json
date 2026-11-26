@@ -108,7 +108,7 @@
         {
           "id": "R2-NULLIFIER-DOUBLING",
           "severity": "CRITICAL - demonstrated complete-balance theft",
-          "status": "PROVEN 2026-11-26, NOT executed on chain (proof /tmp/double.json on apecsdev, snarkjs verify OK against the deployed VK d4ed12ee...)",
+          "status": "PROVEN 2026-11-26, NOT executed on chain (proof /home/apecs/cov/role2-probe-nullifier-doubling-3out.json on apecsdev, snarkjs verify OK against the deployed VK d4ed12ee...; not committed)",
           "mechanism": "neither circuit constrains the two in-notes distinct; hook check 7 folds SHA256(oldNull||nf0||nf1) with no membership test; nPublic 2 means oldNull is not verifiable by the circuit. A single note loads as BOTH in-notes and its value counts twice.",
           "impact": "this pool's whole 700 FT drains in 3 actions ([112,112]->224 -> [224,224]->448 -> [448,448] UNSHIELD 700). The 2-out pool drains in ONE action (see its entry).",
           "fix": "the v3 nullifier set (docs/ROLE2-3OUT-V3-DESIGN.md section 3.2) with membership proofs + hook check; measure the SMT depth before any ceremony.",
@@ -173,7 +173,7 @@
         {
           "id": "R2-NULLIFIER-DOUBLING",
           "severity": "CRITICAL - demonstrated complete-balance theft",
-          "status": "PROVEN 2026-11-26, NOT executed on chain (proof /tmp/drain-2out.json on apecsdev, snarkjs verify OK against the deployed VK 05250429...)",
+          "status": "PROVEN 2026-11-26, NOT executed on chain (proof /home/apecs/cov/role2-probe-drain-2out.json on apecsdev, snarkjs verify OK against the deployed VK 05250429...; not committed)",
           "mechanism": "neither circuit constrains the two in-notes distinct; hook check 7 folds SHA256(oldNull||nf0||nf1) with no membership test; nPublic 2 means oldNull is not verifiable by the circuit. A single note loads as BOTH in-notes and its value counts twice.",
           "impact": "THE WHOLE BALANCE DRAINS IN ONE ACTION: the 450,600-FT note (tree 46) as both in-notes gives inSum 901,200 >= balance 762,400, so a single UNSHIELD pays out the entire 762,400 FT. Current live state: balance 762,400, notes 600/400/450,600/300,400, state outpoint a722ef3b...:1.",
           "fix": "the v3 nullifier set (docs/ROLE2-3OUT-V3-DESIGN.md section 3.2) with membership proofs + hook check; measure the SMT depth before any ceremony.",

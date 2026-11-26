@@ -810,10 +810,13 @@ owner credential on this host. Do not declare the live site updated until
 (one per pool generation) that use ONE note as BOTH in-notes. Both verify
 `snarkjs groth16 verify` against their own DEPLOYED verifying keys. The exploit
 was NOT executed on chain — no state was advanced, no funds moved. The proofs
-live in `/tmp/double.json` (3-out) and `/tmp/drain-2out.json` (2-out) on
-`apecsdev`; the op JSONs contain hypothetical out-note `nk` values for notes
-that were never created, so they grant nothing — but reproduce them with the
-commands below rather than trusting the files.
+are preserved at
+`/home/apecs/cov/role2-probe-nullifier-doubling-3out.json` (3-out) and
+`/home/apecs/cov/role2-probe-drain-2out.json` (2-out) on `apecsdev` (copies
+also in `/tmp`; both re-verified `snarkJS: OK!` after the copy); the op JSONs
+contain hypothetical out-note `nk` values for notes that were never created,
+so they grant nothing — but reproduce them with the commands below rather
+than trusting the files. Neither file is committed.
 
 ### 12.1 The mechanism (three verified facts)
 

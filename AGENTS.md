@@ -32,11 +32,14 @@ input, so the circuit cannot constrain the set.
 
 **Worst case — the 2-out pool drains in ONE action:** the 450,600-FT note
 (tree 46) as both in-notes gives inSum 901,200 ≥ balance 762,400, so a single
-UNSHIELD pays out the entire 762,400 FT (proof `/tmp/drain-2out.json` on
-`apecsdev`, snarkjs OK against the 2-out ceremony VK `05250429…`). The 3-out
-pool (700 FT) drains in three actions (proof `/tmp/double.json`, snarkjs OK
-against `d4ed12ee…`). Both proofs target the LIVE roots. The exploit was NOT
-broadcast; the op JSONs contain hypothetical nks for notes never created.
+UNSHIELD pays out the entire 762,400 FT (proof
+`/home/apecs/cov/role2-probe-drain-2out.json` on `apecsdev`, snarkjs OK
+against the 2-out ceremony VK `05250429…`). The 3-out pool (700 FT) drains
+in three actions (proof
+`/home/apecs/cov/role2-probe-nullifier-doubling-3out.json`, snarkjs OK
+against `d4ed12ee…`). Both proofs target the LIVE roots and re-verify after
+the copy. The exploit was NOT broadcast; the op JSONs contain hypothetical
+nks for notes never created; neither file is committed.
 
 **Severity:** sharper than F6 — F6 was "soundness not established, no forged
 proof demonstrated"; here the HONEST prover produces the draining proof.

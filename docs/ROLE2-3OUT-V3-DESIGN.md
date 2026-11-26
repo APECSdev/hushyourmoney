@@ -149,9 +149,10 @@ constrain the set.
 
 The worst case is the 2-out pool: its 450,600-FT note as both in-notes gives
 inSum 901,200 ≥ balance 762,400, so **one UNSHIELD action pays out the entire
-762,400 FT** (proof `/tmp/drain-2out.json` on `apecsdev`, verified). The 3-out
-pool drains in three actions. The exploit was NOT executed on chain. Full
-record: handoff §12.
+762,400 FT** (proof
+`/home/apecs/cov/role2-probe-drain-2out.json` on `apecsdev`, verified). The
+3-out pool drains in three actions. The exploit was NOT executed on chain.
+Full record: handoff §12.
 
 The current state commitment is `root ‖ nullifierSetHash`; the hash is a
 rolling chain and hook check 7 only folds
