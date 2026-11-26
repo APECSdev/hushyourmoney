@@ -25,9 +25,12 @@ updated with the measured/deployed record. The 2-out generation is
 byte-identical (the hooked 2-out program still hashes `d71851a1…`), so the live
 2-out pool and its tooling are unaffected.
 
-**Session commits:** `hushyourmoney` `21c799e` (docs/site/handoff); 
-`pusd-shielded-pool` `5f645c3` (3-out tooling + evidence). The Hub image
-`a49aa80c…` predates the 21/21 + 69/69 text updates — rebuild pending.
+**Session commits:** `hushyourmoney` `21c799e` (docs/site/handoff), `6879ded`
+(the 3-out UNSHIELD record + final state); `pusd-shielded-pool` `5f645c3`
+(3-out tooling + evidence). The site image `d1b87bfa995b` / Hub
+`sha256:d1b87bfa995bde96b4a5909bf2c5f6b66661014010bc8ec828ced3552d08fc84`
+(pushed 2026-11-26 19:45Z) carries the 21/21 + 69/69 + UNSHIELD text; Flux
+owner update pending.
 
 ### Hosts / paths (continue here)
 
@@ -219,13 +222,14 @@ BN_VK_FIXTURES=/home/apecs/cov/our-3out.fixtures.json POOL_3OUT=1 \
   “measured, not deployed” to the chipnet demo record.
 - All changed SFCs pass the `@vue/compiler-sfc` parse + compile check (VM
   image + `/tmp/check-sfc.cjs`).
-- **Site image `a49aa80ceb69` / Hub
-  `sha256:a49aa80ceb6990fff2320f1e79c96d3acfee6e479d2b073ba416c1ab5ce0b524`
-  (pushed 2026-11-26 18:44Z) is STALE**: it was built BEFORE the
-  `20/20 → 21/21` and `5/5 → 69/69` text updates. Rebuild + re-push:
-  `rsync web/ apecsdev:~/build/hushyourmoney-3out/web/` then
-  `docker build --network=host -t nyusternie/hushyourmoney:latest .` in that
-  dir, smoke on `127.0.0.1:3215`, `docker push`, update this digest.
+- **Site image `d1b87bfa995b` / Hub
+  `sha256:d1b87bfa995bde96b4a5909bf2c5f6b66661014010bc8ec828ced3552d08fc84`
+  (pushed 2026-11-26 19:45Z)**: rebuilt after the UNSHIELD record; the
+  smoke on `127.0.0.1:3215` returned 200 for `/`, `/research`,
+  `/research/shielded-pool`, `/research/bn254`, `/playground`, `/daemons`, and
+  the shielded-pool page carries `Three confirmed 3-out actions`, `ec31a41c`,
+  `UNSHIELD 300`, `Final state 700 FT` and `11 leaves`. The previous Hub image
+  `a49aa80c…` (2026-11-26 18:44Z) was stale; this supersedes it.
 - **Flux:** no owner credential on blackhost; the owner dashboard update is
   the remaining deployment action.
 
@@ -234,9 +238,9 @@ BN_VK_FIXTURES=/home/apecs/cov/our-3out.fixtures.json POOL_3OUT=1 \
 1. ✅ Full 3-out sweep DONE (69/69); re-run red team/sweep only if the hook
    changes. ✅ The 3-out demo lifecycle is complete (SHIELD → TRANSFER →
    UNSHIELD 300); the final state is 700 FT / 11 leaves.
-2. Rebuild + push the site image (the current source has 21/21 + 69/69 + the
-   UNSHIELD record; the Hub image is stale), update the AGENTS digest, then
-   Flux owner update.
+2. ✅ Site image rebuilt + pushed (`d1b87bfa995b`, Hub digest
+   `sha256:d1b87bfa…`); the Flux owner update remains the only deployment
+   action.
 3. Nito client 3-out path (201-B carrier, 9-field actionHash, three out-notes).
 4. Deposit path (onboarding), real nullifier set (Merkle membership),
    encrypted note delivery — the v3 core.
