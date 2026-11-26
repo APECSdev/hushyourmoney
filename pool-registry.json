@@ -52,7 +52,7 @@
         "notesAtTree": [6, 7, 8, 9, 10]
       },
       "feePolicy": "BARE: 15k sats x 2 fuel per action; every action broadcast atomically with its lock (lock --no-wait -> action spends the lock's UNCONFIRMED outputs)",
-      "notes": "3-out demo deployed 2026-11-26 runner-free from the apecsdev VM with wallet A. SHIELD -> TRANSFER -> UNSHIELD confirmed; every input VM-ACCEPTED consensus+standard. Demo only: 1-of-1 setup, public bootstrap in-notes on the first action (indices 0/1), no real nullifier set, no encrypted note delivery; Gate 7 is the mainnet gate. The Nito client 3-out path is NOT built.",
+      "notes": "3-out demo deployed 2026-11-26 runner-free from the apecsdev VM with wallet A. SHIELD -> TRANSFER -> UNSHIELD confirmed; every input VM-ACCEPTED consensus+standard. Demo only: 1-of-1 setup, public bootstrap in-notes on the first action (indices 0/1), no real nullifier set, no encrypted note delivery; Gate 7 is the mainnet gate. The Nito client 3-out witness path is built and byte-exact against the live UNSHIELD; the store branch is wired (poolId + outs=3); the UI pool selector, 3-out blanks and the browser acceptance remain.",
       "clientHandoff": "docs/ROLE2-3OUT-V3-DESIGN.md"
     },
     {
