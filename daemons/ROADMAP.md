@@ -1,7 +1,7 @@
 <!-- daemons/ROADMAP.md -->
 # Daemon roadmap
 
-Status: M0 is done. M1 transport core is implemented and tested; M2–M7 are not started.
+Status: M0 is done. M1 transport and M2 CashShuffle round cores are implemented and tested; M3–M7 are not started.
 
 ## 1. Milestones
 
@@ -9,7 +9,7 @@ Status: M0 is done. M1 transport core is implemented and tested; M2–M7 are not
 |---|---|---|---|---|
 | **M0 — orchestration** | Tree, plans, acceptance, open questions, config/metrics, stubs, units | `npm test` passes on the apecsdev VM; `git diff --check` clean; no build on this host | — | **done (this commit)** |
 | **M1 — shared transport** | Official NIP-44 v2 KDF/padding + `nito-v0` compatibility; NIP-59 timestamp tweaks; relay pool (N relays, 80 ms outbox, dedupe, reconnect, NIP-42) | Official NIP-44 vectors pass; mock-relay tests pass; no network in unit tests | Nito client mode decision (official vs `nito-v0`) | **core done** — 35 shared tests pass; client mode pending |
-| **M2 — CashShuffle round** | Protocol engine with `VERIFY` before `SIGNING`; signature verification; timeouts; blame; persistence | A1 (5-peer chipnet round) and A2 (malicious coordinator) pass | M1 | not started |
+| **M2 — CashShuffle round** | Protocol engine with `VERIFY` before `SIGNING`; signature verification; timeouts; blame; persistence | A1 (5-peer chipnet round) and A2 (malicious coordinator) pass | M1 | **core done** — 16 round tests; A1/A2 end-to-end and the network loop pending |
 | **M3 — wallet and liquidity** | Equal-amount UTXO selection; BCH Schnorr 0x41; broadcast; caps; metrics | A4 (10 rounds within cap) and A7 (signature separation) pass | M1 | not started |
 | **M4 — pool-native batching** | Tag-pair lock builder; blank acquisition; atomic lock+action; VM-eval; off-chain note delivery | A5 (pairs, correct count) and A6 (blank cost) pass | M3; Nito proving assets; Nito 3-input builder | not started |
 | **M5 — operations** | Hardened systemd; metrics endpoint; journald caps; backup/restore; 24 h soak | A3 (24 h uptime) and A9 (hardening) pass | M2, M3 | not started |

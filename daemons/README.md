@@ -1,7 +1,7 @@
 <!-- daemons/README.md -->
 # Daemons — permanent CashShuffle and CashFusion liquidity
 
-**Status:** shared transport core implemented and tested (M1); the daemon runtime, wallet, pool adapter, and deployment are not implemented. No daemon is running or funded.
+**Status:** shared transport (M1) and CashShuffle round core (M2) implemented and tested; the network loop, wallet, pool adapter, and deployment are not implemented. No daemon is running or funded.
 **Source handoff:** `docs/CASHSHUFFLE-DAEMON-HANDOFF-2026-11-25.md`.
 **Reference implementation:** `../nito.cash/apps/web/src/lib/cashshuffle/`, `../nito.cash/apps/web/src/lib/nostr/`, `../nito.cash/apps/web/src/lib/pool/`.
 **Design:** `../nito.cash/docs/CASHSHUFFLE-NOSTR-DESIGN.md`.
@@ -28,7 +28,7 @@ The Nito Cash client remains the final approval for any deployed result.
 | `daemons/cashshuffle/` | CashShuffle daemon plan, acceptance, open questions, config, stubs, unit, `.env.example`, systemd unit. |
 | `daemons/cashfusion/` | CashFusion daemon plan, acceptance, open questions, config, stubs, unit, `.env.example`, systemd unit. |
 
-**Not yet implemented:** the CashShuffle protocol engine, the BCH wallet, the role-2 pool adapter, the CashFusion round, the proving-asset handover, and any deployment. The shared Nostr transport is implemented in `shared/src/nostr/`.
+**Not yet implemented:** the network loop, the BCH wallet, the role-2 pool adapter, the CashFusion round, the proving-asset handover, and any deployment. The shared Nostr transport is implemented in `shared/src/nostr/`; the CashShuffle round state machine and verify-before-sign are implemented in `cashshuffle/src/round.js`.
 
 ---
 
@@ -121,7 +121,7 @@ No blocker to the orchestration tree. The following items block the first workin
 |---|---|---|
 | Nito reference commit | Nito | `transport.js` and its test are untracked at `../nito.cash` HEAD `984ca4c`. This is a comparison/porting gap, not a blocker for the official mode. |
 | NIP-44 mode for the Nito client | Joint | The daemon supports official v2 and `nito-v0`; the client must pick one. Official v2 is the interoperability target. |
-| Verify-before-sign in the protocol core or daemon-only | Joint | The theft vector; the daemon adds `VERIFY` regardless. |
+| Nito client verify-before-sign | Joint | The daemon implements `VERIFY` and the malicious-coordinator test; the Nito browser peer needs the same check or the coordinator can steal from it. |
 | Pool-native tag-pair round shape | Joint | One output per participant cannot fund a role-2 action. |
 | Proving assets + 3-input builder + note delivery | Nito | The client cannot prove or drive the 3-input shape until the handover and the builder swap. |
 | Production relay set + NIP-42 policy | Joint | The current reference publishes on one relay and does not authenticate. |

@@ -1,7 +1,7 @@
 <!-- daemons/cashshuffle/README.md -->
 # CashShuffle daemon
 
-**Status:** shared transport core implemented (M1); the round, wallet, pool adapter, and deployment are not implemented. No float, no deployment.
+**Status:** shared transport (M1) and the round state machine with verify-before-sign (M2) implemented; the network loop, wallet, pool adapter, and deployment are not implemented. No float, no deployment.
 **Source handoff:** `docs/CASHSHUFFLE-DAEMON-HANDOFF-2026-11-25.md`.
 **Design:** `../nito.cash/docs/CASHSHUFFLE-NOSTR-DESIGN.md`.
 **Reference:** `../nito.cash/apps/web/src/lib/cashshuffle/`, `../nito.cash/apps/web/src/lib/nostr/`.

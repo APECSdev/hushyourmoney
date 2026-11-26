@@ -43,7 +43,7 @@ const DAEMONS = [
         id: '01',
         name: 'CashShuffle',
         subtitle: 'The equal-output shuffle',
-        status: 'M1 core · M2–M5 next',
+        status: 'M2 core · M3–M5 next',
         badge: 'badge-mid',
         numClass: 'topic-lime',
         body: 'A permanent peer and possible coordinator for CashShuffle-over-Nostr. Equal inputs, onion-wrapped outputs, a verify-before-sign phase, and BCH Schnorr signatures. The first daemon milestone.',
@@ -128,7 +128,7 @@ const MATRIX = [
     },
     {
         dimension: 'status',
-        shuffle: 'orchestration; M1–M5 not started',
+        shuffle: 'M1–M2 cores; M3–M5 not started',
         fusion: 'orchestration; M6 not started',
     },
 ]
@@ -155,9 +155,9 @@ const REAL_VS_PLANNED = [
     },
     {
         surface: 'CashShuffle round',
-        state: 'planned',
-        badge: 'badge-wait',
-        detail: 'No implementation. The daemon adds a VERIFY phase the Nito protocol core does not have.',
+        state: 'core implemented',
+        badge: 'badge-mid',
+        detail: 'Round state machine + VERIFY before SIGNING; 16 tests including the malicious-coordinator case. The network loop, wallet and end-to-end A1/A2 are pending.',
     },
     {
         surface: 'CashFusion round',
@@ -233,7 +233,7 @@ const POOL_FACTS = [
 const ROADMAP = [
     { id: 'M0', title: 'Orchestration', status: 'done', badge: 'badge-done', body: 'Tree, plans, acceptance, open questions, config/metrics, stubs, units. This commit.' },
     { id: 'M1', title: 'Shared transport', status: 'in progress', badge: 'badge-mid', body: 'Official NIP-44 v2 KDF/padding + nito-v0; NIP-59 timestamps; relay pool with 80 ms pacing, dedupe, reconnect, NIP-42. 35 shared tests; Nito client mode pending.' },
-    { id: 'M2', title: 'CashShuffle round', status: 'not started', badge: 'badge-wait', body: 'Protocol engine with VERIFY before SIGNING, signature verification, timeouts, blame, persistence.' },
+    { id: 'M2', title: 'CashShuffle round', status: 'in progress', badge: 'badge-mid', body: 'Round state machine + VERIFY before SIGNING; 16 tests including the malicious-coordinator case. Network loop, wallet and A1/A2 end-to-end pending.' },
     { id: 'M3', title: 'Wallet and liquidity', status: 'not started', badge: 'badge-wait', body: 'Equal-amount UTXO selection, BCH Schnorr 0x41, broadcast, caps, metrics.' },
     { id: 'M4', title: 'Pool-native batching', status: 'not started', badge: 'badge-wait', body: 'Tag-pair lock builder, blank acquisition, atomic lock+action, VM-eval, off-chain note delivery.' },
     { id: 'M5', title: 'Operations', status: 'not started', badge: 'badge-wait', body: 'Hardened systemd, metrics endpoint, journald caps, backup/restore, 24 h soak.' },
@@ -244,7 +244,7 @@ const ROADMAP = [
 /* ── Acceptance gates ─────────────────────────────────────────────── */
 const SHUFFLE_GATES = [
     { id: 'A1', title: '5-peer chipnet round', body: '5 equal inputs → 5 equal outputs, all BCH Schnorr signatures, one txid, no wallet key on the relay.' },
-    { id: 'A2', title: 'Malicious coordinator', body: 'A coordinator presents a transaction that omits a peer’s output; the peer refuses to sign and the round aborts.' },
+    { id: 'A2', title: 'Malicious coordinator', body: 'A coordinator presents a transaction that omits a peer’s output; the peer refuses to sign and the round aborts. Unit test passes; end-to-end pending.' },
     { id: 'A3', title: '24 h uptime', body: 'Relay drop and reconnect; 80 ms pacing; no bans; a round completes after the reconnect.' },
     { id: 'A4', title: '10 rounds within cap', body: '10 consecutive rounds within the float cap; balance and caps visible in the metrics.' },
     { id: 'A5', title: 'Tag pairs', body: 'Two tagged fuel UTXOs per action; five actions require 10 tagged outputs, not 5.' },
@@ -270,7 +270,7 @@ const ROUNDS = [
     {
         n: '01',
         title: 'Wire and verification',
-        body: 'The transport core is implemented; settle the Nito client mode and the theft defense before any round code.',
+        body: 'The transport and round cores are implemented; settle the Nito client mode and the client-side VERIFY.',
         asks: 'NIP-44 mode (official vs nito-v0), NIP-59 timestamps, VERIFY placement, registration fields',
         href: 'https://github.com/APECSdev/hushyourmoney/blob/master/daemons/cashshuffle/OPEN-QUESTIONS.md',
     },
@@ -414,7 +414,7 @@ const SOURCES = [
         </p>
 
         <div class="animate-rise mt-8 flex flex-wrap items-center justify-center gap-3" style="animation-delay: 0.5s">
-            <span class="status-chip status-lime">M1 transport core</span>
+            <span class="status-chip status-lime">M1–M2 cores</span>
             <span class="status-chip status-violet">not deployed</span>
             <span class="status-chip status-cyan">Nito final approval</span>
         </div>
@@ -745,12 +745,12 @@ const SOURCES = [
         <div class="reveal text-center">
             <p class="font-mono text-[0.8rem] uppercase tracking-[0.45em] text-lime-200">08 · the sequence</p>
             <h2 class="mt-5 font-display text-[clamp(1.9rem,5vw,3.4rem)] font-bold leading-[1.08] text-white">
-                M0 is done. M1 is in progress.
+                M0 is done. M1–M2 cores are in progress.
             </h2>
             <p class="mx-auto mt-4 max-w-2xl text-base leading-relaxed text-slate-200">
-                The transport core is implemented and tested; M2–M7 are not started. The roadmap is ordered
-                by dependency: transport, then round, then wallet, then the pool composition, then operations,
-                then CashFusion, then production.
+                The transport and round cores are implemented and tested; M3–M7 are not started. The roadmap is
+                ordered by dependency: transport, then round, then wallet, then the pool composition, then
+                operations, then CashFusion, then production.
             </p>
         </div>
 
@@ -786,7 +786,7 @@ const SOURCES = [
             <div class="fact-card reveal">
                 <div class="flex items-center justify-between gap-3">
                     <h3 class="font-display text-lg font-bold text-lime-300">CashShuffle · A1–A10</h3>
-                    <span class="badge badge-wait">not started</span>
+                    <span class="badge badge-mid">A2 unit test passes</span>
                 </div>
                 <ul class="life-points">
                     <li v-for="g in SHUFFLE_GATES" :key="g.id">

@@ -1,7 +1,7 @@
 <!-- daemons/cashshuffle/ACCEPTANCE.md -->
 # CashShuffle daemon acceptance
 
-Status: transport tests pass (35/35 shared); the end-to-end gates A1–A10 are not started. Each test records the evidence listed in `daemons/CONVENTIONS.md` §8.
+Status: transport tests pass (35/35 shared) and the A2 unit test passes (16 round tests); the end-to-end gates A1–A10 are not started. Each test records the evidence listed in `daemons/CONVENTIONS.md` §8.
 
 ## A1 — 5-peer chipnet round
 
@@ -13,7 +13,7 @@ Status: transport tests pass (35/35 shared); the end-to-end gates A1–A10 are n
 
 **Pass:** a test coordinator builds a transaction that omits one peer’s output. The peer’s `VERIFY` fails, no signature is produced, the round aborts before broadcast, and no funds move.
 
-**Evidence:** the failing transaction hex, the `VERIFY` error, the absence of a signature, the abort log.
+**Evidence:** the failing transaction hex, the `VERIFY` error, the absence of a signature, the abort log. **Current:** the unit test `a malicious coordinator cannot make a peer sign a transaction without its output` passes in `daemons/cashshuffle/test/round.test.js`; the end-to-end run is pending.
 
 ## A3 — 24 h uptime
 
