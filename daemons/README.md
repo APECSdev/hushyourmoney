@@ -1,7 +1,7 @@
 <!-- daemons/README.md -->
 # Daemons — permanent CashShuffle and CashFusion liquidity
 
-**Status:** orchestration only (2026-11-25). No daemon is implemented, deployed, or funded.
+**Status:** shared transport core implemented and tested (M1); the daemon runtime, wallet, pool adapter, and deployment are not implemented. No daemon is running or funded.
 **Source handoff:** `docs/CASHSHUFFLE-DAEMON-HANDOFF-2026-11-25.md`.
 **Reference implementation:** `../nito.cash/apps/web/src/lib/cashshuffle/`, `../nito.cash/apps/web/src/lib/nostr/`, `../nito.cash/apps/web/src/lib/pool/`.
 **Design:** `../nito.cash/docs/CASHSHUFFLE-NOSTR-DESIGN.md`.
@@ -28,7 +28,7 @@ The Nito Cash client remains the final approval for any deployed result.
 | `daemons/cashshuffle/` | CashShuffle daemon plan, acceptance, open questions, config, stubs, unit, `.env.example`, systemd unit. |
 | `daemons/cashfusion/` | CashFusion daemon plan, acceptance, open questions, config, stubs, unit, `.env.example`, systemd unit. |
 
-**Not in this commit:** the Nostr transport implementation, the protocol engine, the wallet, the role-2 pool adapter, the CashFusion round, the proving-asset handover, and any deployment.
+**Not yet implemented:** the CashShuffle protocol engine, the BCH wallet, the role-2 pool adapter, the CashFusion round, the proving-asset handover, and any deployment. The shared Nostr transport is implemented in `shared/src/nostr/`.
 
 ---
 
@@ -101,7 +101,7 @@ daemons/
 These are not open for the first Nito round; they are the baseline the implementation starts from.
 
 1. **Verify-before-sign is mandatory.** The Nito protocol core has no transaction object and no output check: `../nito.cash/apps/web/src/lib/cashshuffle/protocol.js:17-24,109-115`. This daemon adds a `VERIFY` phase between `SHUFFLE` and `SIGNING` (`daemons/cashshuffle/src/round.js`). Every peer checks its own output, the input set, and the fee before producing a signature.
-2. **NIP-44 padding is the official v2 or an explicitly versioned private variant.** The Nito implementation uses a 4-byte BE length prefix and next-power-of-two padding (`../nito.cash/apps/web/src/lib/nostr/nip44.js:32-45`); the official NIP-44 v2 uses a 2-byte u16 prefix below 65,536 and chunked padding (`https://github.com/nostr-protocol/nips/blob/master/44.md`, lines 166-168, 189-211). A standard peer cannot decrypt the current payload. `daemons/shared/src/nostr/README.md` records the contract.
+2. **NIP-44 KDF and padding are the official v2 or an explicitly versioned private variant.** The Nito implementation uses the raw ECDH x-coordinate as the conversation key and HKDF with salt `nip44-v2`, plus a 4-byte BE length prefix and next-power-of-two padding (`../nito.cash/apps/web/src/lib/nostr/nip44.js`); official NIP-44 v2 uses HKDF-Extract for the conversation key, HKDF-Expand for the message keys, a 2-byte u16 prefix and chunked padding (`https://github.com/nostr-protocol/nips/blob/master/44.md`). `daemons/shared/src/nostr/nip44.js` implements both modes; the official mode passes the 35 official vectors, and `nito-v0` preserves the reference wire.
 3. **Registration carries the verification key, amount, and version — not the input outpoint.** The classic spec is unsigned key + amount (`web/pages/research/coinjoin.vue:186-190`); the Nito `register()` takes `{ key, amount, version }` (`protocol.js:74-90`). The handoff’s “equal-amount input” wording is not used.
 4. **A role-2 action consumes a PAIR of same-tag fuel UTXOs.** The action builder requires exactly two fuel UTXOs (`../nito.cash/apps/web/src/lib/pool/role2-action.js:56,75`); the lock creates two tagged outputs and spends two blanks (`role2-lock.js:6-9,86,106`). One 15,000-sat output per participant does not form a pair. Pool-native batching needs two tagged outputs per action (2N outputs for N actions), not one output per participant.
 5. **Fee accounting is split.** The `15,000 × 2` fuel is the ACTION fee (`role2-action.js:70`; `docs/POOL-HANDOFF-2026-11-24-NITO-ROLE2-TAGGED.md:70-71`; `role2-lock.js:31-33`). The lock/shuffle transaction fee is separate. Two blanks cost 1,000 sats each at the vending machine (`docs/POOL-HANDOFF-2026-11-24-NITO-ROLE2-TAGGED.md` §4.1). The daemon cap accounts for all three.
@@ -119,8 +119,8 @@ No blocker to the orchestration tree. The following items block the first workin
 
 | Blocker | Owner | Why |
 |---|---|---|
-| Commit `transport.js` and `cashshuffle-transport.spec.js` | Nito | Both are untracked at `../nito.cash` HEAD `984ca4c`; the handoff’s module table omits them (`git -C ../nito.cash status --short`). |
-| NIP-44 padding decision | Joint | Official v2 or a versioned private variant; the current code is not standard v2. |
+| Nito reference commit | Nito | `transport.js` and its test are untracked at `../nito.cash` HEAD `984ca4c`. This is a comparison/porting gap, not a blocker for the official mode. |
+| NIP-44 mode for the Nito client | Joint | The daemon supports official v2 and `nito-v0`; the client must pick one. Official v2 is the interoperability target. |
 | Verify-before-sign in the protocol core or daemon-only | Joint | The theft vector; the daemon adds `VERIFY` regardless. |
 | Pool-native tag-pair round shape | Joint | One output per participant cannot fund a role-2 action. |
 | Proving assets + 3-input builder + note delivery | Nito | The client cannot prove or drive the 3-input shape until the handover and the builder swap. |

@@ -1,7 +1,7 @@
 <!-- daemons/cashshuffle/README.md -->
 # CashShuffle daemon
 
-**Status:** orchestration only (2026-11-25). No implementation, no deployment, no float.
+**Status:** shared transport core implemented (M1); the round, wallet, pool adapter, and deployment are not implemented. No float, no deployment.
 **Source handoff:** `docs/CASHSHUFFLE-DAEMON-HANDOFF-2026-11-25.md`.
 **Design:** `../nito.cash/docs/CASHSHUFFLE-NOSTR-DESIGN.md`.
 **Reference:** `../nito.cash/apps/web/src/lib/cashshuffle/`, `../nito.cash/apps/web/src/lib/nostr/`.
@@ -22,7 +22,7 @@ Non-goals for M1–M3: mainnet, CashFusion, the existing CashFusion pool, a publ
 ```
 main.js
   ├─ config.js        validated env (CASHSHUFFLE_* + shared keys)
-  ├─ relay-pool.js    N relays, 80 ms outbox, dedupe, reconnect, NIP-42
+  ├─ relay-pool.js    shared N-relay pool, 80 ms outbox, dedupe, reconnect, NIP-42
   ├─ round.js         REGISTER → POOL → ANNOUNCEMENT → SHUFFLE → VERIFY → SIGNING → BROADCAST / BLAME
   ├─ wallet.js        equal-amount UTXO selection, BCH Schnorr 0x41, broadcast, caps
   ├─ pool.js          role-2 tag pairs, blanks, lock + action, VM-eval

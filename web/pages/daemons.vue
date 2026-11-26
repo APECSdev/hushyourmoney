@@ -43,7 +43,7 @@ const DAEMONS = [
         id: '01',
         name: 'CashShuffle',
         subtitle: 'The equal-output shuffle',
-        status: 'orchestration · M1–M5',
+        status: 'M1 core · M2–M5 next',
         badge: 'badge-mid',
         numClass: 'topic-lime',
         body: 'A permanent peer and possible coordinator for CashShuffle-over-Nostr. Equal inputs, onion-wrapped outputs, a verify-before-sign phase, and BCH Schnorr signatures. The first daemon milestone.',
@@ -149,9 +149,9 @@ const REAL_VS_PLANNED = [
     },
     {
         surface: 'Nostr transport',
-        state: 'reference only',
-        badge: 'badge-mid',
-        detail: 'The Nito transport is the reference. Its transport.js and test are untracked at HEAD 984ca4c; the NIP-44 padding is not standard v2.',
+        state: 'implemented',
+        badge: 'badge-done',
+        detail: 'Shared transport: official NIP-44 v2 KDF/padding passes the 35 official vectors; nito-v0 preserves the Nito wire; NIP-59 timestamps; relay pool with 80 ms pacing, dedupe, reconnect and NIP-42. 35 shared tests.',
     },
     {
         surface: 'CashShuffle round',
@@ -232,7 +232,7 @@ const POOL_FACTS = [
 /* ── Roadmap ──────────────────────────────────────────────────────── */
 const ROADMAP = [
     { id: 'M0', title: 'Orchestration', status: 'done', badge: 'badge-done', body: 'Tree, plans, acceptance, open questions, config/metrics, stubs, units. This commit.' },
-    { id: 'M1', title: 'Shared transport', status: 'not started', badge: 'badge-wait', body: 'Vendor the Nito modules, official NIP-44 v2 padding, NIP-59 timestamps, relay pool with 80 ms pacing, dedupe, reconnect, NIP-42.' },
+    { id: 'M1', title: 'Shared transport', status: 'in progress', badge: 'badge-mid', body: 'Official NIP-44 v2 KDF/padding + nito-v0; NIP-59 timestamps; relay pool with 80 ms pacing, dedupe, reconnect, NIP-42. 35 shared tests; Nito client mode pending.' },
     { id: 'M2', title: 'CashShuffle round', status: 'not started', badge: 'badge-wait', body: 'Protocol engine with VERIFY before SIGNING, signature verification, timeouts, blame, persistence.' },
     { id: 'M3', title: 'Wallet and liquidity', status: 'not started', badge: 'badge-wait', body: 'Equal-amount UTXO selection, BCH Schnorr 0x41, broadcast, caps, metrics.' },
     { id: 'M4', title: 'Pool-native batching', status: 'not started', badge: 'badge-wait', body: 'Tag-pair lock builder, blank acquisition, atomic lock+action, VM-eval, off-chain note delivery.' },
@@ -270,8 +270,8 @@ const ROUNDS = [
     {
         n: '01',
         title: 'Wire and verification',
-        body: 'Settle the transport and the theft defense before any round code.',
-        asks: 'NIP-44 padding, NIP-59 timestamps, VERIFY placement, registration fields',
+        body: 'The transport core is implemented; settle the Nito client mode and the theft defense before any round code.',
+        asks: 'NIP-44 mode (official vs nito-v0), NIP-59 timestamps, VERIFY placement, registration fields',
         href: 'https://github.com/APECSdev/hushyourmoney/blob/master/daemons/cashshuffle/OPEN-QUESTIONS.md',
     },
     {
@@ -414,7 +414,7 @@ const SOURCES = [
         </p>
 
         <div class="animate-rise mt-8 flex flex-wrap items-center justify-center gap-3" style="animation-delay: 0.5s">
-            <span class="status-chip status-lime">orchestration · M0</span>
+            <span class="status-chip status-lime">M1 transport core</span>
             <span class="status-chip status-violet">not deployed</span>
             <span class="status-chip status-cyan">Nito final approval</span>
         </div>
@@ -745,11 +745,12 @@ const SOURCES = [
         <div class="reveal text-center">
             <p class="font-mono text-[0.8rem] uppercase tracking-[0.45em] text-lime-200">08 · the sequence</p>
             <h2 class="mt-5 font-display text-[clamp(1.9rem,5vw,3.4rem)] font-bold leading-[1.08] text-white">
-                M0 is done. M1–M7 are not.
+                M0 is done. M1 is in progress.
             </h2>
             <p class="mx-auto mt-4 max-w-2xl text-base leading-relaxed text-slate-200">
-                The roadmap is ordered by dependency: transport, then round, then wallet, then the pool
-                composition, then operations, then CashFusion, then production.
+                The transport core is implemented and tested; M2–M7 are not started. The roadmap is ordered
+                by dependency: transport, then round, then wallet, then the pool composition, then operations,
+                then CashFusion, then production.
             </p>
         </div>
 

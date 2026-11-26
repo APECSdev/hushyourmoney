@@ -9,7 +9,7 @@
 |---|---|---|
 | `src/config.js` | implemented | Common env parsing and redaction (`DAEMON_*`, `NOSTR_*`). |
 | `src/metrics.js` | implemented | In-process counters and gauges; deterministic snapshots. |
-| `src/nostr/` | contract only | Event signing, NIP-44, NIP-59, relay, relay pool. |
+| `src/nostr/` | implemented | Event signing, NIP-44 (official + nito-v0), NIP-59, relay, relay pool. |
 | `src/bch/` | contract only | BCH Schnorr signing, UTXO selection, broadcast, role-2 helpers. |
 
 ## 2. Vendor pin
@@ -17,27 +17,28 @@
 The reference implementation is the Nito Cash tree at `../nito.cash/apps/web/src/lib/`.
 
 Current HEAD: `984ca4c` (`git -C ../nito.cash log --oneline -1`).
-`transport.js` and `cashshuffle-transport.spec.js` are untracked at that HEAD (`git -C ../nito.cash status --short`). The first implementation round pins the first commit that contains both files, records the commit hash here, and vendors the modules with their MIT notice.
+`transport.js` and `cashshuffle-transport.spec.js` are untracked at that HEAD (`git -C ../nito.cash status --short`). That is a reference gap, not a blocker for the official mode: the shared transport is implemented from the NIP-44/NIP-59 contracts and the Nito reference, and the `nito-v0` mode preserves the reference tree's KDF and padding for a mixed deployment.
 
-Vendored modules: `cashshuffle/protocol.js`, `cashshuffle/transport.js`, `nostr/event.js`, `nostr/nip44.js`, `nostr/nip59.js`, `nostr/relay.js`.
+The implemented modules are `src/nostr/event.js`, `src/nostr/nip44.js`, `src/nostr/nip59.js`, `src/nostr/relay.js`, and `src/nostr/relay-pool.js`. The Nito `protocol.js`/`transport.js` remain the reference for the round layer.
 
 ## 3. NIP-44 decision
 
-The Nito implementation is not the official NIP-44 v2 wire format:
+The Nito implementation is not the official NIP-44 v2 wire format. It differs in BOTH the KDF and the padding:
 
-- `nip44.js:32-45` uses a 4-byte BE length prefix and next-power-of-two padding.
-- Official NIP-44 v2 uses a 2-byte u16 prefix below 65,536 (6-byte above) and chunked padding (`https://github.com/nostr-protocol/nips/blob/master/44.md`, lines 166-168, 189-211).
+- Nito `getConversationKey` returns the raw ECDH x-coordinate and `getMessageKeys` runs HKDF with salt `nip44-v2` and info `nonce` (`../nito.cash/apps/web/src/lib/nostr/nip44.js`).
+- Official NIP-44 v2 derives `conversation_key = HKDF-Extract(sharedX, "nip44-v2")` and then `message_keys = HKDF-Expand(conversation_key, nonce, 76)` (`https://github.com/nostr-protocol/nips/blob/master/44.md`).
+- Nito `nip44.js:32-45` uses a 4-byte BE length prefix and next-power-of-two padding; official v2 uses a 2-byte u16 prefix and chunked padding.
 
 The shared package exposes one of two modes:
 
-1. `NIP44_MODE=official` — the official v2 padding. This is the default for interoperability.
-2. `NIP44_MODE=nito-v0` — the current Nito padding, explicitly versioned as a private variant. Both peers must set it.
+1. `NIP44_MODE=official` — the official v2 KDF and padding. This is the default and passes `nip44.vectors.json` from `https://github.com/paulmillr/nip44` (35 tests).
+2. `NIP44_MODE=nito-v0` — the Nito reference KDF and padding, explicitly versioned as a private variant. Both peers must set it.
 
-The daemon refuses to start if the two peers disagree. The official mode ships the NIP-44 test vectors from the NIP repository; the private mode ships a round-trip fixture and a compatibility warning.
+The daemon refuses to start if the two peers disagree. The official mode is the interoperability target; the private mode exists for a mixed deployment with the current Nito tree.
 
 ## 4. NIP-59 timestamp rule
 
-The rumor’s `created_at` is canonical. The seal and gift-wrap timestamps are randomized up to two days in the past; all timestamps are in the past. The subscription uses `since = now - 172800 - 300` (the pattern in `web/stores/p2pfusion/round.ts:122`).
+Implemented in `src/nostr/nip59.js`. The rumor’s `created_at` is canonical. The seal and gift-wrap timestamps are randomized independently up to two days in the past; all timestamps are in the past. The receiver accepts the two-day window plus 300 s of clock skew. The subscription uses `since = now - 172800 - 300` (the pattern in `web/stores/p2pfusion/round.ts:122`).
 
 Reference: `../nito.cash/apps/web/src/lib/nostr/nip59.js:37,42-55,76`; NIP-59 line 111.
 
@@ -54,7 +55,7 @@ Reference: `../nito.cash/apps/web/src/lib/nostr/nip59.js:37,42-55,76`; NIP-59 li
 - NIP-42 AUTH: `NOSTR_AUTH_POLICY=none|optional|required`; the auth key is a session key, never the wallet key.
 - Health snapshot: `{ relay, state, lastOkAt, lastEventAt, reconnects }`.
 
-The current Nito `transport.js` publishes only on `this.clients[0]` (`transport.js:85`), has no 80 ms pacing, no dedupe, and no reconnect (`relay.js:46-51`). The relay pool is new work (CS-4 / W1).
+Implemented in `src/nostr/relay.js` and `src/nostr/relay-pool.js`; the mock-relay suite covers publish, quorum, dedupe, 80 ms pacing, reconnect/resubscribe and NIP-42. The current Nito `transport.js` publishes only on `this.clients[0]` (`transport.js:85`), has no 80 ms pacing, no dedupe, and no reconnect (`relay.js:46-51`); the shared pool is the replacement.
 
 ## 6. BCH contract
 
@@ -97,9 +98,9 @@ Keys are sorted; labels are sorted inside the key. The snapshot is safe to log.
 
 ## 9. Test plan
 
-- `node --test shared/test/*.test.js` — config and metrics; no network.
-- Official NIP-44 vectors (M1).
-- NIP-59 round-trip and timestamp-window tests (M1).
-- Mock-relay tests for publish, dedupe, pacing, reconnect, AUTH (M1).
+- `node --test shared/test/*.test.js` — 35 tests; no network.
+- Official NIP-44 vectors: `getConversationKey`, `getMessageKeys`, `calcPaddedLen`, encrypt/decrypt, long messages, invalid payloads.
+- NIP-59 round-trip, unsigned rumor, independent timestamps, two-day window, sender/recipient checks, `nito-v0` round-trip.
+- Mock relay: publish, quorum, dedupe, 80 ms pacing, reconnect/resubscribe, NIP-42 AUTH.
 - BCH signing vectors and a chipnet round-trip (M3).
 - Role-2 VM-eval fixtures (M4).

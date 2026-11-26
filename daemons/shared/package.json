@@ -7,7 +7,12 @@
   "exports": {
     ".": "./src/index.js",
     "./config": "./src/config.js",
-    "./metrics": "./src/metrics.js"
+    "./metrics": "./src/metrics.js",
+    "./nostr/event": "./src/nostr/event.js",
+    "./nostr/nip44": "./src/nostr/nip44.js",
+    "./nostr/nip59": "./src/nostr/nip59.js",
+    "./nostr/relay": "./src/nostr/relay.js",
+    "./nostr/relay-pool": "./src/nostr/relay-pool.js"
   },
   "scripts": {
     "test": "node --test test/*.test.js"

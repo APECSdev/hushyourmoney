@@ -1,7 +1,7 @@
 <!-- daemons/cashfusion/README.md -->
 # CashFusion daemon
 
-**Status:** orchestration only (2026-11-25). M6; not implemented, not deployed.
+**Status:** shared transport core implemented (M1); the CashFusion round, wallet, and deployment are not implemented. M6; not deployed.
 **Design:** `docs/P2P-FUSION-DESIGN.md`; `web/stores/p2pfusion/round.ts`.
 **Handoff:** `docs/CASHSHUFFLE-DAEMON-HANDOFF-2026-11-25.md` §6.
 **Shared transport:** `daemons/shared/src/nostr/`.

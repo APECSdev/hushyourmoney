@@ -1,7 +1,7 @@
 <!-- daemons/cashshuffle/PLAN.md -->
 # CashShuffle daemon plan
 
-Status: M0 orchestration. CS-1 … CS-12 are not started.
+Status: M0 orchestration + M1 transport core. CS-1–CS-4 are implemented in `daemons/shared/src/nostr/` and covered by 35 shared tests; CS-5–CS-12 are not started.
 
 Owner key: **H** = Hush, **N** = Nito, **J** = joint.
 
@@ -9,8 +9,8 @@ Owner key: **H** = Hush, **N** = Nito, **J** = joint.
 
 | ID | Task | Owner | Depends on | Exit criteria |
 |---|---|---|---|---|
-| CS-1 | Pin and vendor the Nito transport at the first commit that contains `transport.js` + its test; keep the MIT notice | H | Nito commit | `VENDOR.md` records the commit and file hashes |
-| CS-2 | Implement official NIP-44 v2 padding (2-byte u16 / 6-byte extended prefix, chunked padding) and the official vectors; keep `nito-v0` as an explicit private mode | J | CS-1 | Official vectors pass; cross-mode rejection test passes |
+| CS-1 | Pin the Nito reference for comparison; the shared implementation is independent; keep the MIT notice | H | Nito commit | Reference paths and hashes recorded |
+| CS-2 | Implement official NIP-44 v2 KDF + 2-byte u16 prefix/chunked padding (reference cap 65,535) and the official vectors; keep `nito-v0` as an explicit private mode | J | CS-1 | Official vectors pass; cross-mode rejection test passes |
 | CS-3 | NIP-59 timestamp randomization (seal + gift wrap up to 2 days in the past) and `since = now - 172800 - 300` subscriptions | J | CS-2 | Round-trip and timestamp-window tests pass |
 | CS-4 | Relay pool: N relays, 80 ms per-connection outbox, dedupe by event id, reconnect/backoff, resubscribe, NIP-42 AUTH | H | CS-1 | Mock-relay tests pass; no network in unit tests |
 | CS-5 | Protocol engine: phases, `VERIFY` before `SIGNING`, signature verification, timeouts, blame, duplicate handling, round persistence | H | CS-4 | Unit tests; A2 malicious-coordinator test passes |
@@ -23,6 +23,8 @@ Owner key: **H** = Hush, **N** = Nito, **J** = joint.
 | CS-12 | Nito client final approval | N | CS-7, CS-9 | Written approval recorded |
 
 ## 2. Task detail
+
+**Status 2026-11-25:** CS-1–CS-4 are implemented in `daemons/shared/src/nostr/`; the shared suite is 35/35. CS-5–CS-12 remain.
 
 ### CS-1 — vendor pin
 

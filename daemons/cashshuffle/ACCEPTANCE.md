@@ -1,7 +1,7 @@
 <!-- daemons/cashshuffle/ACCEPTANCE.md -->
 # CashShuffle daemon acceptance
 
-Status: not started. Each test records the evidence listed in `daemons/CONVENTIONS.md` §8.
+Status: transport tests pass (35/35 shared); the end-to-end gates A1–A10 are not started. Each test records the evidence listed in `daemons/CONVENTIONS.md` §8.
 
 ## A1 — 5-peer chipnet round
 
@@ -51,7 +51,7 @@ Status: not started. Each test records the evidence listed in `daemons/CONVENTIO
 
 **Pass:** official NIP-44 v2 vectors pass in `official` mode; a standard peer decrypts the payload; `nito-v0` is explicitly versioned and rejected by the official mode; the seal and gift-wrap timestamps are within the two-day past window; the subscription uses `since`.
 
-**Evidence:** vector output, cross-mode rejection, timestamp fixtures.
+**Evidence:** vector output, cross-mode rejection, timestamp fixtures. **Current:** `daemons/shared/test/{nip44,nip59}.test.js` pass; the end-to-end A8 run is pending.
 
 ## A9 — operations hardening
 
