@@ -122,7 +122,8 @@ browser acceptance remain; the proving assets are live at
 `prover.nito.cash/assets/`. Measured on chipnet: SHIELD **28,326 B**,
 TRANSFER **28,389 B**, fee 30,000 sats (**1.059 / 1.057 sat/B**); the fuel
 policy (2 × 15,000 sats) still covers it. The 2-out flows remain representable with a
-zero-value dummy third note.
+zero-value dummy third note — **and this is now MEASURED on chain, both ways**
+(2026-11-26, see §6.2).
 
 ## 3. The other three v3 pieces
 
@@ -244,6 +245,53 @@ The op-cost being byte-identical to the 2-out machine (7,545 / 8,057) is the
 expected result: the covenant code is unchanged and only the
 category/price/operator constructor bytes differ, so one reviewed script serves
 every category.
+
+### 6.2 The zero-value dummy third note — MEASURED on chain (2026-11-26)
+
+The design's "the 2-out flows remain representable with a zero-value dummy third
+note" is no longer a claim about the circuit; it is exercised on chain, both
+creating and spending the dummy.
+
+**Why a zero is legal.** `circuits/pool3.circom` does exactly two things to an
+out value: `outRange[j] = RangeCheck(VALUE_BITS); outRange[j].in <==
+outValue[j];` and the conservation `sumIn + signedPublic === sumOut`. `0`
+passes a range check and contributes 0 to the sum, so a zero out-note is a
+legal note with a real commitment, owner key, `rho` and `r`.
+
+**The two actions (both confirmed, every input VM-ACCEPTED consensus +
+standard):**
+
+| Step | Tx | Size | Fee | Notes |
+|---|---|---:|---:|---|
+| create the dummy | `30f0f9d4fc3cff162d5421896326cca676d08b7ea5a40e8451771658731dbd85` | 28,252 B | 30,000 (1.062 sat/B) | in-notes 6+7 (210+210), out **400 + 20 + 0** |
+| spend the dummy | `cbfb05033282a3338fdddc6f837113a4b2ec3ad065589bc56d723f0d7ec7dadf` | 28,262 B | 30,000 (1.061 sat/B) | in-notes 11+13 (**400 + 0**), out 200 + 100 + 100 |
+
+**What the chain shows.** The zero-dummy action's carrier (201 B) carries
+`cm2 = 804d7ea76ebe272b…` for the value-0 note; the tree grew 11 → 14 leaves.
+The spend action then used that leaf as `in-note 1`, so the dummy is a real,
+spendable tree member — not a dead leaf. Spending it returned the pool to an
+all-positive note set and the tree to 17 leaves.
+
+**State after both actions:** root
+`17284930349973909159634241637463778619401830995499966741482456361978173648802`
+(LE `a2ef702b…3626`); balance **700 FT**; notes **112 / 84 / 84 / 20 / 200 /
+100 / 100**; **17 leaves**; state outpoint `cbfb0503…:1` (10,000 sats, 700 FT,
+mutable NFT commitment `a2ef702b…56a32b61…`); `actionInputs: []`.
+
+**The cost of a dummy is a leaf, not a note.** A zero out-note still appends a
+commitment to the tree, so a long run of 2-out flows through the 3-out circuit
+grows the tree 3 leaves per action instead of 2. Consolidation and the
+deposit path are the mitigations; the nullifier set (v3 core) is the real fix
+for tree growth because it makes spent leaves irrelevant.
+
+**Tooling.** `role2-op-witness-3out.mjs` gained `--outs a,b,c` (explicit values
+that must sum to the conservation `outSum`, non-negative, exactly three) and
+`--seed <tag>` (a suffix on the out-note secret derivation), plus a
+**duplicate-commitment guard** that refuses to prove a commitment already in
+the tree. Parity was re-proven before the new actions: re-running the
+historical UNSHIELD against its pre-UNSHIELD state backup reproduced the
+recorded `covenant`, `outNotes`, `newRoot`, `newLeaves` and `publicSignals`
+**byte-identically** (only the randomized Groth16 proof differs).
 
 ## 7. Community presentation
 

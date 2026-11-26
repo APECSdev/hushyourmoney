@@ -44,12 +44,32 @@
           "txid": "ec31a41c591c4af4ad95c2fab76c1ad2bb34b483393bce53758982a9d8e9de03",
           "fee": "29000 sats (1.022 sat/B)",
           "outValues": "112+84+84 + 300 FT payout at :2"
+        },
+        {
+          "op": "TRANSFER with a ZERO-VALUE DUMMY third note (notes 6,7 -> 11,12,13; a 2-out flow through the 3-out circuit)",
+          "lockTxid": "0470a5b88a4bea9846e85b7d001a2746d6e1eb76615ec6765f356a4930dd0b7b",
+          "txid": "30f0f9d4fc3cff162d5421896326cca676d08b7ea5a40e8451771658731dbd85",
+          "fee": "30000 sats (1.062 sat/B)",
+          "outValues": "400+20+0 (cm2 = the value-0 note; carrier 201 B; tree 11 -> 14 leaves)"
+        },
+        {
+          "op": "the zero note is SPENT as an in-note (notes 11,13 = 400 and 0 -> 14,15,16)",
+          "lockTxid": "7b8af94cf8434850b939265926f46a9e12097c61c85a195305644283748a986f",
+          "txid": "cbfb05033282a3338fdddc6f837113a4b2ec3ad065589bc56d723f0d7ec7dadf",
+          "fee": "30000 sats (1.061 sat/B)",
+          "outValues": "200+100+100 (a dummy is a real, spendable tree member - not a dead leaf)"
         }
       ],
       "finalState": {
-        "root": "14228234475601541117315008857991396106432351016727521101710528622096584678627",
+        "root": "17284930349973909159634241637463778619401830995499966741482456361978173648802",
+        "rootLE": "a2ef702ba405427d0d3e60918743f5fea891c09d3d9be2a3c4b8eaae83ec3626",
         "balance": "700",
-        "notesAtTree": [6, 7, 8, 9, 10]
+        "notesAtTree": [8, 9, 10, 12, 14, 15, 16],
+        "noteValues": "112 / 84 / 84 / 20 / 200 / 100 / 100",
+        "leaves": 17,
+        "stateOutpoint": "cbfb05033282a3338fdddc6f837113a4b2ec3ad065589bc56d723f0d7ec7dadf:1",
+        "stateCommitment": "a2ef702b...56a32b61...",
+        "actionInputs": "[] - the next action needs a refill lock"
       },
       "feePolicy": "BARE: 15k sats x 2 fuel per action; every action broadcast atomically with its lock (lock --no-wait -> action spends the lock's UNCONFIRMED outputs)",
       "vending": {
@@ -78,7 +98,7 @@
         "satsRecoveryNote": "burned one 20,000,000 demo token UTXO of 0717e1a1d4db... (60,000 sats) by omission - DEMO ONLY; recovered 59,630 sats",
         "nextActionFundable": true
       },
-      "notes": "3-out demo deployed 2026-11-26 runner-free from the apecsdev VM with wallet A. SHIELD -> TRANSFER -> UNSHIELD confirmed; every input VM-ACCEPTED consensus+standard. Demo only: 1-of-1 setup, public bootstrap in-notes on the first action (indices 0/1), no real nullifier set, no encrypted note delivery; Gate 7 is the mainnet gate. The Nito client 3-out witness path is built and byte-exact against the live UNSHIELD; the store branch is wired (poolId + outs=3). 3-out BLANKS are now permissionless (vending loaded, first stranger buy confirmed 2026-11-26). Still open: the Nito UI pool selector and the browser acceptance (walletProverCompatible stays false until it passes).",
+      "notes": "3-out demo deployed 2026-11-26 runner-free from the apecsdev VM with wallet A. FIVE confirmed actions: SHIELD -> TRANSFER -> UNSHIELD -> zero-value-dummy TRANSFER (out 400+20+0) -> the zero note SPENT as an in-note (out 200+100+100); every input VM-ACCEPTED consensus+standard. The zero-value dummy is therefore MEASURED both ways: a 2-out flow through the 3-out circuit, and the dummy as a real spendable tree member (not a dead leaf). Demo only: 1-of-1 setup, public bootstrap in-notes on the first action (indices 0/1), no real nullifier set, no encrypted note delivery; Gate 7 is the mainnet gate. The Nito client 3-out witness path is built and byte-exact against the live UNSHIELD; the store branch is wired (poolId + outs=3). 3-out BLANKS are now permissionless (vending loaded, first stranger buy confirmed 2026-11-26). Still open: the Nito UI pool selector and the browser acceptance (walletProverCompatible stays false until it passes).",
       "clientHandoff": "docs/ROLE2-3OUT-V3-DESIGN.md"
     },
     {

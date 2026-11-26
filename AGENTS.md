@@ -48,16 +48,36 @@ verified at chipnet tip 348,776):**
   operator action. The remaining Nito work is the **UI pool selector** and the
   **browser acceptance** (`walletProverCompatible` stays false until it
   passes).
-- **Still open:** the zero-value dummy third note (2-out flow through the
-  3-out circuit) is circuit-legal (`pool3.circom:188` + `RangeCheck`) but
-  `role2-op-witness-3out.mjs:86` hard-codes the 40/30/30 split — NOT built.
-- **Site release this session:** image **`34524b4db756`**, Hub digest
+- **Zero-value dummy third note — MEASURED both ways (same session).**
+  `role2-op-witness-3out.mjs` gained `--outs a,b,c` (must sum to the
+  conservation `outSum`), `--seed <tag>`, and a duplicate-commitment guard;
+  the default 40/30/30 path was re-proven **byte-identical** against the
+  historical UNSHIELD (covenant / outNotes / newRoot / newLeaves /
+  publicSignals all IDENTICAL; only the randomized proof differs). On chain:
+  created in `30f0f9d4fc3cff162d5421896326cca676d08b7ea5a40e8451771658731dbd85`
+  (28,252 B, 1.062 sat/B, in-notes 6+7, out **400+20+0**, carrier 201 B with
+  `cm2 = 804d7ea76ebe272b…`, tree 11 → 14), then the **zero note was SPENT as
+  an in-note** in
+  `cbfb05033282a3338fdddc6f837113a4b2ec3ad065589bc56d723f0d7ec7dadf`
+  (28,262 B, 1.061 sat/B, in-notes 11+13 = 400 and **0**, out 200+100+100).
+  Every input VM-ACCEPTED consensus + standard. A dummy costs a **leaf**, not
+  a note. Final state: root `1728493034…`, balance **700 FT**, notes
+  **112/84/84/20/200/100/100**, **17 leaves**, state outpoint
+  `cbfb0503…:1`, `actionInputs: []`.
+- **Wallet A after the two actions:** **10 blanks**; one more demo-token UTXO
+  burned for fees (`07a020e92df6…`, tx `21ccad44…`, 59,630 sats; **DEMO
+  ONLY**) — four 60,000-sat demo-token UTXOs remain as fee reserve.
+- **Still open:** the Nito UI pool selector + browser acceptance, the v3 core,
+  Gate 7 and the migration. Nothing on the 3-out note-management layer itself.
+- **Site releases this session (two):** first image **`34524b4db756`**, Hub
   `sha256:34524b4db756382d2dea15a84c0351ad64e20a9d48a23f350164a0dc908f0c75`
-  (`last_updated 2026-11-26T21:17:25Z`). `shielded-pool.vue` gained the
-  “3-out blanks: the machine is loaded” card + four stale-claim fixes;
-  `bn254.vue` + `playground.vue` corrected. SFC OK ×3, build OK, smoke 200 on
-  `/`, `/research`, `/research/shielded-pool`, `/research/bn254`, `/playground`,
-  `/daemons`; markers present, stale strings 0. **Flux owner update pending**
+  (`21:17:25Z`) — the “3-out blanks: the machine is loaded” card + four
+  stale-claim fixes (`bn254.vue`, `playground.vue`). Second image
+  **`5b36bc6543b0`**, Hub
+  `sha256:5b36bc6543b01a8ef375f9078bd1b36bf526fdcfe53a827cf2f7be8e6d0836c7`
+  (`21:29:44Z`) — “Five confirmed 3-out actions”, the zero-dummy paragraph and
+  the new final state. SFC OK, build OK, smoke `/research/shielded-pool` 200 /
+  187,846 B, markers present, stale strings 0. **Flux owner update pending**
   (no owner credential here) — the live site is still `d8495fa…`.
 
 ---

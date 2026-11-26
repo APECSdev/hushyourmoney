@@ -338,13 +338,12 @@ return HTTP 200 with the exact sizes). Worker deploy version `34e48677…`;
 4. ~~**Wallet A sats recovery** before the next lock (see §1).~~ **DONE**
    2026-11-26 (§10): 61,054 plain sats; the next lock is fundable.
 5. **Flux owner update** — image `d8495fa…`.
-6. **Zero-value dummy third note** — `circuits/pool3.circom:188` only
-   constrains `sumIn + signedPublic === sumOut`, and each out value gets a
-   `RangeCheck`, so a 0-value third note is circuit-legal; but
-   `role2-op-witness-3out.mjs:86` hard-codes the 40/30/30 split, so a 2-out
-   flow expressed through the 3-out circuit is **NOT built** (UNMEASURED on
-   chain). §2.4 of the design doc calls it representable; representable ≠
-   exercised.
+6. ~~**Zero-value dummy third note**~~ **DONE 2026-11-26 (§11)**: the
+   witness generator gained `--outs a,b,c` and `--seed`, and the dummy was
+   exercised on chain **both ways** — created (`30f0f9d4…`, out 400+20+0) and
+   then **spent as an in-note** (`cbfb0503…`, in-notes 400 and 0). A dummy is a
+   real, spendable tree member, not a dead leaf. The cost of a dummy is a
+   **leaf**, not a note: the tree grows 3 leaves per action either way.
 
 ---
 
@@ -444,8 +443,10 @@ curl -s https://hub.docker.com/v2/repositories/nyusternie/hushyourmoney/tags/lat
 - Gate 7 MPC and the mainnet deployment.
 - Migration of the Hush 750,000/762,400 notes and the wallet A notes.
 - The Flux owner update for the site image `d8495fa…`.
-- A 2-out-shaped action through the 3-out circuit (zero-value dummy third
-  note) — circuit-legal, not built into the witness generator.
+- Nothing on the 3-out note-management layer itself: the demo lifecycle, the
+  zero-value dummy (created and spent), the permissionless 3-out blanks and the
+  Nito witness path are all done. What remains is the Nito UI, the v3 core,
+  Gate 7 and the migration.
 
 Do not claim any of the above as complete.
 
@@ -600,7 +601,189 @@ live site updated until `/research/shielded-pool` serves the vending card.
 - Nito **UI pool selector** and **browser acceptance** (external; the store
   branch and the byte-exact witness path are done, the blanks are now
   permissionless).
-- The **zero-value dummy third note** (a 2-out flow through the 3-out circuit):
-  circuit-legal, not in the witness generator.
+- ~~The **zero-value dummy third note**~~ **DONE in §11.**
 - **v3 core** (deposit path, nullifier set, encrypted note delivery), **Gate 7
   MPC**, the **migration**, and the **Flux owner update**.
+
+---
+
+## 11. Session update — 2026-11-26 (third): the zero-value dummy, measured both ways
+
+`role2-op-witness-3out.mjs` hard-coded the 40/30/30 split, so the design's
+"2-out flows remain representable with a zero-value dummy third note" was a
+claim about the circuit, not a measured behaviour. It is now measured on chain
+in both directions.
+
+### 11.1 The tooling change (`pusd-shielded-pool`)
+
+Two flags and one guard, with **zero change to the default path**:
+
+- `--outs a,b,c` — explicit out-note values. Exactly three, non-negative, and
+they must sum to the conservation `outSum` (= `inSum + (sign ? -pv : +pv)`).
+Absent, the script computes the original 40/30/30 split.
+- `--seed <tag>` — a suffix on the out-note secret derivation. The default seed
+is `role2-op3-<deployTxid>-<action>-<amount>`; two actions with the same
+action/amount derive the same secrets, and identical out **values** would then
+duplicate a leaf. Absent, the seed string is byte-identical to before.
+- **Duplicate-commitment guard** — refuses to prove if any new commitment is
+already a leaf.
+
+**Parity re-proven before the new actions.** Re-running the historical
+UNSHIELD against its pre-UNSHIELD state backup
+(`role2-pool3-state.pre-unshield-20261126-143607.json`) reproduced the recorded
+op **byte-identically** in every deterministic field:
+
+```
+covenant       IDENTICAL
+outNotes       IDENTICAL
+newRoot        IDENTICAL
+newLeaves      IDENTICAL
+publicSignals  IDENTICAL
+pv / sign      IDENTICAL
+proof          differs (expected: Groth16 proving is randomized)
+```
+
+(Re-running it against the CURRENT state instead trips the duplicate guard —
+which is itself the proof that the default derivation is unchanged.)
+
+### 11.2 The two actions
+
+```bash
+cd ~/zkb/pusd-shielded-pool
+export PATH=/home/apecs/bin:$PATH
+
+# 1) create the dummy: notes 6+7 (210+210) -> 400+20+0
+node role2-op-witness-3out.mjs --action transfer --in 6,7 --outs 400,20,0 \
+  --seed zero-dummy-1 --out /home/apecs/cov/role2-op3-zero.json
+
+cd ~/zkb/groth16_cashscript/chunked/bn254/bn-native-sound
+node pool-refill-role2.mjs --op /home/apecs/cov/role2-op3-zero.json \
+  --state /home/apecs/cov/role2-pool3-state.json \
+  --secrets /home/apecs/.secrets/wallet-a-role2-demo.json --no-wait
+BN_VK_FIXTURES=/home/apecs/cov/our-3out.fixtures.json POOL_3OUT=1 \
+  node pool-op-role2.mjs --3out --op /home/apecs/cov/role2-op3-zero.json \
+  --state /home/apecs/cov/role2-pool3-state.json
+
+# 2) spend the dummy: notes 11+13 (400+0) -> 200+100+100
+cd ~/zkb/pusd-shielded-pool
+node role2-op-witness-3out.mjs --action transfer --in 11,13 --outs 200,100,100 \
+  --seed spend-zero-1 --out /home/apecs/cov/role2-op3-zero-spend.json
+
+cd ~/zkb/groth16_cashscript/chunked/bn254/bn-native-sound
+node pool-refill-role2.mjs --op /home/apecs/cov/role2-op3-zero-spend.json \
+  --state /home/apecs/cov/role2-pool3-state.json \
+  --secrets /home/apecs/.secrets/wallet-a-role2-demo.json --no-wait
+BN_VK_FIXTURES=/home/apecs/cov/our-3out.fixtures.json POOL_3OUT=1 \
+  node pool-op-role2.mjs --3out --op /home/apecs/cov/role2-op3-zero-spend.json \
+  --state /home/apecs/cov/role2-pool3-state.json
+```
+
+Action 1 (`30f0f9d4…`):
+
+```
+transfer pv=0 sign=0 · inSum=420 → out 400+20+0 (zero-value dummy: a 2-out flow)
+proved in 19.4s · n0 142282344756015411… · n1 138635631104676470…
+lock  0470a5b8… · 689B · 2 tagged fuel UTXOs of 15000 sats
+transfer pv=0 sign=0 · balance 700 → 700 · newNull 79314d6ea7f86295…
+fills 0/0/242 · unlockings 9488/9490/8776 · nq 108
+consensus: ACCEPT 6997745/7623200 | ACCEPT 6956864/7624800 | ACCEPT 6594303/7053600
+standard:  ACCEPT 7032945/7623200 | ACCEPT 6992064/7624800 | ACCEPT 6629247/7053600
+tx 30f0f9d4… · 28252B · fee 30000 sats (1.062 sat/B) · FT 700 → 700
+```
+
+Action 2 (`cbfb0503…`):
+
+```
+transfer pv=0 sign=0 · inSum=400 → out 200+100+100
+proved in 18.0s · n0 111045121164150532… · n1 227928132051084653…
+lock  7b8af94c… · 689B · 2 tagged fuel UTXOs of 15000 sats
+transfer pv=0 sign=0 · balance 700 → 700 · newNull 56a32b6156df1b6f…
+fills 0/0/252 · unlockings 9488/9490/8786 · nq 108
+consensus: ACCEPT 7011699/7623200 | ACCEPT 6971336/7624800 | ACCEPT 6602153/7061600
+standard:  ACCEPT 7047027/7623200 | ACCEPT 7006664/7624800 | ACCEPT 6637225/7061600
+tx cbfb0503… · 28262B · fee 30000 sats (1.061 sat/B) · FT 700 → 700
+```
+
+### 11.3 On-chain verification
+
+Action 1's carrier decoded from `vout[0].scriptPubKey` (`6a 4c c9` + 201 B):
+
+```
+carrier payload: 201 bytes
+ nf0 22b6d4b767592e21…   nf1 618e84544eb1eace…
+ cm0 09a32ab3289becbf…   cm1 5f13387bc14cb90d…   cm2 804d7ea76ebe272b…
+ newRoot 2d7bf1b66f20352d…
+ pv 0000000000000000  sign 0
+```
+
+`cm2` is the commitment of the **value-0** note. The state NFT at `vout[1]`
+carries `2d7bf1b6… ‖ 79314d6e…` (root ‖ nullifier fold), 10,000 sats, 700 FT,
+mutable — matching the action's `newRoot` and `newNull`. Action 2's state
+commitment is `a2ef702b… ‖ 56a32b61…`.
+
+**The dummy is spendable.** Action 2 used leaf 13 (the value-0 commitment) as
+in-note 1 and the circuit accepted it; `publicSignals[0]` equalled the root
+after action 1. A dummy therefore costs a **leaf**, not a note.
+
+### 11.4 Final state (tip 348,784)
+
+| Item | Value |
+|---|---|
+| Root | `17284930349973909159634241637463778619401830995499966741482456361978173648802` (LE `a2ef702b…3626`) |
+| Balance | **700 FT** |
+| Notes | 112 (8) / 84 (9) / 84 (10) / 20 (12) / 200 (14) / 100 (15) / 100 (16) |
+| Leaves | **17** (11 → 14 → 17) |
+| State outpoint | `cbfb05033282a3338fdddc6f837113a4b2ec3ad065589bc56d723f0d7ec7dadf:1` — 10,000 sats, 700 FT |
+| Action inputs | `[]` — the next action needs a refill |
+
+Sum check: 112 + 84 + 84 + 20 + 200 + 100 + 100 = **700** ✓
+
+### 11.5 Wallet A after the two actions
+
+Two more demo-token UTXOs were burned to fund the actions (DEMO ONLY):
+`0717e1a1d4db…` was used in §10.1; this session added
+`07a020e92df6…` — tx
+`21ccad44a248ebb72fb950973694b765fd2de38722933788fec8e64691333085`,
+59,630 sats recovered. Wallet A now holds **10 blanks** and the remaining plain
+sats; four 60,000-sat demo-token UTXOs remain as fee reserve.
+
+### 11.6 Explorer links (Selene primary, all HTTP 200)
+
+- lock `0470a5b8…`: `https://explorer.selene.cash/tx/0470a5b88a4bea9846e85b7d001a2746d6e1eb76615ec6765f356a4930dd0b7b?network=chipnet`
+- zero-dummy `30f0f9d4…`: `https://explorer.selene.cash/tx/30f0f9d4fc3cff162d5421896326cca676d08b7ea5a40e8451771658731dbd85?network=chipnet`
+- recovery `21ccad44…`: `https://explorer.selene.cash/tx/21ccad44a248ebb72fb950973694b765fd2de38722933788fec8e64691333085?network=chipnet`
+- lock `7b8af94c…`: `https://explorer.selene.cash/tx/7b8af94cf8434850b939265926f46a9e12097c61c85a195305644283748a986f?network=chipnet`
+- zero note spent `cbfb0503…`: `https://explorer.selene.cash/tx/cbfb05033282a3338fdddc6f837113a4b2ec3ad065589bc56d723f0d7ec7dadf?network=chipnet`
+
+### 11.7 Site release (built + pushed, Flux pending)
+
+`web/pages/research/shielded-pool.vue` only:
+
+- the "Three confirmed 3-out actions" card became **"Five confirmed 3-out
+  actions"** with the zero-dummy action and the zero-spend action inline and two
+  new Selene tx buttons;
+- the "the note shapes" card gained the zero-value-dummy paragraph (why a 0 is
+  legal, both actions, "a dummy is a real tree member, not a dead leaf — it
+  costs a leaf and is recoverable");
+- the FAQ row "3-out demo pool · chipnet" was updated to five actions and the
+  new final state.
+
+Verification (on `apecsdev`): SFC parse + compileScript + compileTemplate
+**OK**; `docker build --network=host` success (yarn layers cached); image
+**`5b36bc6543b0`**; smoke on `127.0.0.1:3222`: `/research/shielded-pool` **200,
+187,846 B**; markers present — "Five confirmed 3-out actions" 1, `30f0f9d4` 2,
+`cbfb0503` 2, "zero-value dummy note" 1, "zero note spent cbfb0503" 1,
+"400+20+0" 2, "112 / 84 / 84 / 20 / 200 / 100 / 100" 1, "17 leaves" 1; stale
+strings 0 — "Three confirmed 3-out actions" 0, "210 / 210 / 112 / 84 / 84" 0.
+
+Hub: digest
+`sha256:5b36bc6543b01a8ef375f9078bd1b36bf526fdcfe53a827cf2f7be8e6d0836c7`,
+`last_updated 2026-11-26T21:29:44Z`. **Flux owner update still pending** — no
+owner credential on this host. Do not declare the live site updated until
+`/research/shielded-pool` serves "Five confirmed 3-out actions".
+
+### 11.8 Commits
+
+- `pusd-shielded-pool`: the `--outs` / `--seed` / duplicate-guard change to
+  `role2-op-witness-3out.mjs`.
+- `hushyourmoney`: site (this section's release) + docs/registry/AGENTS.

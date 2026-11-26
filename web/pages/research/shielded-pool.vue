@@ -39,7 +39,7 @@ const RESULTS = [
     { q: 'Circuit (3-out v3)', v: '184,528 constraints (+1,056, +0.58%) · 112 private inputs · 183,017 wires · 2 public inputs · 20.2 s compile', src: 'circom 2.2.3 --O2 on apecsdev, 2026-11-26 · circuits/pool3.circom', href: 'https://github.com/APECSdev/pusd-shielded-pool/blob/master/circuits/pool3.circom' },
     { q: '3-out carrier + actionHash', v: 'carrier 169 → 201 B · actionHash 8 → 9 fields (cm2) · action +32 B · r1cs 39,449,264 B · wasm 3,380,815 B', src: 'measured 2026-11-26 · v3 design', href: 'https://github.com/APECSdev/hushyourmoney/blob/master/docs/ROLE2-3OUT-V3-DESIGN.md' },
     { q: '3-out verifier + hook + witness', v: 'BUILT: plain sound verifier 7,310 B sha256 6ec7ca8e… (6.01% std margin); hooked program 7,848 B sha256 628207b1…, locking aa200240…; hook 39,082/37,930 op, 537 B; acceptance 21/21; red team 146/0; sweep 69/69 (min 6.00% std). The Nito client 3-out witness path is built and byte-exact against the live UNSHIELD (ec31a41c…); the UI and the browser acceptance remain, while 3-out blanks ARE permissionless (vending aa2020bd…, first stranger buy 569a6e6d…); the proving assets are live on prover.nito.cash.', src: 'POOL_3OUT=1 pool-info / pool-cost / pool-test / pool-redteam / pool-sweep, 2026-11-26', href: 'https://github.com/APECSdev/hushyourmoney/blob/master/docs/ROLE2-3OUT-V3-DESIGN.md' },
-    { q: '3-out demo pool · chipnet', v: 'DEPLOYED 2f650791… (category bc607a96…, program 7,848 B sha256 73cb0ccb…, locking aa204a6c…); SHIELD e847ef56… (28,326 B, 1.059 sat/B), TRANSFER ef64f3dd… (28,389 B, 1.057 sat/B) and UNSHIELD 300 ec31a41c… (28,368 B, 1.022 sat/B, out 112+84+84) confirmed; final state 700 FT, notes 210/210/112/84/84, 11 leaves', src: 'chipnet 2026-11-26 · docs/ROLE2-3OUT-V3-DESIGN.md §6', href: 'https://explorer.selene.cash/tx/ec31a41c591c4af4ad95c2fab76c1ad2bb34b483393bce53758982a9d8e9de03?network=chipnet' },
+    { q: '3-out demo pool · chipnet', v: 'DEPLOYED 2f650791… (category bc607a96…, program 7,848 B sha256 73cb0ccb…, locking aa204a6c…); SHIELD e847ef56… (28,326 B, 1.059 sat/B), TRANSFER ef64f3dd… (28,389 B, 1.057 sat/B), UNSHIELD 300 ec31a41c… (28,368 B, 1.022 sat/B, out 112+84+84), a ZERO-VALUE-DUMMY transfer 30f0f9d4… (out 400+20+0) and the spend of that zero note cbfb0503… (out 200+100+100) confirmed; final state 700 FT, notes 112/84/84/20/200/100/100, 17 leaves', src: 'chipnet 2026-11-26 · docs/ROLE2-3OUT-V3-DESIGN.md §6', href: 'https://explorer.selene.cash/tx/cbfb05033282a3338fdddc6f837113a4b2ec3ad065589bc56d723f0d7ec7dadf?network=chipnet' },
     { q: 'Role-2 browser acceptance', v: 'SHIELD 1ca58773… → TRANSFER 50644d00… → UNSHIELD f52008f4… · state 760,400 FT · wallet A 19,986,800 + 600 FT, 128,323 plain, 0 blanks · pool history 48', src: 'nito.cash browser acceptance 2026-11-26 · docs/ROLE2-BROWSER-ACCEPTANCE-HANDOFF-2026-11-26.md', href: 'https://explorer.selene.cash/tx/f52008f44999f05261a905f8120900888a233e07d7cd489574909d51d0232b70?network=chipnet' },
     { q: 'Notes management · v3', v: '3-out change splitting: BUILT + DEPLOYED as a chipnet demo (SHIELD e847ef56…, TRANSFER ef64f3dd…, UNSHIELD 300 ec31a41c…); deposit path (0-in/2-out onboarding), real nullifier set (Merkle membership) and encrypted note delivery remain DESIGN; UNMEASURED', src: 'docs/ROLE2-3OUT-V3-DESIGN.md §6', href: 'https://github.com/APECSdev/hushyourmoney/blob/master/docs/ROLE2-3OUT-V3-DESIGN.md' },
     { q: 'Failed acceptance locks', v: '2,200 FT + 150,000 fuel sats standing: 3db76294… is public-bootstrap-tagged (1,000 FT + 30,000 sats, sweepable); 10f26fa3…, 1946084e…, c3e21c7a…, dff42ddb… carry lost notes (1,200 FT + 120,000 sats, stuck)', src: 'docs/ROLE2-BROWSER-ACCEPTANCE-REVIEW-2026-11-26.md', href: 'https://github.com/APECSdev/hushyourmoney/blob/master/docs/ROLE2-BROWSER-ACCEPTANCE-REVIEW-2026-11-26.md' },
@@ -1086,7 +1086,7 @@ const LIFECYCLE = [
                 </div>
                 <div class="fact-card reveal" style="transition-delay: 0.1s">
                     <p class="font-mono text-[0.72rem] uppercase tracking-[0.3em] text-cyan-200">deployed · chipnet demo</p>
-                    <h3 class="mt-3 font-display text-xl font-bold text-white">Three confirmed 3-out actions</h3>
+                    <h3 class="mt-3 font-display text-xl font-bold text-white">Five confirmed 3-out actions</h3>
                     <p class="mt-3 text-sm leading-relaxed text-slate-100">
                         Category <span class="font-mono text-xs">bc607a96…</span>; deploy
                         <span class="font-mono text-xs">2f650791…</span>; program 7,848 B sha256
@@ -1096,8 +1096,14 @@ const LIFECYCLE = [
                         400+300+300) → TRANSFER <span class="font-mono text-xs">ef64f3dd…</span> (28,389 B,
                         1.057 sat/B, spends notes 2+3, out 280+210+210) → UNSHIELD 300
                         <span class="font-mono text-xs">ec31a41c…</span> (28,368 B, 1.022 sat/B, spends
-                        notes 4+5, out 112+84+84, 300 FT payout at :2). Final state 700 FT; notes
-                        210 / 210 / 112 / 84 / 84; 11 leaves. Every input VM-ACCEPTED consensus + standard.
+                        notes 4+5, out 112+84+84, 300 FT payout at :2) → <strong class="text-white">ZERO-VALUE
+                        DUMMY</strong> <span class="font-mono text-xs">30f0f9d4…</span> (28,252 B, 1.062 sat/B,
+                        spends notes 6+7, out <strong class="text-white">400+20+0</strong> — a 2-out flow through
+                        the 3-out circuit) → <strong class="text-white">the zero note is spent</strong>
+                        <span class="font-mono text-xs">cbfb0503…</span> (28,262 B, 1.061 sat/B, in-notes 11+13
+                        i.e. 400 and <strong class="text-white">0</strong>, out 200+100+100). Final state 700 FT;
+                        notes 112 / 84 / 84 / 20 / 200 / 100 / 100; 17 leaves. Every input VM-ACCEPTED
+                        consensus + standard.
                     </p>
                     <div class="mt-5 flex flex-wrap gap-3">
                         <a href="https://explorer.selene.cash/tx/2f65079182cf1ecd736e897afad741b9218c6afd16f711042ba4cacf5dd8aa7e?network=chipnet" target="_blank" rel="noopener" class="tx-btn">
@@ -1111,6 +1117,12 @@ const LIFECYCLE = [
                         </a>
                         <a href="https://explorer.selene.cash/tx/ec31a41c591c4af4ad95c2fab76c1ad2bb34b483393bce53758982a9d8e9de03?network=chipnet" target="_blank" rel="noopener" class="tx-btn">
                             <span class="tx-chip">chipnet</span><span class="tx-id">3-out unshield ec31a41c…</span>
+                        </a>
+                        <a href="https://explorer.selene.cash/tx/30f0f9d4fc3cff162d5421896326cca676d08b7ea5a40e8451771658731dbd85?network=chipnet" target="_blank" rel="noopener" class="tx-btn">
+                            <span class="tx-chip">chipnet</span><span class="tx-id">zero-dummy transfer 30f0f9d4…</span>
+                        </a>
+                        <a href="https://explorer.selene.cash/tx/cbfb05033282a3338fdddc6f837113a4b2ec3ad065589bc56d723f0d7ec7dadf?network=chipnet" target="_blank" rel="noopener" class="tx-btn">
+                            <span class="tx-chip">chipnet</span><span class="tx-id">zero note spent cbfb0503…</span>
                         </a>
                     </div>
                 </div>
@@ -1126,6 +1138,16 @@ in1 ─┴─▶ out0, out1                  in1 ─┴─▶ out0, out1, out2
                     The 3-out is the note-management layer: it lets a SHIELD create two wallet-owned
                     notes plus the Hush change in one action, and lets a TRANSFER split change cleanly.
                     It is <strong class="text-white">not</strong> the onboarding fix — the deposit path is.
+                </p>
+                <p class="mt-4 text-sm leading-relaxed text-slate-100">
+                    A 2-out flow still fits: the third output can be a <strong class="text-white">zero-value
+                    dummy note</strong>. `circuits/pool3.circom` only RangeChecks each out value and
+                    constrains <span class="font-mono text-xs">sumIn + signedPublic === sumOut</span>, so
+                    a 0 is legal — and it was exercised on chain both ways: created in
+                    <span class="font-mono text-xs">30f0f9d4…</span> (out 400+20+0) and then
+                    <strong class="text-white">spent as an in-note</strong> in
+                    <span class="font-mono text-xs">cbfb0503…</span> (in-notes 400 and 0). A dummy is a
+                    real tree member, not a dead leaf — it costs a leaf and is recoverable.
                 </p>
             </div>
 
