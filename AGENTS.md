@@ -87,8 +87,12 @@ entries), in the design doc §3.2 and handoff §12. Site image
 `sha256:e1bbb21164962f07de0ac927b38ed0675dbbcad9cd1ec89d4e1d32b920ca2648`
 (`last_updated 2026-11-26T21:56:37Z`; smoke 8 routes 200,
 `/research/shielded-pool` 190,921 B, all disclosure markers present, stale
-strings 0). **Flux owner update pending** (no owner credential here) — the
-live site is still the pre-disclosure build.
+strings 0). **Flux state (polled 2026-11-26 ~22:00Z):** the live site has
+rolled forward to the zero-dummy build `5b36bc6543b0` (live page carries
+"Five confirmed 3-out actions" + the vending card, 187,846 B) but **NOT yet
+the disclosure build** — `R2-NULLIFIER-DOUBLING` = 0 on live. The owner
+update (or another automatic rollout) is still required before the disclosure
+is live; do not claim it deployed until the live page serves the finding.
 
 ---
 

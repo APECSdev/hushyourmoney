@@ -940,7 +940,12 @@ standing rule 1, 901,200 1, 762,400 1) and stale strings 0.
 
 Hub: digest
 `sha256:e1bbb21164962f07de0ac927b38ed0675dbbcad9cd1ec89d4e1d32b920ca2648`,
-`last_updated 2026-11-26T21:56:37Z`. **Flux owner update pending** — no owner
-credential on this host; the owner dashboard at `https://cloud.runonflux.io`
-is the only deployment action. Do not declare the disclosure live until
-`/research/shielded-pool` serves `R2-NULLIFIER-DOUBLING`.
+`last_updated 2026-11-26T21:56:37Z`. **Flux state (polled ~22:00Z):** the
+live site has rolled forward to the zero-dummy build `5b36bc6543b0` (the live
+page carries "Five confirmed 3-out actions" + the vending card, 187,846 B) but
+**NOT yet the disclosure build** — `R2-NULLIFIER-DOUBLING` = 0 on live.
+Flux has picked images up on its own before (2026-11-25 record); if it does
+not consume this one, the owner dashboard at `https://cloud.runonflux.io` is
+the deployment action (no owner credential on this host). **Do not declare
+the disclosure live until `/research/shielded-pool` serves
+`R2-NULLIFIER-DOUBLING`.**
