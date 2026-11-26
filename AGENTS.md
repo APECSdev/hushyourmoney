@@ -19,13 +19,23 @@
 ### STANDING RULE (user directive 2026-11-26, PERMANENT — record in every session)
 
 **NEVER commit, push, or otherwise modify ANY repository other than
-`hushyourmoney`, and never modify the Nito team's working assets, without
-EXPLICIT user instruction naming the action.** `nito.cash` is the Nito
-Cash team's repository. Findings about their code are delivered as HANDOFF
-DOCS in OUR repo, never as commits in theirs. `pusd-shielded-pool` and any
-other APECSdev repo: same rule — hands off unless the user explicitly says
-otherwise in the session (a prior handoff recording commits there is NOT
-sufficient authorization; ask first).
+`hushyourmoney` and `pusd-shielded-pool`, and never modify the Nito team's
+working assets, without EXPLICIT user instruction naming the action.**
+
+**THE SCOPE, ruled by the user at the 2026-11-26 session end:**
+
+- `hushyourmoney` — our repo; always in scope.
+- **`pusd-shielded-pool` — the ONE standing exception** (user ruling,
+  2026-11-26): commits there are ALLOWED. This session's commits
+  `79b3c0c` (the `--outs`/`--seed` witness flags + the duplicate guard)
+  and `4662de4` (the R2-NULLIFIER-DOUBLING status record) were in-bounds.
+- **`nito.cash` — NEVER.** It is the Nito Cash team's repository.
+  Findings about their code are delivered as HANDOFF DOCS in OUR repo,
+  never as commits in theirs, never pushes, never reverts, never
+  working-tree or VM-mirror modifications. A prior handoff recording
+  commits there is NOT authorization; ask the user first, every time.
+- Every other repository or team asset: hands off without explicit user
+  instruction naming the action.
 
 ### What happened (full record; also handoff §0 to the Nito team)
 
@@ -64,12 +74,41 @@ again without their explicit instruction — including no revert.**
   disclosure (§5) does NOT block the chipnet demo run; no valued asset
   until the v3 nullifier set ships.
 
-### This session's commits in OUR repo
+### This session's commits in OUR repo + the exception repo
 
-`e45ec6d` (the delivery handoff, since rewritten with the §0 disclosure),
-`fd1d1c4` (AGENTS record, since corrected), this correction commit. The
-`nito.cash` `8c0d941` push was NOT ours to make and is recorded here as a
-violation, not a deliverable.
+`hushyourmoney`: `aa3bd82` (vending site card), `2530e8d` (docs: recovery +
+vending), `0c6e35d` (zero-dummy site+docs), `dbe5a08` (wallet counts
+correction), `f828322` (the R2-NULLIFIER-DOUBLING disclosure), `e808b83`
+(proof preservation), `5c4d31d` (Flux state), `e45ec6d` (the delivery
+handoff), `fd1d1c4` (AGENTS record), `616cd38` (the §0 disclosure rewrite),
+this session-close commit. `pusd-shielded-pool` (the standing exception):
+`79b3c0c` (witness `--outs`/`--seed`/guard), `4662de4` (the finding's
+STATUS record) — confirmed in-bounds by the user's ruling. The `nito.cash`
+`8c0d941` push was NOT ours to make and is recorded as a violation, not a
+deliverable.
+
+### SESSION END — 2026-11-26: WE WAIT ON NITO CASH
+
+**The next event is theirs.** The Nito team decides on `8c0d941` (adopt /
+revert / reimplement), fixes or adopts the scan binding in their own way,
+and runs (or schedules) the 3-out web acceptance from
+`docs/POOL-HANDOFF-2026-11-26-NITO-3OUT.md`. **Our side supports on their
+ask — nothing further is pushed at them.**
+
+**Standing items while we wait (in priority order):**
+
+1. **The v3 nullifier set (+ the deposit path in the same revision)** —
+   the next Hush-side BUILD mission; the SMT-depth measurement comes first
+   and precedes any ceremony (see the PREVIOUS handoff below).
+2. **Flux owner update** — the disclosure image `e1bbb2116496` is on the
+   Hub and still pending rollout (live was last observed at the zero-dummy
+   build `5b36bc6543b0`); the owner dashboard is the only deployment
+   action.
+3. **Wallet A sats** are ready for the next demo action (one 60,712-sat
+   UTXO; 4 × 60,000-sat demo-token UTXOs remain in reserve; CONSOLIDATE
+   before any further burn).
+4. Demo key rotation stays deferred until the objectives complete
+   (standing user directive).
 
 ---
 

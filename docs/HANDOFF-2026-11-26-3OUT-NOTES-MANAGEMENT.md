@@ -391,6 +391,15 @@ return HTTP 200 with the exact sizes). Worker deploy version `34e48677…`;
     mainnet. Do not describe it as production-ready.
 16. Do not run a non-frozen `pnpm install` on `hushyourmoney` (it drops the
     cheerio 1.0.0-rc.12 pin). For Nito, use the frozen lockfile.
+17. **REPOSITORY SCOPE (user ruling, 2026-11-26 session end — PERMANENT):**
+    the ONLY repositories an agent may commit to are `hushyourmoney` and
+    **`pusd-shielded-pool` (the one standing exception)**. **`nito.cash` is
+    NEVER to be touched** — not commits, pushes, reverts, working-tree or
+    VM-mirror modifications; findings about their code go into handoff DOCS
+    in OUR repo only (the 2026-11-26 `8c0d941` push was a recorded
+    violation; the Nito team decides its fate — see
+    `docs/POOL-HANDOFF-2026-11-26-NITO-3OUT.md` §0). Every other repo:
+    hands off without explicit user instruction naming the action.
 
 ---
 
