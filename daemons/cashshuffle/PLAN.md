@@ -1,7 +1,7 @@
 <!-- daemons/cashshuffle/PLAN.md -->
 # CashShuffle daemon plan
 
-Status: M0 orchestration + M1 transport core + M2 round core. CS-1–CS-4 are implemented in `daemons/shared/src/nostr/` and covered by 40 shared tests; CS-5 is implemented as a state machine with 16 tests (the network loop is pending); CS-6–CS-12 are not started.
+Status: M0 orchestration + M1 transport core + M2 round core. CS-1–CS-4 are implemented in `daemons/shared/src/nostr/` and covered by 40 shared tests; CS-5 is implemented as a state machine with 16 tests (the network loop is pending); CS-6 selection/caps and CS-7 carrier/tag/pair/cost helpers are implemented; CS-8–CS-12 are not started.
 
 Owner key: **H** = Hush, **N** = Nito, **J** = joint.
 
@@ -14,8 +14,8 @@ Owner key: **H** = Hush, **N** = Nito, **J** = joint.
 | CS-3 | NIP-59 timestamp randomization (seal + gift wrap up to 2 days in the past) and `since = now - 172800 - 300` subscriptions | J | CS-2 | Round-trip and timestamp-window tests pass |
 | CS-4 | Relay pool: N relays, 80 ms per-connection outbox, dedupe by event id, reconnect/backoff, resubscribe, NIP-42 AUTH | H | CS-1 | Mock-relay tests pass; no network in unit tests |
 | CS-5 | Protocol engine: phases, `VERIFY` before `SIGNING`, signature verification, timeouts, blame, duplicate handling, round persistence | H | CS-4 | Unit tests; A2 malicious-coordinator test passes |
-| CS-6 | Wallet: equal-amount UTXO selection, BCH Schnorr 0x41 signing, broadcast, balance/caps | H | CS-4 | Chipnet P2PKH round-trip; A7 signature separation |
-| CS-7 | Role-2 pool adapter: tag pairs, blank acquisition, lock + action, atomic broadcast, VM-eval, off-chain note delivery | J | CS-6; Nito proving assets; Nito 3-input builder | A5 and A6 pass |
+| CS-6 | Wallet: equal-amount UTXO selection, BCH Schnorr 0x41 signing, broadcast, balance/caps | H | CS-4 | **selection/caps done** (5 tests); BCH signer and Electrum broadcast pending; A7 pending |
+| CS-7 | Role-2 pool adapter: tag pairs, blank acquisition, lock + action, atomic broadcast, VM-eval, off-chain note delivery | J | CS-6; Nito proving assets; Nito 3-input builder | **carrier/tag/pair/cost done** (7 tests); lock/action builder, VM-eval and A5/A6 pending |
 | CS-8 | Operations: hardened systemd, metrics endpoint, journald cap, backup/restore, runbook | H | CS-5, CS-6 | A9 hardening check passes |
 | CS-9 | 5-peer chipnet round with Nito browser peers | J | CS-5, CS-6 | A1 passes |
 | CS-10 | Malicious-coordinator negative test: coordinator presents a tx that omits a peer’s output | J | CS-5 | A2 passes; no signature; no broadcast |
@@ -24,7 +24,7 @@ Owner key: **H** = Hush, **N** = Nito, **J** = joint.
 
 ## 2. Task detail
 
-**Status 2026-11-25:** CS-1–CS-4 are implemented in `daemons/shared/src/nostr/` (40/40 shared tests). CS-5 is implemented in `cashshuffle/src/round.js` (16 round tests, including the malicious-coordinator case); the transport loop that drives `handleMessage()` is pending. CS-6–CS-12 remain.
+**Status 2026-11-25:** CS-1–CS-4 are implemented in `daemons/shared/src/nostr/` (40/40 shared tests). CS-5 is implemented in `cashshuffle/src/round.js` (16 round tests, including the malicious-coordinator case); the transport loop that drives `handleMessage()` is pending. CS-6 selection/funding/caps are implemented in `cashshuffle/src/wallet.js` (5 tests); the BCH signer and broadcast are pending. CS-7 carrier/tag/pair/cost helpers are implemented in `cashshuffle/src/pool.js` (7 tests); the lock/action builder and VM-eval are pending. CS-8–CS-12 remain.
 
 ### CS-1 — vendor pin
 

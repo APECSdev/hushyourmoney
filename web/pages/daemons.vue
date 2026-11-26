@@ -43,7 +43,7 @@ const DAEMONS = [
         id: '01',
         name: 'CashShuffle',
         subtitle: 'The equal-output shuffle',
-        status: 'M2 core · M3–M5 next',
+        status: 'M2–M4 partial · M5 next',
         badge: 'badge-mid',
         numClass: 'topic-lime',
         body: 'A permanent peer and possible coordinator for CashShuffle-over-Nostr. Equal inputs, onion-wrapped outputs, a verify-before-sign phase, and BCH Schnorr signatures. The first daemon milestone.',
@@ -128,7 +128,7 @@ const MATRIX = [
     },
     {
         dimension: 'status',
-        shuffle: 'M1–M2 cores; M3–M5 not started',
+        shuffle: 'M1–M2 done; M3–M4 partial; M5 not started',
         fusion: 'orchestration; M6 not started',
     },
 ]
@@ -145,7 +145,7 @@ const REAL_VS_PLANNED = [
         surface: 'Daemon process',
         state: 'planned',
         badge: 'badge-wait',
-        detail: 'src/main.js loads the config and exits with “not implemented”; the round, wallet and pool modules are stubs.',
+        detail: 'src/main.js loads the config and exits with “not implemented”; the round, wallet selection and pool helpers exist, but the network loop and BCH builders are pending.',
     },
     {
         surface: 'Nostr transport',
@@ -167,9 +167,9 @@ const REAL_VS_PLANNED = [
     },
     {
         surface: 'Pool-native batching',
-        state: 'design only',
-        badge: 'badge-wait',
-        detail: 'The tag-pair arithmetic is corrected in the plan; no lock/action builder exists in the daemon.',
+        state: 'helpers implemented',
+        badge: 'badge-mid',
+        detail: 'Carrier parse/build, tag, fuel-pair check and cost arithmetic are implemented and tested (7 tests). The BCH lock/action builder and VM-eval are pending.',
     },
     {
         surface: 'blackhost deployment',
@@ -234,8 +234,8 @@ const ROADMAP = [
     { id: 'M0', title: 'Orchestration', status: 'done', badge: 'badge-done', body: 'Tree, plans, acceptance, open questions, config/metrics, stubs, units. This commit.' },
     { id: 'M1', title: 'Shared transport', status: 'in progress', badge: 'badge-mid', body: 'Official NIP-44 v2 KDF/padding + nito-v0; NIP-59 timestamps; relay pool with 80 ms pacing, dedupe, reconnect, NIP-42; CashShuffle transport wrapper. 40 shared tests; Nito client mode pending.' },
     { id: 'M2', title: 'CashShuffle round', status: 'in progress', badge: 'badge-mid', body: 'Round state machine + VERIFY before SIGNING; 16 tests including the malicious-coordinator case. Network loop, wallet and A1/A2 end-to-end pending.' },
-    { id: 'M3', title: 'Wallet and liquidity', status: 'not started', badge: 'badge-wait', body: 'Equal-amount UTXO selection, BCH Schnorr 0x41, broadcast, caps, metrics.' },
-    { id: 'M4', title: 'Pool-native batching', status: 'not started', badge: 'badge-wait', body: 'Tag-pair lock builder, blank acquisition, atomic lock+action, VM-eval, off-chain note delivery.' },
+    { id: 'M3', title: 'Wallet and liquidity', status: 'in progress', badge: 'badge-mid', body: 'Equal-amount selection, funding selection and caps implemented (5 tests); BCH signer and Electrum broadcast pending.' },
+    { id: 'M4', title: 'Pool-native batching', status: 'in progress', badge: 'badge-mid', body: 'Carrier/tag/fuel-pair/cost helpers implemented (7 tests); lock/action builder and VM-eval pending.' },
     { id: 'M5', title: 'Operations', status: 'not started', badge: 'badge-wait', body: 'Hardened systemd, metrics endpoint, journald caps, backup/restore, 24 h soak.' },
     { id: 'M6', title: 'CashFusion', status: 'not started', badge: 'badge-wait', body: 'Six-phase round, measured constants, coordinator avoidance, G4 testnet.' },
     { id: 'M7', title: 'Production', status: 'not started', badge: 'badge-wait', body: 'Security review, mainnet opt-in beta, Gate 7 ceremony for the pool, Nito final approval.' },
@@ -414,7 +414,7 @@ const SOURCES = [
         </p>
 
         <div class="animate-rise mt-8 flex flex-wrap items-center justify-center gap-3" style="animation-delay: 0.5s">
-            <span class="status-chip status-lime">M1–M2 cores</span>
+            <span class="status-chip status-lime">M1–M4 partial</span>
             <span class="status-chip status-violet">not deployed</span>
             <span class="status-chip status-cyan">Nito final approval</span>
         </div>
@@ -735,6 +735,10 @@ const SOURCES = [
                 action, or each participant must contribute two equal inputs and receive two same-tag outputs.
             </p>
         </div>
+        <p class="reveal mt-4 text-sm leading-relaxed text-slate-200">
+            The carrier, tag, fuel-pair and cost helpers are implemented and tested (7 tests); the BCH
+            lock/action builder and the VM-eval are pending.
+        </p>
         <p class="reveal mt-3 font-mono text-xs text-slate-300">
             [source · docs/POOL-HANDOFF-2026-11-24-NITO-ROLE2-TAGGED.md §3–§4; pool-registry.json]
         </p>
@@ -745,12 +749,13 @@ const SOURCES = [
         <div class="reveal text-center">
             <p class="font-mono text-[0.8rem] uppercase tracking-[0.45em] text-lime-200">08 · the sequence</p>
             <h2 class="mt-5 font-display text-[clamp(1.9rem,5vw,3.4rem)] font-bold leading-[1.08] text-white">
-                M0 is done. M1–M2 cores are in progress.
+                M0 is done. M1–M4 are in progress.
             </h2>
             <p class="mx-auto mt-4 max-w-2xl text-base leading-relaxed text-slate-200">
-                The transport and round cores are implemented and tested; M3–M7 are not started. The roadmap is
-                ordered by dependency: transport, then round, then wallet, then the pool composition, then
-                operations, then CashFusion, then production.
+                The transport and round cores are implemented; the wallet selection and pool helpers are partial.
+                The BCH signer, lock/action builder, network loop and deployment remain. The roadmap is ordered by
+                dependency: transport, then round, then wallet, then the pool composition, then operations, then
+                CashFusion, then production.
             </p>
         </div>
 

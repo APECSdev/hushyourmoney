@@ -1,7 +1,7 @@
 <!-- daemons/cashshuffle/ACCEPTANCE.md -->
 # CashShuffle daemon acceptance
 
-Status: transport tests pass (40/40 shared) and the A2 unit test passes (16 round tests); the end-to-end gates A1–A10 are not started. Each test records the evidence listed in `daemons/CONVENTIONS.md` §8.
+Status: transport tests pass (40/40 shared), the A2 unit test passes (16 round tests), wallet selection/caps pass (5 tests) and the pool helpers pass (7 tests); the end-to-end gates A1–A10 are not started. Each test records the evidence listed in `daemons/CONVENTIONS.md` §8.
 
 ## A1 — 5-peer chipnet round
 
@@ -39,13 +39,13 @@ Status: transport tests pass (40/40 shared) and the A2 unit test passes (16 roun
 
 **Pass:** the daemon acquires blanks through the vending covenant at 1,000 sats each, or receives them from the operator; each lock spends exactly two blanks; the cap accounts for 2,000 sats of blank cost per action plus the 30,000 sats of action fuel plus the lock fee.
 
-**Evidence:** vending txids, blank inventory, cost ledger.
+**Evidence:** vending txids, blank inventory, cost ledger. **Current:** `actionCostSats()` and the fuel-pair check are implemented and tested; the vending/blank end-to-end run is pending.
 
 ## A7 — signature separation
 
 **Pass:** every BCH input verifies under BCH Schnorr with 0x41; every Nostr event verifies under BIP-340; a Nostr BIP-340 signature on a BCH input is rejected; a BCH signature on a Nostr event is rejected.
 
-**Evidence:** the verification vectors and the two negative tests.
+**Evidence:** the verification vectors and the two negative tests. **Current:** the BCH signer is pending; the Nostr BIP-340 tests pass.
 
 ## A8 — NIP-44 and NIP-59
 
