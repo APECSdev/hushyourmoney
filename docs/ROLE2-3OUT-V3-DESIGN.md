@@ -117,7 +117,7 @@ The 3-out witness generator is built (`role2-op-witness-3out.mjs`: three
 out-notes, `cm2`, the 201-B carrier, the 9-field actionHash). The Nito client
 3-out witness path is built and reproduces the live UNSHIELD byte-exactly
 (`pool-accept.mjs --pool role2-3out --txid ec31a41c`: fuel0 9,488 B / fuel1
-9,490 B / state 8,821 B); the store branch and UI, the 3-out blanks and the
+9,490 B / state 8,821 B); the store branch is wired; the UI, the 3-out blanks and the
 browser acceptance remain; the proving assets are live at
 `prover.nito.cash/assets/`. Measured on chipnet: SHIELD **28,326 B**,
 TRANSFER **28,389 B**, fee 30,000 sats (**1.059 / 1.057 sat/B**); the fuel
