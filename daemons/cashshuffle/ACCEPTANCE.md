@@ -1,7 +1,7 @@
 <!-- daemons/cashshuffle/ACCEPTANCE.md -->
 # CashShuffle daemon acceptance
 
-Status: transport tests pass (40/40 shared), the A2 unit test passes (16 round tests), wallet selection/caps pass (5 tests) and the pool helpers pass (7 tests); the end-to-end gates A1–A10 are not started. Each test records the evidence listed in `daemons/CONVENTIONS.md` §8.
+Status: transport tests pass (44/44 shared), the A2 unit test passes (16 round tests), wallet selection/caps pass (5 tests), the BCH P2PKH signer passes (4 tests) and the pool/lock/action helpers pass (7 tests); the end-to-end gates A1–A10 are not started. Each test records the evidence listed in `daemons/CONVENTIONS.md` §8.
 
 ## A1 — 5-peer chipnet round
 
@@ -31,7 +31,7 @@ Status: transport tests pass (40/40 shared), the A2 unit test passes (16 round t
 
 **Pass:** the round produces **two tagged fuel UTXOs per action** with the same tag. Five actions require **10 tagged fuel outputs**, not 5. The Nito client scans the outputs; every action passes the BCH-2026 VM in consensus and standard modes; the tags match `SHA256(nf0_LE ‖ nf1_LE)`.
 
-**Evidence:** the round tx, the tag values, the 10 outputs, the VM-eval report for every action, the Nito scan output.
+**Evidence:** the round tx, the tag values, the 10 outputs, the VM-eval report for every action, the Nito scan output. **Current:** the lock/action builders pass 7 tests; the proving assets, VM-eval and Nito scan are pending.
 
 **Correction:** the handoff’s “5 outputs → 5 actions” does not hold. One output per participant produces five distinct tags and zero pairs (`../nito.cash/apps/web/src/lib/pool/role2-action.js:56,75`; `role2-lock.js:6-9,86,106`).
 
@@ -39,13 +39,13 @@ Status: transport tests pass (40/40 shared), the A2 unit test passes (16 round t
 
 **Pass:** the daemon acquires blanks through the vending covenant at 1,000 sats each, or receives them from the operator; each lock spends exactly two blanks; the cap accounts for 2,000 sats of blank cost per action plus the 30,000 sats of action fuel plus the lock fee.
 
-**Evidence:** vending txids, blank inventory, cost ledger. **Current:** `actionCostSats()` and the fuel-pair check are implemented and tested; the vending/blank end-to-end run is pending.
+**Evidence:** vending txids, blank inventory, cost ledger. **Current:** `actionCostSats()`, the fuel-pair check and the lock builder are implemented and tested; the vending/blank end-to-end run is pending.
 
 ## A7 — signature separation
 
 **Pass:** every BCH input verifies under BCH Schnorr with 0x41; every Nostr event verifies under BIP-340; a Nostr BIP-340 signature on a BCH input is rejected; a BCH signature on a Nostr event is rejected.
 
-**Evidence:** the verification vectors and the two negative tests. **Current:** the BCH signer is pending; the Nostr BIP-340 tests pass.
+**Evidence:** the verification vectors and the two negative tests. **Current:** the BCH P2PKH signer passes 4 tests (`daemons/shared/test/p2pkh.test.js`); the end-to-end A7 run is pending.
 
 ## A8 — NIP-44 and NIP-59
 

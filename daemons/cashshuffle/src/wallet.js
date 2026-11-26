@@ -103,11 +103,15 @@ export class Wallet {
     return value
   }
 
-  async signP2pkhTransaction({ transaction, sourceOutputs, privateKey } = {}) {
-    if (typeof this.signer !== 'function') {
+  async signP2pkhTransaction({ transaction, sourceOutputs, inputs, outputs, privateKey, publicKey } = {}) {
+    if (typeof this.signer === 'function') {
+      return this.signer({ transaction, sourceOutputs, inputs, outputs, privateKey, publicKey })
+    }
+    if (!inputs || !outputs) {
       throw new Error('wallet: no BCH signer configured — M3 signing pending')
     }
-    return this.signer({ transaction, sourceOutputs, privateKey })
+    const { signP2pkhTransaction } = await import('../../shared/src/bch/p2pkh.js')
+    return signP2pkhTransaction({ inputs, outputs, privateKey, publicKey })
   }
 
   async broadcast(hex) {

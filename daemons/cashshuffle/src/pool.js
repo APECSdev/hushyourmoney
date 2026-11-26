@@ -12,6 +12,7 @@
 import { createHash } from 'node:crypto'
 
 export const ROLE2_CARRIER_BYTES = 169
+export const ROLE2_CARRIER_PREFIX = [0x6a, 0x4c, ROLE2_CARRIER_BYTES]
 export const ROLE2_FUEL_SATS = 15000n
 export const ROLE2_BLANKS_PER_LOCK = 2
 export const ROLE2_STATE_FLOAT_SATS = 10000n
@@ -108,6 +109,46 @@ export function buildCarrier({ nf0, nf1, cm0, cm1, newRoot, pv = 0n, sign = 0 } 
 
 export function depositTag(carrier) {
   return tagForCarrier(carrier)
+}
+
+function bigIntToLe32(value) {
+  const out = new Uint8Array(32)
+  let number = toBigInt(value, 'limb')
+  for (let index = 0; index < 32; index += 1) {
+    out[index] = Number(number & 0xffn)
+    number >>= 8n
+  }
+  return out
+}
+
+export function encodeRole2Carrier({ nf0, nf1, cm0, cm1, newRoot, pv = 0n, sign = 0 } = {}) {
+  return buildCarrier({
+    nf0: bigIntToLe32(nf0),
+    nf1: bigIntToLe32(nf1),
+    cm0: bigIntToLe32(cm0),
+    cm1: bigIntToLe32(cm1),
+    newRoot: bigIntToLe32(newRoot),
+    pv,
+    sign: Number(sign),
+  })
+}
+
+export function role2CarrierOutput(carrier) {
+  const bytes = toBytes(carrier, 'carrier')
+  if (bytes.length !== ROLE2_CARRIER_BYTES) {
+    throw new Error(`role2: carrier must be ${ROLE2_CARRIER_BYTES} bytes`)
+  }
+  const out = new Uint8Array(ROLE2_CARRIER_PREFIX.length + bytes.length)
+  out.set(ROLE2_CARRIER_PREFIX, 0)
+  out.set(bytes, ROLE2_CARRIER_PREFIX.length)
+  return out
+}
+
+export function readRole2CarrierOutput(lockingBytecode) {
+  const bytes = toBytes(lockingBytecode, 'lockingBytecode')
+  if (bytes.length !== ROLE2_CARRIER_PREFIX.length + ROLE2_CARRIER_BYTES) return null
+  if (bytes[0] !== 0x6a || bytes[1] !== 0x4c || bytes[2] !== ROLE2_CARRIER_BYTES) return null
+  return bytes.subarray(ROLE2_CARRIER_PREFIX.length)
 }
 
 function commitmentOf(nft) {

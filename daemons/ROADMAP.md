@@ -1,17 +1,17 @@
 <!-- daemons/ROADMAP.md -->
 # Daemon roadmap
 
-Status: M0 is done. M1 transport and M2 CashShuffle round cores are implemented and tested; M3 selection/caps and M4 carrier/tag/pair/cost helpers are implemented; the BCH signer, lock/action builder, network loop and deployment remain.
+Status: M0 is done. M1 transport and M2 CashShuffle round cores are implemented and tested; M3 selection/caps and the BCH P2PKH signer are implemented; M4 carrier/tag/pair/cost helpers and the lock/action builders are implemented; the Electrum broadcast, proving assets, VM-eval, note delivery, network loop and deployment remain.
 
 ## 1. Milestones
 
 | Milestone | Scope | Exit criteria | Depends on | Status |
 |---|---|---|---|---|
 | **M0 — orchestration** | Tree, plans, acceptance, open questions, config/metrics, stubs, units | `npm test` passes on the apecsdev VM; `git diff --check` clean; no build on this host | — | **done (this commit)** |
-| **M1 — shared transport** | Official NIP-44 v2 KDF/padding + `nito-v0` compatibility; NIP-59 timestamp tweaks; relay pool (N relays, 80 ms outbox, dedupe, reconnect, NIP-42) | Official NIP-44 vectors pass; mock-relay tests pass; no network in unit tests | Nito client mode decision (official vs `nito-v0`) | **core done** — 40 shared tests pass; client mode pending |
+| **M1 — shared transport** | Official NIP-44 v2 KDF/padding + `nito-v0` compatibility; NIP-59 timestamp tweaks; relay pool (N relays, 80 ms outbox, dedupe, reconnect, NIP-42) | Official NIP-44 vectors pass; mock-relay tests pass; no network in unit tests | Nito client mode decision (official vs `nito-v0`) | **core done** — 44 shared tests pass; client mode pending |
 | **M2 — CashShuffle round** | Protocol engine with `VERIFY` before `SIGNING`; signature verification; timeouts; blame; persistence | A1 (5-peer chipnet round) and A2 (malicious coordinator) pass | M1 | **core done** — 16 round tests; A1/A2 end-to-end and the network loop pending |
-| **M3 — wallet and liquidity** | Equal-amount UTXO selection; BCH Schnorr 0x41; broadcast; caps; metrics | A4 (10 rounds within cap) and A7 (signature separation) pass | M1 | **partial** — selection, funding and caps implemented (5 tests); BCH signer and Electrum broadcast pending |
-| **M4 — pool-native batching** | Tag-pair lock builder; blank acquisition; atomic lock+action; VM-eval; off-chain note delivery | A5 (pairs, correct count) and A6 (blank cost) pass | M3; Nito proving assets; Nito 3-input builder | **partial** — carrier/tag/fuel-pair/cost helpers implemented (7 tests); lock/action builder and VM-eval pending |
+| **M3 — wallet and liquidity** | Equal-amount UTXO selection; BCH Schnorr 0x41; broadcast; caps; metrics | A4 (10 rounds within cap) and A7 (signature separation) pass | M1 | **partial** — selection, funding, caps and BCH P2PKH signer implemented (9 tests); Electrum broadcast pending |
+| **M4 — pool-native batching** | Tag-pair lock builder; blank acquisition; atomic lock+action; VM-eval; off-chain note delivery | A5 (pairs, correct count) and A6 (blank cost) pass | M3; Nito proving assets; Nito 3-input builder | **partial** — carrier/tag/fuel-pair/cost helpers and lock/action builders implemented (7 tests); proving assets, VM-eval and note delivery pending |
 | **M5 — operations** | Hardened systemd; metrics endpoint; journald caps; backup/restore; 24 h soak | A3 (24 h uptime) and A9 (hardening) pass | M2, M3 | not started |
 | **M6 — CashFusion** | Six-phase round; constants; coordinator avoidance; G4 testnet | CF-A1–CF-A5 pass | M1, M5 | not started |
 | **M7 — production** | Security review; mainnet opt-in beta; Gate 7 ceremony for the pool | Nito final approval; Gate 7 record | all | not started |
@@ -20,7 +20,7 @@ Status: M0 is done. M1 transport and M2 CashShuffle round cores are implemented 
 
 | ID | Workstream | Owner | Output |
 |---|---|---|---|
-| W1 | Nostr transport | Hush + Nito | `shared/src/nostr/*` implemented; 40 tests pass; Nito client mode pending |
+| W1 | Nostr transport | Hush + Nito | `shared/src/nostr/*` implemented; 44 tests pass; Nito client mode pending |
 | W2 | CashShuffle protocol | Hush | `cashshuffle/src/round.js`, `VERIFY`, blame, persistence |
 | W3 | BCH wallet | Hush | `cashshuffle/src/wallet.js`, signing, broadcast, caps |
 | W4 | Role-2 pool composition | Hush + Nito | `cashshuffle/src/pool.js`, tag pairs, blanks, VM-eval |

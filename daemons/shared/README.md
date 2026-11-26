@@ -11,7 +11,7 @@
 | `src/metrics.js` | implemented | In-process counters and gauges; deterministic snapshots. |
 | `src/nostr/` | implemented | Event signing, NIP-44 (official + nito-v0), NIP-59, relay, relay pool. |
 | `src/cashshuffle/transport.js` | implemented | CashShuffle round transport: gift-wrapped packets over the relay pool. |
-| `src/bch/` | contract only | BCH Schnorr signing, UTXO selection, broadcast, role-2 helpers. |
+| `src/bch/` | partial | `p2pkh.js` implements BCH Schnorr signing; the role-2 lock/action builders live in `cashshuffle/src/role2-{lock,action}.js`. |
 
 ## 2. Vendor pin
 
@@ -99,9 +99,9 @@ Keys are sorted; labels are sorted inside the key. The snapshot is safe to log.
 
 ## 9. Test plan
 
-- `node --test shared/test/*.test.js` — 40 tests; no network.
+- `node --test shared/test/*.test.js` — 44 tests; no network.
 - Official NIP-44 vectors: `getConversationKey`, `getMessageKeys`, `calcPaddedLen`, encrypt/decrypt, long messages, invalid payloads.
 - NIP-59 round-trip, unsigned rumor, independent timestamps, two-day window, sender/recipient checks, `nito-v0` round-trip.
 - Mock relay: publish, quorum, dedupe, 80 ms pacing, reconnect/resubscribe, NIP-42 AUTH.
-- BCH signing vectors and a chipnet round-trip (M3).
+- BCH P2PKH signing vectors (4 tests; needs `@bitauth/libauth`) and a chipnet round-trip (M3).
 - Role-2 VM-eval fixtures (M4).

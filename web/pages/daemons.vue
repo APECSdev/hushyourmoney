@@ -145,19 +145,19 @@ const REAL_VS_PLANNED = [
         surface: 'Daemon process',
         state: 'planned',
         badge: 'badge-wait',
-        detail: 'src/main.js loads the config and exits with “not implemented”; the round, wallet selection and pool helpers exist, but the network loop and BCH builders are pending.',
+        detail: 'src/main.js loads the config and exits with “not implemented”; the round, wallet selection, BCH P2PKH signer, pool helpers and lock/action builders exist, but the network loop and Electrum broadcast are pending.',
     },
     {
         surface: 'Nostr transport',
         state: 'implemented',
         badge: 'badge-done',
-        detail: 'Shared transport: official NIP-44 v2 KDF/padding passes the official `nip44.vectors.json`; nito-v0 preserves the Nito wire; NIP-59 timestamps; relay pool with 80 ms pacing, dedupe, reconnect and NIP-42; CashShuffle transport wrapper. 40 shared tests.',
+        detail: 'Shared transport: official NIP-44 v2 KDF/padding passes the official `nip44.vectors.json`; nito-v0 preserves the Nito wire; NIP-59 timestamps; relay pool with 80 ms pacing, dedupe, reconnect and NIP-42; CashShuffle transport wrapper. 44 shared tests.',
     },
     {
         surface: 'CashShuffle round',
         state: 'core implemented',
         badge: 'badge-mid',
-        detail: 'Round state machine + VERIFY before SIGNING; 16 tests including the malicious-coordinator case. The network loop, wallet and end-to-end A1/A2 are pending.',
+        detail: 'Round state machine + VERIFY before SIGNING; 16 tests including the malicious-coordinator case. The network loop, Electrum broadcast and end-to-end A1/A2 are pending.',
     },
     {
         surface: 'CashFusion round',
@@ -167,9 +167,9 @@ const REAL_VS_PLANNED = [
     },
     {
         surface: 'Pool-native batching',
-        state: 'helpers implemented',
+        state: 'builders implemented',
         badge: 'badge-mid',
-        detail: 'Carrier parse/build, tag, fuel-pair check and cost arithmetic are implemented and tested (7 tests). The BCH lock/action builder and VM-eval are pending.',
+        detail: 'Carrier/tag/fuel-pair/cost helpers and the lock/action builders are implemented and tested (7 tests). Proving assets, VM-eval and note delivery are pending.',
     },
     {
         surface: 'blackhost deployment',
@@ -232,10 +232,10 @@ const POOL_FACTS = [
 /* ── Roadmap ──────────────────────────────────────────────────────── */
 const ROADMAP = [
     { id: 'M0', title: 'Orchestration', status: 'done', badge: 'badge-done', body: 'Tree, plans, acceptance, open questions, config/metrics, stubs, units. This commit.' },
-    { id: 'M1', title: 'Shared transport', status: 'in progress', badge: 'badge-mid', body: 'Official NIP-44 v2 KDF/padding + nito-v0; NIP-59 timestamps; relay pool with 80 ms pacing, dedupe, reconnect, NIP-42; CashShuffle transport wrapper. 40 shared tests; Nito client mode pending.' },
-    { id: 'M2', title: 'CashShuffle round', status: 'in progress', badge: 'badge-mid', body: 'Round state machine + VERIFY before SIGNING; 16 tests including the malicious-coordinator case. Network loop, wallet and A1/A2 end-to-end pending.' },
-    { id: 'M3', title: 'Wallet and liquidity', status: 'in progress', badge: 'badge-mid', body: 'Equal-amount selection, funding selection and caps implemented (5 tests); BCH signer and Electrum broadcast pending.' },
-    { id: 'M4', title: 'Pool-native batching', status: 'in progress', badge: 'badge-mid', body: 'Carrier/tag/fuel-pair/cost helpers implemented (7 tests); lock/action builder and VM-eval pending.' },
+    { id: 'M1', title: 'Shared transport', status: 'in progress', badge: 'badge-mid', body: 'Official NIP-44 v2 KDF/padding + nito-v0; NIP-59 timestamps; relay pool with 80 ms pacing, dedupe, reconnect, NIP-42; CashShuffle transport wrapper. 44 shared tests; Nito client mode pending.' },
+    { id: 'M2', title: 'CashShuffle round', status: 'in progress', badge: 'badge-mid', body: 'Round state machine + VERIFY before SIGNING; 16 tests including the malicious-coordinator case. Network loop, Electrum broadcast and A1/A2 end-to-end pending.' },
+    { id: 'M3', title: 'Wallet and liquidity', status: 'in progress', badge: 'badge-mid', body: 'Equal-amount selection, funding selection and caps implemented (5 tests); BCH P2PKH signer implemented (4 tests); Electrum broadcast pending.' },
+    { id: 'M4', title: 'Pool-native batching', status: 'in progress', badge: 'badge-mid', body: 'Carrier/tag/fuel-pair/cost helpers and lock/action builders implemented (7 tests); proving assets, VM-eval and note delivery pending.' },
     { id: 'M5', title: 'Operations', status: 'not started', badge: 'badge-wait', body: 'Hardened systemd, metrics endpoint, journald caps, backup/restore, 24 h soak.' },
     { id: 'M6', title: 'CashFusion', status: 'not started', badge: 'badge-wait', body: 'Six-phase round, measured constants, coordinator avoidance, G4 testnet.' },
     { id: 'M7', title: 'Production', status: 'not started', badge: 'badge-wait', body: 'Security review, mainnet opt-in beta, Gate 7 ceremony for the pool, Nito final approval.' },
@@ -736,8 +736,8 @@ const SOURCES = [
             </p>
         </div>
         <p class="reveal mt-4 text-sm leading-relaxed text-slate-200">
-            The carrier, tag, fuel-pair and cost helpers are implemented and tested (7 tests); the BCH
-            lock/action builder and the VM-eval are pending.
+            The carrier, tag, fuel-pair and cost helpers and the BCH lock/action builders are implemented and
+            tested (7 tests); the proving assets, VM-eval and note delivery are pending.
         </p>
         <p class="reveal mt-3 font-mono text-xs text-slate-300">
             [source · docs/POOL-HANDOFF-2026-11-24-NITO-ROLE2-TAGGED.md §3–§4; pool-registry.json]
@@ -753,7 +753,7 @@ const SOURCES = [
             </h2>
             <p class="mx-auto mt-4 max-w-2xl text-base leading-relaxed text-slate-200">
                 The transport and round cores are implemented; the wallet selection and pool helpers are partial.
-                The BCH signer, lock/action builder, network loop and deployment remain. The roadmap is ordered by
+                The Electrum broadcast, network loop, proving assets, VM-eval and deployment remain. The roadmap is ordered by
                 dependency: transport, then round, then wallet, then the pool composition, then operations, then
                 CashFusion, then production.
             </p>

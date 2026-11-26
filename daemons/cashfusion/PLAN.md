@@ -13,7 +13,7 @@ Owner key: **H** = Hush, **N** = Nito, **J** = joint.
 | CF-2 | Constants and fee model: 5-party 10/10, 1,760 B, 5,000 sats; 7-party 14/14; 80 ms pacing; `MIN_PARTICIPANTS=5` | H | CF-1 | Fixture test matches the measured constants |
 | CF-3 | Coordinator policy: `avoid` by default; `rotate` and `allow` explicit; the election check aborts when the policy forbids the role | H | CF-1 | Unit tests for all three policies |
 | CF-4 | Wallet and transaction assembly: BCH Schnorr 0x41, verify-before-sign, fee cap, broadcast | H | shared wallet (M3) | Chipnet round-trip; negative verify-before-sign test |
-| CF-5 | Reuse the shared relay pool; no fork of the transport | H | M1 | **done** — `daemons/shared/src/nostr/relay-pool.js`, 40 shared tests |
+| CF-5 | Reuse the shared relay pool; no fork of the transport | H | M1 | **done** — `daemons/shared/src/nostr/relay-pool.js`, 44 shared tests |
 | CF-6 | G4 testnet: 5-party and 7-party rounds on chipnet with Nito peers | J | CF-2, CF-4 | CF-A1, CF-A2, CF-A5 |
 | CF-7 | Mainnet opt-in beta (G4) | H | CF-6; explicit operator sign-off | CF-A7 |
 | CF-8 | Nito final approval | N | CF-6 | Written approval in `ACCEPTANCE.md` |

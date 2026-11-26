@@ -1,7 +1,7 @@
 <!-- daemons/shared/src/nostr/README.md -->
 # Nostr transport contract
 
-Status: implemented in `src/nostr/`; 40 shared tests pass (M1).
+Status: implemented in `src/nostr/`; 44 shared tests pass (M1).
 
 Reference: `../nito.cash/apps/web/src/lib/nostr/` and `../nito.cash/apps/web/src/lib/cashshuffle/transport.js`.
 
@@ -68,4 +68,4 @@ The official vectors are in `https://github.com/paulmillr/nip44` (`nip44.vectors
 - NIP-59 round-trip, unsigned rumor, independent timestamps, sender/recipient checks, two-day window.
 - Mock relay: publish, quorum, dedupe, 80 ms pacing, reconnect/resubscribe, AUTH challenge.
 - No live relay in unit tests; live relay tests are opt-in integration tests.
-- Current shared suite: 40/40.
+- Current shared suite: 44/44.

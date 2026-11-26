@@ -1,7 +1,7 @@
 <!-- daemons/shared/src/bch/README.md -->
 # BCH wallet contract
 
-Status: contract only. The implementation lands in M3 (W3).
+Status: P2PKH signing implemented in `p2pkh.js` (4 tests); the role-2 lock/action builders are implemented in `cashshuffle/src/role2-{lock,action}.js` (7 tests).
 
 Reference: `../nito.cash/apps/web/src/lib/bch/crypto.js`, `../nito.cash/apps/web/src/lib/pool/role2-lock.js`, `../nito.cash/apps/web/src/lib/pool/role2-action.js`.
 
@@ -9,6 +9,7 @@ Reference: `../nito.cash/apps/web/src/lib/bch/crypto.js`, `../nito.cash/apps/web
 
 - BCH Schnorr with `SIGHASH_ALL|FORKID` (0x41).
 - 64-byte signature followed by the 0x41 sighash byte.
+- `p2pkh.js` implements `buildP2pkhTransaction`, `signP2pkhInput`, `signP2pkhTransaction`, `encodeTransactionToHex` and `estimateByteCount` with `@bitauth/libauth`.
 - Do not reuse the Nostr BIP-340 signer. `AGENTS.md:238` records “BCH Schnorr ≠ final BIP-340.”
 - P2PKH signing uses `@bitauth/libauth` `generateSigningSerializationBCH` + `signMessageHashSchnorr`, matching `../nito.cash/apps/web/src/lib/bch/crypto.js:221-257`.
 - The source output value is part of the signing serialization; every source output is cross-checked against chain data before signing.
@@ -37,6 +38,7 @@ Reference: `../nito.cash/apps/web/src/lib/bch/crypto.js`, `../nito.cash/apps/web
 - `TXINPUTCOUNT == 3` and `TXOUTPUTCOUNT == 2 + sign`.
 - The lock and action broadcast atomically; the action spends the lock’s unconfirmed outputs.
 - Every action is evaluated in `createVirtualMachineBch2026(false)` (consensus) and `(true)` (standard) before broadcast; any error rejects.
+- Implemented: `cashshuffle/src/role2-lock.js` (signed lock) and `cashshuffle/src/role2-action.js` (3-input action with injected unlockings).
 
 ## 5. Fees
 
