@@ -94,8 +94,14 @@ bugs. Two more are not in that list:
    procedure is required.
 2. **Two unspent pool notes.** `pool.js:422-429` requires two unspent notes for
    every action, including SHIELD. Wallet A has no `480e30ff…` notes. The SHIELD
-   throws before the proof. The role-2 SHIELD needs two dummy/bootstrap notes;
-   the registry has `bootstrapNotes`, but the store does not seed them.
+   throws before the proof. The role-2 SHIELD needs two **unspent, private**
+   notes. The registry's `bootstrapNotes` are the pool's once-only genesis pair
+   (leaves 0/1, `nk = 1`, value 0); the first SHIELD `9d9aa97a…` carrier carries
+   their nullifiers, so they are **spent**. Reusing them is a value-0
+   double-spend and gives the SHIELD a **public fuel tag**
+   (`SHA256(nf0_LE ‖ nf1_LE)`), which defeats the deposit-tag author binding.
+   Hush will pre-seed wallet A with two private notes from the pool's 750,000
+   balance via a Hush-side SHIELD; the browser SHIELD then uses those notes.
 
 Also still open from the prior review: the old local zkey default
 (`prover.js:177` / store `generateProof(witness)`), the incomplete
