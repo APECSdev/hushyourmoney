@@ -25,6 +25,10 @@ updated with the measured/deployed record. The 2-out generation is
 byte-identical (the hooked 2-out program still hashes `d71851a1…`), so the live
 2-out pool and its tooling are unaffected.
 
+**Session commits:** `hushyourmoney` `21c799e` (docs/site/handoff); 
+`pusd-shielded-pool` `5f645c3` (3-out tooling + evidence). The Hub image
+`a49aa80c…` predates the 21/21 + 69/69 text updates — rebuild pending.
+
 ### Hosts / paths (continue here)
 
 - VM: `ssh apecsdev`; node is `/home/apecs/bin/node` (`export PATH=/home/apecs/bin:$PATH`).
