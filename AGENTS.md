@@ -14,6 +14,69 @@
 - Make ample use of figures and diagrams when documenting or discussing technical designs and implementations (ASCII/Mermaid in repo docs; rendered diagrams on the site).
 - Published technical claims must satisfy the verification contract (file path, command output, or cited source). Where a quantity has not been measured, mark it UNMEASURED rather than estimating.
 
+## CURRENT HANDOFF — 2026-11-26 SESSION END (3-out v3 measured + 1-of-1 setup + site Notes Management; sweep/pre-seed done; Nito/Flux external)
+
+**Where we are:** the 3-out circuit is measured and the 1-of-1 setup is built; the first 3-out proof is generated; the research pages carry the new `#notes-management` section; the `3db76294` sweep and the one-note pre-seed are on chain. The next session continues at the **3-out verifier program + 201-B hook + 3-out tests**, then the **new pool/migration**, **Nito re-run** and **Flux owner update**.
+
+### Commits / artifacts
+
+- `hushyourmoney`: `0a9bf64` (site Notes Management/3-out), `27afb72` (3-out v3 design), `66e55fc` (nito correction), `07231d6` (browser-acceptance review), `1690daf` (nito review assessment), `1cb362b` (tPUSD funding execution).
+- `pusd-shielded-pool`: `15fa8c7` (`circuits/pool3.circom`, 3-out, 184,528 constraints).
+- apecsdev: `/home/apecs/zkb/pusd-shielded-pool/role2-op-witness-3out.mjs`; `/home/apecs/cov/role2-op-3out.json`; `/home/apecs/cov/role2-op-sweep.json`; `/home/apecs/cov/role2-op-preseed.json`; `/home/apecs/cov/role2-pool-state.json`; `/home/apecs/.secrets/wallet-a-role2-demo.json`.
+- apecsdev `build3`: `pool3_final.zkey` 94M sha256 `b0177dbe…`; `verification_key.json` sha256 `d4ed12ee…` (groth16/bn128, nPublic 2, IC 3); `pool3_js/pool3.wasm` sha256 `c806e561…`; `ZKey Ok!`.
+- Site image `e66931fe3f24`; Hub digest `sha256:e66931fe3f24d5b68e4ca312ebb31ae4d9a42312d78fe0eb77c3df1dedfe434d`; **Flux pending** (owner action).
+
+### Measured 3-out
+
+- **184,528 constraints** (+1,056, **+0.58%** vs 183,472); 2 public inputs; 112 private inputs; 20.2 s compile; r1cs 39,449,264 B; wasm 3,380,815 B.
+- Carrier 169 → **201 B**; actionHash 8 → **9 fields** (`cm2`); action +32 B; 2-public-input verifier contract unchanged.
+- 1-of-1 setup: VK `d4ed12ee…`, zkey `b0177dbe…`, wasm `c806e561…`.
+- First 3-out proof: SHIELD 1,000; out **1,000 + 1,000 + 749,000**; 24.6 s; n0 `114091472811634701…` (pool root); n1 `286879498211432437…`.
+- **NOT built:** the 3-out verifier program under the new VK, the 201-B role-2 hook, the 9-field actionHash in the hook, the 3-out acceptance/red-team/sweep, the new 3-out pool and the migration. The Gate 7 MPC is pending.
+
+### On-chain state (chipnet)
+
+- **Sweep `3db76294…`**: tx `7aee678086af56cc051eb5a94778aee2317d2b127388c7110ecce1d132a3a55a`; 1,000 FT + 30,000 fuel sats recovered; state 760,400 → 761,400; the only public-bootstrap-tagged lock is gone.
+- **One-note pre-seed**: lock `d95e5b974c114411338144399646003d5297a074704ac6930acfff8698704bed`; action `a722ef3b46cebd7c944bd4e545a6e4d61e40302caa174c26ee2b06794e7cb710`; **wallet A 450,600 FT**; **Hush 300,400 FT**; state 762,400; root `322465373188763017…`; notes 44=600, 45=400, 46=450,600, 47=300,400. The `pool-op` log: “next op needs an actionInputs refill”.
+- **Wallet A**: 450,600 note at tree 46; 2 blanks at `7ece13fce91c…`; the Nito sealed store needs the Hush 300,400 note imported as the second in-note.
+- **Four stuck locks**: `10f26fa3…`, `1946084e…`, `c3e21c7a…`, `dff42ddb…` (1,200 FT + 120,000 sats); their notes are lost; not recoverable.
+- **Nito browser acceptance** (before the sweep/pre-seed): SHIELD `1ca58773…`; TRANSFER `50644d00…`; UNSHIELD `f52008f4…`; state 760,400; wallet A 19,986,800 + 600; the 400 FT transfer note is **undelivered**.
+- Operator last measured: 42 blanks / 7,123 plain (re-check; the sweep/pre-seed did not use the operator; wallet A holds 2 blanks).
+
+### Site
+
+- `web/pages/research/shielded-pool.vue` has the new `#notes-management` section: 3-out measured, 1-of-1 setup, 201-B carrier, 9-field actionHash, browser acceptance, 400 FT undelivered, four stuck/one public lock, deposit/nullifier/note-delivery core, migration.
+- Updated: `web/pages/research/index.vue`, `bn254.vue`, `bls12-381.vue`, `playground.vue`, `daemons.vue`.
+- Site image `e66931fe3f24`; Hub `sha256:e66931fe3f24…`; all six changed SFCs OK; `/research`, `/research/shielded-pool`, `/research/bn254`, `/playground`, `/daemons` all 200; markers present.
+- **Flux pending**: the owner (`1JmYudcWEfTPNURBQZ2vDaxMKwNNVnexxR`) must update/redeploy from the Flux dashboard; no owner credential exists on blackhost.
+
+### Next session order
+
+1. Build the 3-out verifier program under the new VK (`BN_VK_FIXTURES`); extend the role-2 hook to the 201-B carrier and 9-field actionHash; run the 3-out acceptance, red-team and sweep.
+2. Deploy the 3-out demo pool; migrate the Hush 750,000/762,400 notes and wallet A notes.
+3. Gate 7 MPC; deposit path; real nullifier set; encrypted note delivery.
+4. Nito re-run (external): import the Hush 300,400 note into wallet A’s sealed store; browser SHIELD → TRANSFER → UNSHIELD; Nito final approval.
+5. Flux owner update (external): image `e66931fe3f24`; owner dashboard; no credential on blackhost.
+6. Re-check operator counts, wallet A 2 blanks, state `actionInputs` (refill needed), and the new pool/migration.
+
+### Hosts
+
+- **apecsdev**: 888 GB free; `build3` (new VK/zkey/wasm); the 3-out witness; `ppot_0080_18.ptau` 289M; `build3` r1cs 39M; the site build.
+- **blackhost**: 4.0 GB free after housekeeping; the daemons test; `snarkjs` at `/root/apps/nito.cash/apps/web/node_modules/.bin/snarkjs`; node v22.
+
+### Security
+
+- The demo wallets/keys are public; the user directed rotation after the objectives. Wallet A 450,600 and Hush 300,400 are demo funds.
+- The 1-of-1 setup is demo-only; the Gate 7 MPC is mandatory for mainnet.
+- The Nito client is the final approval; the Flux owner is the only Flux actor.
+
+### Sources
+
+- `docs/ROLE2-3OUT-V3-DESIGN.md`; `docs/ROLE2-BROWSER-ACCEPTANCE-HANDOFF-2026-11-26.md`; `docs/ROLE2-BROWSER-ACCEPTANCE-REVIEW-2026-11-26.md`; `docs/ROLE2-BROWSER-ACCEPTANCE-REVIEW-RESPONSE-2026-11-26.md`; `docs/ROLE2-TPUSD-FUNDING-EXECUTION-2026-11-26.md`; this `AGENTS.md`.
+- `pusd-shielded-pool/circuits/pool3.circom`; `wip-role2-hook/`; `groth16_cashscript/chunked/bn254/bn-native-sound/`.
+
+---
+
 ## CURRENT HANDOFF — 2026-11-26 (daemons M1–M4 cores + the 2N CashShuffle round implemented; M2–M4 partial; Nito answered the handoff; no daemon running)
 
 **Status:** the daemon cores and the pool-native 2N CashShuffle round are implemented and tested; no daemon is running, deployed, or funded. The 2026-11-24 shielded-pool handoff below remains current for the pool.
@@ -436,6 +499,7 @@ still stand.**
 - Live Flux check through `https://hushyourmoney.com/api/electrum`: one transient 500 said available clients `1` were below required confidence `2`; later `blockchain.scripthash.listunspent` returned 3/3 and `blockchain.scripthash.get_history` returned 3/3 with real chain data. Re-probe before editing the server list.
 
 ### Release log
+- **2026-11-26 (3-out v3 measured + 1-of-1 setup + site Notes Management; sweep/pre-seed done)**: the 3-out circuit `pusd-shielded-pool/circuits/pool3.circom` is **184,528 constraints** (+1,056, +0.58%) with 2 public inputs and 112 private inputs; the 1-of-1 setup is `build3/pool3_final.zkey` 94M sha256 `b0177dbe…`, VK sha256 `d4ed12ee…` (nPublic 2, IC 3), wasm sha256 `c806e561…`; the first 3-out proof is `role2-op-3out.json` (SHIELD 1,000; out 1,000+1,000+749,000; 24.6 s; n0 `114091…`, n1 `286879…`). The site research pages carry the `#notes-management` section and the 3-out/browser-acceptance updates; image `e66931fe3f24` → Hub `sha256:e66931fe3f24…`; **Flux pending**. The `3db76294` sweep is `7aee6780…` (1,000 FT + 30,000 sats; state 760,400 → 761,400); the one-note pre-seed is lock `d95e5b97…` + action `a722ef3b…` (wallet A 450,600; Hush 300,400; state 762,400; notes 44=600, 45=400, 46=450,600, 47=300,400). The 3-out verifier program, 201-B hook, 3-out tests, new pool, migration, Gate 7, deposit/nullifier/note delivery are **not built**. Nito re-run and Flux owner update are external.
 - **2026-11-26 (role-2 v3 — 1-of-1 demo setup + research pages/Notes Management):** the 3-out circuit `pusd-shielded-pool/circuits/pool3.circom` is **184,528 constraints** (+1,056, +0.58%) with 2 public inputs and 112 private inputs. The **1-of-1 demo setup** is built on apecsdev: `build3/pool3_final.zkey` 94M sha256 `b0177dbe…`, `build3/verification_key.json` sha256 `d4ed12ee…` (groth16/bn128, nPublic 2, IC 3), `build3/pool3_js/pool3.wasm` sha256 `c806e561…`; `ZKey Ok!`. The new MPC (Gate 7), the 201-B role-2 hook, the 9-field actionHash, the 3-out witness and the Nito client path are NOT built. The site research pages are updated: `web/pages/research/shielded-pool.vue` gained the `#notes-management` section (3-out measured, deposit path, nullifier set, note delivery, browser acceptance, four stuck/one public, migration); the stats/results/pools/role-2/limits/docs/FAQ were updated; the hub, BN254, BLS12-381, playground and daemons pages carry the 3-out/browser-acceptance changes. Site image `e66931fe3f24`; Hub digest `sha256:e66931fe3f24d5b68e4ca312ebb31ae4d9a42312d78fe0eb77c3df1dedfe434d`; **Flux pending** (owner action). The demo sweep of `3db76294…` and the one-note pre-seed remain pending.
 - **2026-11-26 (role-2 v3 — 3-output circuit measured; design doc):** the user chose the 3-out as the more robust note-management layer. `pusd-shielded-pool/circuits/pool3.circom` compiles on apecsdev (circom 2.2.3): **184,528 constraints** (+1,056, +0.58% vs 183,472), 2 public inputs, 112 private inputs, 20.2 s, r1cs 39,449,264 B, wasm 3,380,815 B; the carrier grows 169→201 B; the actionHash grows 8→9 fields (`cm2`); the action grows +32 B. The design `docs/ROLE2-3OUT-V3-DESIGN.md` covers the 3-out as the note-management layer plus the deposit path (onboarding), the nullifier set (double-spend), encrypted note delivery, the new MPC (Gate 7), the new verifier/hook/client, the migration and the community presentation. The 3-out is not a substitute for onboarding/nullifier/delivery; the new setup is the cryptographic gate; the new verifier/hook/client are the engineering work. The demo sweep of `3db76294…` and the one-note pre-seed remain pending. No web/image change.
 - **2026-11-26 (role-2 browser acceptance — Nito handoff PASSED on chain, Hush review finds the acceptance not clean)**: Nito handoff `docs/ROLE2-BROWSER-ACCEPTANCE-HANDOFF-2026-11-26.md` (commit `3f90bbf`) reports the full lifecycle through the nito.cash browser UI: SHIELD `1ca58773…` (27,773 B), TRANSFER `50644d00…` (28,157 B), UNSHIELD `f52008f4…` (28,036 B); state `f52008f4…:1` 760,400 FT; payout `:2` 1,000 sats/600 FT to wallet A; wallet A 19,986,800 + 600 FT, 128,323 plain, 0 blanks; pool history 48; registry `walletProverCompatible: true` at `056a2c7`; CI `45821771332` green. **Hush review `docs/ROLE2-BROWSER-ACCEPTANCE-REVIEW-2026-11-26.md`:** the final SHIELD reused the public bootstrap notes; five failed-run locks remain at the pool address (**2,200 FT + 150,000 fuel sats**): only `3db76294…` carries the public bootstrap tag (1,000 FT + 30,000 sats; sweepable); the other four (`10f26fa3…`, `1946084e…`, `c3e21c7a…`, `dff42ddb…`) carry the lost notes' private tags (1,200 FT + 120,000 sats; stuck, not stealable); the TRANSFER's 400 FT recipient note is **undelivered** (the 169-B carrier cannot carry it); the failed deposits are **12,600**, not the handoff's ≈9,000; the operator counts are stale (42 blanks / 7,123 plain, not 48 / ~5,000); the lock txids are truncated; the registry comment is stale; the mirror hashes are not pinned. **Next:** Nito sweeps the standing locks and stops using `bootstrapNotes`; Hush pre-seeds wallet A with two private notes; Nito re-runs the acceptance with private in-notes; Nito adds off-chain note delivery; pins the role-2 mirror hashes; refreshes the counts and lock txids. The nullifier-set service is the long-term fix. No web/image change.
