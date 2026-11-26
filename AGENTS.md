@@ -64,9 +64,12 @@ verified at chipnet tip 348,776):**
   a note. Final state: root `1728493034…`, balance **700 FT**, notes
   **112/84/84/20/200/100/100**, **17 leaves**, state outpoint
   `cbfb0503…:1`, `actionInputs: []`.
-- **Wallet A after the two actions:** **10 blanks**; one more demo-token UTXO
-  burned for fees (`07a020e92df6…`, tx `21ccad44…`, 59,630 sats; **DEMO
-  ONLY**) — four 60,000-sat demo-token UTXOs remain as fee reserve.
+- **Wallet A after the two actions:** **4 plain UTXOs / 61,928 sats**, **8
+  blanks**, 99,999,300 FT; one more demo-token UTXO burned for fees
+  (`07a020e92df6…`, tx `21ccad44…`, 59,630 sats; **DEMO ONLY**) — **four**
+  60,000-sat demo-token UTXOs remain as fee reserve. The next lock is NOT
+  fundable as it stands (a transfer refill needs 32,400 sats from
+  `plain[0] + 2 blanks`; the largest plain UTXO is 28,153).
 - **Still open:** the Nito UI pool selector + browser acceptance, the v3 core,
   Gate 7 and the migration. Nothing on the 3-out note-management layer itself.
 - **Site releases this session (two):** first image **`34524b4db756`**, Hub

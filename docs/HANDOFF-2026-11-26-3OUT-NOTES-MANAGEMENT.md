@@ -744,8 +744,13 @@ Two more demo-token UTXOs were burned to fund the actions (DEMO ONLY):
 `0717e1a1d4db…` was used in §10.1; this session added
 `07a020e92df6…` — tx
 `21ccad44a248ebb72fb950973694b765fd2de38722933788fec8e64691333085`,
-59,630 sats recovered. Wallet A now holds **10 blanks** and the remaining plain
-sats; four 60,000-sat demo-token UTXOs remain as fee reserve.
+59,630 sats recovered.
+
+**Wallet A after both actions (tip 348,793):** **4 plain UTXOs / 61,928
+sats**, **8 blanks** (12 − 2 − 2), 99,999,300 FT. Four 60,000-sat demo-token
+UTXOs remain as fee reserve. **The next lock is NOT fundable as it stands** —
+a transfer refill needs `plain[0] + 2 blanks ≥ 32,400` and the largest plain
+UTXO is 28,153 sats; recover sats first (§1 tooling).
 
 ### 11.6 Explorer links (Selene primary, all HTTP 200)
 

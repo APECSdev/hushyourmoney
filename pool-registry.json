@@ -90,13 +90,18 @@
       },
       "walletState": {
         "address": "bchtest:qzzu85xnl99u534d9z40yu7c494hknppx5lu29gl8t",
-        "plainUtxos": 3,
-        "plainSats": 61054,
-        "blanks": 12,
+        "plainUtxos": 4,
+        "plainSats": 61928,
+        "largestPlainUtxo": 28153,
+        "blanks": 8,
         "ft": "99999300",
+        "demoTokenReserve": "4 UTXOs of 20,000,000 units at 60,000 sats each (fee reserve; DEMO ONLY)",
         "satsRecoveryTxid": "3b7838c7d61589411caaebbd9ff9c39b75351eb3987ba830850984f6e2d53567",
         "satsRecoveryNote": "burned one 20,000,000 demo token UTXO of 0717e1a1d4db... (60,000 sats) by omission - DEMO ONLY; recovered 59,630 sats",
-        "nextActionFundable": true
+        "satsRecoveryTxid2": "21ccad44a248ebb72fb950973694b765fd2de38722933788fec8e64691333085",
+        "satsRecoveryNote2": "burned one 20,000,000 demo token UTXO of 07a020e92df6... (60,000 sats) by omission - DEMO ONLY; recovered 59,630 sats (funded the zero-dummy actions)",
+        "nextActionFundable": false,
+        "nextActionNote": "a transfer refill needs plain[0] + 2 blanks >= 32,400 sats; the largest plain UTXO is 28,153 - recover sats first"
       },
       "notes": "3-out demo deployed 2026-11-26 runner-free from the apecsdev VM with wallet A. FIVE confirmed actions: SHIELD -> TRANSFER -> UNSHIELD -> zero-value-dummy TRANSFER (out 400+20+0) -> the zero note SPENT as an in-note (out 200+100+100); every input VM-ACCEPTED consensus+standard. The zero-value dummy is therefore MEASURED both ways: a 2-out flow through the 3-out circuit, and the dummy as a real spendable tree member (not a dead leaf). Demo only: 1-of-1 setup, public bootstrap in-notes on the first action (indices 0/1), no real nullifier set, no encrypted note delivery; Gate 7 is the mainnet gate. The Nito client 3-out witness path is built and byte-exact against the live UNSHIELD; the store branch is wired (poolId + outs=3). 3-out BLANKS are now permissionless (vending loaded, first stranger buy confirmed 2026-11-26). Still open: the Nito UI pool selector and the browser acceptance (walletProverCompatible stays false until it passes).",
       "clientHandoff": "docs/ROLE2-3OUT-V3-DESIGN.md"
