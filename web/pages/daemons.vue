@@ -751,7 +751,7 @@ const SOURCES = [
         </div>
         <p class="reveal mt-4 text-sm leading-relaxed text-slate-200">
             The carrier, tag, fuel-pair and cost helpers and the BCH lock/action builders are implemented and
-            tested (14 tests: 7 pool + 7 lock/action); the proving-asset acceptance, VM-eval and note delivery are pending.
+            tested (14 tests: 7 pool + 7 lock/action); the web-platform acceptance, VM-eval and note delivery are pending.
         </p>
         <p class="reveal mt-3 font-mono text-xs text-slate-300">
             [source · docs/POOL-HANDOFF-2026-11-24-NITO-ROLE2-TAGGED.md §3–§4; pool-registry.json]

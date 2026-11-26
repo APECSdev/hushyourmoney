@@ -20,7 +20,7 @@ Status: M0 is done. M1 transport is done and Nito chose official NIP-44 (`ac6154
 
 | ID | Workstream | Owner | Output |
 |---|---|---|---|
-| W1 | Nostr transport | Hush + Nito | `shared/src/nostr/*` implemented; 44 tests pass; Nito client mode pending |
+| W1 | Nostr transport | Hush + Nito | `shared/src/nostr/*` implemented; 44 tests pass; Nito chose official (`ac61542`) |
 | W2 | CashShuffle protocol | Hush | `cashshuffle/src/round.js`, `VERIFY`, blame, persistence |
 | W3 | BCH wallet | Hush | `cashshuffle/src/wallet.js`, signing, broadcast, caps |
 | W4 | Role-2 pool composition | Hush + Nito | `cashshuffle/src/pool.js`, tag pairs, blanks, VM-eval |
