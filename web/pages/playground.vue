@@ -66,8 +66,8 @@ const EXPERIMENTS = [
         badge: 'badge-done',
         numClass: 'topic-lime',
         to: '/research/shielded-pool',
-        body: 'The flagship Groth16 pool — two verifier generations, deployed and measured gate by gate; the current pool runs the pool rules inside the reviewed on-chain verifier.',
-        meta: 'EXP-04 · flagship research',
+        body: 'The flagship Groth16 pool — two deployed verifier generations plus the measured 3-out v3 (184,528 constraints; 1-of-1 demo setup built); the current pool runs the pool rules inside the reviewed on-chain verifier. The browser acceptance passed; the 3-out is measured, not deployed.',
+        meta: 'EXP-04 · flagship research · 3-out v3 measured',
     },
     {
         id: '05',
@@ -139,7 +139,8 @@ const REAL_VS_MOCK = [
     { what: 'G2b transactions', verdict: 'real', cls: 'badge-live', detail: 'Chipnet funding and round transactions, linked to Selene. The only chain transactions in the gate record.' },
     { what: 'G3 / G3L txids', verdict: 'dry-run', cls: 'badge-wait', detail: 'Harness txids, not broadcast. The rounds used fixture UTXOs.' },
     { what: 'Mainnet fusion beta', verdict: 'not built', cls: 'badge-wait', detail: 'G4 is pending; no production fusion UI exists yet.' },
-    { what: 'Shielded pool', verdict: 'live on chipnet', cls: 'badge-done', detail: 'The role-2 pool is deployed with a full confirmed lifecycle on chipnet; see /research/shielded-pool.' },
+    { what: 'Shielded pool', verdict: 'live on chipnet', cls: 'badge-done', detail: 'The role-2 pool is live on chipnet with a confirmed browser lifecycle; the 3-out v3 is measured (184,528 constraints) but not deployed; the 400 FT transfer note is undelivered; four failed locks are stuck, one is sweepable. See /research/shielded-pool#notes-management.' },
+    { what: '3-out v3', verdict: 'measured · not deployed', cls: 'badge-mid', detail: '184,528 constraints (+1,056, +0.58%), 201-B carrier, 9-field actionHash. The 1-of-1 demo setup is built (new VK/zkey/wasm); the new MPC (Gate 7), 201-B hook, 3-out witness and client path are not built.' },
 ]
 
 /* ── Lab notes (source: /research/cashfusion#lessons) ────────────── */

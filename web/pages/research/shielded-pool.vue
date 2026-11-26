@@ -9,7 +9,7 @@ definePageMeta({
 /* OpenGraph + Twitter + canonical (shared composable; per-page poster). */
 useOg({
     title: `The Shielded Pool — Hush Your Money`,
-    description: `A Groth16 shielded pool for CashTokens, built and measured on Bitcoin Cash chipnet and mainnet. 183,472 constraints, 2 public inputs, no consensus changes.`,
+    description: `A Groth16 shielded pool for CashTokens, measured on chipnet: 183,472 two-output and 184,528 three-output constraints, 2 public inputs, no consensus changes.`,
     path: '/research/shielded-pool',
     image: '/posters/research-shielded-pool.jpg',
     type: 'article',
@@ -23,7 +23,9 @@ useReveal()
    Every value below is a live measurement with a recorded source
    (session log / on-chain decode / snarkjs output). No estimates. */
 const STATS = [
-    { value: '183,472', label: 'constraints · single-asset circuit', tag: 'measured', color: 'text-lime-300' },
+    { value: '183,472', label: 'constraints · 2-out circuit', tag: 'measured', color: 'text-lime-300' },
+    { value: '184,528', label: 'constraints · 3-out circuit (draft)', tag: 'measured', color: 'text-lime-300' },
+    { value: '+0.58%', label: '3-out delta vs 2-out', tag: 'measured', color: 'text-cyan-300' },
     { value: '2', label: 'public inputs', tag: 'measured', color: 'text-cyan-300' },
     { value: '27,624 B', label: 'reviewed sound verifier · deployed', tag: 'cited + measured', color: 'text-white' },
     { value: '7,834 B', label: 'deployed program · pool rules inside the verifier', tag: 'measured', color: 'text-violet-300' },
@@ -34,6 +36,13 @@ const STATS = [
 /* ── Measured results table ──────────────────────────────────────── */
 const RESULTS = [
     { q: 'Circuit (single-asset)', v: '183,472 constraints · 107 private inputs · 181,959 wires', src: 'snarkjs r1cs info build256/pool.r1cs', href: 'https://github.com/APECSdev/pusd-shielded-pool' },
+    { q: 'Circuit (3-out v3 draft)', v: '184,528 constraints (+1,056, +0.58%) · 112 private inputs · 183,017 wires · 2 public inputs · 20.2 s compile', src: 'circom 2.2.3 --O2 on apecsdev, 2026-11-26 · circuits/pool3.circom', href: 'https://github.com/APECSdev/pusd-shielded-pool/blob/master/circuits/pool3.circom' },
+    { q: '3-out carrier + actionHash', v: 'carrier 169 → 201 B · actionHash 8 → 9 fields (cm2) · action +32 B · r1cs 39,449,264 B · wasm 3,380,815 B', src: 'measured 2026-11-26 · v3 design', href: 'https://github.com/APECSdev/hushyourmoney/blob/master/docs/ROLE2-3OUT-V3-DESIGN.md' },
+    { q: '3-out setup + verifier + hook + client', v: '1-of-1 DEMO SETUP BUILT (new VK d4ed12ee…, zkey b0177dbe…, wasm c806e561…, 2026-11-26); the new MPC (Gate 7), the 201-B role-2 hook, the 9-field actionHash, the 3-out witness and the Nito client path are NOT BUILT; UNMEASURED', src: 'v3 design 2026-11-26 · apecsdev setup', href: 'https://github.com/APECSdev/hushyourmoney/blob/master/docs/ROLE2-3OUT-V3-DESIGN.md' },
+    { q: 'Role-2 browser acceptance', v: 'SHIELD 1ca58773… → TRANSFER 50644d00… → UNSHIELD f52008f4… · state 760,400 FT · wallet A 19,986,800 + 600 FT, 128,323 plain, 0 blanks · pool history 48', src: 'nito.cash browser acceptance 2026-11-26 · docs/ROLE2-BROWSER-ACCEPTANCE-HANDOFF-2026-11-26.md', href: 'https://explorer.selene.cash/tx/f52008f44999f05261a905f8120900888a233e07d7cd489574909d51d0232b70?network=chipnet' },
+    { q: 'Notes management · v3', v: 'deposit path (0-in/2-out onboarding) + real nullifier set (Merkle membership) + encrypted note delivery + 3-out change splitting — all DESIGN; UNMEASURED', src: 'docs/ROLE2-3OUT-V3-DESIGN.md', href: 'https://github.com/APECSdev/hushyourmoney/blob/master/docs/ROLE2-3OUT-V3-DESIGN.md' },
+    { q: 'Failed acceptance locks', v: '2,200 FT + 150,000 fuel sats standing: 3db76294… is public-bootstrap-tagged (1,000 FT + 30,000 sats, sweepable); 10f26fa3…, 1946084e…, c3e21c7a…, dff42ddb… carry lost notes (1,200 FT + 120,000 sats, stuck)', src: 'docs/ROLE2-BROWSER-ACCEPTANCE-REVIEW-2026-11-26.md', href: 'https://github.com/APECSdev/hushyourmoney/blob/master/docs/ROLE2-BROWSER-ACCEPTANCE-REVIEW-2026-11-26.md' },
+    { q: 'Transfer note delivery', v: 'the TRANSFER 50644d00… 400 FT recipient note is UNDELIVERED; the 169-B carrier has no encrypted note; the 201-B 3-out carrier still cannot carry a full note — the off-chain channel is UNMEASURED', src: 'nito handoff caveat 1 · v3 design', href: 'https://github.com/APECSdev/hushyourmoney/blob/master/docs/ROLE2-BROWSER-ACCEPTANCE-HANDOFF-2026-11-26.md' },
     { q: 'Public inputs', v: '2 — [merkleRoot, actionHash]', src: 'pool.r1cs + verification_key.json (ic.length = 3)', href: 'https://github.com/APECSdev/pusd-shielded-pool' },
     { q: 'Circuit (multi-asset, variant b)', v: '186,007 constraints (+1.38%) · Poseidon(6) commitments bind the full 256-bit category', src: 'circom 2.2.3 --O2 compile, 2026-11-01 build record', href: 'https://github.com/APECSdev/pusd-shielded-pool' },
     { q: 'On-chain verifier · generation 1', v: '35,626 B inside ONE standard transaction (densless-msm — withdrawn, see below)', src: 'chipnet on-chain measurement', href: 'https://explorer.selene.cash/tx/b0a488db5b7e9bac07eebc45977523cd0730ddfe078571f2e17135231e30546b?network=chipnet' },
@@ -241,7 +250,7 @@ const ROLE2_LIFECYCLE = [
         bullets: [
             'lock 70ab2a1f… (tag cec1170e…) + action, atomic',
             'the public payout output EXECUTED: 250,000 FT to the wallet',
-            '28,175 B · 29,000 sats (1.029 sat/B) · final root 1829766…, balance 750,000',
+            '28,175 B · 29,000 sats (1.029 sat/B) · Hush lifecycle final root 1829766…, balance 750,000; the browser acceptance then advanced the state to f52008f4… (760,400 FT, 44 leaves)',
         ],
         meta: ['chipnet', 'payout executed'],
         tx: 'e54d19fb…8eab',
@@ -289,7 +298,7 @@ const POOLS = [
         txFull: '2eaeb97fc85b2ff0fdd6c6afd1d807f8a715bd92a40258fae9f0e6ce50fe83b8',
         badge: 'badge-done',
         badgeLabel: 'deployed · current',
-        note: 'The current generation: the pool rules run INSIDE the independently reviewed sound verifier as a role-2 hook (program 7,834 B, locking aa203e40…). Signature-free 3-input actions — every pool UTXO spends the one program P2SH32; there is no separate covenant and no step fleet. Deposit tags (checks 4c+4g) bind the fuel to the funded action\'s own nullifiers — the theft replay REJECTS at 4g. Minting guard + permissionless blank vending live (see above). Full lifecycle confirmed: SHIELD 9d9aa97a… → TRANSFER 5262417b… → UNSHIELD 250,000 e54d19fb… (payout executed), each broadcast atomically with its tagged lock. Under OUR solo-ceremony VK (sha256 05250429…).',
+        note: 'The current generation: the pool rules run INSIDE the independently reviewed sound verifier as a role-2 hook (program 7,834 B, locking aa203e40…). Signature-free 3-input actions — every pool UTXO spends the one program P2SH32; there is no separate covenant and no step fleet. Deposit tags (checks 4c+4g) bind the fuel to the funded action\'s own nullifiers — the theft replay REJECTS at 4g. Minting guard + permissionless blank vending live (see above). Full lifecycle confirmed: SHIELD 9d9aa97a… → TRANSFER 5262417b… → UNSHIELD 250,000 e54d19fb… (payout executed), each broadcast atomically with its tagged lock. Under OUR solo-ceremony VK (sha256 05250429…). The nito.cash browser acceptance then ran the full lifecycle through the real UI: SHIELD 1ca58773… → TRANSFER 50644d00… → UNSHIELD f52008f4… (state 760,400 FT, 44 leaves; wallet A 19,986,800 + 600 FT). The 400 FT transfer note is undelivered; four failed locks (1,200 FT + 120,000 sats) are stuck, one (3db76294…, 1,000 FT + 30,000 sats) is sweepable. The 3-out v3 is the next generation — see Notes Management.',
     },
     {
         name: 'chipnet-role2-pool',
@@ -604,7 +613,7 @@ const LIFECYCLE = [
                 every tx confirmed on chipnet [measured] · each action was broadcast ATOMICALLY with
                 its tagged lock (the action spends the lock's unconfirmed outputs — first-seen wins,
                 closing the theft window to ~zero) · fees are BARE per the fee policy: 1 sat/B floor,
-                fuel prepaid in the lock · final state: root 1829766…, balance 750,000, notes at tree 6,7
+                fuel prepaid in the lock · Hush lifecycle final state: root 1829766…, balance 750,000, notes at tree 6,7 · the nito.cash browser acceptance then advanced the state to f52008f4… (760,400 FT, 44 leaves) — see Notes Management
             </p>
 
             <!-- Guard + vending -->
@@ -628,11 +637,11 @@ const LIFECYCLE = [
             </div>
 
             <p class="reveal mt-8 text-center font-mono text-[0.8rem] leading-relaxed text-slate-200">
-                client integration: the nito.cash wallet is committed to its own VK (27f6ea03…) and the
-                7-input shape — the proving-asset swap to our VK (05250429…) plus the 3-input tagged
-                builder are the delivery package's work items ·
-                <a href="https://github.com/APECSdev/hushyourmoney/blob/master/docs/POOL-HANDOFF-2026-11-24-NITO-ROLE2-TAGGED.md" target="_blank" rel="noopener" class="src-link">the delivery package ↗</a> ·
-                their client is the final approval
+                client integration: the nito.cash browser acceptance PASSED — SHIELD 1ca58773… → TRANSFER
+                50644d00… → UNSHIELD f52008f4…, registry live, CI green. The next client surface is the
+                3-out v3 (201-B carrier, 9-field actionHash, new VK/MPC) — see Notes Management ·
+                <a href="https://github.com/APECSdev/hushyourmoney/blob/master/docs/ROLE2-BROWSER-ACCEPTANCE-HANDOFF-2026-11-26.md" target="_blank" rel="noopener" class="src-link">browser acceptance handoff ↗</a> ·
+                <a href="https://github.com/APECSdev/hushyourmoney/blob/master/docs/ROLE2-3OUT-V3-DESIGN.md" target="_blank" rel="noopener" class="src-link">v3 design ↗</a>
             </p>
         </section>
 
@@ -1002,10 +1011,202 @@ const LIFECYCLE = [
             </p>
         </section>
 
+        <!-- ── Notes Management: the 3-out v3 ── -->
+        <section id="notes-management" class="relative z-10 mx-auto w-full max-w-6xl px-6 pb-28 sm:pb-36">
+            <div class="reveal text-center">
+                <p class="font-mono text-[0.8rem] uppercase tracking-[0.45em] text-lime-200">07 · notes management</p>
+                <h2 class="mt-5 font-display text-[clamp(1.9rem,5vw,3.4rem)] font-bold leading-[1.08] text-white">
+                    Notes Management<br />The 3-Output Generation
+                </h2>
+                <p class="mx-auto mt-5 max-w-3xl text-base leading-relaxed text-slate-100 sm:text-lg">
+                    The current pool is <strong class="font-semibold text-white">2-in / 2-out</strong>. The v3
+                    <strong class="font-semibold text-white">3-out</strong> circuit adds one output note:
+                    a SHIELD can create two wallet-owned notes plus the Hush change in one action, and a
+                    TRANSFER can split change cleanly. It is the <strong class="font-semibold text-white">note-management
+                    layer</strong>, not the whole solution — the deposit path, a real nullifier set and
+                    encrypted note delivery are the v3 core. The 3-out is measured; it is not deployed.
+                </p>
+            </div>
+
+            <div class="mt-12 grid gap-6 md:grid-cols-3">
+                <div class="fact-card reveal">
+                    <p class="font-mono text-[0.72rem] uppercase tracking-[0.3em] text-lime-200">measured · 2026-11-26</p>
+                    <h3 class="mt-3 font-display text-xl font-bold text-white">184,528 constraints</h3>
+                    <p class="mt-3 text-sm leading-relaxed text-slate-100">
+                        The 3-out draft adds one note: <strong class="text-white">+1,056 constraints
+                        (+0.58%)</strong> over the 183,472 2-out circuit. 2 public inputs, 112 private
+                        inputs, 20.2 s compile, r1cs 39,449,264 B, wasm 3,380,815 B.
+                    </p>
+                    <p class="mt-3 font-mono text-xs leading-relaxed text-slate-200">circuits/pool3.circom · circom 2.2.3 · apecsdev</p>
+                </div>
+                <div class="fact-card reveal" style="transition-delay: 0.1s">
+                    <p class="font-mono text-[0.72rem] uppercase tracking-[0.3em] text-cyan-200">the carrier grows</p>
+                    <h3 class="mt-3 font-display text-xl font-bold text-white">201 B · 9 fields</h3>
+                    <p class="mt-3 text-sm leading-relaxed text-slate-100">
+                        The carrier grows 169 → <strong class="text-white">201 B</strong>; the actionHash
+                        grows 8 → <strong class="text-white">9 fields</strong> (cm2); the action grows
+                        +32 B. The 2-public-input verifier contract is unchanged.
+                    </p>
+                    <p class="mt-3 font-mono text-xs leading-relaxed text-slate-200">cm2 is bound exactly as cm0/cm1</p>
+                </div>
+                <div class="fact-card reveal" style="transition-delay: 0.2s">
+                    <p class="font-mono text-[0.72rem] uppercase tracking-[0.3em] text-rose-200">the gate</p>
+                    <h3 class="mt-3 font-display text-xl font-bold text-white">A new setup</h3>
+                    <p class="mt-3 text-sm leading-relaxed text-slate-100">
+                        The 1-of-1 demo setup is built (new VK d4ed12ee…, zkey b0177dbe…, wasm c806e561…,
+                        2026-11-26); the new MPC (Gate 7), the 201-B role-2 hook, the 9-field actionHash,
+                        the 3-out witness and the Nito client path are still pending. The circuit is
+                        measured; the deployment is not.
+                    </p>
+                    <p class="mt-3 font-mono text-xs leading-relaxed text-slate-200">measured ≠ deployed</p>
+                </div>
+            </div>
+
+            <div class="reveal mt-10 fact-card">
+                <p class="font-mono text-[0.72rem] uppercase tracking-[0.3em] text-lime-200">the note shapes</p>
+                <pre class="mt-4 overflow-x-auto font-mono text-[0.75rem] leading-relaxed text-slate-100">2-out (current)                     3-out (v3 draft)
+in0 ─┐                              in0 ─┐
+in1 ─┴─▶ out0, out1                  in1 ─┴─▶ out0, out1, out2
+        wallet note + change                  wallet note + wallet note + change</pre>
+                <p class="mt-4 text-sm leading-relaxed text-slate-100">
+                    The 3-out is the note-management layer: it lets a SHIELD create two wallet-owned
+                    notes plus the Hush change in one action, and lets a TRANSFER split change cleanly.
+                    It is <strong class="text-white">not</strong> the onboarding fix — the deposit path is.
+                </p>
+            </div>
+
+            <div class="mt-10 grid gap-6 md:grid-cols-2">
+                <div class="fact-card reveal">
+                    <p class="font-mono text-[0.72rem] uppercase tracking-[0.3em] text-lime-200">01 · shield</p>
+                    <h3 class="mt-3 font-display text-xl font-bold text-white">A public deposit becomes notes</h3>
+                    <p class="mt-3 text-sm leading-relaxed text-slate-100">
+                        The current 2-out SHIELD needs two in-notes; the 3-out lets one action create two
+                        wallet-owned notes plus the Hush change. The onboarding fix is the deposit path,
+                        not the 3-out.
+                    </p>
+                </div>
+                <div class="fact-card reveal" style="transition-delay: 0.1s">
+                    <p class="font-mono text-[0.72rem] uppercase tracking-[0.3em] text-cyan-200">02 · transfer</p>
+                    <h3 class="mt-3 font-display text-xl font-bold text-white">Notes change hands privately</h3>
+                    <p class="mt-3 text-sm leading-relaxed text-slate-100">
+                        The browser acceptance's 400 FT recipient note is <strong class="text-rose-200">undelivered</strong>;
+                        the 169-B carrier has no encrypted note. The 201-B 3-out carrier still cannot carry
+                        a full note; the off-chain channel is the missing piece.
+                    </p>
+                </div>
+                <div class="fact-card reveal">
+                    <p class="font-mono text-[0.72rem] uppercase tracking-[0.3em] text-violet-200">03 · unshield</p>
+                    <h3 class="mt-3 font-display text-xl font-bold text-white">A note becomes a public payout</h3>
+                    <p class="mt-3 text-sm leading-relaxed text-slate-100">
+                        The 600 FT payout at <span class="font-mono text-xs">f52008f4…:2</span> is the
+                        successful unshield; the public leg is public by design.
+                    </p>
+                </div>
+                <div class="fact-card reveal" style="transition-delay: 0.1s">
+                    <p class="font-mono text-[0.72rem] uppercase tracking-[0.3em] text-lime-200">04 · change</p>
+                    <h3 class="mt-3 font-display text-xl font-bold text-white">Change without spending the first note</h3>
+                    <p class="mt-3 text-sm leading-relaxed text-slate-100">
+                        Two wallet-A notes + the Hush change in one SHIELD; the 2-out circuit forces the
+                        one-note workaround. This is the note-management win.
+                    </p>
+                </div>
+            </div>
+
+            <div class="mt-10 grid gap-6 md:grid-cols-2">
+                <div class="fact-card reveal">
+                    <p class="font-mono text-[0.72rem] uppercase tracking-[0.3em] text-lime-200">v3 core · onboarding</p>
+                    <h3 class="mt-3 font-display text-xl font-bold text-white">The deposit path</h3>
+                    <p class="mt-3 text-sm leading-relaxed text-slate-100">
+                        0-in/2-out; public FT deposit; signed deposit input; two private notes; no prior
+                        pool notes. <strong class="text-white">DESIGN — UNMEASURED.</strong>
+                    </p>
+                </div>
+                <div class="fact-card reveal" style="transition-delay: 0.1s">
+                    <p class="font-mono text-[0.72rem] uppercase tracking-[0.3em] text-rose-200">v3 core · double-spend</p>
+                    <h3 class="mt-3 font-display text-xl font-bold text-white">A real nullifier set</h3>
+                    <p class="mt-3 text-sm leading-relaxed text-slate-100">
+                        The current state is <span class="font-mono text-xs">root ‖ rolling nullifier hash</span>;
+                        hook check 7 only folds; the spent bootstrap notes were reusable. The v3 needs a
+                        Merkle nullifier tree with membership. <strong class="text-white">DESIGN — UNMEASURED.</strong>
+                    </p>
+                </div>
+                <div class="fact-card reveal">
+                    <p class="font-mono text-[0.72rem] uppercase tracking-[0.3em] text-cyan-200">v3 core · usability</p>
+                    <h3 class="mt-3 font-display text-xl font-bold text-white">Encrypted note delivery</h3>
+                    <p class="mt-3 text-sm leading-relaxed text-slate-100">
+                        The 400 FT transfer note is undelivered; the carrier cannot carry it. NIP-44/Nostr
+                        or a dedicated channel; recovery from the seed. <strong class="text-white">DESIGN — UNMEASURED.</strong>
+                    </p>
+                </div>
+                <div class="fact-card reveal" style="transition-delay: 0.1s">
+                    <p class="font-mono text-[0.72rem] uppercase tracking-[0.3em] text-lime-200">v3 core · note management</p>
+                    <h3 class="mt-3 font-display text-xl font-bold text-white">The 3-out circuit</h3>
+                    <p class="mt-3 text-sm leading-relaxed text-slate-100">
+                        Measured; not deployed. It is not a substitute for onboarding, the nullifier set
+                        or note delivery.
+                    </p>
+                </div>
+            </div>
+
+            <div class="mt-10 grid gap-6 lg:grid-cols-2">
+                <div class="fact-card reveal">
+                    <p class="font-mono text-[0.72rem] uppercase tracking-[0.3em] text-lime-200">measured · the browser acceptance</p>
+                    <h3 class="mt-3 font-display text-xl font-bold text-white">The second lifecycle</h3>
+                    <p class="mt-3 text-sm leading-relaxed text-slate-100">
+                        SHIELD <span class="font-mono text-xs">1ca58773…</span> (27,773 B) → TRANSFER
+                        <span class="font-mono text-xs">50644d00…</span> (28,157 B) → UNSHIELD
+                        <span class="font-mono text-xs">f52008f4…</span> (28,036 B). State
+                        <span class="font-mono text-xs">f52008f4…:1</span> = 760,400 FT; payout
+                        <span class="font-mono text-xs">:2</span> = 600 FT; wallet A = 19,986,800 + 600 FT,
+                        128,323 plain, 0 blanks; pool history 48.
+                    </p>
+                    <div class="mt-5 flex flex-wrap gap-3">
+                        <a href="https://explorer.selene.cash/tx/1ca587730fece8eabfea6eedf077ac7cd9a683610a0c6779ce5328616b09032d?network=chipnet" target="_blank" rel="noopener" class="tx-btn">
+                            <span class="tx-chip">chipnet</span><span class="tx-id">shield 1ca58773…</span>
+                        </a>
+                        <a href="https://explorer.selene.cash/tx/50644d00b5aec5e7bd92bfda87371ab252f0a11c365909ef69dd66512f0fadac?network=chipnet" target="_blank" rel="noopener" class="tx-btn">
+                            <span class="tx-chip">chipnet</span><span class="tx-id">transfer 50644d00…</span>
+                        </a>
+                        <a href="https://explorer.selene.cash/tx/f52008f44999f05261a905f8120900888a233e07d7cd489574909d51d0232b70?network=chipnet" target="_blank" rel="noopener" class="tx-btn">
+                            <span class="tx-chip">chipnet</span><span class="tx-id">unshield f52008f4…</span>
+                        </a>
+                    </div>
+                    <p class="mt-4 text-sm leading-relaxed text-slate-100">
+                        Two caveats: the 400 FT transfer note is undelivered; four failed locks
+                        (1,200 FT + 120,000 sats) are stuck; the one public lock
+                        (<span class="font-mono text-xs">3db76294…</span>, 1,000 FT + 30,000 sats) is sweepable.
+                    </p>
+                </div>
+                <div class="fact-card reveal" style="transition-delay: 0.1s">
+                    <p class="font-mono text-[0.72rem] uppercase tracking-[0.3em] text-cyan-200">the migration</p>
+                    <h3 class="mt-3 font-display text-xl font-bold text-white">Current pool → v3</h3>
+                    <p class="mt-3 text-sm leading-relaxed text-slate-100">
+                        The Hush 750,000 notes and the wallet A notes re-shield into the v3 pool; the four
+                        stuck locks remain; the one public lock is swept; the new VK/MPC, the 201-B hook and
+                        the client path are the gate. The current pool stays as a read-only historical record.
+                    </p>
+                </div>
+            </div>
+
+            <div class="reveal mt-10 rounded-2xl border border-lime-300/25 bg-lime-300/5 px-5 py-5 font-mono text-xs leading-relaxed text-lime-100">
+                the 3-out is measured, not deployed · the new setup is the cryptographic gate · the new
+                verifier/hook/client is the engineering work · the deposit path, the nullifier set and
+                note delivery are the v3 core · the community presentation is docs/ROLE2-3OUT-V3-DESIGN.md
+            </div>
+
+            <p class="reveal mt-8 text-center font-mono text-[0.8rem] leading-relaxed text-slate-200">
+                sources: <a href="https://github.com/APECSdev/hushyourmoney/blob/master/docs/ROLE2-3OUT-V3-DESIGN.md" target="_blank" rel="noopener" class="src-link">ROLE2-3OUT-V3-DESIGN.md ↗</a> ·
+                <a href="https://github.com/APECSdev/pusd-shielded-pool/blob/master/circuits/pool3.circom" target="_blank" rel="noopener" class="src-link">pool3.circom ↗</a> ·
+                <a href="https://github.com/APECSdev/hushyourmoney/blob/master/docs/ROLE2-BROWSER-ACCEPTANCE-HANDOFF-2026-11-26.md" target="_blank" rel="noopener" class="src-link">browser acceptance handoff ↗</a> ·
+                <a href="https://github.com/APECSdev/hushyourmoney/blob/master/docs/ROLE2-BROWSER-ACCEPTANCE-REVIEW-2026-11-26.md" target="_blank" rel="noopener" class="src-link">Hush review ↗</a> ·
+                <a href="https://github.com/APECSdev/hushyourmoney/blob/master/docs/ROLE2-BROWSER-ACCEPTANCE-REVIEW-RESPONSE-2026-11-26.md" target="_blank" rel="noopener" class="src-link">nito response ↗</a>
+            </p>
+        </section>
+
         <!-- ── Partner integration: the dead pool ── -->
         <section id="integration" class="relative z-10 mx-auto w-full max-w-6xl px-6 pb-28 sm:pb-36">
             <div class="reveal">
-                <p class="font-mono text-[0.8rem] uppercase tracking-[0.45em] text-cyan-200">07 · integration</p>
+                <p class="font-mono text-[0.8rem] uppercase tracking-[0.45em] text-cyan-200">08 · integration</p>
                 <h2 class="mt-3 font-display text-[clamp(1.9rem,5vw,3.4rem)] font-bold leading-[1.08] text-white">
                     What a Partner<br />Integration Taught Us
                 </h2>
@@ -1096,16 +1297,14 @@ const LIFECYCLE = [
                     <p class="font-mono text-[0.72rem] uppercase tracking-[0.3em] text-lime-200">the successor</p>
                     <h3 class="mt-3 font-display text-xl font-bold text-white">The role-2 pool is the next integration</h3>
                     <p class="mt-3 text-sm leading-relaxed text-slate-100">
-                        The current generation changes the client surface again, deliberately: the
-                        nito.cash wallet is committed to its own verifying key
-                        (<span class="font-mono text-xs">27f6ea03…</span>) and builds the 7-input
-                        covenant-at-input-0 shape, while the role-2 pool runs our solo-ceremony VK
-                        (<span class="font-mono text-xs">05250429…</span>) and a signature-free 3-input
-                        tagged shape with off-chain note delivery and blanks acquired through the
-                        vending machine. The proving-asset swap and the new builder are the delivery
-                        package's work items —
-                        <a href="https://github.com/APECSdev/hushyourmoney/blob/master/docs/POOL-HANDOFF-2026-11-24-NITO-ROLE2-TAGGED.md" target="_blank" rel="noopener" class="src-link">POOL-HANDOFF-2026-11-24-NITO-ROLE2-TAGGED.md ↗</a>.
-                        Per the standing directive, their client is the final approval for any deployed result.
+                        The browser acceptance closed the client question: the nito.cash wallet ran
+                        the full lifecycle through the real UI — SHIELD <span class="font-mono text-xs">1ca58773…</span>
+                        → TRANSFER <span class="font-mono text-xs">50644d00…</span> → UNSHIELD
+                        <span class="font-mono text-xs">f52008f4…</span> — against the role-2 pool under our
+                        VK (<span class="font-mono text-xs">05250429…</span>), and the registry is live. The
+                        next integration surface is the 3-out v3: 201-B carrier, 9-field actionHash, new
+                        VK/MPC, and the off-chain note delivery the 400 FT transfer still lacks — see
+                        <a href="#notes-management" class="src-link">07 · notes management</a>.
                     </p>
                 </div>
             </div>
@@ -1121,7 +1320,7 @@ const LIFECYCLE = [
         <section id="limits" class="relative z-10 mx-auto w-full max-w-6xl px-6 pb-28 sm:pb-36">
             <div class="grid items-start gap-12 lg:grid-cols-[1fr_1.4fr]">
                 <div class="reveal">
-                    <p class="font-mono text-[0.8rem] uppercase tracking-[0.45em] text-rose-200">08 · posture</p>
+                    <p class="font-mono text-[0.8rem] uppercase tracking-[0.45em] text-rose-200">09 · posture</p>
                     <h2 class="mt-5 font-display text-[clamp(1.9rem,5vw,3.4rem)] font-bold leading-[1.08] text-white">
                         Security<br />&amp; Limits
                     </h2>
@@ -1181,8 +1380,16 @@ const LIFECYCLE = [
                         substituted script was accepted — pinned in source, and eliminated structurally
                         by the role-2 redesign · the current pool (chipnet-role2-pool-v2-tagged, deployed
                         2026-11-24) carries the reviewed sound verifier with the rules inside role 2 —
-                        but the hook is our own code, with no independent review: the bar it must clear
-                        is Nito Cash's own client as the final approval · and every setup remains 1-of-1
+                        the nito.cash browser acceptance then passed (SHIELD 1ca58773… → TRANSFER
+                        50644d00… → UNSHIELD f52008f4…; state 760,400 FT) — but the hook is our own code,
+                        with no independent review · the 3-out v3 is measured (184,528 constraints,
+                        +0.58%) but NOT deployed: it needs a new VK and a new MPC (Gate 7), a 201-B hook,
+                        a 9-field actionHash and the client path · its 1-of-1 demo VK/zkey/wasm are
+                        built; the new MPC (Gate 7) and deployment are not · the 400 FT transfer note is
+                        UNDELIVERED · four failed locks (1,200 FT + 120,000 sats) are STUCK; one
+                        (3db76294…, 1,000 FT + 30,000 sats) is public-bootstrap-tagged and sweepable ·
+                        the deposit path, nullifier set and note delivery are DESIGN and UNMEASURED ·
+                        every setup remains 1-of-1
                     </div>
                     <p class="font-mono text-[0.8rem] leading-relaxed text-slate-200">
                         withdrawal record:
@@ -1203,11 +1410,22 @@ const LIFECYCLE = [
                         so far was a disclosed single-party (1-of-1) contribution on chipnet —
                         appropriate for a testnet only. Mainnet requires a genuine multi-party
                         ceremony (Gate 7). A proof is bound to its verifying key and public inputs,
-                        never to a txid — double-spend protection lives in the on-chain nullifier
-                        set, stale roots block replay.
+                        never to a txid. The current nullifier state is a rolling hash, not a set:
+                        hook check 7 only folds <code class="text-xs">SHA256(oldNull ‖ nf0 ‖ nf1)</code>,
+                        so the spent bootstrap notes were reusable. The v3 needs a real Merkle
+                        nullifier set with membership. The 3-out circuit is measured at 184,528
+                        constraints (+1,056, +0.58%); its 1-of-1 demo setup is built (new VK
+                        d4ed12ee…, zkey b0177dbe…, wasm c806e561…), but the new MPC (Gate 7), the
+                        201-B hook, the 9-field actionHash, the 3-out witness and the Nito client
+                        path are NOT built. The deposit
+                        path (onboarding) and encrypted note delivery are DESIGN and UNMEASURED.
+                        The browser acceptance's 400 FT transfer note is undelivered; four failed
+                        locks (1,200 FT + 120,000 sats) are stuck, one public lock
+                        (3db76294…, 1,000 FT + 30,000 sats) is sweepable. The 3-out is the
+                        note-management layer; it is not the whole solution.
                     </p>
                     <div class="rounded-2xl border border-rose-300/25 bg-rose-300/5 px-5 py-4 font-mono text-xs leading-relaxed text-rose-200">
-                        testnet only · 1-of-1 trusted setup · no audits yet · /ceremony is the path to mainnet
+                        testnet only · 1-of-1 trusted setup · no audits yet · the 3-out v3 needs a NEW MPC (Gate 7) · the deposit/nullifier/note-delivery are UNMEASURED · /ceremony is the path to mainnet
                     </div>
                     <p>
                         <span class="font-mono text-xs text-slate-200">[cited · third-party]</span> — the pool
@@ -1233,7 +1451,7 @@ const LIFECYCLE = [
         <!-- ── Design docs ── -->
         <section id="docs" class="relative z-10 mx-auto w-full max-w-6xl px-6 pb-28 sm:pb-36">
             <div class="reveal text-center">
-                <p class="font-mono text-[0.8rem] uppercase tracking-[0.45em] text-cyan-200">09 · go deeper</p>
+                <p class="font-mono text-[0.8rem] uppercase tracking-[0.45em] text-cyan-200">10 · go deeper</p>
                 <h2 class="mt-5 font-display text-[clamp(1.9rem,5vw,3.4rem)] font-bold leading-[1.08] text-white">Design Docs</h2>
             </div>
 
@@ -1262,13 +1480,21 @@ const LIFECYCLE = [
                     <h3 class="font-mono text-sm text-violet-300">pool-registry.json</h3>
                     <p class="mt-2 text-sm leading-relaxed text-slate-200">The machine-readable registry: category ↔ covenant address ↔ tree root ↔ first operations.</p>
                 </a>
+                <a href="https://github.com/APECSdev/hushyourmoney/blob/master/docs/ROLE2-3OUT-V3-DESIGN.md" target="_blank" rel="noopener" class="doc-card reveal" style="transition-delay: 0.48s">
+                    <h3 class="font-mono text-sm text-lime-300">ROLE2-3OUT-V3-DESIGN.md</h3>
+                    <p class="mt-2 text-sm leading-relaxed text-slate-200">The 3-out v3: 184,528 constraints (+1,056, +0.58%), 201-B carrier, 9-field actionHash; the 1-of-1 demo setup; the deposit path, nullifier set and note delivery; the new MPC and the migration.</p>
+                </a>
+                <a href="https://github.com/APECSdev/pusd-shielded-pool/blob/master/circuits/pool3.circom" target="_blank" rel="noopener" class="doc-card reveal" style="transition-delay: 0.56s">
+                    <h3 class="font-mono text-sm text-cyan-300">pool3.circom</h3>
+                    <p class="mt-2 text-sm leading-relaxed text-slate-200">The measured 3-output circuit draft: 2-in/3-out, 184,528 constraints, 2 public inputs, 112 private inputs.</p>
+                </a>
             </div>
         </section>
 
         <!-- ── FAQ ── -->
         <section id="faq" class="relative z-10 mx-auto w-full max-w-4xl px-6 pb-28 sm:pb-36">
             <div class="reveal text-center">
-                <p class="font-mono text-[0.8rem] uppercase tracking-[0.45em] text-lime-200">10 · questions</p>
+                <p class="font-mono text-[0.8rem] uppercase tracking-[0.45em] text-lime-200">11 · questions</p>
                 <h2 class="mt-5 font-display text-[clamp(1.9rem,5vw,3.4rem)] font-bold leading-[1.08] text-white">Reviewer FAQ</h2>
             </div>
 
@@ -1282,7 +1508,7 @@ const LIFECYCLE = [
                         verifier now deployed is 27,624 bytes. That is the point of the exercise:
                         the existence proof came before any proposal. Which programs are
                         <em>sound</em> is a separate question — see
-                        <a href="#limits" class="src-link">08 · posture</a>.
+                        <a href="#limits" class="src-link">09 · posture</a>.
                     </p>
                 </details>
 
@@ -1359,25 +1585,60 @@ const LIFECYCLE = [
                         swap needed <strong>no new trusted setup</strong>: both builds verify the same
                         relation under the same verifying key. Still not established: the role-2 hook is
                         our own code with no independent review, and every setup so far is 1-of-1. See
-                        <a href="#limits" class="src-link">08 · posture</a>.
+                        <a href="#limits" class="src-link">09 · posture</a>.
+                    </p>
+                </details>
+
+                <details class="faq-card reveal">
+                    <summary>What is the 3-out / Notes Management?</summary>
+                    <p>
+                        The current pool is 2-in/2-out. The v3 3-out circuit is measured at
+                        184,528 constraints (+1,056, +0.58%) and adds a third out-note: a SHIELD can
+                        create two wallet-owned notes plus the Hush change, and a TRANSFER can split
+                        change cleanly. It is the note-management layer, not the whole solution: the
+                        deposit path (onboarding), a real nullifier set and encrypted note delivery
+                        are the other v3 pieces. The 3-out is measured; its 1-of-1 demo setup is
+                        built (new VK/zkey/wasm); the new MPC (Gate 7) and deployment are not. See
+                        <a href="#notes-management" class="src-link">07 · notes management</a>.
+                    </p>
+                </details>
+
+                <details class="faq-card reveal">
+                    <summary>Did the browser acceptance pass?</summary>
+                    <p>
+                        Yes. The nito.cash wallet ran SHIELD 1ca58773… → TRANSFER 50644d00… →
+                        UNSHIELD f52008f4… through the real UI; the state is 760,400 FT and wallet A
+                        holds 19,986,800 + 600 FT. Two caveats: the 400 FT transfer note is
+                        undelivered (the 169-B carrier has no encrypted note), and four failed locks
+                        (1,200 FT + 120,000 sats) are stuck; one public-bootstrap lock
+                        (3db76294…, 1,000 FT + 30,000 sats) is sweepable. The 3-out v3 is the next
+                        client surface.
+                    </p>
+                </details>
+
+                <details class="faq-card reveal">
+                    <summary>Are the failed locks recoverable?</summary>
+                    <p>
+                        One is. 3db76294… carries the public bootstrap tag and can be swept by any
+                        holder of the public seeds. The other four — 10f26fa3…, 1946084e…,
+                        c3e21c7a…, dff42ddb… — carry the lost notes' private tags; their preimages
+                        are gone, so they are stuck, not stealable. The total is 2,200 FT + 150,000
+                        fuel sats.
                     </p>
                 </details>
 
                 <details class="faq-card reveal">
                     <summary>Is there a working wallet?</summary>
                     <p>
-                        Yes, on chipnet. The nito.cash wallet is the first client built on this
-                        pool and has two confirmed, wallet-originated actions — a SHIELD at block
-                        344641 and a TRANSFER at block 344646. Its first deployment (v2) was
-                        confirmed on chain but structurally unspendable, because the deployed
-                        verifier program was the five-input test fixture while every wallet
-                        action emits seven inputs. That failure and its fix are recorded in
-                        <a href="#integration" class="src-link">07 · integration</a> rather than
-                        quietly replaced — the same pool, re-deployed under the same verifying
-                        key, is now spendable. The role-2 pool is the next integration: it runs our
-                        solo-ceremony VK, so the wallet needs the proving-asset swap plus the
-                        3-input tagged builder — the delivery package's work items. Their client
-                        remains the final approval.
+                        Yes, on chipnet. The nito.cash browser acceptance ran the full lifecycle
+                        through the real UI — SHIELD <span class="font-mono text-xs">1ca58773…</span>
+                        → TRANSFER <span class="font-mono text-xs">50644d00…</span> → UNSHIELD
+                        <span class="font-mono text-xs">f52008f4…</span> — against the role-2 pool under
+                        our VK, and the registry is live. The state is 760,400 FT; wallet A holds
+                        19,986,800 + 600 FT. Two caveats: the 400 FT transfer note is undelivered,
+                        and four failed locks are stuck (one public lock is sweepable). The 3-out v3
+                        is the next client surface: 201-B carrier, 9-field actionHash, new VK/MPC.
+                        See <a href="#notes-management" class="src-link">07 · notes management</a>.
                     </p>
                 </details>
             </div>

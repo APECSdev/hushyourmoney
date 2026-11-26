@@ -394,7 +394,10 @@ const SOURCES = [
                     was curve-specific: the first is a construction, the second was our own script logic.
                     Both are now fixed in the deployed BN254 role-2 pool — the reviewed sound verifier,
                     with the pool rules inside role 2 and the sibling gone entirely. A BLS12-381 pool
-                    would need the same role-2 treatment; the curve is a separate axis.
+                    would need the same role-2 treatment; the curve is a separate axis. The 3-out v3
+                    (184,528 constraints, +0.58%) is a note-management layer, not a curve: a BLS12-381
+                    pool would need the same 3-out, deposit, nullifier-set and note-delivery work, plus
+                    its own new ceremony.
                 </p>
             </details>
         </div>

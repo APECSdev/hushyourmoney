@@ -37,7 +37,9 @@ const PARAMS = [
 
 /* ── Our measured circuit numbers ── */
 const STATS = [
-    { value: '183,472', label: 'constraints · single-asset', tag: 'measured', color: 'text-lime-300' },
+    { value: '183,472', label: 'constraints · 2-out', tag: 'measured', color: 'text-lime-300' },
+    { value: '184,528', label: 'constraints · 3-out (draft)', tag: 'measured', color: 'text-lime-300' },
+    { value: '+0.58%', label: '3-out delta', tag: 'measured', color: 'text-cyan-300' },
     { value: '186,007', label: 'constraints · multi-asset', tag: 'measured', color: 'text-lime-300' },
     { value: '2', label: 'public inputs', tag: 'measured', color: 'text-cyan-300' },
     { value: '128 B', label: 'Groth16 proof', tag: 'derived', color: 'text-violet-300' },
@@ -55,6 +57,16 @@ const GENERATIONS = [
         op: '24.3M op',
         redeem: '347 B covenant / 574 B exec / 6044 B genesis / 4415 B terminal',
         note: 'The build every pool deployed before 2026-11-24 (gate3, gate6, gate6b, mainnet, nito v2/v4). Withdrawn by its author on 2026-10-26 under finding F6: the shared Miller event consumes slopes without the tangent/chord equations, and the terminal compares a value with itself instead of checking the B endpoint. Its vk_x MSM does repair the public-input binding — which is what our red-team numbers actually measured.',
+    },
+    {
+        name: 'bch-groth16-bn254-sound-native · 3-out VK',
+        state: 'draft',
+        badge: 'badge-mid',
+        bytes: '27,624 B',
+        inputs: '3 inputs',
+        op: '20.72M op',
+        redeem: 'new VK → new program P2SH32 (UNMEASURED)',
+        note: 'The 3-out circuit (184,528 constraints, +1,056, +0.58%) uses the same reviewed sound verifier with a NEW verifying key. The 1-of-1 demo setup is built (new VK d4ed12ee…, zkey b0177dbe…, wasm c806e561…); the new MPC (Gate 7), the 201-B role-2 hook, the 9-field actionHash and the 3-out witness are NOT built. The 3-out is the note-management layer of v3; the deposit path, the nullifier set and encrypted note delivery are the other v3 pieces. Measured, not deployed.',
     },
     {
         name: 'bch-groth16-bn254-sound-native',
@@ -75,6 +87,7 @@ const LIMITS = [
     { k: 'consequence', v: 'the verifier MUST be split across inputs and/or transactions' },
     { k: 'generation 1', v: 'verifier as sibling inputs in the SAME transaction, beside the covenant' },
     { k: 'generation 2 · deployed', v: 'pool rules INSIDE the verifier (role 2) — one program, no siblings' },
+    { k: 'generation 3 · 3-out (draft)', v: 'same reviewed verifier, NEW VK — 184,528-constraint 3-out circuit; 1-of-1 demo setup built; Gate 7 pending' },
 ]
 
 /* ── Sources ── */
@@ -85,6 +98,8 @@ const SOURCES = [
     { label: 'zk-verifier-bench — the grading harness', href: 'https://github.com/mr-zwets/zk-verifier-bench' },
     { label: 'perpetualpowersoftau — the BN254 ceremony transcript', href: 'https://github.com/privacy-scaling-explorations/perpetualpowersoftau' },
     { label: 'our circuit + design records', href: 'https://github.com/APECSdev/pusd-shielded-pool' },
+    { label: '3-out v3 design', href: 'https://github.com/APECSdev/hushyourmoney/blob/master/docs/ROLE2-3OUT-V3-DESIGN.md' },
+    { label: '3-out circuit (pool3.circom)', href: 'https://github.com/APECSdev/pusd-shielded-pool/blob/master/circuits/pool3.circom' },
 ]
 </script>
 
@@ -269,6 +284,21 @@ const SOURCES = [
                         <td class="font-mono text-[0.82rem] text-slate-200">measured</td>
                     </tr>
                     <tr>
+                        <td class="whitespace-nowrap font-mono text-[0.82rem] uppercase tracking-wider text-slate-200">3-out circuit (v3 draft)</td>
+                        <td class="text-slate-100">184,528 constraints (+1,056, +0.58%) · 112 private inputs · 183,017 wires · 20.2 s compile</td>
+                        <td class="font-mono text-[0.82rem] text-slate-200">measured</td>
+                    </tr>
+                    <tr>
+                        <td class="whitespace-nowrap font-mono text-[0.82rem] uppercase tracking-wider text-slate-200">3-out carrier + actionHash</td>
+                        <td class="text-slate-100">201 B · 9 fields (cm2) · action +32 B · 2 public inputs unchanged</td>
+                        <td class="font-mono text-[0.82rem] text-slate-200">measured</td>
+                    </tr>
+                    <tr>
+                        <td class="whitespace-nowrap font-mono text-[0.82rem] uppercase tracking-wider text-slate-200">3-out setup</td>
+                        <td class="text-slate-100">1-of-1 demo VK/zkey/wasm built 2026-11-26; new MPC (Gate 7) · 201-B hook · 9-field actionHash · 3-out witness — NOT BUILT</td>
+                        <td class="font-mono text-[0.82rem] text-slate-200">UNMEASURED</td>
+                    </tr>
+                    <tr>
                         <td class="whitespace-nowrap font-mono text-[0.82rem] uppercase tracking-wider text-slate-200">public inputs</td>
                         <td class="text-slate-100">2 — <code>[merkleRoot, actionHash]</code> · vk <code>IC</code> length 3</td>
                         <td class="font-mono text-[0.82rem] text-slate-200">measured</td>
@@ -318,11 +348,13 @@ const SOURCES = [
         <div class="reveal">
             <p class="font-mono text-[0.8rem] uppercase tracking-[0.45em] text-rose-200">04 · the record</p>
             <h2 class="mt-3 font-display text-[clamp(1.9rem,5vw,3.4rem)] font-bold leading-[1.08] text-white">
-                Two Verifier Generations
+                Verifier Generations
             </h2>
             <p class="mt-5 max-w-3xl text-base leading-relaxed text-slate-200 sm:text-lg">
-                We have deployed one and reviewed the other. The difference between them is not
-                performance — it is whether the argument that a forged proof cannot pass still holds.
+                We have deployed one, reviewed the other, and measured the 3-out VK. The difference
+                between the verifier generations is not performance — it is whether the argument that
+                a forged proof cannot pass still holds. The 3-out is a circuit generation, not a
+                verifier rewrite: the same reviewed verifier, a new VK and a new setup.
             </p>
         </div>
 
