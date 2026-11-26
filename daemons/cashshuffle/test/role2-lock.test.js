@@ -17,6 +17,7 @@ import {
 } from '@bitauth/libauth'
 
 import { buildRole2Lock, ROLE2_FUEL_SATS } from '../src/role2-lock.js'
+import { Role2PoolAdapter } from '../src/pool.js'
 
 const POOL = {
   programLocking: 'aa203e40b64cff154d4b3305e8c8cc4e3174bc595ad74342a8445a9a7798b7be3a2987',
@@ -120,6 +121,21 @@ test('signs every input with a valid Schnorr signature (allOutputs)', async () =
     const signature = decoded.inputs[index].unlockingBytecode.slice(1, 66)
     assert.equal(secp.verifySignatureSchnorr(signature.slice(0, 64), pub, digest), true)
   }
+})
+
+test('Role2PoolAdapter delegates to the lock builder', async () => {
+  const adapter = new Role2PoolAdapter({
+    config: { programLocking: POOL.programLocking, poolCategory: POOL.poolCategory },
+  })
+  const lock = await adapter.buildLock({
+    tag: TAG,
+    fundingUtxo: funding,
+    blanks: [blank(14), blank(15)],
+    changeAddress: ADDRESS,
+    privateKey: KEY,
+  })
+  assert.equal(lock.fuelOutpoints.length, 2)
+  await assert.rejects(() => adapter.verifyBeforeBroadcast(), /VM-eval is pending/)
 })
 
 test('rejects bad input shapes', async () => {

@@ -4,8 +4,8 @@
 //
 // One action consumes TWO tagged fuel UTXOs with the SAME tag, TWO blanks,
 // and 30,000 sats of action fee (15,000 per fuel). The lock tx fee is separate.
-// The BCH lock/action builders are the M4 work; this module owns the carrier,
-// the tag, the pair check and the cost arithmetic.
+// The BCH lock/action builders live in role2-lock.js / role2-action.js; this
+// module owns the carrier, the tag, the pair check and the cost arithmetic.
 //
 // See docs/POOL-HANDOFF-2026-11-24-NITO-ROLE2-TAGGED.md §3-§4 and ../PLAN.md.
 
@@ -232,15 +232,17 @@ export class Role2PoolAdapter {
     })
   }
 
-  async buildLock() {
-    throw new Error('Role2PoolAdapter.buildLock: not implemented — CS-7')
+  async buildLock(options = {}) {
+    const { buildRole2Lock } = await import('./role2-lock.js')
+    return buildRole2Lock({ ...options, pool: options.pool ?? this.config })
   }
 
-  async buildAction() {
-    throw new Error('Role2PoolAdapter.buildAction: not implemented — CS-7')
+  async buildAction(options = {}) {
+    const { buildRole2Action } = await import('./role2-action.js')
+    return buildRole2Action({ ...options, pool: options.pool ?? this.config })
   }
 
   async verifyBeforeBroadcast() {
-    throw new Error('Role2PoolAdapter.verifyBeforeBroadcast: not implemented — CS-7')
+    throw new Error('Role2PoolAdapter.verifyBeforeBroadcast: VM-eval is pending — CS-7')
   }
 }
