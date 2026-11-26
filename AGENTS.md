@@ -26,11 +26,12 @@ byte-identical (the hooked 2-out program still hashes `d71851a1…`), so the liv
 2-out pool and its tooling are unaffected.
 
 **Session commits:** `hushyourmoney` `21c799e` (docs/site/handoff), `6879ded`
-(the 3-out UNSHIELD record + final state); `pusd-shielded-pool` `5f645c3`
-(3-out tooling + evidence). The site image `d1b87bfa995b` / Hub
-`sha256:d1b87bfa995bde96b4a5909bf2c5f6b66661014010bc8ec828ced3552d08fc84`
-(pushed 2026-11-26 19:45Z) carries the 21/21 + 69/69 + UNSHIELD text; Flux
-owner update pending.
+(the 3-out UNSHIELD record + final state), `b7f8bb1` (the Nito 3-out witness
+path); `nito.cash` `6ea8077` (the 3-out v3 client path); `pusd-shielded-pool`
+`5f645c3` (3-out tooling + evidence). The site image `cc99fbd0a634` / Hub
+`sha256:cc99fbd0a63406ab198781d16fb9e57c15d1184ec98f3f757fa4ff5755f9caf5`
+(pushed 2026-11-26 20:11Z) carries the 21/21 + 69/69 + UNSHIELD + Nito 3-out
+text; Flux owner update pending.
 
 ### Hosts / paths (continue here)
 
@@ -162,7 +163,7 @@ BN_VK_FIXTURES=/home/apecs/cov/our-3out.fixtures.json POOL_3OUT=1 \
 ### Nito client 3-out path (built 2026-11-26)
 
 - Repo: `/Workspace/apecsdev/nito.cash`; build host `apecsdev`
-  (`~/apps/nito.cash`). New `apps/web/src/lib/pool/role2-3out/` vendors the
+  (`~/apps/nito.cash`); commit `6ea8077`. New `apps/web/src/lib/pool/role2-3out/` vendors the
   3-out program builder under the 3-out VK (`d4ed12ee…`);
   `verifier-role2-3out.js` exposes `role2Program3out` +
   `produceRole2Inputs3out`. The program reproduces the deployed demo exactly:
@@ -248,14 +249,14 @@ BN_VK_FIXTURES=/home/apecs/cov/our-3out.fixtures.json POOL_3OUT=1 \
   “measured, not deployed” to the chipnet demo record.
 - All changed SFCs pass the `@vue/compiler-sfc` parse + compile check (VM
   image + `/tmp/check-sfc.cjs`).
-- **Site image `d1b87bfa995b` / Hub
-  `sha256:d1b87bfa995bde96b4a5909bf2c5f6b66661014010bc8ec828ced3552d08fc84`
-  (pushed 2026-11-26 19:45Z)**: rebuilt after the UNSHIELD record; the
-  smoke on `127.0.0.1:3215` returned 200 for `/`, `/research`,
-  `/research/shielded-pool`, `/research/bn254`, `/playground`, `/daemons`, and
-  the shielded-pool page carries `Three confirmed 3-out actions`, `ec31a41c`,
-  `UNSHIELD 300`, `Final state 700 FT` and `11 leaves`. The previous Hub image
-  `a49aa80c…` (2026-11-26 18:44Z) was stale; this supersedes it.
+- **Site image `cc99fbd0a634` / Hub
+  `sha256:cc99fbd0a63406ab198781d16fb9e57c15d1184ec98f3f757fa4ff5755f9caf5`
+  (pushed 2026-11-26 20:11Z)**: rebuilt after the Nito 3-out witness record;
+  the smoke on `127.0.0.1:3215` returned 200 for `/`, `/research`,
+  `/research/shielded-pool`, `/research/bn254`, `/playground`, and the
+  shielded-pool page carries `Three confirmed 3-out actions`, `ec31a41c`,
+  `3-out witness path is built and byte-exact`, `Nito client UI/assets/blank`.
+  The previous Hub images `a49aa80c…` and `d1b87bfa…` are superseded.
 - **Flux:** no owner credential on blackhost; the owner dashboard update is
   the remaining deployment action.
 
@@ -264,8 +265,8 @@ BN_VK_FIXTURES=/home/apecs/cov/our-3out.fixtures.json POOL_3OUT=1 \
 1. ✅ Full 3-out sweep DONE (69/69); re-run red team/sweep only if the hook
    changes. ✅ The 3-out demo lifecycle is complete (SHIELD → TRANSFER →
    UNSHIELD 300); the final state is 700 FT / 11 leaves.
-2. ✅ Site image rebuilt + pushed (`d1b87bfa995b`, Hub digest
-   `sha256:d1b87bfa…`); the Flux owner update remains the only deployment
+2. ✅ Site image rebuilt + pushed (`cc99fbd0a634`, Hub digest
+   `sha256:cc99fbd0…`); the Flux owner update remains the only deployment
    action.
 3. Nito client 3-out path — **WITNESS BYTE-EXACT** (2026-11-26): the vendored
    `role2-3out` program reproduces code 7,848 B sha256 `73cb0ccb…` / locking
