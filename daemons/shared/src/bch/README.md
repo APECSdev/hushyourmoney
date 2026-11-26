@@ -1,7 +1,7 @@
 <!-- daemons/shared/src/bch/README.md -->
 # BCH wallet contract
 
-Status: P2PKH signing implemented in `p2pkh.js` (4 tests); the role-2 lock/action builders are implemented in `cashshuffle/src/role2-{lock,action}.js` (7 tests).
+Status: P2PKH signing implemented in `p2pkh.js` (4 tests); the role-2 lock/action builders are implemented in `cashshuffle/src/role2-{lock,action}.js` (7 tests). Nito’s 3-input builders are done, the proving assets are pinned, and the role-2 witness acceptance PASSED (`a304d3c`); the store/UI wiring and web-platform acceptance remain.
 
 Reference: `../nito.cash/apps/web/src/lib/bch/crypto.js`, `../nito.cash/apps/web/src/lib/pool/role2-lock.js`, `../nito.cash/apps/web/src/lib/pool/role2-action.js`.
 
@@ -39,7 +39,7 @@ Reference: `../nito.cash/apps/web/src/lib/bch/crypto.js`, `../nito.cash/apps/web
 - `TXINPUTCOUNT == 3` and `TXOUTPUTCOUNT == 2 + sign`.
 - The lock and action broadcast atomically; the action spends the lock’s unconfirmed outputs.
 - Every action is evaluated in `createVirtualMachineBch2026(false)` (consensus) and `(true)` (standard) before broadcast; any error rejects. The VM-eval is pending.
-- Implemented: `cashshuffle/src/role2-lock.js` (signed lock) and `cashshuffle/src/role2-action.js` (3-input action with injected unlockings).
+- Implemented: `cashshuffle/src/role2-lock.js` (signed lock) and `cashshuffle/src/role2-action.js` (3-input action with injected unlockings). Nito confirmed the 2N shape and the fee split; the 3-input builders are done on the client side.
 
 ## 5. Fees
 

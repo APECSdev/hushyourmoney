@@ -17,8 +17,7 @@
 
 The reference implementation is the Nito Cash tree at `../nito.cash/apps/web/src/lib/`.
 
-Current HEAD: `984ca4c` (`git -C ../nito.cash log --oneline -1`).
-`transport.js` and `cashshuffle-transport.spec.js` are untracked at that HEAD (`git -C ../nito.cash status --short`). That is a reference gap, not a blocker for the official mode: the shared transport is implemented from the NIP-44/NIP-59 contracts and the Nito reference, and the `nito-v0` mode preserves the reference tree's KDF and padding for a mixed deployment.
+Nito committed the transport in `f88ed90` and the official NIP-44/NIP-59 changes in `ac61542`; the earlier `984ca4c` snapshot is superseded. The shared implementation is aligned with the official mode; `nito-v0` remains only as a compatibility mode for older payloads.
 
 The implemented modules are `src/nostr/event.js`, `src/nostr/nip44.js`, `src/nostr/nip59.js`, `src/nostr/relay.js`, `src/nostr/relay-pool.js`, `src/cashshuffle/transport.js` and `src/bch/p2pkh.js`. The Nito `protocol.js`/`transport.js` remain the reference for the round layer.
 
@@ -33,13 +32,13 @@ The Nito implementation is not the official NIP-44 v2 wire format. It differs in
 The shared package exposes one of two modes:
 
 1. `NIP44_MODE=official` — the official v2 KDF and padding. This is the default and passes `nip44.vectors.json` from `https://github.com/paulmillr/nip44` (35 conversation-key cases, 10 encrypt/decrypt cases, 24 padding cases).
-2. `NIP44_MODE=nito-v0` — the Nito reference KDF and padding, explicitly versioned as a private variant. Both peers must set it.
+2. `NIP44_MODE=nito-v0` — the pre-`ac61542` Nito KDF and padding, kept only for older payloads. Nito does not use it.
 
-The daemon and the Nito client must set the same mode; a mismatch fails at decrypt. The official mode is the interoperability target; the private mode exists for a mixed deployment with the current Nito tree.
+Nito chose `official` (`ac61542`) and has no `nito-v0` path. The official mode is the interoperability target; the private mode remains only as a compatibility path for older payloads.
 
 ## 4. NIP-59 timestamp rule
 
-Implemented in `src/nostr/nip59.js`. The rumor’s `created_at` is canonical. The seal and gift-wrap timestamps are randomized independently up to two days in the past; all timestamps are in the past. The receiver accepts the two-day window plus 300 s of clock skew. The subscription uses `since = now - 172800 - 300` (the pattern in `web/stores/p2pfusion/round.ts:122`).
+Implemented in `src/nostr/nip59.js` and adopted by Nito in `ac61542`. The rumor’s `created_at` is canonical. The seal and gift-wrap timestamps are randomized independently up to two days in the past; all timestamps are in the past. The receiver accepts the two-day window plus 300 s of clock skew. The subscription uses `since = now - 172800 - 300` (the pattern in `web/stores/p2pfusion/round.ts:122`).
 
 Reference: `../nito.cash/apps/web/src/lib/nostr/nip59.js:37,42-55,76`; NIP-59 line 111.
 
@@ -56,7 +55,7 @@ Reference: `../nito.cash/apps/web/src/lib/nostr/nip59.js:37,42-55,76`; NIP-59 li
 - NIP-42 AUTH: `NOSTR_AUTH_POLICY=none|optional|required`; the auth key is a session key, never the wallet key.
 - Health snapshot: `{ relay, state, lastOkAt, lastEventAt, reconnects }`.
 
-Implemented in `src/nostr/relay.js` and `src/nostr/relay-pool.js`; the mock-relay suite covers publish, quorum, dedupe, 80 ms pacing, reconnect/resubscribe and NIP-42. The current Nito `transport.js` publishes only on `this.clients[0]` (`transport.js:85`), has no 80 ms pacing, no dedupe, and no reconnect (`relay.js:46-51`); the shared pool is the replacement.
+Implemented in `src/nostr/relay.js` and `src/nostr/relay-pool.js`; the mock-relay suite covers publish, quorum, dedupe, 80 ms pacing, reconnect/resubscribe and NIP-42. Nito wired the AUTH response in its transport (`d85bade`); the production relay set and policy remain open.
 
 ## 6. BCH contract
 

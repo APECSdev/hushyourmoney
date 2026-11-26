@@ -109,38 +109,35 @@ daemons/
 
 ---
 
-## 4. Decisions locked from the 2026-11-25 review
+## 4. Decisions settled (Hush + Nito, 2026-11-26)
 
-These are not open for the first Nito round; they are the baseline the implementation starts from.
+These are settled; the implementation follows them.
 
-1. **Verify-before-sign is mandatory.** The Nito protocol core has no transaction object and no output check: `../nito.cash/apps/web/src/lib/cashshuffle/protocol.js:17-24,109-115`. This daemon adds a `VERIFY` phase between `SHUFFLE` and `SIGNING` (`daemons/cashshuffle/src/round.js`). Every peer checks its own output, the input set, and the fee before producing a signature.
-2. **NIP-44 KDF and padding are the official v2 or an explicitly versioned private variant.** The Nito implementation uses the raw ECDH x-coordinate as the conversation key and HKDF with salt `nip44-v2`, plus a 4-byte BE length prefix and next-power-of-two padding (`../nito.cash/apps/web/src/lib/nostr/nip44.js`); official NIP-44 v2 uses HKDF-Extract for the conversation key, HKDF-Expand for the message keys, a 2-byte u16 prefix and chunked padding (`https://github.com/nostr-protocol/nips/blob/master/44.md`). `daemons/shared/src/nostr/nip44.js` implements both modes; the official mode passes the 35 official vectors, and `nito-v0` preserves the reference wire.
-3. **Registration carries the verification key, amount, and version — not the input outpoint.** The classic spec is unsigned key + amount (`web/pages/research/coinjoin.vue:186-190`); the Nito `register()` takes `{ key, amount, version }` (`protocol.js:74-90`). The handoff’s “equal-amount input” wording is not used.
-4. **A role-2 action consumes a PAIR of same-tag fuel UTXOs.** The action builder requires exactly two fuel UTXOs (`../nito.cash/apps/web/src/lib/pool/role2-action.js:56,75`); the lock creates two tagged outputs and spends two blanks (`role2-lock.js:6-9,86,106`). One 15,000-sat output per participant does not form a pair. Pool-native batching needs two tagged outputs per action (2N outputs for N actions), not one output per participant.
-5. **Fee accounting is split.** The `15,000 × 2` fuel is the ACTION fee (`role2-action.js:70`; `docs/POOL-HANDOFF-2026-11-24-NITO-ROLE2-TAGGED.md:70-71`; `role2-lock.js:31-33`). The lock/shuffle transaction fee is separate. Two blanks cost 1,000 sats each at the vending machine (`docs/POOL-HANDOFF-2026-11-24-NITO-ROLE2-TAGGED.md` §4.1). The daemon cap accounts for all three.
-6. **BCH Schnorr is not Nostr BIP-340.** Nostr events use BIP-340 (`../nito.cash/apps/web/src/lib/nostr/event.js:15-35`); BCH inputs use BCH Schnorr with the 0x41 sighash byte (`../nito.cash/apps/web/src/lib/bch/crypto.js:221-257`). `AGENTS.md:238` records “BCH Schnorr ≠ final BIP-340.” The wallet module uses the BCH path only.
-7. **NIP-59 timestamps are tweaked.** The current Nito seal copies the rumor’s `created_at` and the gift wrap uses `now` (`../nito.cash/apps/web/src/lib/nostr/nip59.js:37,42-55,76`). NIP-59 line 111 directs implementations to tweak every timestamp other than the rumor’s. The shared transport randomizes the seal and gift-wrap timestamps up to two days in the past and subscribes with `since = now - 172800 - 300` (the pattern in `web/stores/p2pfusion/round.ts:122`).
-8. **The daemon runs as a dedicated non-root user with hardening.** The unit uses `User=cashshuffle`, `NoNewPrivileges`, `ProtectSystem=strict`, `ProtectHome`, `PrivateTmp`, `StateDirectory`, `MemoryMax`, and `CPUQuota` (`daemons/cashshuffle/systemd/cashshuffle-daemon.service`). The host has 2 CPU cores, 3.8 GiB RAM, and 2.8 GiB free on a 93%-full 38G disk (verified 2026-11-25 via `ssh blackhost 'nproc; free -h; df -h /'`).
-9. **Proving assets are a separate handover with an acceptance gate.** The Hush keypair is `VK 05250429…`, `zkey 4a4e2543…`, `wasm 8595b434…` (`AGENTS.md:699`); the Nito repo carries its own PPOT keypair (`VK 27f6ea03…`) and its role-2 registry entry was `walletProverCompatible: false`, `status: 'awaiting-proving-assets'` at the last Hush check (`../nito.cash/apps/web/src/lib/pool/registry.js:88-93`). The zkey is 97 MB and cannot ship in the app bundle (`prover.js:41`); the distribution channel, CORS, caching, and the web-platform SHIELD→TRANSFER→UNSHIELD acceptance gate are defined in `daemons/cashshuffle/OPEN-QUESTIONS.md`.
-10. **CashFusion coordinator privacy is explicit.** `AGENTS.md:110` records that the coordinator-sees critique applies to CashFusion, not CashShuffle. The CashFusion daemon defaults to `coordinatorPolicy=avoid` (`daemons/cashfusion/src/config.js`); it does not become the default coordinator.
+1. **Verify-before-sign is mandatory.** Nito added `VERIFY` between `SHUFFLE` and `SIGNING` (`docs/DAEMONS-NITO-RESPONSE-2026-11-25.md` item 3), and the daemon has the same phase (`daemons/cashshuffle/src/round.js`). Every peer checks its own output, the input set, the fee and duplicate outpoints/addresses before producing a signature.
+2. **NIP-44 is official v2.** Nito chose `official` (commit `ac61542`); the shared module’s default is official and passes `nip44.vectors.json`. `nito-v0` remains a compatibility mode but is not used by the Nito client.
+3. **Registration carries the verification key, amount, and version — not the input outpoint.** Confirmed by Nito; the classic spec is unsigned key + amount (`web/pages/research/coinjoin.vue:186-190`).
+4. **A role-2 action consumes a PAIR of same-tag fuel UTXOs.** Nito confirmed the 2N-output round shape (10 outputs for 5 actions) on 2026-11-26. The lock creates two tagged outputs and spends two blanks; the action consumes exactly two fuel UTXOs plus the state.
+5. **Fee accounting is split.** The `15,000 × 2` fuel is the ACTION fee; the lock/shuffle fee is separate; two blanks cost 1,000 sats each. Nito confirmed the split and the 400,000-sat cap for 10 actions.
+6. **BCH Schnorr is not Nostr BIP-340.** Nostr events use BIP-340; BCH inputs use BCH Schnorr with the 0x41 sighash byte. The wallet module uses the BCH path only.
+7. **NIP-59 timestamps are tweaked.** Nito adopted independent seal/gift-wrap randomization up to two days in the past (commit `ac61542`); the receiver accepts the two-day window plus 300 s. The shared transport implements the same rule.
+8. **The daemon runs as a dedicated non-root user with hardening.** `User=cashshuffle`, `NoNewPrivileges`, `ProtectSystem=strict`, `ProtectHome`, `PrivateTmp`, `StateDirectory`, `MemoryMax=512M`, `CPUQuota=50%`. The host has 2 CPU cores, 3.8 GiB RAM, and 2.8 GiB free on a 93%-full 38G disk (verified 2026-11-25).
+9. **Proving assets are pinned with an acceptance gate.** Nito pinned the three hashes, mirrored them on `prover.nito.cash`, and `scripts/pool-accept.mjs --pool role2 --txid 9d9aa97a` reports all three unlockings BYTE-EXACT (commit `a304d3c`). The registry flag flips after the web-platform SHIELD→TRANSFER→UNSHIELD.
+10. **CashFusion coordinator privacy is explicit.** `AGENTS.md:110` records that the coordinator-sees critique applies to CashFusion, not CashShuffle. The CashFusion daemon defaults to `coordinatorPolicy=avoid`.
 
 ---
 
-## 5. Blockers for implementation
+## 5. Remaining blockers
 
-No blocker to the implemented cores. The following items block the first working round and need a Nito round:
+No blocker to the implemented cores. The remaining items block the first working round:
 
 | Blocker | Owner | Why |
 |---|---|---|
-| Nito reference commit | Nito | `transport.js` and its test are untracked at `../nito.cash` HEAD `984ca4c`. This is a comparison/porting gap, not a blocker for the official mode. |
-| NIP-44 mode for the Nito client | Joint | The daemon supports official v2 and `nito-v0`; the client must pick one. Official v2 is the interoperability target. |
-| Nito client verify-before-sign | Joint | The daemon implements `VERIFY` and the malicious-coordinator test; the Nito browser peer needs the same check or the coordinator can steal from it. |
-| Pool-native tag-pair round shape | Joint | One output per participant cannot fund a role-2 action. |
-| Proving assets + 3-input builder + note delivery | Nito | The client cannot prove or drive the 3-input shape until it pins the public handover and swaps the builder. |
-| Production relay set + NIP-42 policy | Joint | The current reference publishes on one relay and does not authenticate. |
-| `blackhost` ownership and capacity sign-off | Hush | 2 cores, 3.8 GiB RAM, 2.8 GiB free; the daemon shares the host with the rpsls build. |
-| Signature verification, timeouts, persistence, network loop, Electrum broadcast, VM-eval, note delivery | Hush | The cores exist; the runtime wiring, signature checks and chain path are the remaining Hush work. |
-| Nito final approval | Nito | The standing bar for any deployed result. |
+| Nito store/UI wiring for `submitRole2Action` + role-2 scan | Nito | The builders are done; the store/UI and the 642-B STMT / 169-B carrier scan are the remaining client work. |
+| Web-platform chipnet SHIELD→TRANSFER→UNSHIELD | Nito | After this, `walletProverCompatible` flips and the daemon-side A5/A6 can run. |
+| Production relay set + NIP-42 policy | Joint | NIP-42 is wired (commit `d85bade`); the production set and policy remain open. |
+| Blame behavior, blank-acquisition role, metrics exposure | Joint/Hush | Open design/ops items. |
+| Signature verification, timeouts, persistence, network loop, Electrum broadcast, VM-eval, note delivery, deployment | Hush | The cores exist; the runtime wiring, signature checks and chain path are the remaining Hush work. |
+| Nito final approval | Nito | Standing; the record goes in A10 / CF-A6. |
 
 ---
 

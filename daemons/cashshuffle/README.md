@@ -1,7 +1,7 @@
 <!-- daemons/cashshuffle/README.md -->
 # CashShuffle daemon
 
-**Status:** shared transport (M1) done; round state machine + VERIFY (M2 partial; signature verification, timeouts and persistence pending); wallet selection/caps + BCH P2PKH signer (M3 partial); carrier/tag/fuel-pair/cost + lock/action builders (M4 partial). The network loop, Electrum broadcast, proving-asset acceptance, VM-eval, note delivery and deployment are not implemented. No float, no deployment.
+**Status:** shared transport (M1) done; round state machine + VERIFY (M2 partial; signature verification, timeouts and persistence pending); wallet selection/caps + BCH P2PKH signer (M3 partial); carrier/tag/fuel-pair/cost + lock/action builders (M4 partial). Nito answered the checklist: official NIP-44 (`ac61542`), NIP-59 adopted, client `VERIFY` added, 2N shape confirmed, fee split confirmed, proving assets pinned + role-2 witness acceptance PASSED (`a304d3c`), 3-input builders done, NIP-42 wired (`d85bade`). Remaining: Nito store/UI wiring + web-platform acceptance; Hush signature verification/timeouts/persistence, network loop, Electrum broadcast, VM-eval, note delivery and deployment. No float, no deployment.
 **Source handoff:** `docs/CASHSHUFFLE-DAEMON-HANDOFF-2026-11-25.md`.
 **Design:** `../nito.cash/docs/CASHSHUFFLE-NOSTR-DESIGN.md`.
 **Reference:** `../nito.cash/apps/web/src/lib/cashshuffle/`, `../nito.cash/apps/web/src/lib/nostr/`.

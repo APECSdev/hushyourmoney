@@ -1,7 +1,7 @@
 <!-- daemons/cashshuffle/PLAN.md -->
 # CashShuffle daemon plan
 
-Status: M0 done; M1 transport done; M2 round partial (state machine + VERIFY; signature verification, timeouts and persistence pending); M3 selection/caps + BCH signer partial; M4 carrier/lock/action partial. CS-1–CS-4 implemented; CS-5–CS-7 partial; CS-8–CS-12 not started.
+Status: M0 done; M1 transport done and Nito chose official NIP-44 (`ac61542`); M2 round partial (state machine + VERIFY; Nito added the client VERIFY; signature verification, timeouts and persistence pending); M3 selection/caps + BCH signer partial; M4 carrier/lock/action partial (2N shape confirmed; Nito witness acceptance PASSED `a304d3c`; store/UI wiring + web acceptance pending). CS-1–CS-4 implemented; CS-5–CS-7 partial; CS-8–CS-12 not started.
 
 Owner key: **H** = Hush, **N** = Nito, **J** = joint.
 
@@ -24,21 +24,21 @@ Owner key: **H** = Hush, **N** = Nito, **J** = joint.
 
 ## 2. Task detail
 
-**Status 2026-11-26:** CS-1–CS-4 are implemented in `daemons/shared/src/nostr/` (44/44 shared tests). CS-5 is implemented as a state machine + VERIFY in `cashshuffle/src/round.js` (16 round tests, including the malicious-coordinator case); signature verification, timeouts, persistence and the transport loop that drives `handleMessage()` are pending. CS-6 selection/funding/caps are implemented in `cashshuffle/src/wallet.js` (5 tests); the BCH P2PKH signer is implemented (4 p2pkh tests); Electrum broadcast is pending. CS-7 carrier/tag/pair/cost helpers are implemented in `cashshuffle/src/pool.js` and the lock/action builders in `cashshuffle/src/role2-{lock,action}.js` (14 tests: 7 pool + 7 lock/action); the proving-asset acceptance, VM-eval, note delivery, atomic broadcast and A5/A6 are pending. CS-8–CS-12 remain.
+**Status 2026-11-26:** CS-1–CS-4 are implemented in `daemons/shared/src/nostr/` (44/44 shared tests); Nito chose official NIP-44 (`ac61542`) and wired NIP-42 (`d85bade`). CS-5 is implemented as a state machine + VERIFY in `cashshuffle/src/round.js` (16 round tests, including the malicious-coordinator case); Nito added the client VERIFY; signature verification, timeouts, persistence and the transport loop that drives `handleMessage()` are pending. CS-6 selection/funding/caps are implemented in `cashshuffle/src/wallet.js` (5 tests); the BCH P2PKH signer is implemented (4 p2pkh tests); Electrum broadcast is pending. CS-7 carrier/tag/pair/cost helpers are implemented in `cashshuffle/src/pool.js` and the lock/action builders in `cashshuffle/src/role2-{lock,action}.js` (14 tests: 7 pool + 7 lock/action); the 2N shape is confirmed, Nito’s role-2 witness acceptance PASSED (`a304d3c`), and the 3-input builders are done; the store/UI wiring, web-platform acceptance, VM-eval, note delivery, atomic broadcast and A5/A6 remain. CS-8–CS-12 remain.
 
 ### CS-1 — reference pin
 
-- `git -C ../nito.cash log --oneline -1` is `984ca4c` on 2026-11-25; `transport.js` and `cashshuffle-transport.spec.js` are untracked at that HEAD.
-- The shared implementation is independent; the `nito-v0` mode preserves the reference wire for a mixed deployment.
+- Nito committed the transport in `f88ed90` and the official NIP-44/NIP-59 changes in `ac61542`; the earlier `984ca4c` snapshot is superseded.
+- The shared implementation is independent and aligned with official v2; `nito-v0` remains only as a compatibility mode.
 - The Nito `protocol.js`/`transport.js` remain the reference for the round layer.
-- The source paths and the HEAD pin are recorded in `daemons/shared/README.md` §2.
+- The source paths and the current Nito commits are recorded in `daemons/shared/README.md` §2.
 
 ### CS-2 — NIP-44
 
 - Official v2: HKDF-Extract for the conversation key, HKDF-Expand for the message keys, 2-byte u16 prefix and chunked padding. The official JavaScript reference caps plaintext at 65,535 bytes, so the 6-byte extended prefix is not exercised.
-- The current Nito code uses raw sharedX + HKDF with salt `nip44-v2`, a 4-byte prefix and next-power padding (`../nito.cash/apps/web/src/lib/nostr/nip44.js`).
-- `NIP44_MODE=official|nito-v0`; the default is `official`.
-- The official mode passes `nip44.vectors.json` (35 conversation-key cases, 10 encrypt/decrypt cases, 24 padding cases); `nito-v0` has a round-trip and cross-mode rejection test.
+- Nito chose official v2 (`ac61542`); the pre-`ac61542` tree used raw sharedX + HKDF with salt and a 4-byte prefix/next-power padding.
+- `NIP44_MODE=official|nito-v0`; the default is `official`, and the Nito client has no `nito-v0` path.
+- The official mode passes `nip44.vectors.json` (35 conversation-key cases, 10 encrypt/decrypt cases, 24 padding cases); `nito-v0` has a round-trip and cross-mode rejection test for compatibility.
 
 ### CS-3 — NIP-59
 
@@ -57,6 +57,7 @@ Owner key: **H** = Hush, **N** = Nito, **J** = joint.
 ### CS-5 — protocol engine
 
 - Implemented: phases `REGISTER → POOL → ANNOUNCEMENT → SHUFFLE → VERIFY → SIGNING → BROADCAST`; `BLAME` is a side state; `VERIFY` checks the final transaction pays the peer’s own output, the input set, and the fee; the malicious-coordinator test passes.
+- Nito added the client `VERIFY` on 2026-11-26 (own output, duplicate outpoints/addresses).
 - Pending: signature verification before counting, per-phase timeouts, duplicate packet handling and round persistence to `CASHSHUFFLE_DATA_DIR`.
 
 ### CS-6 — wallet
@@ -67,7 +68,8 @@ Owner key: **H** = Hush, **N** = Nito, **J** = joint.
 ### CS-7 — role-2 adapter
 
 - Implemented: `tag = SHA256(carrier[0..64])`; carrier parse/build; fuel-pair check; cost arithmetic; lock with 2 tagged fuel UTXOs, 2 blanks and optional FT deposit; 3-input action with 169-B carrier, new state and optional payout.
-- Pending: proving-asset acceptance, VM-eval in consensus and standard modes, off-chain note delivery, atomic lock+action broadcast.
+- Nito confirmed the 2N shape, pinned the proving assets and PASSED the role-2 witness acceptance (`a304d3c`); the 3-input builders are done.
+- Pending: the store/UI wiring, web-platform SHIELD→TRANSFER→UNSHIELD, VM-eval in consensus and standard modes, off-chain note delivery, atomic lock+action broadcast.
 
 ### CS-8 — operations
 

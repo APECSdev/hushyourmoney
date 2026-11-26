@@ -1,7 +1,7 @@
 <!-- daemons/shared/src/nostr/README.md -->
 # Nostr transport contract
 
-Status: implemented in `src/nostr/`; 44 shared tests pass (M1).
+Status: implemented in `src/nostr/`; 44 shared tests pass (M1). Nito chose official NIP-44 (`ac61542`), adopted the NIP-59 randomization (`ac61542`), and wired NIP-42 (`d85bade`).
 
 Reference: `../nito.cash/apps/web/src/lib/nostr/` and `../nito.cash/apps/web/src/lib/cashshuffle/transport.js`.
 
@@ -32,13 +32,13 @@ The official v2 KDF and padding are the default:
 - 2-byte u16 length prefix; the official JavaScript reference caps plaintext at 65,535 bytes, so the 6-byte extended prefix is not exercised by the reference or its vectors.
 - ChaCha20 with counter 0; HMAC-SHA256 over `nonce ‖ ciphertext`; base64 with padding.
 
-The current Nito code uses the raw ECDH x-coordinate as the conversation key, HKDF with salt `nip44-v2` for the message keys, a 4-byte prefix and next-power padding (`../nito.cash/apps/web/src/lib/nostr/nip44.js`). `NIP44_MODE=nito-v0` preserves that wire for a mixed deployment; both peers must set it and the payload is labelled as a private variant, not NIP-44 v2.
+The pre-`ac61542` Nito code used the raw ECDH x-coordinate as the conversation key, HKDF with salt `nip44-v2` for the message keys, a 4-byte prefix and next-power padding. Nito chose official v2 on 2026-11-26 (`ac61542`); `NIP44_MODE=nito-v0` remains only for older payloads and is not used by the client.
 
 The official vectors are in `https://github.com/paulmillr/nip44` (`nip44.vectors.json`). The test suite runs them in `official` mode: 35 conversation-key cases, 10 encrypt/decrypt cases, 24 padding cases, long messages and invalid payloads.
 
 ## 4. NIP-59
 
-- Implemented in `nip59.js`.
+- Implemented in `nip59.js` and adopted by Nito in `ac61542`.
 - The rumor’s `created_at` is canonical and the rumor is unsigned.
 - The seal and gift wrap use independent random timestamps up to two days in the past; all timestamps are in the past (NIP-59 line 111).
 - `unwrapGift` verifies the gift-wrap signature, the seal signature, and the optional expected sender; it rejects a non-1059 gift, a non-13 seal, a wrong `p` tag, a future timestamp, or a timestamp outside the two-day window.
@@ -53,7 +53,7 @@ The official vectors are in `https://github.com/paulmillr/nip44` (`nip44.vectors
 - Inbound events are deduped by `event.id`; a duplicate delivery is dropped before routing.
 - A reconnect resubscribes with `{ kinds: [1059], '#p': [self], since: now - 172800 - 300 }`.
 - The health snapshot is `{ relay, state, lastOkAt, lastEventAt, reconnects }`.
-- The mock-relay suite covers publish, quorum, dedupe, 80 ms pacing, reconnect/resubscribe and NIP-42.
+- The mock-relay suite covers publish, quorum, dedupe, 80 ms pacing, reconnect/resubscribe and NIP-42. Nito wired the AUTH response in its transport (`d85bade`); the production relay set and policy remain open.
 
 ## 6. NIP-42 AUTH
 

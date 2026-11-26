@@ -32,7 +32,7 @@ const TOC = [
     { n: '07', title: 'Pool composition', href: '#pool' },
     { n: '08', title: 'Roadmap', href: '#roadmap' },
     { n: '09', title: 'Acceptance gates', href: '#gates' },
-    { n: '10', title: 'The first Nito round', href: '#nito' },
+    { n: '10', title: 'The Nito response', href: '#nito' },
     { n: '11', title: 'Questions', href: '#faq' },
     { n: '12', title: 'Sources', href: '#sources' },
 ]
@@ -151,13 +151,13 @@ const REAL_VS_PLANNED = [
         surface: 'Nostr transport',
         state: 'implemented',
         badge: 'badge-done',
-        detail: 'Shared transport: official NIP-44 v2 KDF/padding passes the official `nip44.vectors.json`; nito-v0 preserves the Nito wire; NIP-59 timestamps; relay pool with 80 ms pacing, dedupe, reconnect and NIP-42; CashShuffle transport wrapper. 44 shared tests.',
+        detail: 'Shared transport: official NIP-44 v2 KDF/padding passes the official `nip44.vectors.json`; Nito chose official (`ac61542`), adopted the NIP-59 timestamps and wired NIP-42 (`d85bade`); relay pool with 80 ms pacing, dedupe, reconnect; CashShuffle transport wrapper. 44 shared tests.',
     },
     {
         surface: 'CashShuffle round',
         state: 'core implemented',
         badge: 'badge-mid',
-        detail: 'Round state machine + VERIFY before SIGNING; 16 tests including the malicious-coordinator case. Signature verification, timeouts, persistence, the network loop, Electrum broadcast and end-to-end A1/A2 are pending.',
+        detail: 'Round state machine + VERIFY before SIGNING; 16 tests including the malicious-coordinator case; Nito added the client VERIFY. Signature verification, timeouts, persistence, the network loop, Electrum broadcast and end-to-end A1/A2 are pending.',
     },
     {
         surface: 'CashFusion round',
@@ -169,7 +169,7 @@ const REAL_VS_PLANNED = [
         surface: 'Pool-native batching',
         state: 'builders implemented',
         badge: 'badge-mid',
-        detail: 'Carrier/tag/fuel-pair/cost helpers and the lock/action builders are implemented and tested (14 tests: 7 pool + 7 lock/action). Proving assets, VM-eval and note delivery are pending.',
+        detail: 'Carrier/tag/fuel-pair/cost helpers and the lock/action builders are implemented and tested (14 tests: 7 pool + 7 lock/action). Nito confirmed the 2N shape, pinned the proving assets and PASSED the witness acceptance (`a304d3c`); the store/UI wiring, web acceptance, VM-eval and note delivery remain.',
     },
     {
         surface: 'blackhost deployment',
@@ -179,9 +179,9 @@ const REAL_VS_PLANNED = [
     },
     {
         surface: 'Nito final approval',
-        state: 'pending',
-        badge: 'badge-wait',
-        detail: 'The Nito Cash client remains the final approval for any deployed result.',
+        state: 'standing',
+        badge: 'badge-mid',
+        detail: 'The Nito Cash client remains the final approval; the record goes in A10/CF-A6 after the web-platform acceptance.',
     },
 ]
 
@@ -231,11 +231,11 @@ const POOL_FACTS = [
 
 /* ── Roadmap ──────────────────────────────────────────────────────── */
 const ROADMAP = [
-    { id: 'M0', title: 'Orchestration', status: 'done', badge: 'badge-done', body: 'Tree, plans, acceptance, open questions, config/metrics, stubs, units. This commit.' },
-    { id: 'M1', title: 'Shared transport', status: 'in progress', badge: 'badge-mid', body: 'Official NIP-44 v2 KDF/padding + nito-v0; NIP-59 timestamps; relay pool with 80 ms pacing, dedupe, reconnect, NIP-42; CashShuffle transport wrapper. 44 shared tests; Nito client mode pending.' },
-    { id: 'M2', title: 'CashShuffle round', status: 'in progress', badge: 'badge-mid', body: 'Round state machine + VERIFY before SIGNING; 16 tests including the malicious-coordinator case. Signature verification, timeouts, persistence, network loop, Electrum broadcast and A1/A2 end-to-end pending.' },
+    { id: 'M0', title: 'Orchestration', status: 'done', badge: 'badge-done', body: 'Tree, plans, acceptance, open questions, config/metrics, stubs, units. Commit 239d66c.' },
+    { id: 'M1', title: 'Shared transport', status: 'done', badge: 'badge-done', body: 'Official NIP-44 (ac61542), NIP-59 timestamps, relay pool with 80 ms pacing, dedupe, reconnect, NIP-42 (d85bade); CashShuffle transport wrapper. 44 shared tests.' },
+    { id: 'M2', title: 'CashShuffle round', status: 'in progress', badge: 'badge-mid', body: 'Round state machine + VERIFY before SIGNING; 16 tests including the malicious-coordinator case; Nito added the client VERIFY. Signature verification, timeouts, persistence, network loop, Electrum broadcast and A1/A2 end-to-end pending.' },
     { id: 'M3', title: 'Wallet and liquidity', status: 'in progress', badge: 'badge-mid', body: 'Equal-amount selection, funding selection and caps implemented (5 tests); BCH P2PKH signer implemented (4 tests); Electrum broadcast pending.' },
-    { id: 'M4', title: 'Pool-native batching', status: 'in progress', badge: 'badge-mid', body: 'Carrier/tag/fuel-pair/cost helpers and lock/action builders implemented (14 tests: 7 pool + 7 lock/action); proving-asset acceptance, VM-eval and note delivery pending.' },
+    { id: 'M4', title: 'Pool-native batching', status: 'in progress', badge: 'badge-mid', body: 'Carrier/tag/fuel-pair/cost helpers and lock/action builders implemented (14 tests: 7 pool + 7 lock/action); Nito confirmed the 2N shape, pinned the assets and PASSED the witness acceptance (a304d3c); store/UI wiring, web acceptance, VM-eval and note delivery pending.' },
     { id: 'M5', title: 'Operations', status: 'not started', badge: 'badge-wait', body: 'Hardened systemd, metrics endpoint, journald caps, backup/restore, 24 h soak.' },
     { id: 'M6', title: 'CashFusion', status: 'not started', badge: 'badge-wait', body: 'Six-phase round, measured constants, coordinator avoidance, G4 testnet.' },
     { id: 'M7', title: 'Production', status: 'not started', badge: 'badge-wait', body: 'Security review, mainnet opt-in beta, Gate 7 ceremony for the pool, Nito final approval.' },
@@ -265,35 +265,43 @@ const FUSION_GATES = [
     { id: 'CF-A7', title: 'Mainnet gate', body: 'Mainnet is rejected until G4 and the operator sign-off are recorded.' },
 ]
 
-/* ── The first Nito round ─────────────────────────────────────────── */
-const ROUNDS = [
+/* ── The Nito response ───────────────────────────────────────────── */
+const NITO_ANSWERS = [
     {
         n: '01',
         title: 'Wire and verification',
-        body: 'The transport and round cores are implemented; settle the Nito client mode and the client-side VERIFY.',
-        asks: 'NIP-44 mode (official vs nito-v0), NIP-59 timestamps, VERIFY placement, registration fields',
-        href: 'https://github.com/APECSdev/hushyourmoney/blob/master/daemons/cashshuffle/OPEN-QUESTIONS.md',
+        status: 'answered',
+        badge: 'badge-done',
+        body: 'Official NIP-44 (ac61542), NIP-59 randomization, client VERIFY, registration fields.',
+        asks: 'NIP-44 official · NIP-59 · VERIFY · registration',
+        href: 'https://github.com/APECSdev/hushyourmoney/blob/master/docs/DAEMONS-NITO-RESPONSE-2026-11-25.md',
     },
     {
         n: '02',
         title: 'Round shape and fees',
-        body: 'Settle the pool-native composition and the cap arithmetic.',
-        asks: 'Tag pairs, 2N outputs, lock fee vs action fee, blank cost, blame behavior',
-        href: 'https://github.com/APECSdev/hushyourmoney/blob/master/daemons/cashshuffle/ACCEPTANCE.md',
+        status: 'answered',
+        badge: 'badge-done',
+        body: '2N outputs (10 for 5 actions), 30k fuel + 2k blanks + lock fee, 400k cap.',
+        asks: '2N outputs · fee split · 400k cap',
+        href: 'https://github.com/APECSdev/hushyourmoney/blob/master/docs/DAEMONS-NITO-RESPONSE-2026-11-25.md',
     },
     {
         n: '03',
         title: 'Proving assets and client builder',
-        body: 'Hand over the Hush keypair and swap the client to the 3-input shape.',
-        asks: 'VK 05250429…, zkey 4a4e2543…, wasm 8595b434…, distribution URL, 3-input builder, off-chain notes',
-        href: 'https://github.com/APECSdev/hushyourmoney/blob/master/docs/POOL-HANDOFF-2026-11-24-NITO-ROLE2-TAGGED.md',
+        status: 'mostly answered',
+        badge: 'badge-mid',
+        body: 'Assets pinned + witness acceptance PASS (a304d3c); 3-input builders done. Store/UI wiring and web-platform acceptance remain.',
+        asks: 'assets pinned · 3-input builders · store/UI · web acceptance',
+        href: 'https://github.com/APECSdev/hushyourmoney/blob/master/docs/DAEMONS-NITO-RESPONSE-2026-11-25.md',
     },
     {
         n: '04',
         title: 'Operations and acceptance',
-        body: 'Settle the deployment and run the gates.',
-        asks: 'Relay set, NIP-42 policy, metrics exposure, blackhost capacity, A1/A2, Nito final approval',
-        href: 'https://github.com/APECSdev/hushyourmoney/blob/master/daemons/ROADMAP.md',
+        status: 'partly answered',
+        badge: 'badge-mid',
+        body: 'NIP-42 wired (d85bade), blackhost confirmed; production relay set/policy, blame, blank role and metrics remain.',
+        asks: 'NIP-42 · blackhost · relay set/policy · blame · metrics',
+        href: 'https://github.com/APECSdev/hushyourmoney/blob/master/docs/DAEMONS-NITO-RESPONSE-2026-11-25.md',
     },
 ]
 
@@ -342,8 +350,14 @@ const SOURCES = [
     {
         title: 'Nito unblock handoff',
         href: 'https://github.com/APECSdev/hushyourmoney/blob/master/docs/DAEMONS-NITO-UNBLOCK-HANDOFF-2026-11-25.md',
-        body: 'The twelve decisions and handovers that unblock the daemon implementation, plus the four-round agenda.',
+        body: 'The post-response handoff: what Nito answered, what remains, and the daemon-side work.',
         cls: 'text-violet-300',
+    },
+    {
+        title: 'Nito response',
+        href: 'https://github.com/APECSdev/hushyourmoney/blob/master/docs/DAEMONS-NITO-RESPONSE-2026-11-25.md',
+        body: 'The 11-item checklist answers: official NIP-44, NIP-59, client VERIFY, 2N shape, fees, proving acceptance, 3-input builders, NIP-42.',
+        cls: 'text-lime-300',
     },
     {
         title: 'P2P-FUSION-DESIGN.md',
@@ -414,7 +428,7 @@ const SOURCES = [
         </p>
 
         <div class="animate-rise mt-8 flex flex-wrap items-center justify-center gap-3" style="animation-delay: 0.5s">
-            <span class="status-chip status-lime">M1–M4 partial</span>
+            <span class="status-chip status-lime">M1 done · M2–M4 partial</span>
             <span class="status-chip status-violet">not deployed</span>
             <span class="status-chip status-cyan">Nito final approval</span>
         </div>
@@ -459,7 +473,7 @@ const SOURCES = [
                     A round needs a peer that stays online.
                 </h2>
                 <div class="mt-6 flex flex-wrap gap-2">
-                    <span class="badge badge-mid">M1–M4 partial</span>
+                    <span class="badge badge-mid">M1 done · M2–M4 partial</span>
                     <span class="badge badge-wait">not deployed</span>
                 </div>
             </div>
@@ -597,7 +611,7 @@ const SOURCES = [
 │                                                                                 │
 │   cashshuffle-daemon.service                 cashfusion-daemon.service          │
 │   User=cashshuffle · 512M · 50% CPU          User=cashfusion · 512M · 50% CPU   │
-│   M1–M4 partial                               M6                                 │
+│   M1 done · M2–M4 partial                     M6                                 │
 │                                                                                 │
 └───────────────────────────────────┬─────────────────────────────────────────────┘
                                     │ outbound WSS · NIP-59 gift wrap
@@ -749,12 +763,12 @@ const SOURCES = [
         <div class="reveal text-center">
             <p class="font-mono text-[0.8rem] uppercase tracking-[0.45em] text-lime-200">08 · the sequence</p>
             <h2 class="mt-5 font-display text-[clamp(1.9rem,5vw,3.4rem)] font-bold leading-[1.08] text-white">
-                M0 is done. M1–M4 are in progress.
+                M0–M1 done. M2–M4 are partial.
             </h2>
             <p class="mx-auto mt-4 max-w-2xl text-base leading-relaxed text-slate-200">
-                The transport and round cores are implemented; the wallet selection and pool helpers are partial.
-                Signature verification, timeouts, persistence, the Electrum broadcast, network loop, proving-asset acceptance,
-                VM-eval and deployment remain. The roadmap is ordered by
+                Nito answered the client questions; the remaining Nito work is the store/UI wiring and the
+                web-platform acceptance. Hush still needs signature verification, timeouts, persistence, the
+                Electrum broadcast, network loop, VM-eval, note delivery and deployment. The roadmap is ordered by
                 dependency: transport, then round, then wallet, then the pool composition, then operations, then
                 CashFusion, then production.
             </p>
@@ -820,33 +834,43 @@ const SOURCES = [
         </p>
     </section>
 
-    <!-- ── 10 · The first Nito round ── -->
+    <!-- ── 10 · The Nito response ── -->
     <section id="nito" class="relative z-10 mx-auto w-full max-w-6xl scroll-mt-24 px-6 pb-28 sm:pb-36">
         <div class="reveal text-center">
-            <p class="font-mono text-[0.8rem] uppercase tracking-[0.45em] text-violet-200">10 · the unblock</p>
+            <p class="font-mono text-[0.8rem] uppercase tracking-[0.45em] text-violet-200">10 · the response</p>
             <h2 class="mt-5 font-display text-[clamp(1.9rem,5vw,3.4rem)] font-bold leading-[1.08] text-white">
-                Four rounds with Nito.
+                Nito answered. Two items remain.
             </h2>
             <p class="mx-auto mt-4 max-w-2xl text-base leading-relaxed text-slate-200">
-                The implementation is blocked on decisions, not on code. Each round resolves one group
-                of questions and records the decision in the tree.
+                Nito answered the 11-item checklist on 2026-11-26. The wire, verification, round shape,
+                fees, proving assets and 3-input builders are settled; the remaining client work is the
+                store/UI wiring and the web-platform SHIELD→TRANSFER→UNSHIELD.
             </p>
         </div>
 
         <div class="mt-10 grid gap-5 md:grid-cols-2">
-            <a v-for="(r, i) in ROUNDS" :key="r.n" :href="r.href" target="_blank" rel="noopener" class="doc-card reveal" :style="{ transitionDelay: (i * 0.06) + 's' }">
+            <a v-for="(r, i) in NITO_ANSWERS" :key="r.n" :href="r.href" target="_blank" rel="noopener" class="doc-card reveal" :style="{ transitionDelay: (i * 0.06) + 's' }">
                 <div class="flex items-center justify-between gap-3">
                     <span class="font-mono text-xs text-violet-300">{{ r.n }}</span>
-                    <span class="badge badge-wait">decision needed</span>
+                    <span class="badge" :class="r.badge">{{ r.status }}</span>
                 </div>
                 <h3 class="mt-3 font-display text-lg font-bold text-white">{{ r.title }}</h3>
                 <p class="mt-2 text-sm leading-relaxed text-slate-200">{{ r.body }}</p>
                 <p class="mt-3 font-mono text-[0.7rem] uppercase tracking-[0.16em] text-slate-300">{{ r.asks }}</p>
-                <span class="mt-3 inline-block font-mono text-xs uppercase tracking-[0.22em] text-violet-300">open the questions →</span>
+                <span class="mt-3 inline-block font-mono text-xs uppercase tracking-[0.22em] text-violet-300">read the response →</span>
             </a>
         </div>
+
+        <div class="reveal mt-6 rounded-2xl border border-violet-300/25 bg-violet-300/[0.06] p-5">
+            <p class="font-mono text-xs uppercase tracking-[0.25em] text-violet-200">remaining Nito work</p>
+            <p class="mt-2 text-sm leading-relaxed text-slate-100">
+                Store/UI wiring for <span class="font-mono text-xs">submitRole2Action</span> + the role-2 scan,
+                and the web-platform chipnet SHIELD→TRANSFER→UNSHIELD. After the web acceptance,
+                <span class="font-mono text-xs">walletProverCompatible</span> flips and the daemon-side A5/A6 can run.
+            </p>
+        </div>
         <p class="reveal mt-4 font-mono text-xs text-slate-300">
-            [source · daemons/cashshuffle/OPEN-QUESTIONS.md Q1–Q15; daemons/cashfusion/OPEN-QUESTIONS.md Q1–Q10]
+            [source · docs/DAEMONS-NITO-RESPONSE-2026-11-25.md; daemons/cashshuffle/OPEN-QUESTIONS.md]
         </p>
     </section>
 
@@ -896,8 +920,8 @@ const SOURCES = [
                 The tree is public. The daemons are not.
             </h2>
             <p class="mx-auto mt-4 max-w-2xl text-base leading-relaxed text-slate-200">
-                Read the orchestration, the plans and the open questions. The first Nito round resolves
-                the wire and verification decisions; the code follows.
+                Read the orchestration, the plans and the Nito response. The store/UI wiring and the
+                web-platform acceptance are the remaining client work; the daemon runtime follows.
             </p>
             <div class="mt-8 flex flex-col items-center justify-center gap-4 sm:flex-row">
                 <a href="https://github.com/APECSdev/hushyourmoney/tree/master/daemons" target="_blank" rel="noopener" class="btn-primary">

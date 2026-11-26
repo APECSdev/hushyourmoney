@@ -1,7 +1,7 @@
 <!-- daemons/cashshuffle/OPEN-QUESTIONS.md -->
 # CashShuffle daemon — open questions for the Nito rounds
 
-Each question has a proposed default. A round resolves the question or records a deferral.
+Each question has a proposed default. The Nito response of 2026-11-26 resolves Q1–Q6, Q9, Q10, Q12, Q13 and Q15; Q7, Q8, Q11 and Q14 remain open.
 
 ## Q1. NIP-44 KDF + padding: official v2 or a versioned private variant?
 
@@ -11,6 +11,8 @@ Each question has a proposed default. A round resolves the question or records a
 
 **Owner:** Joint.
 
+**Resolved 2026-11-26:** Nito chose `official` v2 (`ac61542`); there is no `nito-v0` path in the client. Hush’s `nito-v0` remains a compatibility mode only.
+
 ## Q2. NIP-59 timestamps: who randomizes them?
 
 **Why:** the current seal copies the rumor’s `created_at` and the gift wrap uses `now` (`../nito.cash/apps/web/src/lib/nostr/nip59.js:37,42-55,76`); NIP-59 line 111 directs implementations to tweak every timestamp other than the rumor’s.
@@ -18,6 +20,8 @@ Each question has a proposed default. A round resolves the question or records a
 **Proposed default:** the sender randomizes the seal and gift wrap up to two days in the past; the receiver accepts the two-day window; the subscription uses `since = now - 172800 - 300`.
 
 **Owner:** Joint.
+
+**Resolved 2026-11-26:** Nito adopted `randomizeCreatedAt()` for the seal and gift wrap (`ac61542`); the receiver rejects outside the two-day window.
 
 ## Q3. Verify-before-sign: the daemon has it; the Nito client must add it
 
@@ -27,6 +31,8 @@ Each question has a proposed default. A round resolves the question or records a
 
 **Owner:** Joint.
 
+**Resolved 2026-11-26:** Nito added `VERIFY` to `protocol.js`; it now checks the peer’s own output exactly once at the expected amount/address and rejects duplicate input outpoints/output addresses.
+
 ## Q4. Registration fields
 
 **Why:** the handoff §2.2 says the daemon publishes its “equal-amount input”; the classic spec and the Nito `register()` use the verification key + amount only (`web/pages/research/coinjoin.vue:186-190`; `protocol.js:74-90`).
@@ -34,6 +40,8 @@ Each question has a proposed default. A round resolves the question or records a
 **Proposed default:** registration = verification key + amount + version, unsigned. The input outpoint is revealed only when the transaction is built/signed.
 
 **Owner:** Joint.
+
+**Resolved 2026-11-26:** Nito confirmed key + amount + version, unsigned; the outpoint is revealed only at build/sign.
 
 ## Q5. Pool-native round shape
 
@@ -43,6 +51,8 @@ Each question has a proposed default. A round resolves the question or records a
 
 **Owner:** Joint.
 
+**Resolved 2026-11-26:** Nito confirmed 2N outputs (10 for 5 actions), with each participant contributing two equal inputs and receiving two same-tag outputs. The design is final in `docs/CASHSHUFFLE-NOSTR-DESIGN.md`.
+
 ## Q6. Fee accounting
 
 **Why:** the 15,000 × 2 fuel is the action fee (`role2-action.js:70`; `docs/POOL-HANDOFF-2026-11-24-NITO-ROLE2-TAGGED.md:70-71`); the lock/shuffle transaction fee is separate; two blanks cost 1,000 sats each.
@@ -50,6 +60,8 @@ Each question has a proposed default. A round resolves the question or records a
 **Proposed default:** the cap includes 30,000 sats of action fuel + 2,000 sats of blanks + the lock/shuffle fee at `CASHSHUFFLE_FEE_RATE`, with `CASHSHUFFLE_MAX_LOCK_FEE_SATS` per lock.
 
 **Owner:** Joint.
+
+**Resolved 2026-11-26:** Nito confirmed the split and accepted the 400,000-sat cap for 10 actions.
 
 ## Q7. Blame behavior
 
@@ -75,6 +87,8 @@ Each question has a proposed default. A round resolves the question or records a
 
 **Owner:** Joint.
 
+**Resolved 2026-11-26:** Nito wired the AUTH response (kind 22242, relay + challenge tags) under `authPolicy: none|optional|required` (`d85bade`); the production relay set and policy remain open (Q8).
+
 ## Q10. Liquidity cap
 
 **Why:** the handoff leaves the cap open; one action costs 30,000 sats of fuel + 2,000 sats of blanks + the lock fee.
@@ -82,6 +96,8 @@ Each question has a proposed default. A round resolves the question or records a
 **Proposed default:** 400,000 sats for the first soak (10 actions: 300,000 fuel + 20,000 blanks + up to 50,000 lock fees); raise after the 24 h run.
 
 **Owner:** Hush.
+
+**Resolved 2026-11-26:** Nito accepted the 400,000-sat cap for 10 actions.
 
 ## Q11. Blank acquisition role
 
@@ -99,6 +115,8 @@ Each question has a proposed default. A round resolves the question or records a
 
 **Owner:** Nito.
 
+**Resolved 2026-11-26:** Nito pinned the three hashes, mirrored the assets on `prover.nito.cash`, and `scripts/pool-accept.mjs --pool role2 --txid 9d9aa97a` reports all three unlockings BYTE-EXACT (`a304d3c`). The registry flag flips after the web-platform acceptance.
+
 ## Q13. Nito 3-input builder and note delivery
 
 **Why:** the Nito client is built for the 7-input covenant-at-input-0 shape; the role-2 pool is 3 inputs and the carrier leaves no room for the old out[6] note (`docs/POOL-HANDOFF-2026-11-24-NITO-ROLE2-TAGGED.md` §3, §7).
@@ -106,6 +124,8 @@ Each question has a proposed default. A round resolves the question or records a
 **Proposed default:** the Nito client adopts the 3-input builder and off-chain note delivery before the daemon’s pool-native acceptance (A5). Our `role2-action.js` is the reference shape.
 
 **Owner:** Nito.
+
+**Resolved 2026-11-26:** the 3-input builders (`role2-carrier.js`, `role2-lock.js`, `role2-action.js`, `role2-actions.js`) are done; the store/UI wiring and role-2 scan remain.
 
 ## Q14. Metrics exposure
 
@@ -122,3 +142,5 @@ Each question has a proposed default. A round resolves the question or records a
 **Proposed default:** Hush owns the host sign-off; the daemon runs with `MemoryMax=512M` and `CPUQuota=50%`; the journald cap is set before the first run; a proving daemon does not run on this host.
 
 **Owner:** Hush.
+
+**Resolved 2026-11-26:** Nito confirmed Hush owns the host sign-off; no Nito credentials are needed.
