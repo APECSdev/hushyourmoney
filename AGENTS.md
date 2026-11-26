@@ -20,7 +20,7 @@
 verifier program (under the new VK), the 201-B role-2 hook, the 3-out witness
 generator, the acceptance suite, the red team and the **full 69-case liveness
 sweep** are built and measured; a **3-out demo pool is deployed on chipnet**
-and its **SHIELD and TRANSFER are confirmed**. The site research pages are
+and its **SHIELD, TRANSFER and UNSHIELD are confirmed**. The site research pages are
 updated with the measured/deployed record. The 2-out generation is
 byte-identical (the hooked 2-out program still hashes `d71851a1…`), so the live
 2-out pool and its tooling are unaffected.
@@ -40,7 +40,8 @@ byte-identical (the hooked 2-out program still hashes `d71851a1…`), so the liv
 - Runtime state: `/home/apecs/cov/role2-pool-state.json` (the live 2-out pool);
   `/home/apecs/cov/role2-pool3-state.json` (**the 3-out demo pool; contains
   note nks — NOT committed**); `/home/apecs/cov/role2-op3.json` (SHIELD),
-  `/home/apecs/cov/role2-op3-transfer.json` (TRANSFER); the 3-out fixtures
+  `/home/apecs/cov/role2-op3-transfer.json` (TRANSFER),
+  `/home/apecs/cov/role2-op3-unshield.json` (UNSHIELD 300); the 3-out fixtures
   `/home/apecs/cov/our-3out.fixtures.json` and proofs
   `/home/apecs/cov/our-3out-proofs.json`; the 64 minted proofs
   `/home/apecs/cov/our-3out-sweep-a.json` (seed `sweep-3out-v1a`) and
@@ -136,15 +137,21 @@ BN_VK_FIXTURES=/home/apecs/cov/our-3out.fixtures.json POOL_3OUT=1 \
 - **TRANSFER** `ef64f3dda71ed0110f488ea366e8fab79ff214649586c00ccba14d12da46e325`
   (28,389 B, 30,000 sats, 1.057 sat/B; spends notes 2+3; out **280+210+210**;
   lock `f52502b4a8713e6feb9b76054d4e7a8c13e61ae0dfcdf3b1a0cc4da039d0935a`).
+- **UNSHIELD 300** `ec31a41c591c4af4ad95c2fab76c1ad2bb34b483393bce53758982a9d8e9de03`
+  (28,368 B, 29,000 sats, 1.022 sat/B; spends notes 4+5; out **112+84+84**;
+  300 FT payout at `:2`; lock
+  `11b9416cc71ac5331060de58f26cdfc47f07519ac693e0d3f5e3d9be7b121088`).
 - Every action input VM-ACCEPTED consensus + standard. Final state root
-  `3271108787199986663014643111346367083348315666322274808145127686880774309637`
-  (LE `05c7abbd…`); balance **1,000 FT**; notes **300 (index 4) / 280 (5) /
-  210 (6) / 210 (7)**; 8 leaves. On-chain state `ef64f3dd…:1` decodes to
-  category `bc607a96…`, amount 1,000, mutable NFT commitment `05c7abbd…`.
-- All 8 txs (anchor/mint/deploy/tagbatch/2 locks/SHIELD/TRANSFER) return
-  **200 on Selene** `https://explorer.selene.cash/tx/<txid>?network=chipnet`.
-- The two actions are the note-management proof: one action creates three
-  notes; the next spends two and creates three with change splitting.
+  `14228234475601541117315008857991396106432351016727521101710528622096584678627`
+  (LE `e31cd294…`); balance **700 FT**; notes **210 (index 6) / 210 (7) /
+  112 (8) / 84 (9) / 84 (10)**; 11 leaves. On-chain state `ec31a41c…:1`
+  decodes to category `bc607a96…`, amount 700, mutable NFT commitment
+  `e31cd294…`.
+- All 10 txs (anchor/mint/deploy/tagbatch/3 locks/SHIELD/TRANSFER/UNSHIELD)
+  return **200 on Selene** `https://explorer.selene.cash/tx/<txid>?network=chipnet`.
+- The three actions are the note-management proof: one action creates three
+  notes; the next spends two and creates three with change splitting; the
+  unshield spends two, pays 300 FT publicly and creates three change notes.
 - Demo only: 1-of-1 setup, **public bootstrap in-notes on the first action**
   (indices 0/1), no real nullifier set, no encrypted note delivery; Gate 7 is
   the mainnet gate.
@@ -154,10 +161,11 @@ BN_VK_FIXTURES=/home/apecs/cov/our-3out.fixtures.json POOL_3OUT=1 \
 - The 3-out deploy spent 6 plain UTXOs (82,715 sats) but the change returned;
   the tag batch then consumed the 78,563-sat consolidated UTXO.
 - **40 of the 64 blanks were burned to recover 28,632 sats**; a 2-UTXO
-  consolidation made a 32,113-sat UTXO; the SHIELD lock and TRANSFER lock each
-  spent 2 blanks, so **20 blanks remain** (20,000 sats) at wallet A. The
-  refill's `plain[0]` threshold is ~30,400 sats for a transfer (31,000 +
-  2,400 for a shield with FT change). **Recover sats before the next lock**:
+  consolidation made a 32,113-sat UTXO; the SHIELD, TRANSFER and UNSHIELD locks
+  each spent 2 blanks, so **18 blanks remain** (18,000 sats) at wallet A. The
+  UNSHIELD lock spent the last large plain UTXO (31,901 sats) and returned
+  **2,523 plain sats**; the next lock is NOT fundable from wallet A as it
+  stands. **Recover sats before the next lock**:
   `wallet-consolidate.mjs`, `blank-sweep.mjs --count N`, and
   `token-sats-recover.mjs --min-value 60000 --count 1` (wallet A also holds
   seven 20M tPUSD demo UTXOs at 60,000 sats each; burning one is DEMO ONLY).
@@ -165,7 +173,9 @@ BN_VK_FIXTURES=/home/apecs/cov/our-3out.fixtures.json POOL_3OUT=1 \
   `bchtest:qpt2lckk…` has 8,806 plain sats + token UTXOs; the x402 receiving
   wallet has 10,000 plain sats. Do not use mainnet funds.
 - The 3-out pool's FT supply change (99,999,000 FT) sits at wallet A
-  `4f49c1cb…:3` (1,000 sats); the pool's state float is 10,000 sats.
+  `4f49c1cb…:3` (1,000 sats); the UNSHIELD paid 300 FT to wallet A at
+  `ec31a41c…:2` (1,000 sats), so wallet A holds **99,999,300 FT** and the pool
+  holds 700 FT (100,000,000 total); the pool's state float is 10,000 sats.
 
 ### Tooling / files (repo)
 
@@ -202,7 +212,7 @@ BN_VK_FIXTURES=/home/apecs/cov/our-3out.fixtures.json POOL_3OUT=1 \
 ### Site / release
 
 - `web/pages/research/shielded-pool.vue` `#notes-management` now carries the
-  measured 3-out program, the 3-out gates, the deployed demo pool and the two
+  measured 3-out program, the 3-out gates, the deployed demo pool and the three
   confirmed actions (Selene links).
 - `web/pages/research/bn254.vue`, `web/pages/daemons.vue`,
   `web/pages/playground.vue`, `web/pages/research/index.vue` updated from
@@ -222,15 +232,18 @@ BN_VK_FIXTURES=/home/apecs/cov/our-3out.fixtures.json POOL_3OUT=1 \
 ### Next session order
 
 1. ✅ Full 3-out sweep DONE (69/69); re-run red team/sweep only if the hook
-   changes.
-2. Rebuild + push the site image (the current source has 21/21 + 69/69; the
-   Hub image is stale), update the AGENTS digest, then Flux owner update.
+   changes. ✅ The 3-out demo lifecycle is complete (SHIELD → TRANSFER →
+   UNSHIELD 300); the final state is 700 FT / 11 leaves.
+2. Rebuild + push the site image (the current source has 21/21 + 69/69 + the
+   UNSHIELD record; the Hub image is stale), update the AGENTS digest, then
+   Flux owner update.
 3. Nito client 3-out path (201-B carrier, 9-field actionHash, three out-notes).
 4. Deposit path (onboarding), real nullifier set (Merkle membership),
    encrypted note delivery — the v3 core.
 5. Gate 7 MPC → mainnet; migrate the Hush 750,000/762,400 notes and the
    wallet A notes into the 3-out pool.
-6. Re-check wallet A sats (20 blanks + demo tPUSD UTXOs) before the next lock.
+6. Re-check wallet A sats (18 blanks + 2,523 plain + demo tPUSD UTXOs) before
+   the next lock; recover sats first.
 
 ---
 

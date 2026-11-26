@@ -4,7 +4,7 @@
 measured; the 1-of-1 demo setup, the 3-out verifier program under that VK, the
 201-B role-2 hook, the 3-out witness generator, the acceptance suite, the red
 team and the full 69-case liveness sweep are **built and measured**; a 3-out demo pool
-is **deployed on chipnet** and its SHIELD and TRANSFER are confirmed. The
+is **deployed on chipnet** and its SHIELD, TRANSFER and UNSHIELD are confirmed. The
 deposit circuit, the real nullifier set and the note-delivery layer are **not
 built**. The new MPC (Gate 7) remains the mainnet gate. Every unmeasured item is
 marked UNMEASURED.
@@ -195,12 +195,14 @@ Deployed runner-free from the `apecsdev` VM with `POOL_3OUT=1` and the
 | Tag batch | `8e3eaf7170240f5fa632879df7e6896a365f6ac5f7c89355db791e158df55526` (64 blanks) |
 | SHIELD 1,000 | `e847ef567bd06ec6585e4d7384d0eb28ca77913c7b8813beb52a9194e83017e0` — 28,326 B, 30,000 sats (1.059 sat/B), VM-ACCEPTED consensus+standard; out **400 + 300 + 300** |
 | TRANSFER | `ef64f3dda71ed0110f488ea366e8fab79ff214649586c00ccba14d12da46e325` — 28,389 B, 30,000 sats (1.057 sat/B), VM-ACCEPTED; spends notes 2+3, out **280 + 210 + 210** |
-| Locks | `4f49c1cb94bf0588a0d064a86884cfcab5790c2d23eaa5092cc25fa260292d54` (SHIELD), `f52502b4a8713e6feb9b76054d4e7a8c13e61ae0dfcdf3b1a0cc4da039d0935a` (TRANSFER) |
-| Final state | root `3271108787199986663014643111346367083348315666322274808145127686880774309637`; balance 1,000 FT; notes 300 (index 4), 280 (5), 210 (6), 210 (7); 8 leaves |
+| UNSHIELD 300 | `ec31a41c591c4af4ad95c2fab76c1ad2bb34b483393bce53758982a9d8e9de03` — 28,368 B, 29,000 sats (1.022 sat/B), VM-ACCEPTED consensus+standard; spends notes 4+5, out **112 + 84 + 84**, 300 FT payout at `:2` |
+| Locks | `4f49c1cb94bf0588a0d064a86884cfcab5790c2d23eaa5092cc25fa260292d54` (SHIELD), `f52502b4a8713e6feb9b76054d4e7a8c13e61ae0dfcdf3b1a0cc4da039d0935a` (TRANSFER), `11b9416cc71ac5331060de58f26cdfc47f07519ac693e0d3f5e3d9be7b121088` (UNSHIELD) |
+| Final state | root `14228234475601541117315008857991396106432351016727521101710528622096584678627`; balance 700 FT; notes 210 (index 6), 210 (7), 112 (8), 84 (9), 84 (10); 11 leaves |
 
-The two actions are the note-management proof: the 3-out SHIELD creates three
+The three actions are the note-management proof: the 3-out SHIELD creates three
 notes in one action; the 3-out TRANSFER spends two of them and creates three
-new ones, with change splitting. The pool is a **demo**: 1-of-1 setup, public
+new ones, with change splitting; the 3-out UNSHIELD spends two notes, pays 300
+FT publicly and creates three change notes. The pool is a **demo**: 1-of-1 setup, public
 bootstrap in-notes on the first action, no real nullifier set and no encrypted
 note delivery. Gate 7 remains mandatory for mainnet.
 

@@ -2,8 +2,59 @@
   "$schema": "https://hushyourmoney.com/schemas/pool-registry-v1.json",
   "version": 1,
   "network": "multi",
-  "updated": "2026-11-24",
+  "updated": "2026-11-26",
   "pools": [
+    {
+      "name": "Chipnet role-2 pool v3 - 3-OUT NOTES MANAGEMENT (demo, deployed)",
+      "network": "chipnet",
+      "poolCategory": "bc607a96c8a21a1400263d437005d3f434c3c60674018119995dc6200072e635",
+      "poolLocking": "aa204a6ce339fb62b7b2ebb502c9bf642d3221620e6f5ded619ce8a39110e35182ea87",
+      "treeRootLE": "e31cd2943f8ac9cc126cde7c2bb422b8c2f4e404c2aa94c0062ca14d34e5741f",
+      "assetCategory": "bc607a96c8a21a1400263d437005d3f434c3c60674018119995dc6200072e635",
+      "setupGrade": "disclosed 1-of-1 demo setup (build3/pool3_final.zkey sha256 b0177dbe..., 2026-11-26) - Gate 7 MPC remains mandatory before mainnet",
+      "walletProverCompatible": false,
+      "anchorTxid": "bc607a96c8a21a1400263d437005d3f434c3c60674018119995dc6200072e635",
+      "mintTxid": "62d91e4cf541f8c7a710cfcecd566fd99f91b0d6615afddaaf074217b739132e",
+      "deployTxid": "2f65079182cf1ecd736e897afad741b9218c6afd16f711042ba4cacf5dd8aa7e",
+      "deployBlock": 348569,
+      "program": "code 7,848 B sha256 73cb0ccb01791d37bea2289fc809211296685896ed8ca16ea260a666ede67971; R 65 B; carrier 201 B; actionHash 9 fields (cm2)",
+      "mintingNFT": "born guarded (deploy out1) - the tag supply's source",
+      "tagBatchTxid": "8e3eaf7170240f5fa632879df7e6896a365f6ac5f7c89355db791e158df55526",
+      "tagBlanksMinted": 64,
+      "depositTag": "hook checks 4c+4g unchanged: SHA256(carrier[0..64]) = SHA256(nf0||nf1) of the funded action",
+      "gates": "plain sound verifier 7,310 B sha256 6ec7ca8e...; hooked 3-out program 7,848 B sha256 628207b1...; hook 39,082 op std / 37,930 cons / 537 B; acceptance 21/21; red team 146/0; sweep 69 cases/0 failed (min 6.00% std, input 2)",
+      "lifecycle": [
+        {
+          "op": "SHIELD 1000",
+          "lockTxid": "4f49c1cb94bf0588a0d064a86884cfcab5790c2d23eaa5092cc25fa260292d54",
+          "txid": "e847ef567bd06ec6585e4d7384d0eb28ca77913c7b8813beb52a9194e83017e0",
+          "fee": "30000 sats (1.059 sat/B)",
+          "outValues": "400+300+300"
+        },
+        {
+          "op": "TRANSFER (notes 2,3 -> 4,5,6)",
+          "lockTxid": "f52502b4a8713e6feb9b76054d4e7a8c13e61ae0dfcdf3b1a0cc4da039d0935a",
+          "txid": "ef64f3dda71ed0110f488ea366e8fab79ff214649586c00ccba14d12da46e325",
+          "fee": "30000 sats (1.057 sat/B)",
+          "outValues": "280+210+210"
+        },
+        {
+          "op": "UNSHIELD 300 (notes 4,5 -> 6,7,8; payout executed)",
+          "lockTxid": "11b9416cc71ac5331060de58f26cdfc47f07519ac693e0d3f5e3d9be7b121088",
+          "txid": "ec31a41c591c4af4ad95c2fab76c1ad2bb34b483393bce53758982a9d8e9de03",
+          "fee": "29000 sats (1.022 sat/B)",
+          "outValues": "112+84+84 + 300 FT payout at :2"
+        }
+      ],
+      "finalState": {
+        "root": "14228234475601541117315008857991396106432351016727521101710528622096584678627",
+        "balance": "700",
+        "notesAtTree": [6, 7, 8, 9, 10]
+      },
+      "feePolicy": "BARE: 15k sats x 2 fuel per action; every action broadcast atomically with its lock (lock --no-wait -> action spends the lock's UNCONFIRMED outputs)",
+      "notes": "3-out demo deployed 2026-11-26 runner-free from the apecsdev VM with wallet A. SHIELD -> TRANSFER -> UNSHIELD confirmed; every input VM-ACCEPTED consensus+standard. Demo only: 1-of-1 setup, public bootstrap in-notes on the first action (indices 0/1), no real nullifier set, no encrypted note delivery; Gate 7 is the mainnet gate. The Nito client 3-out path is NOT built.",
+      "clientHandoff": "docs/ROLE2-3OUT-V3-DESIGN.md"
+    },
     {
       "name": "Chipnet role-2 pool v2 \u2014 DEPOSIT-TAGGED (the durable author-binding fix, deployed)",
       "network": "chipnet",
