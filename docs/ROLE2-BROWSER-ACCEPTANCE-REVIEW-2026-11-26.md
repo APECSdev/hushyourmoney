@@ -39,20 +39,23 @@ the 1,000 FT deposit was tagged with the public
 
 The failed runs left five unspent lock pairs at the pool address:
 
-| Lock | Fuel0 FT | Fuel1 FT | Fuel sats |
-|---|---:|---:|---:|
-| `3db76294aba8fa24ad213520159660fe5280ab0c2430d592f56f9bd434a9a779` | 1,000 | 0 | 30,000 |
-| `10f26fa38a4f7c506db3cb921fbc31615ab08c5b3dc12a7d645608b322b2fe84` | 0 | 0 | 30,000 |
-| `1946084ea07abef655c6f3a55850461726c2252e1ddaf47b2d2528f369450b1c` | 0 | 0 | 30,000 |
-| `c3e21c7a99116e0205a1d97bffeff8eef9c314c54826532c72296d81ceaad08a` | 600 | 0 | 30,000 |
-| `dff42ddb835c39bf2200a6eef697ec5f256ade4a206d41bd85d904876e3e1c2a` | 600 | 0 | 30,000 |
+| Lock | Fuel0 FT | Fuel1 FT | Fuel sats | Tag |
+|---|---:|---:|---:|---|
+| `3db76294aba8fa24ad213520159660fe5280ab0c2430d592f56f9bd434a9a779` | 1,000 | 0 | 30,000 | public bootstrap `9b15436a…` |
+| `10f26fa38a4f7c506db3cb921fbc31615ab08c5b3dc12a7d645608b322b2fe84` | 0 | 0 | 30,000 | lost private |
+| `1946084ea07abef655c6f3a55850461726c2252e1ddaf47b2d2528f369450b1c` | 0 | 0 | 30,000 | lost private |
+| `c3e21c7a99116e0205a1d97bffeff8eef9c314c54826532c72296d81ceaad08a` | 600 | 0 | 30,000 | lost private |
+| `dff42ddb835c39bf2200a6eef697ec5f256ade4a206d41bd85d904876e3e1c2a` | 600 | 0 | 30,000 | lost private |
 
-The fuel0s carry **2,200 FT**; the five pairs carry **150,000 fuel sats**.
-The lock commitments (`9b15436a…`, `e20f2710…`, `1ef01ad4…`, `fefbc49f…`,
-`1b2d4fa4…`) are the public bootstrap tags. The hook's check 7 only folds
+**Correction from the nito response (`a75e7ab`; fix `6669cdd`):** only
+`3db76294…` carries the public bootstrap tag (`9b15436a…`). The other four
+carry the lost notes' private nullifier pairs; their preimages are not public
+and the notes are gone. The P0 is **one lock**: 1,000 FT + 30,000 sats. The
+other four (1,200 FT + 120,000 sats) are **stuck, not publicly spendable** — a
+demo loss. The hook's check 7 only folds
 `newNull = SHA256(oldNull ‖ nf0 ‖ nf1)`; there is no set-membership check.
 Any holder of a valid proof over the public bootstrap nullifiers can spend
-these locks. The notes are gone; the fuel and the 2,200 FT are not.
+`3db76294…`. The notes are gone; the fuel and the 1,000 FT are not.
 
 The handoff says "the failed acceptance runs' shields (≈9,000 FT of demo
 deposits) are in the pool's 760,400 FT balance". The state's 760,400 includes
@@ -61,9 +64,10 @@ FT. The handoff's own "≈9,000" is understated: the failed deposits are
 **12,600** (10,400 state + 2,200 fuel). The 600 payout is the successful
 UNSHIELD, not a failed deposit.
 
-The safe immediate action is to sweep the five locks (the bootstrap nullifiers
-are public; nito can build the action) and to stop using the seeds as
-in-notes. The long-term fix is the nullifier-set service the handoff lists.
+The safe immediate action is to sweep `3db76294…` (the bootstrap nullifiers
+are public; nito or Hush can build the action) and to stop using the seeds as
+in-notes. The other four are stuck; they need the lost note secrets, which do
+not exist. The long-term fix is the nullifier-set service the handoff lists.
 Hush will pre-seed wallet A with two private notes from the pool's 750,000
 balance; the browser SHIELD then uses private notes and the deposit tag is
 author-bound.
