@@ -14,6 +14,222 @@
 - Make ample use of figures and diagrams when documenting or discussing technical designs and implementations (ASCII/Mermaid in repo docs; rendered diagrams on the site).
 - Published technical claims must satisfy the verification contract (file path, command output, or cited source). Where a quantity has not been measured, mark it UNMEASURED rather than estimating.
 
+## CURRENT HANDOFF — 2026-11-26 (later session) — 3-out v3 BUILT + DEPLOYED DEMO
+
+**Where we are:** the 3-out feature is no longer design-only. The 3-out
+verifier program (under the new VK), the 201-B role-2 hook, the 3-out witness
+generator, the acceptance suite, the red team and the **full 69-case liveness
+sweep** are built and measured; a **3-out demo pool is deployed on chipnet**
+and its **SHIELD and TRANSFER are confirmed**. The site research pages are
+updated with the measured/deployed record. The 2-out generation is
+byte-identical (the hooked 2-out program still hashes `d71851a1…`), so the live
+2-out pool and its tooling are unaffected.
+
+### Hosts / paths (continue here)
+
+- VM: `ssh apecsdev`; node is `/home/apecs/bin/node` (`export PATH=/home/apecs/bin:$PATH`).
+- Bench: `~/zkb/groth16_cashscript/chunked/bn254/bn-native-sound/` (the hooked
+  program, tests, sweeps, deploy/op tooling).
+- Pool repo: `~/zkb/pusd-shielded-pool/` (`build3/` = the 3-out setup;
+  `role2-op-witness-3out.mjs`, `gen-our-proofs-3out.mjs`,
+  `gen-sweep-proofs-3out.mjs`).
+- Runtime state: `/home/apecs/cov/role2-pool-state.json` (the live 2-out pool);
+  `/home/apecs/cov/role2-pool3-state.json` (**the 3-out demo pool; contains
+  note nks — NOT committed**); `/home/apecs/cov/role2-op3.json` (SHIELD),
+  `/home/apecs/cov/role2-op3-transfer.json` (TRANSFER); the 3-out fixtures
+  `/home/apecs/cov/our-3out.fixtures.json` and proofs
+  `/home/apecs/cov/our-3out-proofs.json`; the 64 minted proofs
+  `/home/apecs/cov/our-3out-sweep-a.json` (seed `sweep-3out-v1a`) and
+  `-b.json` (seed `sweep-3out-v1b`); the full sweep report
+  `/home/apecs/cov/pool3-sweep-report.json`.
+- Wallet A (the 3-out demo funder): `/home/apecs/.secrets/wallet-a-role2-demo.json`,
+  `bchtest:qzzu85xnl99u534d9z40yu7c494hknppx5lu29gl8t`. The hot wallet
+  `/home/apecs/.secrets/faucet-hot-wallet.json` (`bchtest:qzmux3gx…`) has
+  ~5,917 plain sats; the 3-out deploy deliberately used wallet A.
+
+### Exact commands (all from `bn-native-sound/` unless noted)
+
+```bash
+# 3-out proofs / fixtures (from ~/zkb/pusd-shielded-pool, build3 paths)
+node gen-our-proofs-3out.mjs
+node ~/cov/mkfixtures.mjs ~/zkb/pusd-shielded-pool/build3/verification_key.json \
+     /home/apecs/cov/our-3out-proofs.json /home/apecs/cov/our-3out.fixtures.json
+
+# build + gates (BN_VK_FIXTURES is mandatory; POOL_3OUT=1 selects 201-B/9-field)
+BN_VK_FIXTURES=/home/apecs/cov/our-3out.fixtures.json node build.mjs
+BN_VK_FIXTURES=/home/apecs/cov/our-3out.fixtures.json POOL_3OUT=1 node pool-info.mjs
+BN_VK_FIXTURES=/home/apecs/cov/our-3out.fixtures.json POOL_3OUT=1 node pool-cost.mjs
+BN_VK_FIXTURES=/home/apecs/cov/our-3out.fixtures.json POOL_3OUT=1 node pool-test.mjs
+BN_VK_FIXTURES=/home/apecs/cov/our-3out.fixtures.json POOL_3OUT=1 node pool-redteam.mjs
+BN_VK_FIXTURES=/home/apecs/cov/our-3out.fixtures.json POOL_3OUT=1 node pool-sweep.mjs \
+     /home/apecs/cov/pool3-sweep-report.json \
+     /home/apecs/cov/our-3out-sweep-a.json /home/apecs/cov/our-3out-sweep-b.json
+
+# deploy the 3-out demo pool (already done; the dry run is deterministic)
+BN_VK_FIXTURES=/home/apecs/cov/our-3out.fixtures.json POOL_3OUT=1 \
+  node pool-deploy-role2.mjs --secrets /home/apecs/.secrets/wallet-a-role2-demo.json \
+  --state-out /home/apecs/cov/role2-pool3-state.json
+
+# per action: prove -> tagged lock -> action (the demo's exact flow)
+cd ~/zkb/pusd-shielded-pool
+node role2-op-witness-3out.mjs --action shield --amount 1000 --in 0,1 \
+  --state /home/apecs/cov/role2-pool3-state.json --out /home/apecs/cov/role2-op3.json
+cd ~/zkb/groth16_cashscript/chunked/bn254/bn-native-sound
+node pool-refill-role2.mjs --op /home/apecs/cov/role2-op3.json \
+  --state /home/apecs/cov/role2-pool3-state.json \
+  --secrets /home/apecs/.secrets/wallet-a-role2-demo.json --no-wait
+BN_VK_FIXTURES=/home/apecs/cov/our-3out.fixtures.json POOL_3OUT=1 \
+  node pool-op-role2.mjs --3out --op /home/apecs/cov/role2-op3.json \
+  --state /home/apecs/cov/role2-pool3-state.json
+```
+
+### Built + measured
+
+- **Plain 3-out sound verifier** under the new VK: code **7,310 B** sha256
+  `6ec7ca8e713c3d79e45d5a393546c2bf28cb25b23545b904e8476f13c583f8b9`; R 65 B;
+  fixture-0 n_q 111, fills 93/22/133, unlocking 9,313 / 9,243 / 8,763 B,
+  margins **6.46% consensus / 6.01% standard**, score 27,573.
+- **Hooked 3-out program** (fixture category): code **7,848 B** sha256
+  `628207b197ae2cea8b069198f9b454d12fa7e50a19bb1ffa5822cfe5ab533f73`;
+  locking `aa2002409194a2d8c043002fc946274c71776996c30fb26f188b63b915e9873ef93087`;
+  role code 804 / 720 / 2,911 B; prologue 7,843; pieces 4,036 / 3,812.
+- **Hook price**: **39,082 op standard / 37,930 op consensus**; 537 B of
+  role-2 code (2-out: 37,198 / 36,046, 524 B).
+- **Acceptance**: **21/21** (3 controls + 18 rejection classes; the 3-out adds
+  the `cm2` carrier tamper). The 2-out suite is still **20/20**.
+- **Red team**: **146 runs / 0 accepted**, both positive controls accepted
+  (`wip-role2-hook/pool-redteam-3out-report.json`).
+- **Full liveness sweep**: **69 cases / 0 failed** — 5 committed fixtures +
+  64 minted random proofs (seeds `sweep-3out-v1a` / `sweep-3out-v1b`).
+  - consensus min margins: input 0 **7.86%** (`sweep-3out-v1b unshield #2`),
+    input 1 **8.54%** (`fixture 4`), input 2 **6.49%**
+    (`sweep-3out-v1b shield #10`).
+  - standard min margins: input 0 **7.40%** (`sweep-3out-v1b unshield #2`),
+    input 1 **8.07%** (`fixture 4`), input 2 **6.00%**
+    (`sweep-3out-v1a shield #1`).
+  - max at-cap op **7,080,373** (standard input 0, **11.86% cap margin**);
+    input 2 at-cap max 6,752,799 (**15.93%**); cap rule all true.
+  - Report: `wip-role2-hook/pool3-sweep-report.json` (141 KB, committed);
+    the 5-fixture subset is `wip-role2-hook/pool3-sweep-fixtures.json`.
+- **2-out regression**: `POOL_3OUT` unset rebuilds code sha256 `d71851a1…`,
+  7,834 B; `BN_VK_FIXTURES=our.fixtures.json node pool-test.mjs` still **20/20**.
+
+### Deployed 3-out demo pool (chipnet, 2026-11-26)
+
+- Category (anchor) `bc607a96c8a21a1400263d437005d3f434c3c60674018119995dc6200072e635`
+  (anchor 924 B); mint `62d91e4cf541f8c7a710cfcecd566fd99f91b0d6615afddaaf074217b739132e`
+  (326 B); deploy `2f65079182cf1ecd736e897afad741b9218c6afd16f711042ba4cacf5dd8aa7e`
+  (761 B); all confirmed in chipnet block **348,569**.
+- Program code 7,848 B sha256 `73cb0ccb01791d37bea2289fc809211296685896ed8ca16ea260a666ede67971`,
+  locking `aa204a6ce339fb62b7b2ebb502c9bf642d3221620e6f5ded619ce8a39110e35182ea87`;
+  guard `aa20e33ce1810617ea549e24b7aa66c9291c9e9b79aa8dc006501d8a2b2b2990dce887`
+  (redeem 5,103 B, K=64, born guarded).
+- Tag batch `8e3eaf7170240f5fa632879df7e6896a365f6ac5f7c89355db791e158df55526`
+  (9,830 B, 64 blanks; guard passthrough).
+- **SHIELD 1,000** `e847ef567bd06ec6585e4d7384d0eb28ca77913c7b8813beb52a9194e83017e0`
+  (28,326 B, 30,000 sats, 1.059 sat/B; out **400+300+300**; lock
+  `4f49c1cb94bf0588a0d064a86884cfcab5790c2d23eaa5092cc25fa260292d54`).
+- **TRANSFER** `ef64f3dda71ed0110f488ea366e8fab79ff214649586c00ccba14d12da46e325`
+  (28,389 B, 30,000 sats, 1.057 sat/B; spends notes 2+3; out **280+210+210**;
+  lock `f52502b4a8713e6feb9b76054d4e7a8c13e61ae0dfcdf3b1a0cc4da039d0935a`).
+- Every action input VM-ACCEPTED consensus + standard. Final state root
+  `3271108787199986663014643111346367083348315666322274808145127686880774309637`
+  (LE `05c7abbd…`); balance **1,000 FT**; notes **300 (index 4) / 280 (5) /
+  210 (6) / 210 (7)**; 8 leaves. On-chain state `ef64f3dd…:1` decodes to
+  category `bc607a96…`, amount 1,000, mutable NFT commitment `05c7abbd…`.
+- All 8 txs (anchor/mint/deploy/tagbatch/2 locks/SHIELD/TRANSFER) return
+  **200 on Selene** `https://explorer.selene.cash/tx/<txid>?network=chipnet`.
+- The two actions are the note-management proof: one action creates three
+  notes; the next spends two and creates three with change splitting.
+- Demo only: 1-of-1 setup, **public bootstrap in-notes on the first action**
+  (indices 0/1), no real nullifier set, no encrypted note delivery; Gate 7 is
+  the mainnet gate.
+
+### Wallet A / sats state (important for the next action)
+
+- The 3-out deploy spent 6 plain UTXOs (82,715 sats) but the change returned;
+  the tag batch then consumed the 78,563-sat consolidated UTXO.
+- **40 of the 64 blanks were burned to recover 28,632 sats**; a 2-UTXO
+  consolidation made a 32,113-sat UTXO; the SHIELD lock and TRANSFER lock each
+  spent 2 blanks, so **20 blanks remain** (20,000 sats) at wallet A. The
+  refill's `plain[0]` threshold is ~30,400 sats for a transfer (31,000 +
+  2,400 for a shield with FT change). **Recover sats before the next lock**:
+  `wallet-consolidate.mjs`, `blank-sweep.mjs --count N`, and
+  `token-sats-recover.mjs --min-value 60000 --count 1` (wallet A also holds
+  seven 20M tPUSD demo UTXOs at 60,000 sats each; burning one is DEMO ONLY).
+- The hot wallet has ~5,917 plain sats; the PUSD mint key
+  `bchtest:qpt2lckk…` has 8,806 plain sats + token UTXOs; the x402 receiving
+  wallet has 10,000 plain sats. Do not use mainnet funds.
+- The 3-out pool's FT supply change (99,999,000 FT) sits at wallet A
+  `4f49c1cb…:3` (1,000 sats); the pool's state float is 10,000 sats.
+
+### Tooling / files (repo)
+
+- `pusd-shielded-pool`: `gen-our-proofs-3out.mjs` (5 fixtures),
+  `gen-sweep-proofs-3out.mjs` (seeded minter), `role2-op-witness-3out.mjs`
+  (CLI witness + proof + 3 out-notes; 40/30/30 split; `--state`, `--out`,
+  `--wasm`, `--zkey`), `wip-role2-hook/pool-hook.mjs` (`outs` parameter;
+  2-out byte-identical), `pool-tx.mjs` (`outs`), `pool-test.mjs`
+  (`POOL_3OUT=1`, cm2 tamper), `pool-redteam.mjs`, `pool-sweep.mjs`
+  (`POOL_3OUT=1`, code pin `628207b1…`), `pool-cost.mjs`,
+  `pool-op-role2.mjs` (`--3out`), `pool-deploy-role2.mjs` (`POOL_3OUT=1`,
+  `--state-out`, top-level `guard` alias), `pool-info.mjs` (hooked build
+  code/R/locking; stock `build.mjs` cannot smoke-test the hook),
+  `wallet-consolidate.mjs`, `blank-sweep.mjs`, `token-sats-recover.mjs`.
+- Reports/records committed: `pool-redteam-3out-report.json`,
+  `pool3-sweep-report.json` (69 cases), `pool3-sweep-fixtures.json`
+  (5 cases), `build.3out-plain.json`, `our-3out.fixtures.json`,
+  `our-3out-proofs.json`, `our-3out-sweep-a.json`, `our-3out-sweep-b.json`.
+- Landmines (also in `wip-role2-hook/STATUS.md`):
+  1. `pool-tagbatch-role2.mjs` reads **`state.guard` (top-level)**; a
+     born-guarded deploy wrote only `outpoints.guard`. Fixed in
+     `pool-deploy-role2.mjs` (alias) + the live state file.
+  2. A token-spending P2PKH signature must include each source output's
+     **token data** in the signing serialization; a tokenless `sourceOutputs`
+     entry produces a signature the network rejects with code 16
+     (`Signature must be zero for failed CHECK(MULTI)SIG`). Fixed in
+     `blank-sweep.mjs` / `token-sats-recover.mjs`.
+  3. `pool-refill-role2.mjs` sizes from **`plain[0]` only**; consolidate /
+     recover sats before locking.
+  4. The deploy script's console line labelled “sha256” prints the first 16
+     hex chars of the **code**, not the hash; the real hash is in the state
+     file / `pool-info.mjs` (`73cb0ccb…` for the deployed category).
+
+### Site / release
+
+- `web/pages/research/shielded-pool.vue` `#notes-management` now carries the
+  measured 3-out program, the 3-out gates, the deployed demo pool and the two
+  confirmed actions (Selene links).
+- `web/pages/research/bn254.vue`, `web/pages/daemons.vue`,
+  `web/pages/playground.vue`, `web/pages/research/index.vue` updated from
+  “measured, not deployed” to the chipnet demo record.
+- All changed SFCs pass the `@vue/compiler-sfc` parse + compile check (VM
+  image + `/tmp/check-sfc.cjs`).
+- **Site image `a49aa80ceb69` / Hub
+  `sha256:a49aa80ceb6990fff2320f1e79c96d3acfee6e479d2b073ba416c1ab5ce0b524`
+  (pushed 2026-11-26 18:44Z) is STALE**: it was built BEFORE the
+  `20/20 → 21/21` and `5/5 → 69/69` text updates. Rebuild + re-push:
+  `rsync web/ apecsdev:~/build/hushyourmoney-3out/web/` then
+  `docker build --network=host -t nyusternie/hushyourmoney:latest .` in that
+  dir, smoke on `127.0.0.1:3215`, `docker push`, update this digest.
+- **Flux:** no owner credential on blackhost; the owner dashboard update is
+  the remaining deployment action.
+
+### Next session order
+
+1. ✅ Full 3-out sweep DONE (69/69); re-run red team/sweep only if the hook
+   changes.
+2. Rebuild + push the site image (the current source has 21/21 + 69/69; the
+   Hub image is stale), update the AGENTS digest, then Flux owner update.
+3. Nito client 3-out path (201-B carrier, 9-field actionHash, three out-notes).
+4. Deposit path (onboarding), real nullifier set (Merkle membership),
+   encrypted note delivery — the v3 core.
+5. Gate 7 MPC → mainnet; migrate the Hush 750,000/762,400 notes and the
+   wallet A notes into the 3-out pool.
+6. Re-check wallet A sats (20 blanks + demo tPUSD UTXOs) before the next lock.
+
+---
+
 ## CURRENT HANDOFF — 2026-11-26 SESSION END (3-out v3 measured + 1-of-1 setup + site Notes Management; sweep/pre-seed done; Nito/Flux external)
 
 **Where we are:** the 3-out circuit is measured and the 1-of-1 setup is built; the first 3-out proof is generated; the research pages carry the new `#notes-management` section; the `3db76294` sweep and the one-note pre-seed are on chain. The next session continues at the **3-out verifier program + 201-B hook + 3-out tests**, then the **new pool/migration**, **Nito re-run** and **Flux owner update**.
@@ -499,6 +715,7 @@ still stand.**
 - Live Flux check through `https://hushyourmoney.com/api/electrum`: one transient 500 said available clients `1` were below required confidence `2`; later `blockchain.scripthash.listunspent` returned 3/3 and `blockchain.scripthash.get_history` returned 3/3 with real chain data. Re-probe before editing the server list.
 
 ### Release log
+- **2026-11-26 (later session) — 3-out v3 BUILT + DEPLOYED DEMO; 69/69 sweep**: the 3-out verifier program under the new VK is built: plain **7,310 B** sha256 `6ec7ca8e…` (fixture-0 margins 6.46% cons / 6.01% std), hooked **7,848 B** sha256 `628207b1…` (locking `aa200240…`, role code 804/720/2,911 B), hook **39,082 op std / 37,930 op cons** (537 B); 2-out regression byte-identical (`d71851a1…`, 7,834 B) and 2-out acceptance still **20/20**. 3-out gates: acceptance **21/21** (3 controls + 18 rejection classes incl. the `cm2` carrier tamper), red team **146/0**, full liveness sweep **69 cases / 0 failed** (5 fixtures + 64 minted, seeds `sweep-3out-v1a/v1b`; min 6.00% std input 2; max at-cap 7,080,373 op = 11.86% cap margin; cap rule all true). A **3-out demo pool is deployed on chipnet**: category `bc607a96…`, deploy `2f650791…` (block 348,569), program 7,848 B sha256 `73cb0ccb…` locking `aa204a6c…`, guard `aa20e33c…` K=64; tag batch `8e3eaf71…` (64 blanks); **SHIELD 1,000** `e847ef56…` (28,326 B, 1.059 sat/B; out 400+300+300) and **TRANSFER** `ef64f3dd…` (28,389 B, 1.057 sat/B; spends notes 2+3; out 280+210+210) confirmed, every input VM-ACCEPTED consensus+standard; final state root `327110…9637`, balance 1,000 FT, notes 300/280/210/210, 8 leaves. The site pages (`shielded-pool`, `bn254`, `daemons`, `playground`, research hub) are updated and all changed SFCs compile; **the Hub image `a49aa80c…` was built BEFORE the 21/21 and 69/69 text updates and is therefore STALE — rebuild + re-push pending**; Flux remains owner-pending. Tooling/evidence committed in `pusd-shielded-pool` (`wip-role2-hook/` reports + minted proofs; `gen-our-proofs-3out.mjs`, `gen-sweep-proofs-3out.mjs`, `role2-op-witness-3out.mjs`, `pool-info.mjs`, `wallet-consolidate.mjs`, `blank-sweep.mjs`, `token-sats-recover.mjs`). Landmines: tag batch reads top-level `state.guard`; token-spending P2PKH sighash must include token data (code 16); refill sizes from `plain[0]` only. The 3-out demo is 1-of-1 with public bootstrap in-notes, no real nullifier set and no encrypted note delivery; Gate 7 remains mandatory.
 - **2026-11-26 (3-out v3 measured + 1-of-1 setup + site Notes Management; sweep/pre-seed done)**: the 3-out circuit `pusd-shielded-pool/circuits/pool3.circom` is **184,528 constraints** (+1,056, +0.58%) with 2 public inputs and 112 private inputs; the 1-of-1 setup is `build3/pool3_final.zkey` 94M sha256 `b0177dbe…`, VK sha256 `d4ed12ee…` (nPublic 2, IC 3), wasm sha256 `c806e561…`; the first 3-out proof is `role2-op-3out.json` (SHIELD 1,000; out 1,000+1,000+749,000; 24.6 s; n0 `114091…`, n1 `286879…`). The site research pages carry the `#notes-management` section and the 3-out/browser-acceptance updates; image `e66931fe3f24` → Hub `sha256:e66931fe3f24…`; **Flux pending**. The `3db76294` sweep is `7aee6780…` (1,000 FT + 30,000 sats; state 760,400 → 761,400); the one-note pre-seed is lock `d95e5b97…` + action `a722ef3b…` (wallet A 450,600; Hush 300,400; state 762,400; notes 44=600, 45=400, 46=450,600, 47=300,400). The 3-out verifier program, 201-B hook, 3-out tests, new pool, migration, Gate 7, deposit/nullifier/note delivery are **not built**. Nito re-run and Flux owner update are external.
 - **2026-11-26 (role-2 v3 — 1-of-1 demo setup + research pages/Notes Management):** the 3-out circuit `pusd-shielded-pool/circuits/pool3.circom` is **184,528 constraints** (+1,056, +0.58%) with 2 public inputs and 112 private inputs. The **1-of-1 demo setup** is built on apecsdev: `build3/pool3_final.zkey` 94M sha256 `b0177dbe…`, `build3/verification_key.json` sha256 `d4ed12ee…` (groth16/bn128, nPublic 2, IC 3), `build3/pool3_js/pool3.wasm` sha256 `c806e561…`; `ZKey Ok!`. The new MPC (Gate 7), the 201-B role-2 hook, the 9-field actionHash, the 3-out witness and the Nito client path are NOT built. The site research pages are updated: `web/pages/research/shielded-pool.vue` gained the `#notes-management` section (3-out measured, deposit path, nullifier set, note delivery, browser acceptance, four stuck/one public, migration); the stats/results/pools/role-2/limits/docs/FAQ were updated; the hub, BN254, BLS12-381, playground and daemons pages carry the 3-out/browser-acceptance changes. Site image `e66931fe3f24`; Hub digest `sha256:e66931fe3f24d5b68e4ca312ebb31ae4d9a42312d78fe0eb77c3df1dedfe434d`; **Flux pending** (owner action). The demo sweep of `3db76294…` and the one-note pre-seed remain pending.
 - **2026-11-26 (role-2 v3 — 3-output circuit measured; design doc):** the user chose the 3-out as the more robust note-management layer. `pusd-shielded-pool/circuits/pool3.circom` compiles on apecsdev (circom 2.2.3): **184,528 constraints** (+1,056, +0.58% vs 183,472), 2 public inputs, 112 private inputs, 20.2 s, r1cs 39,449,264 B, wasm 3,380,815 B; the carrier grows 169→201 B; the actionHash grows 8→9 fields (`cm2`); the action grows +32 B. The design `docs/ROLE2-3OUT-V3-DESIGN.md` covers the 3-out as the note-management layer plus the deposit path (onboarding), the nullifier set (double-spend), encrypted note delivery, the new MPC (Gate 7), the new verifier/hook/client, the migration and the community presentation. The 3-out is not a substitute for onboarding/nullifier/delivery; the new setup is the cryptographic gate; the new verifier/hook/client are the engineering work. The demo sweep of `3db76294…` and the one-note pre-seed remain pending. No web/image change.

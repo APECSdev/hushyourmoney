@@ -38,7 +38,7 @@ const PARAMS = [
 /* ── Our measured circuit numbers ── */
 const STATS = [
     { value: '183,472', label: 'constraints · 2-out', tag: 'measured', color: 'text-lime-300' },
-    { value: '184,528', label: 'constraints · 3-out (draft)', tag: 'measured', color: 'text-lime-300' },
+    { value: '184,528', label: 'constraints · 3-out (deployed demo)', tag: 'measured', color: 'text-lime-300' },
     { value: '+0.58%', label: '3-out delta', tag: 'measured', color: 'text-cyan-300' },
     { value: '186,007', label: 'constraints · multi-asset', tag: 'measured', color: 'text-lime-300' },
     { value: '2', label: 'public inputs', tag: 'measured', color: 'text-cyan-300' },
@@ -60,13 +60,13 @@ const GENERATIONS = [
     },
     {
         name: 'bch-groth16-bn254-sound-native · 3-out VK',
-        state: 'draft',
-        badge: 'badge-mid',
-        bytes: '27,624 B',
+        state: 'deployed demo',
+        badge: 'badge-live',
+        bytes: '7,310 B plain / 7,848 B hooked',
         inputs: '3 inputs',
-        op: '20.72M op',
-        redeem: 'new VK → new program P2SH32 (UNMEASURED)',
-        note: 'The 3-out circuit (184,528 constraints, +1,056, +0.58%) uses the same reviewed sound verifier with a NEW verifying key. The 1-of-1 demo setup is built (new VK d4ed12ee…, zkey b0177dbe…, wasm c806e561…); the new MPC (Gate 7), the 201-B role-2 hook, the 9-field actionHash and the 3-out witness are NOT built. The 3-out is the note-management layer of v3; the deposit path, the nullifier set and encrypted note delivery are the other v3 pieces. Measured, not deployed.',
+        op: '39,082 std / 37,930 cons hook',
+        redeem: 'new VK → new program P2SH32; fixture-category locking aa200240…; demo pool locking aa204a6c…',
+        note: 'The 3-out circuit (184,528 constraints, +1,056, +0.58%) uses the same reviewed sound verifier with a NEW verifying key. The 1-of-1 demo setup (new VK d4ed12ee…, zkey b0177dbe…, wasm c806e561…), the 3-out verifier program (7,310 B plain sha256 6ec7ca8e…; 7,848 B hooked sha256 628207b1…), the 201-B role-2 hook, the 9-field actionHash and the 3-out witness are BUILT; acceptance 21/21, red team 146/0, sweep 69/69. A 3-out demo pool is deployed on chipnet (SHIELD e847ef56… → TRANSFER ef64f3dd…). The new MPC (Gate 7) and the Nito client 3-out path remain. The 3-out is the note-management layer of v3; the deposit path, the nullifier set and encrypted note delivery are the other v3 pieces.',
     },
     {
         name: 'bch-groth16-bn254-sound-native',
@@ -87,7 +87,7 @@ const LIMITS = [
     { k: 'consequence', v: 'the verifier MUST be split across inputs and/or transactions' },
     { k: 'generation 1', v: 'verifier as sibling inputs in the SAME transaction, beside the covenant' },
     { k: 'generation 2 · deployed', v: 'pool rules INSIDE the verifier (role 2) — one program, no siblings' },
-    { k: 'generation 3 · 3-out (draft)', v: 'same reviewed verifier, NEW VK — 184,528-constraint 3-out circuit; 1-of-1 demo setup built; Gate 7 pending' },
+    { k: 'generation 3 · 3-out (chipnet demo)', v: 'same reviewed verifier, NEW VK — 184,528-constraint 3-out circuit; verifier/hook/witness built; demo pool deployed; Gate 7 pending' },
 ]
 
 /* ── Sources ── */
@@ -284,7 +284,7 @@ const SOURCES = [
                         <td class="font-mono text-[0.82rem] text-slate-200">measured</td>
                     </tr>
                     <tr>
-                        <td class="whitespace-nowrap font-mono text-[0.82rem] uppercase tracking-wider text-slate-200">3-out circuit (v3 draft)</td>
+                        <td class="whitespace-nowrap font-mono text-[0.82rem] uppercase tracking-wider text-slate-200">3-out circuit (v3 demo)</td>
                         <td class="text-slate-100">184,528 constraints (+1,056, +0.58%) · 112 private inputs · 183,017 wires · 20.2 s compile</td>
                         <td class="font-mono text-[0.82rem] text-slate-200">measured</td>
                     </tr>
@@ -295,8 +295,8 @@ const SOURCES = [
                     </tr>
                     <tr>
                         <td class="whitespace-nowrap font-mono text-[0.82rem] uppercase tracking-wider text-slate-200">3-out setup</td>
-                        <td class="text-slate-100">1-of-1 demo VK/zkey/wasm built 2026-11-26; new MPC (Gate 7) · 201-B hook · 9-field actionHash · 3-out witness — NOT BUILT</td>
-                        <td class="font-mono text-[0.82rem] text-slate-200">UNMEASURED</td>
+                        <td class="text-slate-100">1-of-1 demo VK/zkey/wasm built 2026-11-26; 3-out verifier 7,310 B plain / 7,848 B hooked, hook 39,082/37,930 op; acceptance 21/21; red team 146/0; demo pool deployed; new MPC (Gate 7) pending</td>
+                        <td class="font-mono text-[0.82rem] text-slate-200">measured + deployed demo</td>
                     </tr>
                     <tr>
                         <td class="whitespace-nowrap font-mono text-[0.82rem] uppercase tracking-wider text-slate-200">public inputs</td>
@@ -351,7 +351,8 @@ const SOURCES = [
                 Verifier Generations
             </h2>
             <p class="mt-5 max-w-3xl text-base leading-relaxed text-slate-200 sm:text-lg">
-                We have deployed one, reviewed the other, and measured the 3-out VK. The difference
+                We have deployed one, reviewed the other, and built the 3-out VK — the 3-out
+                verifier program and a chipnet demo pool are live. The difference
                 between the verifier generations is not performance — it is whether the argument that
                 a forged proof cannot pass still holds. The 3-out is a circuit generation, not a
                 verifier rewrite: the same reviewed verifier, a new VK and a new setup.
