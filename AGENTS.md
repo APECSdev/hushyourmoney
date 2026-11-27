@@ -14,7 +14,63 @@
 - Make ample use of figures and diagrams when documenting or discussing technical designs and implementations (ASCII/Mermaid in repo docs; rendered diagrams on the site).
 - Published technical claims must satisfy the verification contract (file path, command output, or cited source). Where a quantity has not been measured, mark it UNMEASURED rather than estimating.
 
-## CURRENT HANDOFF — 2026-11-27 SESSION END (LATEST) — M1+M3+M4 DONE, THE MINI-MPC COMPLETE, THE CASCADE ONE GATE FROM M2 — THE NEXT SESSION COLLECTS THE SWEEP, RELEASES M2, AND DRIVES M5
+## CURRENT HANDOFF — 2026-11-27 EVENING (LATEST) — THE POST IS LIVE (topic 2666), M2 GATES PASSED + THE RELEASE UP, THE "DEAD POOL" DIAGNOSIS REFUTED, AND THE USER'S $1 DEPOSIT IS CONFIRMED IN THE PERMANENT POOL
+
+**The arc of this session** (all on-chain verifiable):
+
+1. **THE THREE LINKS ARE IN THE POST** (commit `d0e47a7`, pushed): SHIELD `627013ca…`
+(pool5, the user's 4 units, CONFIRMED) · TRANSFER `4fda8a8b…` (the confirmed 100-PUSD
+op) · UNSHIELD `998a0474…` (pool5, 2 PUSD paid out publicly, CONFIRMED). The user
+published: `https://bitcoincashresearch.org/t/hush-your-money-introducing-shielded-stablecoin-payments-for-bitcoin/2666`.
+The old-gen §10 runbook was IMPOSSIBLE (two measured blockers: the pool3b covenant's
+vestigial v1 balance arithmetic kills pv≠0; the 11-13 terminal pins TXINPUTCOUNT==7 and
+the steps are 2,300-sat fee-starved — pool `dd1e3506…`'s 100 PUSD is permanently
+locked). The pool5 solution: the covenant minus the four vestigial lines (fork-compiled)
++ the terminal pin 7→8 + an honest 1-unit seed ({1,0} notes == 1 FT holdings; 1 of the
+user's 5 units seeded, 4 in the SHIELD, 2 back out, 3 remain shielded). Tooling + record:
+`pusd-shielded-pool/mainnet-pool5/` (commits `e13f2e8`, `b9d76fb`).
+
+2. **THE M2 GATES PASSED AND THE RELEASE IS UP**: the post-MPC sweep merged — **69
+cases / 0 failed** (`wip-role2-hook/pool-sweep-v3-mpc-report.json`), red team **164/0**
+(`pool-redteam-v3-mpc-report.json`) — both committed (`4bb8d7d`). GitHub release
+`role2-proving-assets-v3-v1` created (draft, 4/5 assets: fixtures `e74555dd…`, wasm
+`a9b4b03d…` UNCHANGED, VK `f6b49cc0…`, SHA256SUMS); the 120.8 MB zkey `de7875e3…`
+upload was still in flight at session end (host upstream ≈ 30-60 KB/s) — **PUBLISH THE
+DRAFT when it lands**.
+
+3. **THE "DEAD POOL" DIAGNOSIS WAS REFUTED — THE PERMANENT POOL IS ALIVE.** The v4h
+§1 "OUTTOKCOMMIT divergence" was a STATE-FILE OFF-BY-ONE: the in5 slot was recorded at
+lock `ceb9d18e…` **vout 4** — the lock's wallet BCH change (a tokenless P2PKH source,
+later spent) — instead of **vout 5** (the 3,000-sat hLock tokenless). The original
+action spent the P2PKH with an H-covenant unlocking → the node's OP_EQUALVERIFY; the
+local VM rehearsal passed because the builder SYNTHESIZES source outputs from the state
+file (it never saw the real chain outpoint). After vout 4 got spent, rebuilds failed
+"Missing inputs". Fixed (`in5.vout=5`, backup `.bak-in5fix`); the probe ladder (`mn-ab.mjs`)
+then measured BOTH commitment introspection ops pushing the RAW 96 B on mainnet
+(OUTTOKCOMMIT(1) and UTXOTOKCOMMIT(0), both RELAYED) — identical to the bench VM.
+
+4. **THE USER'S $1 IS SHIELDED IN THE PERMANENT POOL**: deposit
+`5b54fb9783806fca229953dd2b3505e2d0cb5927f795611c45d1715dec48316f` **CONFIRMED**
+(pv=100, balance 0→100, holdings at `:2` carrying the REAL `2469acc5…` PUSD, root
+`51483175…`, nullSet 2 keys, notes 3). NO check-9 fix, NO redeploy — the deployed v4h
+program is correct. Record: `wip-role2-hook/V4H-DEPOSIT-LIVE-2026-11-27.md`.
+
+**Next session, in order:** (1) publish the M2 draft once the zkey lands (verify
+SHA256SUMS); (2) the chipnet dress rehearsal for TRANSFER/UNSHIELD (the standing user
+order before further mainnet value ops — needs ~30k CHIPNET sats; the faucet hot wallet
+holds 5,917); (3) the mainnet TRANSFER + UNSHIELD of the user's $1 — needs the next
+action lock (fuel 23,000×2 + walks 2,000×2 + in6 3,000 + fees ≈ 0.0006 BCH; the wallet
+is sats-thin); (4) the v4h site record + the Nito notifications (M2 is live; the deposit
+is live). **Landmines added:** the state-file off-by-one class (verify every actionInput
+vout against the chain before building — the builder's source-synthesis trust boundary
+is the state file); "Missing inputs" = a spent/nonexistent outpoint, not a script issue;
+libauth's `outpointTransactionHash` is DISPLAY-order (reversing it again double-flips);
+the genesis-witness layout gate (selector-0 encodes genesis[1] to zero bytes — re-roll
+proofs until the 7,904-B unlocking; Groth16 proving is randomized per run).
+
+---
+
+## PREVIOUS — 2026-11-27 SESSION END — M1+M3+M4 DONE, THE MINI-MPC COMPLETE, THE CASCADE ONE GATE FROM M2 — THE NEXT SESSION COLLECTS THE SWEEP, RELEASES M2, AND DRIVES M5
 
 **The overnight mission (the section below, now CONSUMED) is complete.** M1
 (all three gates under v3.1), M3 (the chipnet v3.1 pool deployed + the full
