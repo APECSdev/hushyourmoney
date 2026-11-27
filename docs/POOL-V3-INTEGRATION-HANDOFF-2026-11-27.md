@@ -74,11 +74,13 @@ The three fixes in one R1CS (each is a closed consensus hole):
 | circuit hash | `69622946620445cf…` |
 
 Entropy `888d7f92…` is PUBLISHED per the chipnet demo precedent — the toxic
-waste is derivable, so **this VK is chipnet-valid ONLY**. The mainnet VK is the
-post-MPC trio (§8): 2-3 independent contributions with UNPUBLISHED entropy —
-yours first, then ours, `zkey verify`, VK export. Base: `build4/pool4_0000.zkey`
-(120,817,628 B, VK-neutral). **M2 (the proving-assets release) = the POST-MPC
-trio**; hold B4 pinning until it settles (the program bakes `vk.ic[0]`).
+waste is derivable, so **this VK is chipnet-valid ONLY**. **The mainnet VK is
+the post-MPC trio — the mini-MPC is COMPLETE (§8)**: Nito's contribution
+(ba66883d…, unpublished entropy) then ours (2cb3aa50…, unpublished), chain
+verified ZKey Ok!, final zkey `pool4_0002_hush.zkey` sha256 `52ee860d…`,
+final VK sha256 `b4d88dd5…` (nPublic 2, IC 3), wasm unchanged. **M2 (the
+proving-assets release) = THIS post-MPC trio + the bench fixtures file**
+(`4a46238b…`); the program bakes the new `vk.ic[0]` (§1.3).
 
 ### §1.3 The program (per-category; the `2469acc5…` build) — **v3.1 supersedes v3.0**
 
@@ -99,6 +101,14 @@ by the VK swap). The deployed CHIPNET build (category `e56c0a85…`) is recorded
 in §9. Reproducible via `wip-role2-hook/pool-build-v3.mjs` (the walkV3 wrap).
 The plain v3-era program: 7,385 B, sha256
 `925a42327fd66f6d8131c52d10762057ecfdc0051bb18aa7ac5f764042e279e0`.
+
+**THE POST-MPC MAINNET CANDIDATE (the cascade, 2026-11-27 early hours):**
+under the final mini-MPC VK — code **7,997 B**, sha256
+**`0023d1ea433cf633502ad507d37cc0cce991b4742027ed86d9cebd3c44155ab6`**,
+locking `aa202374973e…`, plain 7,384 B `dabf5d23…`; the walk scripts +
+wrap lockings UNCHANGED. Built from the post-MPC fixtures
+(`our-v3-mpc.fixtures.json` sha256 `4a46238b…`); walk-test 10/10 + acceptance
+29/29 re-passed under it; the red team + sweep re-runs gate the M2 release.
 
 ## §2 The action shape (FIVE inputs — the client-swap delta) — **v3.1: the walk UTXOs are P2SH32-WRAPPED**
 
@@ -317,27 +327,37 @@ All three computed from first principles and asserted at import
 (`pusd-shielded-pool/genesis-v3.mjs`). The genesis tree is EMPTY — no leaves,
 no notes, no spent keys; the first action MUST be a deposit.
 
-## §8 The MPC (Gate 7 at demo scale — the mainnet VK) — **the window is OPEN**
+## §8 The MPC (Gate 7 at demo scale — the mainnet VK) — **COMPLETE**
 
-- Base: `~/zkb/pusd-shielded-pool/build4/pool4_0000.zkey` (120,817,628 B,
-  re-verified intact) — VK-neutral; contributions chain onto it.
-- **The window is OPEN NOW** (2026-11-27, overnight → morning). We are
-  running the v3.1 sweep shards + the chipnet lifecycle on the same VM — your
-  single-threaded ~10-min contribute fits alongside; nothing of ours needs
-  the zkey until the cascade.
-- Your contribution, exact mechanics:
-  `cd ~/zkb/pusd-shielded-pool && snarkjs zkey contribute build4/pool4_0000.zkey
-  build4/pool4_0001_nito.zkey` — **your entropy, UNPUBLISHED — not in any
-  repo, doc, commit, or message.** Record only the printed contribution hash.
-- Our contribution follows yours onto `pool4_0001_nito.zkey` (same hygiene),
-  then `zkey verify`, the VK export, the hash record. **The final trio
-  supersedes the current chipnet-only trio** (§1.2) and is the M2 release +
-  the B4 pin target.
-- The cascade after the MPC (measured-pattern work, a few hours): re-prove
-  the 5 fixtures (~85 s each, measured) → `mkfixtures-v3.mjs` → rebuild the
-  program (new `vk.ic[0]` ⇒ new program hash ⇒ new lockings; **the walk
-  scripts are UNCHANGED — category-only, no VK**) → re-run `walk-test.mjs` +
-  `pool-test-v3.mjs` (29/29) + the red team + the sweep under the final zkey.
+**Done in the agreed order, both entropies UNPUBLISHED (never in any repo,
+doc, commit, or message — only the printed contribution hashes are records):**
+
+1. **Nito first** (01:29 UTC): onto `pool4_0000.zkey` →
+   `pool4_0001_nito.zkey` (120,818,020 B, sha256
+   `ef4b1ec9a447c8335c3a28f8a7e4fa32c298851830bd96140c77eccb57abc966`).
+   Contribution hash `ba66883d…3b2d10e8`. Verified by us: `zkey verify`
+   → **ZKey Ok!**, the printed hash matches their record.
+2. **Hush second** (immediately after): onto `pool4_0001_nito.zkey` →
+   `pool4_0002_hush.zkey` (sha256
+   `52ee860d6a867ce1c49763a79a3fb980c090b2f6f8948d10ad7a2736a19cde17`).
+   Contribution hash `2cb3aa50…1ca3ecad` — entropy 64 B `/dev/urandom`
+   piped, never a file. **The final chain verifies: ZKey Ok!** (both
+   contributions in the transcript).
+3. **The final VK**: `verification_key_mpc.json` sha256
+   `b4d88dd51ac915c1987b876f242fd6b6b1d2da84871e5dc20bfd62d304604fbd` —
+   groth16/bn128, **nPublic 2, IC 3** (the 2-scalar contract intact).
+   **`pool4.wasm` is UNCHANGED** (`a9b4b03d…`) — a phase-2 MPC never touches
+   the circuit/wasm.
+4. **The user's third slot**: their decision, pending on their side — two
+   independent contributions already satisfy the agreed "2–3" minimum; a
+   third chains onto `pool4_0002_hush.zkey` and the VK re-exports.
+
+**The cascade (running)**: the 5 fixtures re-proved under the final zkey ✓ →
+the bench fixtures `our-v3-mpc.fixtures.json` (sha256 `4a46238b…`, all 5
+self-verify) ✓ → the program rebuilt under the new `vk.ic[0]` ✓ (**7,997 B,
+sha256 `0023d1ea…`** — §1.3; the walk scripts + lockings UNCHANGED) →
+walk-test 10/10 ✓ + acceptance 29/29 ✓ → the red team + sweep re-runs (in
+flight; seeds `sweep-v3mpc-a`/`sweep-v3mpc-b`) → **M2 when they pass**.
 
 ## §9 The chipnet v3.1 demo (M3) — the deployment record
 
