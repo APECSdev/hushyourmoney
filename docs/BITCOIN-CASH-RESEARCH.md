@@ -14,9 +14,11 @@ Optional tags (verified against the forum's tag set — tags.json, 2026-11-27):
 
 --------------------------------------------------------------------------------
 
-STATUS: DRAFT — publish gates, the placeholder inventory, and the verification
-ledger live in BITCOIN-CASH-RESEARCH-NOTES.md. The one publish BLOCKER is the
-mainnet lifecycle links — fill the three XXX below.
+STATUS: READY TO POST (TEMP links) — the three mainnet lifecycle links are
+TEMPORARY for the hackathon deadline; the permanent pool will replace them
+(no verbiage changes in the meantime, per the user ruling). The permanent-pool
+checklist + the verification ledger live in BITCOIN-CASH-RESEARCH-NOTES.md.
+Everything below this line is the post.
 
 **Hush Your Money (https://hushyourmoney.com) has delivered a NEW Unique Value Proposition (UVP) for Bitcoin with a BRAND NEW Shielded Stablecoin Payments protocol, tentatively titled "The Hush Protocol"**
 
@@ -130,7 +132,7 @@ the full public ceremony (below) are still ahead of it.
   nullifier is rejected at consensus.
 - **Fees:** BARE, ~1 sat/B.
 - **Gates under the current verifying key:** acceptance 29/29, red team 164/0,
-  liveness sweep [SWEEP].
+  liveness sweep 69/0.
 - **It has run on BCH mainnet before:** an earlier generation ran a
   four-transaction mainnet demo with a real proof; the full generational
   record is on the research page.

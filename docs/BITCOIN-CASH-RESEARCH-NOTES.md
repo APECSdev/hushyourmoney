@@ -7,37 +7,58 @@ inventory, the verification ledger, and the decision record for the draft at
 docs/BITCOIN-CASH-RESEARCH.md — kept separate so the post file is CLEANLY the
 thing we are agreeing to publish.
 
-## Publish gates
+## Publish state — TEMP links, published for the hackathon deadline
 
-THE BLOCKER (user ruling 2026-11-27): the mainnet Preview v0 lifecycle links —
-the three XXX txids in the draft. Everything else is completed in the meantime:
+USER RULING (2026-11-27, binding): the three mainnet lifecycle links are
+TEMPORARY — published to meet the hackathon deadline — until the PERMANENT
+pool is ready, and NO verbiage changes are wanted in the meantime ("I DO NOT
+WANT ANY CHANGE IN VERBIAGE, AS THIS IS TEMPORARY ONLY").
 
-1. `[SWEEP]` — the post-MPC liveness sweep result. 4 shards were still
-   running on the VM at 2026-11-27 13:36Z; expect 69 cases / 0 failed
-   (`grep -c "failed" /tmp/sweep-v3mpc-s*.log`; merge per the
-   `/tmp/pool-sweep-v31-s*.json` precedent → `wip-role2-hook/`). Note: this
-   also feeds the M2 release → the M5 mainnet deploy, so it is on the critical
-   path to the blocker itself.
-2. The v3.1 record LIVE on https://hushyourmoney.com/research/shielded-pool —
-   at 2026-11-27 the live page carries the R2 disclosure but NOT the v3.1
-   record (R3-FREE-NEWROOT / pool4 / 247,120 all absent) — plus the Flux
-   rollout settled.
-3. Nito confirms the BCH⇒PUSD swap is live in the wallet (not verifiable from
-   this repo).
-4. Fill the three mainnet lifecycle txids + Selene `?network=mainnet` links
-   after the Preview v0 deploy + confirmations.
+The TEMP links as filled (commit `d0e47a7`) — identities verified on-chain
+2026-11-27, this host:
+
+- **SHIELDING** `627013ca…` — the pool5 action (`mainnet-role2-pool4-v4h`),
+  CONFIRMED, carries ParyonUSD (asset category `2469acc5…`). ✓
+- **TRANSFER** `4fda8a8b…` — resolves 200 and is confirmed, but it is the
+  2026-11-20 EARLIER-GENERATION mainnet transfer (references the old deploy
+  `63ddfdd4…` + the old category `dd1e3506…`), NOT a pool5 action — pool5 has
+  not run a transfer (its UNSHIELD spends the SHIELD's state directly).
+  Accepted as TEMP per the ruling.
+- **UNSHIELDING** `998a0474…` — pool5, spends the SHIELD's outputs (state
+  chain correct); PENDING / unconfirmed at every probe this session (relayed,
+  DSProof score 0.00). Accepted as TEMP per the ruling.
+
+### PERMANENT-pool update checklist (when it lands)
+
+1. Swap the three lifecycle links to the permanent pool's lifecycle (same
+   Selene `?network=mainnet` format; link txid text inline — bare URLs on
+   their own line render as bare Discourse onebox cards).
+2. Gates line: the completed post-MPC sweep is verified 69 cases / 0 failed
+   (`/tmp/sweep-v3mpc-s{0..3}.log`: 18+17+17+17) — bring the line current
+   under the permanent pool's final bytes if they differ.
+3. Architecture alignment: the deployed TEMP pool is v4h (the C architecture
+   — the ASSET rides the H-covenant in5/in6 pair; 96-B state commitment
+   [noteRoot ‖ nullSetRoot ‖ balance]; program 8,078 B sha256 `4f096247…`,
+   the post-check-6-fix build); the post's diagram/summary describe the
+   earlier v3.1 5-input shape. Deferred per the ruling.
+4. Ceremony count: the post says "two-party mini-MPC"; the chain is now
+   THREE contributions (Nito `ba66883d…` → Hush `2cb3aa50…` → user
+   `e982459d…`; final zkey `pool4_0003_user.zkey` sha256 `de7875e3…`, VK
+   `f6b49cc0…`; all entropies unpublished —
+   docs/MPC-USER-CONTRIBUTION-2026-11-27.md). Deferred per the ruling.
+5. The v3.1 record on https://hushyourmoney.com/research/shielded-pool (still
+   absent from the live page at 2026-11-27) + Flux, and the Nito BCH⇒PUSD
+   swap confirmation.
 
 ## Placeholder inventory (inline in the post)
 
-- Three `XXX` mainnet txids (SHIELDING / TRANSFER / UNSHIELDING) + their
-  Selene links — at fill time, link the txid TEXT inline
-  (`[txid](https://explorer.selene.cash/tx/<txid>?network=mainnet)`) instead
-  of bare URLs in parentheses; bare URLs on their own line render as Discourse
-  onebox cards and explorer pages carry no preview metadata.
-- `[SWEEP]` — the sweep result line in "What is actually running".
-- Publish-time option (recommended): a short "verify it yourself" block with
-  the PUSD asset-category txid (Selene mainnet link) + the pool program hash,
-  so forum readers can check the pool on-chain without trusting us.
+- The three `XXX` mainnet txids: FILLED (TEMP per the ruling above).
+- `[SWEEP]`: FILLED 2026-11-27 with the verified sweep result (69 cases /
+  0 failed — `/tmp/sweep-v3mpc-s{0..3}.log`, complete; a data fill, not a
+  verbiage change).
+- Publish-time option (deferred with the verbiage per the TEMP ruling): a
+  short "verify it yourself" block with the PUSD asset-category txid + the
+  pool program hash.
 
 ## Verification ledger (2026-11-27, this host)
 
@@ -148,6 +169,15 @@ docs/V3-BUILD-2026-11-27.md + docs/POOL-V3-INTEGRATION-HANDOFF-2026-11-27.md.
   all probed 200, titles taken from the fetched <title> tags); the 2027
   vision moved to the close (after Disclosure). Poll: NOT added (user
   declined). Title unchanged.
+- **2026-11-27 pass 8** — the links were filled by the user's session (commit
+  `d0e47a7`) and reviewed on the user's ask. RULINGS: the links are TEMPORARY
+  for the hackathon deadline until the permanent pool is ready; NO verbiage
+  changes wanted. NO language edits made this pass; the only post change is
+  the [SWEEP] placeholder fill (69/0, verified). Findings recorded above: the
+  TRANSFER link is the 2026-11-20 earlier-generation tx; the UNSHIELD was
+  pending at review time; the deployed pool is v4h while the post describes
+  v3.1; the MPC chain is now three contributions. The permanent-pool
+  checklist supersedes the old gates list.
 
 ## Open items for the user
 
