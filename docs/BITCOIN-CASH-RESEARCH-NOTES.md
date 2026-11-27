@@ -7,6 +7,30 @@ inventory, the verification ledger, and the decision record for the draft at
 docs/BITCOIN-CASH-RESEARCH.md — kept separate so the post file is CLEANLY the
 thing we are agreeing to publish.
 
+## PUBLICATION RECORD — LIVE
+
+- **URL**: https://bitcoincashresearch.org/t/hush-your-money-introducing-shielded-stablecoin-payments-for-bitcoin/2666
+- **Title** (exact): "Hush Your Money: Introducing Shielded Stablecoin Payments
+  for Bitcoin" — category_id 8 (Technical) — posted 2026-11-27T19:49:35Z.
+- **Tags as posted**: apps, audits, bch-native, contracts (the forum's "apps"
+  instead of the draft's "applications" — both in the verified tags.json set).
+- **Verified live (this host, raw fetch + diff vs the committed draft):**
+  the paste starts at the bold lead (the STATUS/Title/tags header blocks were
+  NOT pasted) ✓; zero placeholders ✓ ([SWEEP] went out as 69/0) ✓; the three
+  Selene mainnet tx links hyperlinked ✓; the diagram renders as a code block
+  ✓; 3 h3 + 10 h2 headings render ✓; the fundme + forum-topic links present
+  ✓; no literal placeholder anywhere in the cooked HTML ✓.
+- **The user's paste-time edits (live post vs the committed draft — all the
+  user's own, recorded for the trail):** bold added on "NATIVE" / "ONLY 2
+  OTHERS EXIST IN THE WORLD"; italics on the RAILGUN/Namada footnote; the
+  section heading "The research is EXTENSIVE" retitled "A Mountain of
+  Research"; bold on "EXTENSIVE — six years of it"; the try-it steps' bold
+  moved onto the verbs ("**SWAP** / **SHIELD** / **TRANSFER**"). The
+  committed draft file was NOT retro-edited — it stays the as-agreed source;
+  the live post is the canonical published record.
+- **The TEMP-links state is unchanged** — see the permanent-pool checklist
+  below for the swap when the permanent pool lands.
+
 ## Publish state — TEMP links, published for the hackathon deadline
 
 USER RULING (2026-11-27, binding): the three mainnet lifecycle links are
