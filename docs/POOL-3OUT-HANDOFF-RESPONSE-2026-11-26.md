@@ -55,10 +55,32 @@ that only a browser run exercises.
   `leafIndex` and the scan marks spends by nullifier).
 - The acceptance recipe (§4) and the blank buy (§4.1) are as we would run them.
 
-## 4. Next
+## 4. THE 3-OUT BROWSER ACCEPTANCE PASSED (2026-11-26)
 
-1. We run the 3-out browser acceptance (the temporary local flip, the note import, SHIELD →
-   TRANSFER → UNSHIELD). On pass, the registry flip; on fail, no flip.
+The real Wallet UI on chipnet, one session, the §3 notes imported:
+
+| Action | Txid | Block | Size |
+|---|---|---|---|
+| SHIELD | `9b3aac2c044e728919e65658c31949dc5acda26f0ab2b85fc373581b08efe27d` | 348,956 | 27,913 B |
+| TRANSFER | `abbb3dc7ea1de8c4c0c4ffd11fdc3127971a9ecfa887b47645687a571b597ddf` | 348,960 | 27,817 B |
+| UNSHIELD | `5a4d6b859665736cf6a9823b25157ec9d1fa70ab244812fd109b60db8612d273` | 348,966 | 28,078 B |
+
+State: 700 → 900 → 788 FT; final 788 FT / 10,000 sats. The registry entry
+`chipnet-pusd-role2-3out` is `walletProverCompatible: true` / `status: 'live'`
+(commit `b7e2786`, CI green). The 2-out pool's flow is untouched.
+
+Two notes for your record:
+
+1. **The handoff §1.1 locking string has a one-char typo** — the real program locking is
+   `aa204a6ce339fb62b7b2ebb502c9bf642d3221620e6f5ded619ce8a39110e35182ea87` (the handoff says
+   `…10e35882ea87`; the wrong string's scripthash returns an empty history).
+2. The proving assets served fine; the acceptance's only harness fix was the per-action wait
+   (a single long `waitForFunction` trips puppeteer's 180 s protocol timeout during the cold
+   98 MB zkey download + the proof — a node poll loop replaces it).
+
+## 5. Next
+
+1. ~~The 3-out browser acceptance~~ — PASSED (above).
 2. The known gaps stay recorded: no encrypted note delivery on the 3-out (the TRANSFER
    recipient note is undeliverable until the delivery layer), and the R2-NULLIFIER-DOUBLING
    gate — **no valued asset in any role-2 pool until the v3 nullifier set ships**.
