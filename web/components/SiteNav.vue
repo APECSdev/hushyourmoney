@@ -20,6 +20,7 @@ const RESEARCH = [
 
 const LINKS = [
     { label: 'Research', to: '/research', research: true },
+    { label: 'Compare', to: '/compare' },
     { label: 'Playground', to: '/playground' },
     { label: 'Daemons', to: '/daemons' },
     { label: 'Ceremony', to: '/ceremony' },

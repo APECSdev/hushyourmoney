@@ -74,9 +74,9 @@ export default defineNuxtConfig({
         /* Retired standalone specification — merged into the CoinJoin topic page. */
         '/spec': { redirect: { to: '/research/coinjoin', statusCode: 301 } },
 
-        /* Retired placeholder / orphaned pages (2026-11-24 cleanup). */
+        /* Retired placeholder / orphaned pages (2026-11-24 cleanup).
+           /compare now hosts the ELI5 privacy-coins comparison (2026-11-27). */
         '/_blank': { redirect: { to: '/', statusCode: 301 } },
-        '/compare': { redirect: { to: '/', statusCode: 301 } },
         '/diary': { redirect: { to: '/', statusCode: 301 } },
         '/treasury': { redirect: { to: '/', statusCode: 301 } },
         '/profile': { redirect: { to: '/', statusCode: 301 } },

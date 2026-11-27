@@ -123,6 +123,7 @@ function tryAgain() {
                 <p class="font-mono text-xs uppercase tracking-[0.35em] text-slate-400">everything we publish</p>
                 <div class="mt-4 flex flex-wrap items-center justify-center gap-x-6 gap-y-2 font-mono text-sm">
                     <NuxtLink to="/research" class="text-slate-200 transition hover:text-lime-300">research</NuxtLink>
+                    <NuxtLink to="/compare" class="text-slate-200 transition hover:text-lime-300">compare</NuxtLink>
                     <NuxtLink to="/playground" class="text-slate-200 transition hover:text-lime-300">playground</NuxtLink>
                     <NuxtLink to="/ceremony" class="text-slate-200 transition hover:text-lime-300">ceremony</NuxtLink>
                     <NuxtLink to="/roadmap" class="text-slate-200 transition hover:text-lime-300">roadmap</NuxtLink>
