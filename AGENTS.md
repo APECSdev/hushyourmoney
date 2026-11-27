@@ -14,6 +14,75 @@
 - Make ample use of figures and diagrams when documenting or discussing technical designs and implementations (ASCII/Mermaid in repo docs; rendered diagrams on the site).
 - Published technical claims must satisfy the verification contract (file path, command output, or cited source). Where a quantity has not been measured, mark it UNMEASURED rather than estimating.
 
+## CURRENT HANDOFF — 2026-11-27 (LATEST +1) — NITO ANSWERED; THE SMT SPIKE IS MEASURED — THE V3 NULLIFIER SET IS HOOK-LEVEL
+
+**The wait ended 2026-11-26 18:39.** Nito's response is recorded in OUR repo at
+`docs/POOL-3OUT-HANDOFF-RESPONSE-2026-11-26.md` (commit `a3eebb0`): the
+apology + rule accepted on both sides (their VM mirror is theirs — our future
+runs use a separate clone); `6ea8077` + `c6ad077` ACCEPTED (their byte-exact
+gate re-run: fuel0 9,488 / fuel1 9,490 / state 8,821 B); `8c0d941` ADOPTED
+with two fixes THEY made — our pushed code did NOT contain the claimed scan
+binding (`scanPool` had no payload parameter and still resolved the default
+pool) and `assembleLeaves` was 2-out-only (the 3-out tree threw "incomplete
+leaf list"); their fix commit `2928632` is on their origin master (verified
+read-only via `git ls-remote`). 73 files / 692 tests green. **Their remaining
+event: the 3-out browser acceptance** (temporary local flip, the 7-note
+import, SHIELD → TRANSFER → UNSHIELD; registry flip only on pass). Their §4
+explicitly assigns the 2N network loop + the blackhost deployment to US; the
+Nito client 2N UI stays theirs. They acknowledge the R2-NULLIFIER-DOUBLING
+gate: no valued asset until the v3 nullifier set ships.
+
+**The SMT-depth spike — MEASURED this session (the ordered mission).** Full
+record: `docs/NULLIFIER-SET-SPIKE-2026-11-27.md`; tooling:
+`pusd-shielded-pool/spike-nullset/` (commit `0d2887f`, pushed). The
+measurement decides: **the v3 nullifier set is the HOOK-LEVEL SHA256 SMT.**
+
+- **In-circuit (Poseidon SMT, dual-walk insert): REJECTED BY MEASUREMENT.** One
+depth-254 insert = 263,907 c (Poseidon(2) = 517 c; 2 hashes/level). The
+grafted v3 circuit = **743,608 c (4.03× the current 184,528)**, nPublic 2,
+wtns 10.77 s, and `snarkjs groth16 setup` is **REFUSED by the pot18 phase-1
+we hold** — `743608*2 > 2**18`; pot18 supports < 262,144 c (snarkjs bound:
+`floor(log2(nC+nPub+nOut))+1 ≤ power`), so the deepest insert that fits is
+D ≤ 22 — birthday-broken. Every sound in-circuit depth needs a pot20-class
+phase-1 instantiation + ~4× phase-2 MPC. circomlib's SMTProcessor(254)
+measures costlier (271,758) than the hand-rolled dual-walk. Correctness WAS
+proven (wtns check OK at both depths) — the option dies on ceremony + prover
+cost, not on soundness.
+- **Hook-level (SHA256 SMT in BCH script): VERIFIED ON THE REAL VM.** The
+unrolled dual walk ACCEPTS a true witness and REJECTS a tampered
+sibling/root at D=64 (318,065 op) and D=128 (633,401 op), always far under
+the self-funded `(41 + unlockingLen) × 800` budget (the witness bytes fund
+it). Costs: +8,481 B sibling witness per nullifier + invoke-shared walk code
+(~4–6 KB ESTIMATE — the unrolled D=254 script is 11,656 B > the measured
+10,000-B script cap; the production shape is one ~24-B level-body function
+invoked 1,016× via the role-2 program's existing function-invoke system) + a
+dedicated nullifier-data input ⇒ **+21–23 KB per action (+~75 % fee at BARE
+rates)**. The walk key is the carrier's proof-bound nf slice (actionHash
+fields 0/1 — NO actionHash change at all).
+- **The one circuit revision = the deposit path (0-in/2-out) + `nf0 ≠ nf1`
+in-circuit (~4 constraints — closes the demonstrated in-action doubling at
+the proof level). Still fits pot18; the ceremony economics do not change.**
+
+**Standing (priority order):**
+
+1. **The v3 BUILD** — hook-level nullifier set + deposit path in one circuit
+   revision, one ceremony; then new VK → verifier program → hook →
+   acceptance/red-team/sweep → demo deploy → migration (the tooling chain is
+   the template). The site record updates with it.
+2. **Flux owner update** — STILL pending, re-verified live this session: the
+   live `/research/shielded-pool` serves the zero-dummy build (187,846 B,
+   `R2-NULLIFIER-DOUBLING` = 0); the disclosure image `e1bbb2116496` is
+   confirmed on the Hub (digest verified).
+3. The Nito 3-out browser acceptance (external, theirs; on pass → registry
+   flip).
+4. Wallet A ready for any demo action on their ask (per the handoff record;
+   not re-probed on chain this session).
+5. Demo key rotation stays deferred until the objectives complete.
+
+The STANDING RULE below (2026-11-26, PERMANENT) still governs every session.
+
+---
+
 ## CURRENT HANDOFF — 2026-11-26 (LATEST +2) — RULE VIOLATION RECORDED: nito.cash commit 8c0d941 was UNAUTHORIZED; the Nito team decides
 
 ### STANDING RULE (user directive 2026-11-26, PERMANENT — record in every session)

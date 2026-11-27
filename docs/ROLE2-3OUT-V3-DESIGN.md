@@ -167,6 +167,19 @@ The SMT-depth measurement (does a collision-free sparse tree keyed by `H(nf)`
 fit the on-chain budget?) decides in-circuit membership vs a hook-level set
 and must be measured before any ceremony.
 
+**MEASURED 2026-11-26/27 — the decision is the HOOK-LEVEL set** (full record:
+`docs/NULLIFIER-SET-SPIKE-2026-11-27.md`). The in-circuit option at depth 254
+is **743,608 constraints (4.03×)** and is **refused by the pot18 phase-1 we
+hold** (snarkjs: `743608*2 > 2**18` — pot18 supports < 262,144 constraints;
+every sound in-circuit depth exceeds it, D ≤ 22 would fit and is
+birthday-broken). The hook-level SHA256 SMT walk verifies end-to-end on the
+real BCH-2026 VM (true witness accepts; tampered sibling/root reject) at
+~2.5 M op against a ~13.6 M-op self-funded budget, costing **+21–23 KB per
+action (+~75 % fee)** with the walk code function-invoke-shared. The v3
+circuit revision therefore carries only the deposit path + an in-circuit
+`nf0 ≠ nf1` (~4 constraints) and still fits pot18 — the ceremony economics do
+not change.
+
 ### 3.3 Encrypted note delivery — the usability fix
 
 The 169-B carrier has no encrypted note; the 400 FT transfer note is
