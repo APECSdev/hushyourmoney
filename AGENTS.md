@@ -98,6 +98,15 @@ PROVEN in-circuit.
    tamper (walkB; role 2 accepts by design — the two-script pin), the 4-input
    shape (GRAPH), swapped/junk walk lockings (4w).
 
+**Interim Nito update SENT (2026-11-27 session end):**
+`docs/POOL-UPDATE-NITO-2026-11-27.md` — the R3-FREE-NEWROOT disclosure (their
+pools v2/v4 + their continuity-only scan are affected; the two-proof drain
+evidence; the optional client-side detection stopgap) + the v3 status snapshot +
+the §3 integration preview (what changes for their client / what carries over)
++ "nothing required from you". Their call on the 3-out browser acceptance
+stands; the v3 is the integration target. The FULL handoff follows the
+remaining gates.
+
 **Next session (in order):**
 1. **Red team** — extend `pool-redteam.mjs` to the 5-input shape (walk-input
    scenarios; the stock 151-scenario list + the walk tamper classes).
