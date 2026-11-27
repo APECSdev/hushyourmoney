@@ -2,8 +2,55 @@
   "$schema": "https://hushyourmoney.com/schemas/pool-registry-v1.json",
   "version": 1,
   "network": "multi",
-  "updated": "2026-11-26",
+  "updated": "2026-11-27",
   "pools": [
+    {
+      "name": "Chipnet role-2 pool v3.1 - HOOK-LEVEL NULLIFIER SET + DEPOSIT PATH (demo, deployed, the current generation)",
+      "network": "chipnet",
+      "poolCategory": "e56c0a8583e36092f20e54c9247f6b8e5a6afd391027aa70ae109c3c42377930",
+      "poolLocking": "aa206dc915cef6f1343b7d170caaf79346072222d66fd3285fcb4d506f184069e8cb87",
+      "treeRootLE": "faeea5aa82e607dbec36b08a42605dfc24f2f347099d037044190a007883ef18",
+      "assetCategory": "e56c0a8583e36092f20e54c9247f6b8e5a6afd391027aa70ae109c3c42377930",
+      "setupGrade": "disclosed 1-of-1 demo setup (build4/pool4_final.zkey sha256 942f8fc5..., 2026-11-27) - CHIPNET-ONLY; the mini-MPC (unpublished-entropy contributions, Nito first, Hush second) produces the mainnet VK; the full-scale ceremony remains the production bar",
+      "walletProverCompatible": false,
+      "anchorTxid": "e56c0a8583e36092f20e54c9247f6b8e5a6afd391027aa70ae109c3c42377930",
+      "mintTxid": "85cd4780ea00d28a020e596b31b0832e0d274a893d1f756091f2980569afd473",
+      "deployTxid": "23909dc28ff10c8753d1c60b8775ad163481baac3b652db00094985e7200703a",
+      "deployBlock": 349143,
+      "program": "code 7,998 B (the deployed category build); carrier 201 B; actionHash 9 fields; 5-input shape (fuel pair + state + walkA + walkB)",
+      "mintingNFT": "born guarded (deploy out1); guard batch a98ee616a8cbeecd8e92ac5bd3287c0b65ec5f42d1e16e9d4b65bb8307457579 (64 blanks, confirmed h 349183)",
+      "depositTag": "hook checks 4c+4g unchanged: SHA256(carrier[0..64]) = SHA256(nf0||nf1) of the funded action",
+      "walkInputs": "v3.1: the walk UTXOs are P2SH32-wrapped (raw script lockings are relay-nonstandard - measured, scriptpubkey code 64); walkA/walkB unlockings 8,445/8,425 B; the hook 4w + graph pins hash the P2SH32 lockings",
+      "nullifierSet": "hook-level SHA256 SMT D=254 keyed by the carrier's nf slices; walkA proves nf0's slot empty vs the state's nullSetRoot and emits midRoot; walkB proves nf1's slot empty vs midRoot and pins finalNullRoot into the new state commitment's second half; the R2 replay and the R3 free-root are both closed at consensus",
+      "genesis": "EMPTY tree (zh[20]) and EMPTY nullifier set (e579b9be0b8f58daacc4f66c959ed3ec903884d1914e11e7e0c3bbf2a5627b43); state commitment = LE32(zh[20]) || EMPTY_NULL_ROOT; NO bootstrap seeds - the first notes enter via a deposit",
+      "gates": "acceptance 29/29 (v3.1); red team 164/0 (twice: v3.0 + v3.1 pins); sweep 69 cases/0 failed (std min margins 8.13/8.71/6.00/36.26/35.72%, max at-cap 7,077,519 = 11.89% cap margin); hook 39,033 op std / 37,881 op cons (612 B)",
+      "lifecycle": [
+        {
+          "op": "DEPOSIT 1000",
+          "lockTxid": "1c8be39cf3e1c2e735d3df3bf4692cb5052827c10c3bfa989aa9975535f66e01",
+          "txid": "137a79079b35eff7835f84cb19973d644458cbf3751d98d3279ebe9c67ed4646",
+          "fee": "50000 sats (1.102 sat/B)",
+          "note": "THE ONBOARDING: empty genesis, pv 1000, out notes 400/300/300; balance 0 -> 1000; nullSet 2 keys"
+        },
+        {
+          "op": "TRANSFER",
+          "lockTxid": "455e3c5f343a6da338dc0c892df9eabb77f463a61462c16b339e419b18e1657c",
+          "txid": "8ccc9cd27cf6d4a5e7d194c9fada57fafd4977ed62e292e6cff68eb35d4e34e3",
+          "fee": "47500 sats (1.045 sat/B)",
+          "note": "spends notes 0,1 - the first membership spend; nullSet 4 keys"
+        },
+        {
+          "op": "UNSHIELD 250",
+          "lockTxid": "a9b9cefa364192bfeaa3a4038c2859f881803e957cd1b552ec4c74f1b73f8bda",
+          "txid": "405166f57af10186ef85b57a7e5e070b0df569e7b4f03e5051373fd14e9fda00",
+          "fee": "45500 sats (1.002 sat/B)",
+          "note": "250 FT paid publicly, 750 shielded onward; nullSet 6 keys; balance 750"
+        }
+      ],
+      "mainnetDesignation": "Preview v0 (user directive 2026-11-27: never 'Release Candidate'/'RC') - the mainnet pool runs at the asset category 2469acc5afa4b10cb5b5c04afb89c3a3ffd61c5da9c01e26d00951cae2a02544 (confirmed by the user + both teams); mainnet candidate program (v3.1 pins) code 7,998 B sha256 40a9599141686539edd5590ba03fe012701ea0cc2ec4aae6a9fb7749416db012, rebuilt at the post-MPC cascade",
+      "notes": "Every input of every action VM-ACCEPTED consensus+standard pre-broadcast; all txs confirmed. The v3.0 attempt (category 03af2eda..., deploy 89f0829e... confirmed h 349131) was aborted at its first lock - the raw walk lockings were relay-rejected; it never held value. Walk-dust/fuel: 23,000x2 + 2,000x2 per action (defaults; the lifecycle's leaner last two actions at 21,750/21,250 per fuel are recorded in the M4 doc). State file /home/apecs/cov/role2-pool4-state.json on the shared VM.",
+      "treeRootLEIs": "the CURRENT root after the lifecycle (deposit->transfer->unshield); the GENESIS commitment was LE32(zh[20]) || EMPTY_NULL_ROOT = 3e1f1922dfb671d3f912f7ea461e0a88ee848fdde12b6c18ab1ad2c56ae73421e579b9be0b8f58daacc4f66c959ed3ec903884d1914e11e7e0c3bbf2a5627b43"
+    },
     {
       "name": "Chipnet role-2 pool v3 - 3-OUT NOTES MANAGEMENT (demo, deployed)",
       "network": "chipnet",
@@ -64,7 +111,15 @@
         "root": "17284930349973909159634241637463778619401830995499966741482456361978173648802",
         "rootLE": "a2ef702ba405427d0d3e60918743f5fea891c09d3d9be2a3c4b8eaae83ec3626",
         "balance": "700",
-        "notesAtTree": [8, 9, 10, 12, 14, 15, 16],
+        "notesAtTree": [
+          8,
+          9,
+          10,
+          12,
+          14,
+          15,
+          16
+        ],
         "noteValues": "112 / 84 / 84 / 20 / 200 / 100 / 100",
         "leaves": 17,
         "stateOutpoint": "cbfb05033282a3338fdddc6f837113a4b2ec3ad065589bc56d723f0d7ec7dadf:1",
