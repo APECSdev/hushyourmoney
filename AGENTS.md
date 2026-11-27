@@ -14,128 +14,195 @@
 - Make ample use of figures and diagrams when documenting or discussing technical designs and implementations (ASCII/Mermaid in repo docs; rendered diagrams on the site).
 - Published technical claims must satisfy the verification contract (file path, command output, or cited source). Where a quantity has not been measured, mark it UNMEASURED rather than estimating.
 
-## CURRENT HANDOFF — 2026-11-27 OVERNIGHT (LATEST) — THE USER'S GO: M1 GATES + M3 CHIPNET DEMO + M4 HANDOFF TONIGHT; THE MINI-MPC (unpublished-entropy phase-2) AGREED FOR MAINNET — EXECUTE THIS FIRST
+## CURRENT HANDOFF — 2026-11-27 SESSION END (LATEST) — M1+M3+M4 DONE, THE MINI-MPC COMPLETE, THE CASCADE ONE GATE FROM M2 — THE NEXT SESSION COLLECTS THE SWEEP, RELEASES M2, AND DRIVES M5
 
-**Read `docs/HANDOFF-NITO-2026-11-27-MORNING.md` (the Nito team's demand list,
-committed) and `docs/HANDOFF-NITO-2026-11-27-MORNING-RESPONSE.md` (our review +
-the GO) FIRST.** The situation: the user ordered **Option C** — the v3 pool on
-MAINNET with REAL PUSD, both drains closed at consensus BEFORE any real value
-enters any pool; the user rejected any drainable-pool demo in the strongest
-terms. Nito's M1-M5 list + the schedule compressed to overnight. The v3 stack
-(circuit/ceremony/fixtures/walks/program/hook/29-29) is DONE — the details are
-in the PREVIOUS section below + `docs/V3-BUILD-2026-11-27.md` (the canonical
-build record; read it too).
+**The overnight mission (the section below, now CONSUMED) is complete.** M1
+(all three gates under v3.1), M3 (the chipnet v3.1 pool deployed + the full
+DEPOSIT → TRANSFER → UNSHIELD lifecycle confirmed), M4 (the full integration
+handoff delivered + twice-updated through the MPC), and the mini-MPC (Nito
+first, Hush second, both entropies UNPUBLISHED, chain verified) are DONE. The
+**v3.1 relay finding** (below) forced a same-night program revision + a pool
+redeploy — everything recorded. **The next session's mission, in order:**
 
-**The user's binding decisions (2026-11-27 evening, this session):**
-1. **GO on M1 → M3 → M4 tonight** (red team + sweep + hook cost → chipnet v3
-   demo deploy → the full integration handoff).
-2. **The mini-MPC AGREED for mainnet**: 2-3 independent phase-2 contributions
-   with **UNPUBLISHED entropy** — one from the Nito side (their machine or the
-   shared VM, their entropy, never recorded anywhere), one from the user's
-   side — then the final zkey/VK; MAINNET RUNS UNDER THE FINAL VK. The current
-   1-of-1 published-entropy zkey (entropy `888d7f92…`, in commit `1528993`)
-   stays **CHIPNET-ONLY**. The full-scale ceremony remains the production bar;
-   this mini-MPC is the user-ordered demo-scale Gate 7. **ENTROPY HYGIENE IS A
-   STANDING RULE: the MPC entropies go in NO repo, doc, commit, or message**
-   (unlike the chipnet demo precedent, which publishes them).
-3. **PENDING USER QUESTION (not blocking): confirm the mainnet pool runs the
-   asset at category `2469acc5…`** — the anchor
-   `2469acc5afa4b10cb5b5c04afb89c3a3ffd61c5da9c01e26d00951cae2a02544` probed
-   **200 on Selene `?network=mainnet`** from this host, and our ENTIRE v3 stack
-   already pins that exact category (`gen-our-proofs-v3.mjs:43`, the fixtures,
-   the hook), so the 7,998-B program `d98c1d2a…` is already the category-
-   correct mainnet candidate if confirmed. Lockings/program hashes are
-   PER-CATEGORY — a different category means a rebuild. (Note: the OLD
-   `mainnet-pusd-pool` registry entry used category `dd1e3506…` — the 1.00-PUSD
-   solo demo, a different asset.)
+1. **COLLECT THE LAST GATE**: the post-MPC sweep harness re-run — 4 shards
+   RUNNING on the VM as this session closes:
+   `SWEEP_SHARD=$k/4 BN_VK_FIXTURES=/home/apecs/cov/our-v3-mpc.fixtures.json
+   node pool-sweep-v3.mjs /tmp/pool-sweep-v3mpc-s$k.json
+   /home/apecs/cov/our-v3-mpc-sweep-a.json /home/apecs/cov/our-v3-mpc-sweep-b.json`
+   (logs `/tmp/sweep-v3mpc-s{0..3}.log`). Check completion:
+   `grep -c "failed" /tmp/sweep-v3mpc-s*.log` — expect `cases 17/18, failed 0`
+   per shard (69 total). Merge → `pool-sweep-v3-mpc-report.json` (the
+   `/tmp/pool-sweep-v31-s*.json` merge precedent: one JSON with
+   {shape, shards, results}), copy into `wip-role2-hook/`, commit. **Any
+   failure → report to the user + Nito before anything else.**
+2. **M2 — the post-MPC proving-assets release** (the release is gated on the
+   sweep passing): GitHub release `role2-proving-assets-v3-v1` on
+   `APECSdev/pusd-shielded-pool` (the `-v1`/`-3out-v1` releases are the
+   pattern), contents + sha256s:
+   - `pool4_final.zkey` = the VM's `build4/pool4_0002_hush.zkey` (120,818,020-class,
+     sha256 `52ee860d6a867ce1c49763a79a3fb980c090b2f6f8948d10ad7a2736a19cde17`)
+   - `pool4.wasm` = `build4/pool4_js/pool4.wasm` (**UNCHANGED** sha256
+     `a9b4b03d17c614ba920c45df5c34949e26ce8cdbdeb3d6b145476a2857289395` —
+     phase-2 never touches the circuit)
+   - `verification_key_v3.json` = `build4/verification_key_mpc.json` (sha256
+     `b4d88dd51ac915c1987b876f242fd6b6b1d2da84871e5dc20bfd62d304604fbd`;
+     groth16/bn128, nPublic 2, IC 3)
+   - **the bench fixtures file** (Nito's ask, ANSWERED YES):
+     `our-v3-mpc.fixtures.json` (sha256
+     `4a46238b9f652024b2d3ceb7b45994eb3bd0465c9e77a7df5a1de40163c19f78` —
+     the `{vk, fixtures}` shape their program build consumes)
+   - SHA256SUMS. Nito mirrors + B4 data-edits it (their pin table is ready).
+3. **The site record** (`/research/shielded-pool` + the research hub per the
+   release-log pattern): the v3.1 generation, the relay finding, the lifecycle,
+   the MPC, Preview v0. Also the missing items noted below (the vending load).
+4. **Nito's chipnet browser acceptance** — GO GIVEN (against the EXISTING
+   deployed pool; their proofs use the CHIPNET trio
+   `942f8fc5…/a9b4b03d…/07638f10…` — the deployed pool's program pins the
+   chipnet VK; the post-MPC trio governs MAINNET only). Support on their ask.
+5. **M5**: their mainnet-adapter diff → OUR REVIEW before broadcast → the
+   user's GO for **Preview v0** (the user's naming directive — never
+   "Release Candidate"/"RC"). The mainnet recipe = the chipnet v3.1 deploy with
+   the ASSET category `2469acc5afa4b10cb5b5c04afb89c3a3ffd61c5da9c01e26d00951cae2a02544`
+   (CONFIRMED by the user on both sides; in the role-2 architecture the pool
+   category IS the asset category; the issuer mints the state NFT + blanks
+   from the asset's minting NFT). **The post-MPC mainnet-candidate program
+   is ALREADY BUILT: 7,997 B, sha256
+   `0023d1ea433cf633502ad507d37cc0cce991b4742027ed86d9cebd3c44155ab6`**,
+   locking `aa202374973e…` (the `40a95991…` build is superseded — it pinned
+   the pre-MPC VK).
 
-**Verified this session (this host):** the anchor 200 mainnet (above);
-`EMPTY_NULL_ROOT = e579b9be0b8f58daacc4f66c959ed3ec903884d1914e11e7e0c3bbf2a5627b43`
-(the 254-level SHA256 zero fold, recomputed); `zh[20] =
-15019797232609675441998260052101280400536945603062888308240081994073687793470`
-(decimal) — the v3 genesis state NFT commitment = `LE32(zh[20]) ‖
-EMPTY_NULL_ROOT` (64 B).
+**The v3.1 finding (measured on chain, the session's key discovery):** the
+RAW walk-script lockings are **NON-STANDARD scriptPubKeys — relay refuses the
+creating tx (`scriptpubkey`, code 64; minimal-tx A/B confirmed)**. The first
+DEPOSIT lock died on it. **v3.1: the walk UTXOs lock to `P2SH32(walkScript)`**
+(scripts byte-identical, riding the unlockings as the redeem push — 8,445 /
+8,425 B, ~1.5 KB under the 10,000-B cap; the hook 4w/graph pins hash the
+P2SH32 lockings). The v3.0 attempt (category `03af2eda…`, deploy `89f0829e…`
+confirmed h 349131) was ABORTED at that first lock — it never held value; its
+state backup is `/home/apecs/cov/role2-pool4-state.v3.0-aborted-03af2eda.json`.
+**This is also landmine #11 in the M4 doc's list.**
 
-**THE OVERNIGHT EXECUTION ORDER:**
+**The mini-MPC — COMPLETE, both entropies UNPUBLISHED (standing rule: the MPC
+entropies go in NO repo, doc, commit, or message):**
+1. Nito first (01:29 UTC): `pool4_0001_nito.zkey` (120,818,020 B, sha256
+   `ef4b1ec9a447c8335c3a28f8a7e4fa32c298851830bd96140c77eccb57abc966`),
+   contribution hash `ba66883d 462a461c … c229bb5b 3b2d10e8` (full value in
+   `docs/MPC-NITO-CONTRIBUTION-2026-11-27.md`). **We verified it: zkey verify
+   → ZKey Ok!, the printed hash matches.**
+2. Hush second: onto it → `pool4_0002_hush.zkey` (sha256 `52ee860d…`),
+   contribution hash `2cb3aa50 bb638933 fbf751a9 aac6fceb bdc07e39 f4e35db8
+c1af253b abb104ef 10900674 d306ab26 1e62c22e cb248128 53f8af66 c65accd4
+fce5ebf6 1ca3ecad`. Entropy: 64 B `/dev/urandom` piped on the VM — never a
+file. **The final chain verifies: ZKey Ok!** VK exported (above).
+3. The user's THIRD SLOT: pending the user's decision — two independent
+   contributions already satisfy the agreed "2–3" minimum; a third chains
+   onto `pool4_0002_hush.zkey` (then re-verify + re-export the VK + the
+   cascade re-derives).
 
-1. **M1 — the gates** (under the CURRENT zkey — chipnet-valid):
-   a. Red team: extend `pool-redteam.mjs` to the 5-input v3 shape (the walk
-      unlockings + raw-locking source outputs; the stock 151-scenario list +
-      the walk-input tamper surface — the walk scripts' own 10/10 battery is
-      `wip-role2-hook/walk-test.mjs`). Any finding → report IMMEDIATELY
-      (Nito's M1 ask: tonight, not morning).
-   b. Sweep: WRITE `gen-sweep-proofs-v3.mjs` (pattern:
-      `gen-sweep-proofs-3out.mjs`; seeded random REAL proofs with the pool4
-      witness = appendSiblings + isDeposit + per-proof SMT data — the mirror
-      is in `role2-op-witness-v3.mjs` / `gen-our-proofs-v3.mjs`) + extend
-      `pool-sweep.mjs` (5-input scenario, walk unlockings FIXED-SIZE 8,164 /
-      8,131 B, self-funding budgets ~6.5M). Seeds `sweep-v3a`/`v3b`. Proof
-      time at 247k c UNMEASURED (24.6 s at 184k — measure as you go).
-   c. Hook cost: `pool-cost.mjs` v3 (the difference method; the v3 scenario:
-      state commitment = `noteRoot ‖ nullSetRoot`, newCommit = `newRoot ‖
-      finalNullRoot`, NO fold).
-2. **M3 — the chipnet v3 demo** (under the current zkey — the testnet norm):
-   funding first — re-verify wallet A on chain (per the 2026-11-26 record: ONE
-   plain UTXO 60,712 sats + 8 blanks + 99,999,300 FT; a transfer refill needs
-   ~32,400 — consolidate via `wallet-consolidate.mjs` if needed). Extend
-   `pool-refill-role2.mjs` to ALSO create the two walk-input UTXOs (raw
-   walkA/walkB lockings, ~300-600 sats dust — permissionless, not blanks).
-   `pool-deploy-role2.mjs` v3 mode: the program built with
-   `POOL_NULLDATA_HASHES` + the v3 hook (pool-build-v3/pool-test-v3 pattern);
-   genesis state commitment = `LE32(zh[20]) ‖ EMPTY_NULL_ROOT`; born-guarded.
-   `pool-op-role2.mjs` grows inputs 3/4 (the walk witnesses from the op JSON's
-   `nullSet` field — `role2-op-witness-v3.mjs` emits them). Lifecycle
-   **DEPOSIT → TRANSFER → UNSHIELD**, EVERY input VM-ACCEPTED consensus+
-   standard pre-broadcast; broadcast chipnet.bch.ninja primary. Write
-   `role2-pool4-state.json` (the v3 state file — `role2-op-witness-v3.mjs`
-   defaults to it; it carries `nullSet`, the spent SMT keys).
-3. **M4 — the full integration handoff doc** (the Nito M4 list + the
-   corrections in the MORNING-RESPONSE doc): the v3 registry-entry template,
-   the DEPOSIT flow spec, the walk-data contract, the scan contract (SMT
-   reconstruction), the pool-accept 5-input extension (oracle records), the
-   genesis constants (above), the full VM-landmine list (the two published +
-   OP_SIZE non-popping + OP_SPLIT right-on-top + the in-loop consume-not-pick
-   hygiene), fuelSats (~47-48k computed), 2 blanks + dust walk UTXOs, the
-   guard/vending recipe (unchanged, pool-agnostic).
-4. **The MPC** (parallel with M3 if the VM allows — COORDINATE with the Nito
-   team, they also work the shared VM tonight): base =
-   `build4/pool4_0000.zkey` (120,817,628 B, VK-neutral, the post-setup zkey);
-   Nito contributes (their entropy, UNPUBLISHED), then ours (UNPUBLISHED);
-   `zkey verify` → VK export → hashes. **The final trio supersedes the current
-   `pool4_final.zkey`/VK (chipnet-only).**
-5. **The cascade after the MPC**: re-prove the 5 fixtures
-   (`gen-our-proofs-v3.mjs`, env WASM/ZKEY → the final zkey; ~3 min each
-   measured) → `mkfixtures-v3.mjs` (the VK path) → rebuild the program (new
-   `vk.ic[0]` ⇒ new program hash/lockings; the WALK SCRIPTS ARE UNCHANGED —
-   category-only, no VK) → re-run `walk-test.mjs` + `pool-test-v3.mjs` (29/29)
-   → re-run the sweep under the final zkey.
-6. **M2 — the proving-assets release = the POST-MPC trio** (zkey/wasm/VK +
-   sha256s; Nito mirrors + pins — they were told to HOLD B4 until the MPC
-   settles).
-7. **M5 — the mainnet deploy recipe + the GO/NO-GO** (the valued-asset
-   clearance is the user's to give once the final VK + gates are in place);
-   Nito asked for our review of their mainnet-adapter diff before broadcast —
-   ACCEPTED.
+**The cascade status (under the post-MPC VK):** the 5 fixtures re-proved ✓
+(`our-v3-mpc-proofs.json`, ~85–95 s each); the bench fixtures ✓
+(`our-v3-mpc.fixtures.json` `4a46238b…`, all 5 self-verify); the program
+rebuilt ✓ (**7,997 B `0023d1ea…`**); walk-test **10/10** ✓; acceptance
+**29/29** ✓; red team re-run **164/0** ✓ (`pool-redteam-v3-mpc-report.json`
+on the VM — COPY IT INTO `wip-role2-hook/` + COMMIT with the sweep); the sweep
+re-mint ✓ (64 proofs, seeds `sweep-v3mpc-a/b`, `our-v3-mpc-sweep-{a,b}.json`);
+the sweep harness re-run = the IN-FLIGHT item (item 1 above).
 
-**Landmines for the overnight:** `pool-build.mjs` (build.mjs's own smoke)
-   ALWAYS fails with any hook registered — its tokenless shape; hooked builds
-   come from the pool-cost/pool-test pattern (they always did). The bench
-   generator has the v3 GRAPH edit applied (`wip-role2-hook/v3-graph-pin.patch`
-   — inert without `POOL_NULLDATA_HASHES`; pre-v3 copy at
-   `script.mjs.pre-v3` on the VM). rsync `--delete` into the VM checkout wipes
-   the node_modules symlink — recreate it. VM contention: Nito runs their
-   overnight on the same VM — schedule the sweep around their prover tests.
-   Chipnet mining cadence is the M3 schedule risk. The walk lockings are RAW
-   (no P2SH32 form) — do not wrap them.
+**The chipnet v3.1 pool (the M3 record, all CONFIRMED):**
+- `chipnet-role2-pool4-v3`, category/anchor
+  `e56c0a8583e36092f20e54c9247f6b8e5a6afd391027aa70ae109c3c42377930`, mint
+  `85cd4780…`, deploy `23909dc2…` **h 349143**, born-guarded (K=64), genesis
+  commitment = `LE32(zh[20]) ‖ EMPTY_NULL_ROOT` =
+  `3e1f1922dfb671d3f912f7ea461e0a88ee848fdde12b6c18ab1ad2c56ae73421e579b9be0b8f58daacc4f66c959ed3ec903884d1914e11e7e0c3bbf2a5627b43`;
+  guard batch `a98ee616…` (64 blanks) h 349183; program 7,998 B sha256
+  `27b904a2ddec9e6b…` locking `aa206dc915cef6f1343b7d170caaf79346072222d66fd3285fcb4d506f184069e8cb87`;
+  walk lockings `aa20f823d16d3cab…`/`aa206ae3e5fb435b…`; state file
+  `/home/apecs/cov/role2-pool4-state.json`.
+- **The lifecycle (every input VM-ACCEPTED consensus+standard, all
+  confirmed):** DEPOSIT `137a79079b35eff7835f84cb19973d644458cbf3751d98d3279ebe9c67ed4646`
+  (45,366 B, fee 50,000, balance 0→1,000, lock `1c8be39c…`) → TRANSFER
+  `8ccc9cd27cf6d4a5e7d194c9fada57fafd4977ed62e292e6cff68eb35d4e34e3` (45,445 B,
+  fee 47,500, lock `455e3c5f…`) → UNSHIELD 250
+  `405166f57af10186ef85b57a7e5e070b0df569e7b4f03e5051373fd14e9fda00` (45,418 B,
+  fee 45,500, 250 FT paid out, lock `a9b9cefa…`). Explorer:
+  `https://explorer.selene.cash/tx/<txid>?network=chipnet`.
+- **Fuel economics (measured):** action ≈ 45.4 KB; locked fuel 50,000
+  (deposit) / 47,500 / 46,500 per action (fuel 23,000×2 + walk 2,000×2 is the
+  comfortable default; the lifecycle's lean rates recorded in the M4 doc);
+  fees 1.00–1.10 sat/B (BARE floor 1 sat/B enforced by the op builder's
+  `fee ≥ size` assert). Blanks 2/action; batch ≈ 75,400 sats (64×1,000+fee).
+- **Wallet A at session end (on-chain verified):** 1 plain UTXO / **2,352
+  sats**, **58 blanks**, the 99,999,000-FT supply chunk + the 250-FT payout
+  (e56c0a85). The funding ledger (all DEMO-ONLY burns of zero-value assets,
+  recorded in the M4 doc §10): the 4 × 60k reserve burns + the dead-v3.0
+  recovery (65 wrong-category UTXOs, tx `08e5fb71…` net 46,582) + the 7 old
+  demo tokens + consolidations. **Wallet A is now sats-THIN — their
+  acceptance locks are Nito's to fund (their plan); a user top-up is the
+  clean fix if we run more actions.**
+- **NOT DONE for this pool:** the vending-machine load (no v3.1-category
+  vending exists — `pool-vend-load-role2.mjs` with the e56c0a85 blanks if the
+  permissionless acquisition matters for the record) and the site page.
 
-**Standing rules updated by the user's decisions:** the mini-MPC is the
-user-ordered Gate 7 at demo scale — mainnet value ONLY under the final
-(post-MPC) VK; the no-valued-asset rule for CURRENT-hook pools stands until the
-v3 is live; the MPC entropies are NEVER published; the Nito repo remains
-untouched (their morning doc was placed in OUR docs/ by them — commit 8477349
-pattern, we commit their docs as received).
+**The Nito channel (all committed as received + our reviews):**
+- `docs/HANDOFF-NITO-2026-11-27-MORNING.md` + `-RESPONSE.md` (the M-by-M GO)
+- `docs/POOL-UPDATE-NITO-2026-11-27.md` (the R3 disclosure)
+- `docs/POOL-V3-INTEGRATION-HANDOFF-2026-11-27.md` (**the M4 contract of
+  record — updated through the MPC**), their
+  `POOL-V3-INTEGRATION-HANDOFF-NITO-RESPONSE-2026-11-27.md` + our
+  `-RESPONSE-REVIEW`, their `POOL-V3-NITO-STATUS-UPDATE-2026-11-27.md` +
+  `MPC-NITO-CONTRIBUTION-2026-11-27.md` + our `-STATUS-UPDATE-REVIEW`
+  (**the current exchange** — all asks answered: the M2 fixtures file YES;
+  the acceptance on the EXISTING pool YES, chipnet trio; their one figure
+  correction requested — their `5a08cf51…` raw-hash is not reproducible,
+  non-load-bearing).
+- **Their side built + verified**: the SMT mirror (`smt.js`, oracle-proven vs
+  our 5 fixtures), the R3 scan stopgap live-verified, B4 closed (v3 pins =
+  the chipnet trio ✓ correct), the vendored v3.1 build chain (byte-exact
+  reproductions of `27b904a2…` + `40a95991…`), 114/114 lib tests.
+
+**Tooling (all committed, `pusd-shielded-pool` @ `f28b8a1`):** the M1
+harnesses (`pool-redteam-v3.mjs`, `pool-sweep-v3.mjs`, `pool-cost-v3.mjs`,
+`pool-tx-v3.mjs` with `walkV3`/`walkWitnesses`), the chain tools
+(`pool-deploy-role2-v3.mjs`, `pool-refill-role2-v3.mjs`,
+`pool-op-role2-v3.mjs`), `genesis-v3.mjs`, `gen-sweep-proofs-v3.mjs` (4 action
+classes incl. DEPOSIT), `pool-build-v3.mjs` (v3.1-fixed). **The harnesses'
+CODE_PINs now pin the post-MPC program `0023d1ea…`** (the chipnet-VK gate
+records stand as run — re-running them requires pointing the pins back or
+running under the MPC fixtures, which is what the in-flight sweep does).
+Reports to commit with the sweep: `pool-redteam-v3-mpc-report.json` + the
+merged `pool-sweep-v3-mpc-report.json`.
+
+**Session landmines (NEW, beyond the M4 doc's 11):** (a) **the ssh-nohup CWD
+gotcha**: `ssh host 'cd X && A & B &'` runs the SECOND background job from
+HOME — each background job needs its own `cd`; (b) `mkfixtures-v3.mjs` has
+HARDCODED default paths (reads `build4/verification_key.json` + the OLD
+proofs file, writes over `our-v3.fixtures.json`) — the MPC conversion ran via
+a sed'd temp copy (parameterize when convenient); (c) `pool-build-v3.mjs` had
+been MISSED in the v3.1 pass (raw pins) — the cascade build caught it; (d)
+the v3 proof time is **~85–220 s at 247,120 c** (~5–9× the 3-out's 24.6 s) —
+plan the mint/sweep schedules around it; (e) `BN_VK_FIXTURES` takes the
+**fixtures** file (`{vk, fixtures}`), not the proofs list (a usage-comment bug
+in the committed pool-test-v3 header, fixed).
+
+**Standing rules (all unchanged + reinforced):** the MPC entropies are
+NEVER published (unlike the chipnet demo precedent); the repo scope rule
+(hushyourmoney + pusd-shielded-pool only; nito.cash NEVER); the no-valued-asset
+rule for current-hook pools is LIFTED for the v3.1 pool at demo scale (the
+drains are closed at consensus: R2/R3 + the walk scripts) but the MAINNET
+Preview v0 GO is the user's; mainnet runs ONLY under the post-MPC VK;
+Preview v0 naming everywhere; the zkstreet.com re-check reminder is DUE
+2026-11-27 (from the 2026-10-27 user request).
 
 ---
+
+## PREVIOUS — 2026-11-27 OVERNIGHT (CONSUMED — M1+M3+M4+MPC all done above; kept for the order text + the binding decisions)
+
+**The user's binding decisions (2026-11-27 evening):** the overnight GO (M1 →
+M3 → M4), the mini-MPC agreed (2-3 unpublished-entropy contributions, Nito
+first, Hush second, mainnet under the final VK), and the pending category
+question — now RESOLVED: `2469acc5…` confirmed by the user on both sides.
+
+*(The full overnight order text is preserved in git history — commit `68ba014` — and in `docs/HANDOFF-NITO-2026-11-27-MORNING-RESPONSE.md` §1; the section body was trimmed at session end to avoid duplication with the CURRENT handoff above.)*
 
 ## PREVIOUS — 2026-11-27 SESSION END (LATEST +1) — THE V3 BUILD: CIRCUIT + CEREMONY + PROGRAM + HOOK + 29/29 ACCEPTANCE ALL LANDED; NEW FINDING R3-FREE-NEWROOT DISCLOSED + CLOSED; REMAINING = RED TEAM/SWEEP + DEMO DEPLOY
 
