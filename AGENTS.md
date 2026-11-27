@@ -14,7 +14,117 @@
 - Make ample use of figures and diagrams when documenting or discussing technical designs and implementations (ASCII/Mermaid in repo docs; rendered diagrams on the site).
 - Published technical claims must satisfy the verification contract (file path, command output, or cited source). Where a quantity has not been measured, mark it UNMEASURED rather than estimating.
 
-## CURRENT HANDOFF — 2026-11-27 (LATEST +1) — NITO ANSWERED; THE SMT SPIKE IS MEASURED — THE V3 NULLIFIER SET IS HOOK-LEVEL
+## CURRENT HANDOFF — 2026-11-27 SESSION END (LATEST) — THE V3 BUILD: CIRCUIT + CEREMONY + PROGRAM + HOOK + 29/29 ACCEPTANCE ALL LANDED; NEW FINDING R3-FREE-NEWROOT DISCLOSED + CLOSED; REMAINING = RED TEAM/SWEEP + DEMO DEPLOY
+
+**User directive this session:** "proceed with the v3 build — hook-level set +
+deposit path in one revision, then new VK → verifier → hook → red-team/sweep →
+demo deploy." The first four stages are DONE and pushed; the full record is
+`docs/V3-BUILD-2026-11-27.md` (read it FIRST next session). Commits in
+`pusd-shielded-pool` (the standing exception repo): `653a692` (pool4 circuit +
+the R3 finding + the drain probe), `7f03e55` (walk scripts), `1528993`
+(ceremony + fixtures + the v3 program + the v3 hook + 29/29). Nothing was
+broadcast; no chain state was touched; the Nito repo was not touched.
+
+**NEW FINDING DURING THE DESIGN PASS — R3-FREE-NEWROOT (demonstrated, closed
+in this revision).** `newMerkleRoot` was a FREE witness input in EVERY pool
+circuit generation (pool.circom, pool3.circom): no circuit constraint, no hook
+check, and the nito.cash scan verifies only root CONTINUITY (scan.js:170-173 —
+it never recomputes the 3-leaf append). Two ordinary Groth16 proofs drain any
+pool: action A "plants" the root of a FAKE tree (real leaves + the action's
+own cms + a fabricated note of value = the ENTIRE balance); action B "spends"
+the fabricated note with membership proofs against the planted root. **Both
+proofs snarkjs-verify against the DEPLOYED 3-out VK** (evidence:
+`/home/apecs/cov/role2-probe-freeroot-drain-3out.json`; the probe is committed
+at `spike-nullset/probe-freeroot-drain.mjs`; NOT broadcast). This drain is
+INDEPENDENT of and simpler than R2-NULLIFIER-DOUBLING and is NOT stopped by
+the nullifier SMT alone — it EXPANDED the v3 circuit scope: the append is now
+PROVEN in-circuit.
+
+**The v3 stack as landed (all measured on the apecsdev VM):**
+
+1. **Circuit** `circuits/pool4.circom` + `circuits/noteappend.circom`:
+   **247,120 constraints** (+62,592, +33.9% vs pool3's 184,528; 15,024 under
+   the pot18 wall), nPublic 2, 174 private inputs. THREE fixes in one R1CS:
+   (a) the append proof — 3 sequential `DenseAppend` dual-walk inserts chain
+   `merkleRoot -(cm0)-> r1 -(cm1)-> r2 -(cm2)-> newMerkleRoot`, each pinned to
+   the tree's frontier by the dense-shape rule (`IsEqual(sibling, zh[i]) ===
+   1 - keyBits[i]` — holes would fork every sequentially-scanning client);
+   (b) `isDeposit` — the onboarding path (gated membership + in-values pinned
+   to zero; genesis tree EMPTY, bootstrap seeds GONE); (c) `nf0 != nf1`. The
+   9-field actionHash + the 201-B carrier + the 2-public-input contract are
+   ALL UNCHANGED. The gate (`spike-nullset/probe-v3-negatives.mjs`): honest
+   control + deposit ACCEPT at wtns; the R3 plant REJECTED (the append chain);
+   the R2 doubling REJECTED (nf distinctness).
+2. **Ceremony** (1-of-1 demo, `ppot_0080_18.ptau` sha256 `9693220206af…`):
+   circuit hash `69622946620445cf…`, entropy `888d7f92815b2bfb5fb4a5cb00ed644e12d291ab76212d36`
+   (published per the demo precedent), **`ZKey Ok!`**. `pool4_final.zkey` sha256
+   `942f8fc5327191da4a98bfbd81b74f87bd6f79267efb2d3067ac6cd0175a723a`; VK sha256
+   `07638f101038418d7b97ba46871476edaf3f6c63086fa9e984a2aa33e530b704`
+   (groth16/bn128, nPublic 2, IC 3); wasm sha256 `a9b4b03d17c6…9395`.
+   VM dir: `~/zkb/pusd-shielded-pool/build4/`.
+3. **Fixtures**: `gen-our-proofs-v3.mjs` — 5 proofs (transfer/shield/unshield/
+   transfer2/**DEPOSIT**, the onboarding path's first proof, n0 = zh[20]), each
+   with per-fixture SMT walk data; `mkfixtures-v3.mjs` →
+   `/home/apecs/cov/our-v3.fixtures.json` (all 5 snarkjs-verify OK).
+4. **Walk scripts** `wip-role2-hook/walk-scripts.mjs`: walkA **278 B** /
+   walkB **291 B** RAW lockings in OP_BEGIN/UNTIL loop form (the spike's
+   unrolled walk was 11,656 B > the 10,000-B locking cap), unlockings
+   **8,164 / 8,131 B**, honest accepts on both VMs at 4.19M/4.22M op of ~6.5M
+   self-funded budgets; 10/10 walk battery (`walk-test.mjs`). walkA (input 3):
+   walks nf0 from the state's nullSetRoot, emits midRoot pinned to its own
+   unlocking; walkB (input 4): walks nf1 from walkA's `INPUTBYTECODE(3)`
+   midRoot, pins finalNullRoot into out1's commitment second half. The key
+   bits are extracted IN SCRIPT from the carrier slices. **Two NEW measured VM
+   landmines** (recorded in the source): `BIN2NUM([0x80])` = −0 = ZERO, and
+   `RSHIFTNUM` truncates toward zero for negatives — the key byte is zero-
+   padded to stay unsigned (`(kbNum >> bp) mod 2`).
+5. **Program + hook**: plain 7,385 B sha256 `925a4232…`; **v3 hooked
+   7,998 B** sha256 `d98c1d2ac828a909…` locking `1ff9085b…` (+150 B over the
+   3-out 7,848). The bench generator edit (GRAPH: TXINPUTCOUNT 3→5 + the
+   walk-locking SHA256 pins, inert without `POOL_NULLDATA_HASHES`) is
+   committed as `wip-role2-hook/v3-graph-pin.patch` (pre-v3 copy kept on the
+   VM as script.mjs.pre-v3). `pool-hook.mjs` v3 path: check 4w (walk-locking
+   pins), fold check 7 REMOVED, check 10 = commitment length + first half
+   (walkB pins the second half). The 2-out/3-out paths are UNCHANGED
+   (pool-test 3-out still green — but note: `pool-build.mjs`'s own build.mjs
+   smoke ALWAYS fails with any hook registered — its tokenless shape; the
+   hooked builds of record come from the pool-cost/pool-test pattern, always
+   did).
+6. **Acceptance** `wip-role2-hook/pool-test-v3.mjs`: **29/29** — controls
+   transfer/shield/unshield/DEPOSIT through the FULL program, the walk inputs
+   on their own scripts, and every rejection class incl. the 6 NEW v3 classes:
+   **the REPLAY** (nf0 already in the set → walkA rejects — the R2 mechanism
+   now stopped at consensus), the nullSetRoot tamper (walkA), the finalNullRoot
+   tamper (walkB; role 2 accepts by design — the two-script pin), the 4-input
+   shape (GRAPH), swapped/junk walk lockings (4w).
+
+**Next session (in order):**
+1. **Red team** — extend `pool-redteam.mjs` to the 5-input shape (walk-input
+   scenarios; the stock 151-scenario list + the walk tamper classes).
+2. **Liveness sweep** — `pool-sweep.mjs` with the v3 scenario (the walk
+   unlockings are FIXED-SIZE ~8.2 KB; re-measure budgets/margins) + the hook
+   cost re-measure (`pool-cost.mjs` v3, the difference method).
+3. **Demo deploy** — a NEW chipnet pool (anchor/mint/deploy born-guarded per
+   `pool-deploy-role2.mjs`), genesis state commitment = `zh[20] ‖ EMPTY_NULL_ROOT`;
+   the lock/refill tooling gains the walk-input UTXOs (dust, permissionless raw
+   lockings — the lock tx embeds the fixed walkA/walkB lockings; the sibling
+   data is witness-supplied at spend time); the lifecycle **DEPOSIT → TRANSFER
+   → UNSHIELD** with every input VM-ACCEPTED consensus+standard; wallet A
+   funding (ONE plain UTXO 60,712 sats per the 2026-11-26 record — re-verify
+   on chain); registry + `/research/shielded-pool` site record + this AGENTS.
+4. Nito handoff doc for the v3 integration (deposit path + the walk-input
+   client flow + the SMT scan), AFTER the deploy is proven.
+
+**Standing rules unchanged:** the STANDING RULE (no valued asset in any pool
+running the current hook) stays in force until the v3 demo is live AND
+reviewed; Gate 7 (the real MPC) remains mandatory before mainnet; the
+`role2-proving-assets` class release for the v3 zkey/wasm/VK comes after the
+red-team/sweep gates. The Nito 3-out browser acceptance remains THEIR event;
+wallet A stays ready; demo key rotation stays deferred.
+
+---
+
+## PREVIOUS — 2026-11-27 (LATEST +1) — NITO ANSWERED; THE SMT SPIKE IS MEASURED — THE V3 NULLIFIER SET IS HOOK-LEVEL
 
 **The wait ended 2026-11-26 18:39.** Nito's response is recorded in OUR repo at
 `docs/POOL-3OUT-HANDOFF-RESPONSE-2026-11-26.md` (commit `a3eebb0`): the
