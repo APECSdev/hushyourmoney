@@ -78,12 +78,12 @@ and if you like what you see, VOTE for it:
 
 If you want to see it LIVE ON MAINNET, then these are the links for you:
 
-- **SHIELDING**: XXX
-  (https://explorer.selene.cash/tx/XXX?network=mainnet)
-- **TRANSFER**: XXX
-  (https://explorer.selene.cash/tx/XXX?network=mainnet)
-- **UNSHIELDING**: XXX
-  (https://explorer.selene.cash/tx/XXX?network=mainnet)
+- **SHIELDING**: 627013caa09b2e42ae4229bbd15bc2f53561911d1ccb0e09d260af937c012403
+  (https://explorer.selene.cash/tx/627013caa09b2e42ae4229bbd15bc2f53561911d1ccb0e09d260af937c012403?network=mainnet)
+- **TRANSFER**: 4fda8a8b63ff2ef82cc1f5a9ad89bdcbbc86fec254e9c08bb1b874312f6b544f
+  (https://explorer.selene.cash/tx/4fda8a8b63ff2ef82cc1f5a9ad89bdcbbc86fec254e9c08bb1b874312f6b544f?network=mainnet)
+- **UNSHIELDING**: 998a04748b6db7845cd06ef37ab0a51c26b685c0a458a59f7700df873215734d
+  (https://explorer.selene.cash/tx/998a04748b6db7845cd06ef37ab0a51c26b685c0a458a59f7700df873215734d?network=mainnet)
 
 Every action is a single transaction, and every input was evaluated on the
 BCH-2026 VM in both consensus and standard mode before broadcast. Fees are
