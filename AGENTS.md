@@ -14,7 +14,206 @@
 - Make ample use of figures and diagrams when documenting or discussing technical designs and implementations (ASCII/Mermaid in repo docs; rendered diagrams on the site).
 - Published technical claims must satisfy the verification contract (file path, command output, or cited source). Where a quantity has not been measured, mark it UNMEASURED rather than estimating.
 
-## CURRENT HANDOFF — 2026-11-27 NIGHT (LATEST) — THE PERMANENT POOL IS LIVE: THE FULL REAL-PUSD LIFECYCLE IS CONFIRMED ON MAINNET, M2 IS PUBLISHED, THE ANNOUNCEMENT POST IS LIVE (topic 2666), NITO IS UPDATED, AND ALL RECORDS ARE COMMITTED
+## CURRENT HANDOFF — 2026-11-28 SESSION END — THE VENDING MACHINES ARE LIVE ON BOTH NETWORKS, THE FOLLOW-UP pv=2 DEPOSIT IS CONFIRMED (balance 92), NP01 IS ANSWERED BY MEASUREMENT, THE PERMANENT-POOL SITE BUILD IS LIVE ON FLUX, AND THE zkstreet REMINDER IS DELIVERED
+
+**Read this section FIRST.** The one-paragraph state: the ordered mission is COMPLETE.
+The G5 vending machines are LIVE on both networks — the chipnet v3.1 machine (loaded
+2 blanks) and the MAINNET v4h machine (a fresh 16-blank guard batch + the load, all
+confirmed) — and the mainnet machine immediately executed its FIRST TWO LIVE BUYS (the
+operator bought 2 blanks back through its own covenant for the follow-up op). The
+follow-up mainnet op RAN: the pv=2 DEPOSIT is confirmed at block 979305 — balance 90 →
+92, the pool's second deposit and the first on a NON-empty tree. NP01 (Nito's
+extra-output question) is answered by MEASUREMENT: the program REJECTS any additional
+chain output, value-carrying AND the literal ~176-B OP_RETURN packet shape — off-chain
+delivery (their Nostr mailbox) is the only note-delivery path. The permanent-pool site
+build rolled LIVE on Flux. The zkstreet re-check is delivered: still registered,
+expires 2027-01-19. Every claim below is on-chain verifiable or VM-measured.
+
+### 1. THE VENDING MACHINES (both networks, the Nito G5 ask — DONE)
+
+- **MAINNET v4h machine** (category `324b1dbf…`): locking
+  `aa2073ad0a1e681fa123d80754164fd34bdcb0f6ea3c26784b36f6d8778a8b0a945087` ·
+  price **1,000 sats** → the operator P2PKH `bitcoincash:qrqj0azr…` · redeem 157 B ·
+  blank shape: pool-cat mutable NFT, EMPTY commitment, 0 FT, 1,000-sat float. Chain:
+  the user's top-up 100,000 sats confirmed block **979284** (`94dd61c0…`) → guard batch
+  `c9cca1e4c705edff6963cfaca52a722a37776ed311eb8be0921ab588e338adae` (2,822 B; VM-eval
+  ACCEPT both modes pre-broadcast, consensus 63,813 / standard 70,085 op of 1,175,200;
+  16 blanks minted through the immortal guard) → load
+  `5bd644121ad69fbe48bd852c094d2fafad8d34506200404a06fe47af0c3c3c00` (3,689 B, block
+  **979287**, scripthash-verified 16 blanks / 16,000 sats at the machine locking).
+- **The machine's FIRST LIVE BUYS**: the operator bought 2 blanks back through its own
+  covenant — `9cbeac1783c516a58297351316a3b75ab3cf851800afe871f75a59e05914fd70`
+  (block **979301**) and `15b2fd742c0d5bd166ad185bed217ffe30e28e42da0ecf021ea0336b30bc4643`
+  (block **979302**), both 487 B, both covenant-executed with VM-ACCEPT pre-broadcast —
+  the blanks became the deposit lock's H-pair fuel. **Machine stock: 14 blanks = 7
+  visitor SHIELDs.**
+- **CHIPNET v3.1 machine** (category `e56c0a85…`): locking
+  `aa207bd03b1c57afff2715d61031e82a25dff54a6819b1bc16e545ddcfcd026a8bc987` · price
+  1,000 sats · operator wallet A `bchtest:qzzu85xnl99u534d9z40yu7c494hknppx5lu29gl8t` ·
+  load `ead5d00051ec2aa25a1d93444e185b7f85226d59f60ae89dafb407b2fa36ff46` (623 B,
+  block **350676**) · 2 blanks in the machine, **48 in wallet A's reserve** for cheap
+  reloads. `state.vending` written to both state files.
+- The full registry-ready field sets + the two open-question answers are in
+  `docs/VENDING-NITO-RESPONSE-2026-11-28.md` (commits `6fa057f` → `28160a8` →
+  `36998d9`).
+
+### 2. THE FOLLOW-UP MAINNET OP — the pv=2 DEPOSIT (confirmed block 979305)
+
+The op the user directed (recorded in V4H-DEPOSIT-LIVE §5: "the v4h deposit path can
+absorb the 2 wallet units in a follow-up deposit op (pv=2)"). Full chain, all
+confirmed:
+
+- **Witness**: deposit pv=2 sign=0 isDeposit=1 (the onboarding class — phantom in-notes,
+  membership gated off; this is the FIRST v4h deposit on a NON-empty tree: 3 fresh
+  notes summing to 2 appended at leaves 9→11, the 5 old notes stay) · null-set walks
+  4/4 verified · proved in 18.3 s under the FINAL chain `build4/pool4_0003_user.zkey`
+  (the DEFAULT zkey is still wrong — the standing warning holds).
+- **The lock** `ac4569ad73cbeb773b0cd81f187feeac5753d9dcba3edddca570a90ad46c9c8a`
+  (1,066 B): fuel 21,000×2 tagged `33797a62…` = H(nf0‖nf1) of THIS op · walks 2,000×2 ·
+  in6 carries the **2-FT deposit** (the 10-FT UTXO spent, an **8-FT change** returned at
+  `ac4569ad:6`) · BCH change 24,983.
+- **The action** `0e7dbe1d96ecd2a1654ff5befcd9733824c4f4dea885aa1851090577c2fdbf74`
+  (46,054 B · fee 46,700 sats = **1.014 sat/B** · all 7 inputs VM-ACCEPT consensus +
+  standard pre-broadcast · ASSET 90+2 = 92 conserved · the txid identical to the
+  `--no-broadcast` dry — actions are signature-free and fully deterministic).
+- **Pool state now**: balance **92** · notes 8 · nullSet 8 keys · state at
+  `0e7dbe1d:1` (float restored to **10,000**) · holdings 92 FT at `0e7dbe1d:2` ·
+  actionInputs EMPTY (the next op needs a refill lock + 2 blanks).
+
+### 3. THE VALUE LEDGER (verified on chain at session end)
+
+- **User's PUSD (`2469acc5…`)**: **92 shielded** in the permanent pool · **10 at the
+  wallet** (the untouched 2-FT `998a0474:7` + the 8-FT change `ac4569ad:6`) · 3 in pool5 ·
+  100 permanently locked in the dead 11-20 pool (unchanged, disclosed).
+- **Mainnet wallet**: 37,129 plain sats in 5 UTXOs (the lock change 24,983 + the two
+  1,000-sat price returns from the buy-back + the old 6,716 + 3,430) · 0 blanks (the
+  next op's 2 blanks are buyable from the machine at 1,000 sats each).
+- **THE NEXT ACTION LOCK IS NOT FUNDABLE from the wallet as it stands**: a refill needs
+  inSats ≈ 49,400 (fixed 47,000 + the 2,400 gate) vs plain[0] 24,983 + blanks 2,000 —
+  **ASK THE USER for a ~0.0003 BCH top-up before any further op.**
+- Chipnet wallet A: 112,567 sats, 48 blanks (46 after nothing — unchanged), the
+  e56c0a85 FT.
+
+### 4. NP01 + THE SUPPLY QUESTION — both answered by measurement (the response doc is the record)
+
+- **NP01: the packet CANNOT ride the chain.** Fresh acceptance run under the DEPLOYED
+  mainnet category (`POOL_CATEGORY=324b1dbf…`) + the three-contribution fixtures
+  (`BN_VK_FIXTURES=our-v3-user3.fixtures.json`): **42/42**, and the extra-output
+  transfer REJECTS at **r2:p4c (ip 321)** — the `TXOUTPUTCOUNT == 3 + sign` pin. The
+  LITERAL packet shape (a ~176-B OP_RETURN-class 0-value output) ALSO measured: REJECT,
+  the same check — the count pin is output-type-independent. Probe committed as
+  `wip-role2-hook/probe-np01-extra-output.mjs` (`b479f84`). Consequence for Nito's B3:
+  the encrypted-note packet cannot ride the carrier (parsed exactly) NOR an extra
+  output (this measurement) — **the Nostr mailbox is the only note-delivery path.**
+- **The 100M pool-cat supply (their §4.2)**: decoded from the deploy `61022b8b…` —
+  out2 minted the 100,000,000 pool-cat FT to the **operator's own P2PKH** (never at a
+  pool locking); it is the category's mandatory genesis supply, valueless by design
+  (the C architecture), spendable only by the operator's key, and never accepted by
+  the pool as value (the asset is pinned `2469acc5…`). Now 99,999,500 FT at
+  `8808e632…:1`; the ~500-FT delta arose in the probe era (the 99,999,500 figure first
+  appears in the probe relay `b3319682…`, block 979248).
+- **Two inert leftovers identified** (for the record): the wallet's 1 v4h NFT
+  (`8808e632:0`, a 96-B-commitment mutable NFT) = the probe-era NFT swept back; and
+  failed-era debris at the program locking (8 × 3,000-sat NFT slots with
+  genesis/probe-shaped commitments, a 23,000-sat fuel slot with an empty-commitment
+  NFT at `405c3ad5:3`, 3 × 1,000 plain) — all behind the program's rules, unspendable
+  by the operator. The holdings ride the **H-covenant locking `aa2006fa0f…`** (a
+  separate P2SH32 from the program — decoded from the unshield's out2).
+
+### 5. THE SITE — the permanent-pool build is LIVE on Flux
+
+- Source delta since the last build: `web/pages/research/shielded-pool.vue` only
+  (+164/−1, commit `16cef8e`, the `#permanent-pool` record). Built on the apecsdev VM
+  (single unraced build, BUILD_MARKER cache-bust, SFC 3/3 OK, yarn layer cached).
+  Smoke: all 12 marker sets on 210,027 B; `/compare` regression clean.
+- **Hub**: `nyusternie/hushyourmoney:latest` =
+  `sha256:7caeb4e5dc68fe172ea19dcbb8550e0c5c8739b1cacae5f764d1dbbe6ed1cd55`
+  (`last_updated 2026-11-28T01:16:51Z`; one transient push network failure — a retry
+  loop resumes the already-uploaded layers). Local `hush-local` on `:3100` recreated
+  from the digest.
+- **Flux ROLLED**: live `/research/shielded-pool` = 210,027 B with every marker
+  verified (`#permanent-pool`, the REAL-PUSD-lifecycle stats label, the lifecycle
+  txids, `role2-proving-assets-v3-v1`, the role-2 section intact); `/compare` 200
+  (the BIG-TABLE build `51eae8ca2433` was confirmed LIVE at session start — the
+  queue drained in order).
+
+### 6. THE zkstreet.com RE-CHECK (the 2026-10-27 user request — DELIVERED 2026-11-28)
+
+RDAP (Verisign, DB updated 2026-11-28T00:57:06Z): **still registered**, status
+`client transfer prohibited`, expiration **2027-01-19T18:17:54Z** — not expired,
+~14 months out. The user's belief that it expired remains contradicted by the
+registry; no action possible before the expiry + drop cycle.
+
+### 7. THE TOOLING MAP (this session's four pusd-shielded-pool commits — all pushed)
+
+- `pool-vend-load-role2.mjs` gained `--electrum <host>` (default chipnet — the chipnet
+  behavior unchanged; `97b2cbe`).
+- `blank-buy.mjs` gained `--electrum <host>` AND the network-aware buyer-address
+  prefix (`state.network === 'mainnet' ? 'bitcoincash' : 'bchtest'` — it HARDCODED
+  bchtest; `8f4ad40`).
+- `pool-refill-role2-v4h.mjs`: the latent **BigInt sort-comparator crash fixed**
+  (`b9c3d96`) — the ASSET-UTXO selection comparator returned a BigInt, which
+  `Array.sort` rejects; it never fired before because the original deposit wallet
+  held ONE asset UTXO.
+- `probe-np01-extra-output.mjs` committed (`b479f84`). Backups on the VM bench:
+  `.bak-chipnet-only` ×2, `.bak-bigint-sort`.
+- hushyourmoney commits: `0ba68cd` (the user's MPC third-slot records + the Nito
+  vending request — the previously-untracked docs), `6fa057f` → `28160a8` →
+  `36998d9` (the vending response through its executed updates).
+
+### 8. THE LANDMINES (new this session)
+
+1. **The BigInt sort-comparator class**: any `arr.sort((a,b) => BigInt… - BigInt…)`
+   throws the moment the array holds ≥2 elements — latent until then. Wrap the delta
+   in `Number()` (amounts here are far below 2^53) or compare without subtraction.
+2. **The deposit class runs on NON-empty pools**: isDeposit gates membership off and
+   pins the phantom in-notes to zero — the 3 fresh out-notes (sum = pv) append to
+   whatever tree, the old notes stay, balance += pv. Both prior v4h deposits were
+   empty-tree onboardings; this one is the measured non-empty case.
+3. **Deterministic txids**: the action/lock/buy txs are fully deterministic
+   (signature-free actions; the signed txs use deterministic Schnorr) — the dry-run
+   txid IS the broadcast txid; a `--no-broadcast` pass is byte-exactly the real tx.
+4. **The refill writes `actionInputs` POST-BROADCAST, pre-confirmation**; `--no-wait`
+   exits for the atomic lock+action pattern (the recorded lifecycle waited for lock
+   confirmation first — the production-safe mainnet path).
+5. **`blank-buy` polls but writes NO state** — a process killed after broadcast is
+   harmless (the buy is on chain; re-verify via merkle).
+6. **Electrum flakes mid-session**: the VM lost `electron.jochen-hoenicke.de:51002`
+   and `bch.loping.net:50002` during the session; `bch.soul-dev.com` held from both
+   hosts. Fulcrum `scripthash.listunspent` takes the STRING `"include_tokens"`
+   (NOT a boolean); scripthash = `sha256(locking).digest()[::-1].hex()`.
+7. **Mainnet top-up discipline**: wait for the parent's 1 confirmation before running
+   covenant ops off it (the mempool-chain alternative exists; first-seen wins — but a
+   stuck parent stalls the whole chain).
+8. **Guard-batch economics vs the machine**: a batch is K=16 ≈ 26k sats; the machine
+   buy-back recovers blanks for ~1,000 net sats each AND live-proves the covenant —
+   prefer the buy-back unless the machine needs the stock.
+9. **Untracked session records**: the MPC-decision/contribution + vending-request docs
+   sat untracked from the last session — commit session records at session end (one
+   task = one commit).
+
+### 9. THE NEXT SESSION'S MISSION, IN ORDER
+
+1. **The Nito side (support on ask)**: the buy flow + registry fields (both machines'
+   handovers are in the response doc), their chipnet browser acceptance on the
+   EXISTING v3.1 pool (chipnet trio `942f8fc5…/a9b4b03d…/07638f10…`), the M2 mirror +
+   B4 data-edits, and their mainnet-adapter diff → OUR REVIEW → the user's GO for
+   **Preview v0**.
+2. **Further mainnet ops — the user's call, TOP-UP-GATED**: the wallet cannot fund
+   another lock (§3); a ~0.0003 BCH top-up + 2 machine blanks buys one more action.
+3. **Machine stock on ask**: 14 blanks = 7 SHIELDs; more stock = more guard batches
+   (~26k sats per K=16 batch).
+4. The v3.1 chipnet vending load is DONE (was item 5 of the last mission); the
+   zkstreet reminder is DELIVERED (next re-check after 2027-01-19 if still wanted).
+
+### 10. STANDING RULES — all unchanged
+
+The MPC entropies are NEVER published; the repo scope rule (hushyourmoney +
+pusd-shielded-pool only; nito.cash NEVER); mainnet runs under the final VK only;
+Preview v0 naming everywhere; the explorer policy (Selene primary, imaginary.cash
+NEVER); one task = one commit + push; builds on the VM only.
+
+## PREVIOUS — 2026-11-27 NIGHT — THE PERMANENT POOL IS LIVE: THE FULL REAL-PUSD LIFECYCLE IS CONFIRMED ON MAINNET, M2 IS PUBLISHED, THE ANNOUNCEMENT POST IS LIVE (topic 2666), NITO IS UPDATED, AND ALL RECORDS ARE COMMITTED
 
 **Read this section FIRST; it supersedes the two 2026-11-27 evening sections that were
 trimmed into it (their content is preserved in git history — commits `0c3c2c4`,
@@ -1390,6 +1589,7 @@ still stand.**
 - Live Flux check through `https://hushyourmoney.com/api/electrum`: one transient 500 said available clients `1` were below required confidence `2`; later `blockchain.scripthash.listunspent` returned 3/3 and `blockchain.scripthash.get_history` returned 3/3 with real chain data. Re-probe before editing the server list.
 
 ### Release log
+- **2026-11-28 — `/research/shielded-pool` THE PERMANENT-POOL RECORD — SOURCE + HUB PUSHED, **FLUX LIVE** (queue drained in order; the compare-table build confirmed live at session start first)**: the follow-up release for commit `16cef8e` (the `#permanent-pool` section: the v4h C-architecture record, the full REAL-PUSD mainnet lifecycle `5b54fb97`/`63ccd3db`/`d8a93aa2`, the chipnet dress-rehearsal cards, the "bug that wasn't a protocol bug" case study, the posture box, the new STATS strip, three new POOLS entries — SFC-verified at commit time). Web delta since the last-built image: `web/pages/research/shielded-pool.vue` only (+164/−1). Pipeline (the standing recipe): VM rsync md5-identical (`6428dd95…`) → SFC check 3/3 OK → single unraced `docker build --network=host` with a BUILD_MARKER.txt cache-bust (yarn layer cached; the VM at load 0.40 — the build fast) → VM smoke 6 routes 200 + **all 12 marker sets** on `/research/shielded-pool` = 210,027 B (the `#permanent-pool` anchor, the "the permanent pool · mainnet · REAL PUSD lifecycle complete" stats label, the dress-rehearsal + "bug that wasn't" + posture headings — note: the apostrophe HTML-escapes to `&#39;` in SSR, grep accordingly — all 5 txids, `role2-proving-assets-v3-v1`, the role-2 section intact, `/compare` regression markers clean) → `:latest` push → **digest `sha256:7caeb4e5dc68fe172ea19dcbb8550e0c5c8739b1cacae5f764d1dbbe6ed1cd55`** (Hub `last_updated 2026-11-28T01:16:51Z`; ONE transient push network failure mid-layer — the detached 8-attempt retry loop resumed the already-uploaded layers and succeeded) → local `hush-local` recreated from the same digest (`:3100` = 210,027 B byte-identical). **FLUX ROLLED** (~2h): live `/research/shielded-pool` = 210,027 B with every marker verified ×1 + `/compare` 200 — and the 2026-11-27 BIG-TABLE build `51eae8ca2433` was verified LIVE at session START (`STABLECOIN ACCESS` + `the star · pinned` on live, 119,535 B), closing that release's FLUX-PENDING line.
 - **2026-11-27 (later) — `/compare` THE BIG TABLE makeover — SOURCE + HUB PUSHED (`:latest` digest `51eae8ca2433`); LIVE ROLLS IN QUEUE ORDER (morning build now live; the table build pending)**: user directive: the page is ALL "the big table" — Bitcoin Cash pinned 1st column, then Zcash + Monero swappable via popup (any of the 10 roster coins: Zano, Firo, Dash, Grin, Beam, Secret, Aztec, Horizen), rows = the user's asks: USD cost of plain transfer, cost of SHIELD/TRANSFER/UNSHIELD, confirmation times, consensus algos, underlying privacy protocols, and STABLECOIN ACCESS as the headline row. Localhost-only iteration first (VM build under the `compare-wip` side tag; NEVER `:latest` during WIP), then ship. Source commit `6482b7d` (compare.vue rewrite, +661/−1095; the title-case "The Privacy Money Table" on user review). **Measured cost rows (all cited in-cell)**: BCH plain ≈ $0.0008 (24h median 360 sats — Blockchair API captured 2026-11-27T12:45Z) and ≈ $0.06 per pool action (30,000 sats = our own chipnet BARE-fee record); Zcash ≈ $0.08 (ZIP-317 10,000-zatoshi conventional fee, cross-confirmed by the live 24h median); Dash ≈ $0.001 (Blockchair avg) + the 4-rounds mixing multiplier; Monero/Zano/Firo/Grin/Beam fees = honest `UNMEASURED` chips (no official figures; no estimates). Reference prices captured 12:44Z (Coin BCH $210.21 / ZEC $758.21 / DASH $36.84, Kraken XMR $440.00, CoinGecko ZANO/FIRO/GRIN/BEAM/SCRT/ZEN). **Stablecoin row**: BCH ★ NATIVE — PUSD CashToken (mainnet category `2469acc5…` anchor probed 200 on Selene 2026-11-27; pool-registry.json cited); Zano fUSD native; Beam supported; Aztec bridged cUSDC; Secret SNIP-20 bridges; Zcash/Monero/Grin/Firo/Dash none verified. New support sections: the gold "Private payments need a dollar" stablecoin callout, "The scorecard, honestly" (BCH wins: stablecoin/costs/priced lifecycle; loses: 10-min blocks, opt-in privacy), ELI5 row legends, compact FAQ. Every cell carries `[measured]/[cited]/[dynamic]/[UNMEASURED]` chips + src links. **Build lessons (VM)**: NEVER run two docker builds concurrently on the 7.8GB VM — the raced builds produced a poisoned image (container boots, accepts TCP, never responds); a single unraced build with a BUILD_MARKER.txt cache-bust is clean (image verified by full marker smoke BEFORE shipping). The VM docker daemon is very slow under the other team's load (layer commits took ~8 min, EXPOSE ~4 min; total build ~50 min wall; patience > restarts). Pipeline: rsync md5-identical → SFC check OK → single detached build → VM smoke (200 + all 10 marker sets incl. title-case) → `:latest` push (digest `sha256:51eae8ca2433…`, Hub `last_updated 2026-11-27T15:13:37Z`) → local `hush-local` recreated from the same digest (`/compare` 200, 119,535 B, title-case ×5). **LIVE**: Flux drained the queue in order — the MORNING build (`ccf360b7d5e6`, the first ELI5 cards page) rolled to live at ~15:14Z making live `/compare` 200 at last; the table build `51eae8ca2433` was still NOT live after 15+ polls 15:14–15:34Z (live page = 145,276 B, cards markers). Do NOT declare the table live until the live `/compare` carries `STABLECOIN ACCESS` + `the star · pinned`; if Flux does not auto-roll within hours, the owner dashboard update at `https://cloud.runonflux.io` remains the action (no Flux credential on this host). The `compare-wip` side tag stays on the Hub (reference); `:latest` is the release. WIP-era local churn cleaned: no local node_modules, `hush-local` runs the release digest.
 - **2026-11-27 — `/compare` ELI5 privacy-coins page — SOURCE + HUB PUSHED, FLUX PENDING; local `:3100` refreshed**: user directive: a NEW comparison page at `https://hushyourmoney.com/compare` of the TOP privacy blockchains (Zcash, Monero, Zano, Firo, Dash, Bitcoin Cash), ELI5, with engaging graphics/animations; commit + push + deploy. Source commit `b134f7d` (5 files, +1,233/−2). New `web/pages/compare.vue` (~1,050 lines, research shell, OG reuses `posters/research.jpg` with the playground-precedent note): ① hero "Privacy coins, ELI5"; ② on-page index; ③ 01 glass-piggy-bank intro (the three questions a spy asks); ④ 02 five animated magic-trick cards — the sealed envelope (zk, pulsing proof seal), the group photo (ring signatures, 8 silhouettes with a CSS-staggered lime highlight), the hotel room (stealth addresses, JS interval cycling one-time addresses after mount; constant initial value for hydration parity), the locked cash box (hidden amounts), the trading party (CoinJoin, two coins swapping rows via mirrored keyframes); ⑤ 03 six coin cards (ticker badges, ELI5 blurbs, `private by default` vs `privacy is optional` badges, magic/since lines, a "watch out" box, per-coin source link); ⑥ 04 the interactive "spy's notebook" — pick a coin, three rows (who sent it / how much / who got it) show hidden (lime ▚▚ + `hidden` tag) / partly hidden (violet) / public (rose values), with mode toggles for the two opt-in coins (Zcash shielded/transparent, BCH +CashFusion/plain) — Zcash's `ARIA` toggles demonstrate opt-in privacy; ⑦ 05 the big table (6 rows, all six columns sourced); ⑧ 06 a cited timeline 2013→2026 (CryptoNote paper → Monero/Xcoin 2014 → Zcash+Zcoin 2016 → BCH fork Aug 1 2017 → Zano/Grin/Beam 2019 → CashFusion/94% 2020 → Firo Spark 2023 → Binance delists Monero Feb 2024 → our 2026 testnet pool); ⑨ 07 honorable mentions (Grin, Beam, Secret Network, Aztec, Horizen) + an honest note that Pirate Chain/MobileCoin/Wownero's official sites were unreachable from the build host so they got no cards; ⑩ 08 the honest corner (2017 Monero traceability study arXiv:1704.04299, 2018 Zcash anonymity study USENIX/Kappos, the 2024 delisting wave, mixing-never-hides-amounts, human-error caveat, view-keys/auditable-wallets); ⑪ 09 why we build on BCH (glass-by-default admission + CashFusion today + our ZK pool research, links to /research/*); ⑫ 10 FAQ (5 details/summary); ⑬ 11 sources — 16 cards, every URL curl-verified 200 from the build host at authoring time (getmonero FAQ + 3 moneropedia pages, zips.z.cash protocol PDF, z.cash/learn, docs.zano.org what-is-zano, zano.org, firo.org FAQ+research, eprint 2021/1173 + 2019/373, docs.dash.org CoinJoin, cashfusion.org, bitcoincashresearch t/752, arXiv 1704.04299, USENIX Kappos, Wikipedia ×4, the official sites of the five mentions, our own /research pages). **Every technical claim on the page was verified against a fetched source before publishing** — key verifications: Monero "private by mandate" + tail emission 0.6 XMR/block (getmonero FAQ); Zcash "shielded transactions can be verified as valid without revealing the sender, recipient, or amount" + Oct 2016 launch (Wikipedia); Zano "every transaction is private by default… enforced at the protocol level" + Sabelnikov wrote the original CryptoNote reference + production since 2019 + Zarcanum (docs.zano.org); Firo 2016 Zerocoin launch + 2023 Spark wallet switch + Spark addresses "not searchable on the blockchain" (firo.org FAQ/research); Dash wallet CoinJoin "trustless (non-custodial)… four" rounds default (docs.dash.org) + Xcoin Jan 2014 (Wikipedia); BCH bitcoin fork Aug 1 2017 (Wikipedia) + CashFusion "blend into the crowd" (cashfusion.org). Config: the retired `/compare` 301 removed from routeRules, SiteNav gained the `Compare` top-level link (order Research/Compare/Playground/…), sitemap.xml 17→18 `<loc>`, error.vue published-pages row gained `compare`. **Verification (VM build, never this host)**: rsync md5-identical; all 3 changed SFCs parse+compileScript+compileTemplate OK (`docker run … node /tmp/check-sfc.cjs`); `docker build --network=host` → image `ccf360b7d5e6`; VM smoke (127.0.0.1:3221): `/compare` **200, 145,276 B** with every section marker SSR-verified (hero, all five trick cards incl. the `kq7mz2` stealth ticker seed, `envelopes in` swap stage, all six coin cards, spy-notebook rows — Monero default = 3 `hidden` rows + `aria-pressed="true"` active button, table, timeline, mentions, honest corner, FAQ, sources), description+canonical+og:image+twitter:card present, nav `href="/compare"` ×1 on `/` and `/compare`, 17 routes 200, retired routes 301 intact, sitemap 18 `<loc>`, `/api/wallet` 200, 404 page 404 under `Accept: text/html` with the `compare` link. HUB: digest `sha256:ccf360b7d5e6de7f77fbbf040abee61c79a9d6d039a60b8cb349deae23d8ee06`, `last_updated 2026-11-27T07:44:08Z` (push clean; package.json unchanged but the Nuxt layer rebuilt, ~4.3 min). **LOCAL PREVIEW refreshed per user directive**: `docker pull` + `docker rm -f hush-local` + recreate on `127.0.0.1:3100` — serves digest `ccf360b7d5e6` with `/compare` 200, byte-identical 145,276 B (gotcha re-confirmed: a running container keeps its creation-time image). **FLUX PENDING**: 14+ polls 07:44–07:52Z all show live `/compare` → 301 (previous build); the owner-signed dashboard update from `https://cloud.runonflux.io` remains the deploy action — do NOT declare live until `https://hushyourmoney.com/compare` returns 200 with `Privacy coins,` ×1 AND the homepage nav shows `href="/compare"`.
 - **2026-11-26 (later session) — 3-out v3 BUILT + DEPLOYED DEMO; 69/69 sweep**: the 3-out verifier program under the new VK is built: plain **7,310 B** sha256 `6ec7ca8e…` (fixture-0 margins 6.46% cons / 6.01% std), hooked **7,848 B** sha256 `628207b1…` (locking `aa200240…`, role code 804/720/2,911 B), hook **39,082 op std / 37,930 op cons** (537 B); 2-out regression byte-identical (`d71851a1…`, 7,834 B) and 2-out acceptance still **20/20**. 3-out gates: acceptance **21/21** (3 controls + 18 rejection classes incl. the `cm2` carrier tamper), red team **146/0**, full liveness sweep **69 cases / 0 failed** (5 fixtures + 64 minted, seeds `sweep-3out-v1a/v1b`; min 6.00% std input 2; max at-cap 7,080,373 op = 11.86% cap margin; cap rule all true). A **3-out demo pool is deployed on chipnet**: category `bc607a96…`, deploy `2f650791…` (block 348,569), program 7,848 B sha256 `73cb0ccb…` locking `aa204a6c…`, guard `aa20e33c…` K=64; tag batch `8e3eaf71…` (64 blanks); **SHIELD 1,000** `e847ef56…` (28,326 B, 1.059 sat/B; out 400+300+300) and **TRANSFER** `ef64f3dd…` (28,389 B, 1.057 sat/B; spends notes 2+3; out 280+210+210) confirmed, every input VM-ACCEPTED consensus+standard; final state root `327110…9637`, balance 1,000 FT, notes 300/280/210/210, 8 leaves. The site pages (`shielded-pool`, `bn254`, `daemons`, `playground`, research hub) are updated and all changed SFCs compile; **the Hub image `a49aa80c…` was built BEFORE the 21/21 and 69/69 text updates and is therefore STALE — rebuild + re-push pending**; Flux remains owner-pending. Tooling/evidence committed in `pusd-shielded-pool` (`wip-role2-hook/` reports + minted proofs; `gen-our-proofs-3out.mjs`, `gen-sweep-proofs-3out.mjs`, `role2-op-witness-3out.mjs`, `pool-info.mjs`, `wallet-consolidate.mjs`, `blank-sweep.mjs`, `token-sats-recover.mjs`). Landmines: tag batch reads top-level `state.guard`; token-spending P2PKH sighash must include token data (code 16); refill sizes from `plain[0]` only. The 3-out demo is 1-of-1 with public bootstrap in-notes, no real nullifier set and no encrypted note delivery; Gate 7 remains mandatory.
