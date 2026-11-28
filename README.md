@@ -6,9 +6,11 @@
 
 **Spend Privately. Fearlessly!**
 
-A free, open-source, non-custodial **UTXO privacy toolkit**.
-Break the link between your coins and your identity with the battle-tested
-**CashShuffle** and **CashFusion** CoinJoin protocols — right from your browser.
+A free, open-source **UTXO privacy research program** — and the technical
+reference site for private payments on UTXO-based blockchains. The research is
+built in the open, deployed on public networks, and documented for academics
+and third-party reviewers: every claim carries its source, every measured
+quantity is marked, and anything unmeasured is marked UNMEASURED.
 No accounts. No custodians. No permission.
 
 ## Alternative URLs
@@ -18,19 +20,42 @@ No accounts. No custodians. No permission.
 
 ## What is it?
 
-Hush Your Money is a non-custodial web wallet with one purpose: making private
-payments practical on UTXO-based blockchains. Every key is generated and stored
-on your device, and every transaction is signed locally. Our servers never see
-your private keys — they simply relay public blockchain data.
+- **The shielded pool** — our zero-knowledge pool for UTXO-based tokens: a
+  BN254 Groth16 verifier with the pool rules inside one on-chain program,
+  signature-free actions, a nullifier set enforced at consensus, and
+  permissionless blank acquisition through on-chain vending machines.
+  The permanent pool is **live on Bitcoin Cash mainnet** and has run its
+  complete lifecycle with **real PUSD** (the CashToken USD stablecoin):
+  deposit → transfer → public unshield, all confirmed on chain.
+  The full record — architecture, measurements, every transaction — is at
+  [`/research/shielded-pool`](https://hushyourmoney.com/research/shielded-pool);
+  the protocol repo is
+  [`pusd-shielded-pool`](https://github.com/APECSdev/pusd-shielded-pool), and
+  the proving assets are published as the
+  [`role2-proving-assets-v3-v1`](https://github.com/APECSdev/pusd-shielded-pool/releases/tag/role2-proving-assets-v3-v1)
+  release.
+- **The CoinJoin lineage** — the protocol surveys and our own experiments:
+  [CashFusion](https://hushyourmoney.com/research/cashfusion) and
+  [CoinJoin](https://hushyourmoney.com/research/coinjoin) references, P2P
+  fusion over Nostr, and the [pool-native round
+  daemons](https://hushyourmoney.com/daemons) (CashShuffle-style rounds
+  composed with the pool's fee flow — implemented and tested, not yet
+  running).
+- **The comparison reference** — [the big privacy-money
+  table](https://hushyourmoney.com/compare): Bitcoin Cash, Zcash, Monero and
+  the rest, measured and cited side by side — costs, confirmation times,
+  underlying privacy protocols, and stablecoin access.
+- **The playground** — [live experiments](https://hushyourmoney.com/playground),
+  including the CashFusion-over-Nostr round simulation and the opt-in relay
+  probe.
 
-- **CashShuffle** — equal-amount CoinJoin rounds; an observer cannot tell which output belongs to whom.
-- **CashFusion** — arbitrary-amount CoinJoin; many small coins fused into fewer, larger ones.
-- **Zero-knowledge research** — open research into shielded pools: a next-generation privacy layer for UTXO-based tokens, developed and proven on public test networks.
+**The announcement**: [Hush Your Money — introducing shielded stablecoin
+payments for Bitcoin](https://bitcoincashresearch.org/t/hush-your-money-introducing-shielded-stablecoin-payments-for-bitcoin/2666)
+(bitcoincashresearch.org).
 
 ## The Stack
 
-- [Nuxt 3](https://nuxt.com) + Pinia + Tailwind CSS, installable as a PWA
-- CashShuffle / CashFusion CoinJoin protocols
+- [Nuxt 3](https://nuxt.com) + Pinia + Tailwind CSS
 - Electrum client proxy (`/api/electrum`) for chain data
 - Hosted on [Flux](https://cloud.runonflux.io), a community-run decentralized cloud
 
@@ -74,6 +99,9 @@ cd web
 docker build -t nyusternie/hushyourmoney:latest .
 docker run -p 3000:3000 nyusternie/hushyourmoney:latest
 ```
+
+If the build fails with `EAI_AGAIN registry.yarnpkg.com` (container DNS),
+re-run with `docker build --network=host`.
 
 Optional runtime override: `NUXT_PUBLIC_PSF_API_URL` (blockchain REST API base).
 
