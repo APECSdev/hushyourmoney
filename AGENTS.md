@@ -55,6 +55,17 @@ then measured BOTH commitment introspection ops pushing the RAW 96 B on mainnet
 `51483175…`, nullSet 2 keys, notes 3). NO check-9 fix, NO redeploy — the deployed v4h
 program is correct. Record: `wip-role2-hook/V4H-DEPOSIT-LIVE-2026-11-27.md`.
 
+## SESSION CLOSE — 2026-11-27 LATE EVENING — THE ITEMS BELOW ARE DONE
+
+1. **THE CHIPNET REHEARSAL PASSED** (funded via chipnet.bch.ninja's faucet PoW API, 200k sats to wallet A, tx `62d01ca9…`; harness `mainnet-pool5/faucet-claim.mjs`): pool `654d3230…` ran DEPOSIT `5fca6027…` (pv=1,000) → TRANSFER `df6e80c0…` → UNSHIELD `6c930969…` (200 paid out publicly) — ALL CONFIRMED. The rehearsal REPRODUCED the in5 off-by-one (same OP_EQUALVERIFY), enabling the SOURCE fix: `pool-refill-role2-v4h.mjs` L180 wrote in5 at `(NO_SLOT ? 4 : 5)` — the real layout is `(NO_SLOT ? 5 : 6)`. Backup kept.
+2. **THE MAINNET LIFECYCLE IS COMPLETE, REAL PUSD**: DEPOSIT `5b54fb97…` → TRANSFER `63ccd3db…` (fee 1.02 sat/B, lean 21,000-fuel lock) → **UNSHIELD `d8a93aa2…` (pv=10 REAL PUSD paid out publicly)**. Final: balance 90 (~$0.90 shielded), notes 5, nullSet 6.
+3. **M2 PUBLISHED**: release `role2-proving-assets-v3-v1`, 5 assets; the zkey re-downloaded, sha256 byte-exact `de7875e3…`.
+4. **THE SITE RECORD IS IN**: the `#permanent-pool` section + STATS + 3 new POOLS entries (SFC-verified); the engineering record in `pusd-shielded-pool/wip-role2-hook/V4H-DEPOSIT-LIVE-2026-11-27.md` (commit `3312060`).
+
+**New landmines (measured):** token-bearing P2PKH outputs dust-floor at 1,000 sats (600 died `dust code 64`); the 1 sat/B action floor vs the lock budget — the unshield used `STATE_FLOAT_SATS=9700` (payout sats hook-unpinned; `pool-op-role2-v4h.mjs` now takes `PAYOUT_SATS`/`STATE_FLOAT_SATS`).
+
+**Remaining:** the site IMAGE build+push (VM only) + Flux; the Nito notifications; a possible pv=2 follow-up deposit with the 2 wallet units.
+
 **Next session, in order:** (1) publish the M2 draft once the zkey lands (verify
 SHA256SUMS); (2) the chipnet dress rehearsal for TRANSFER/UNSHIELD (the standing user
 order before further mainnet value ops — needs ~30k CHIPNET sats; the faucet hot wallet

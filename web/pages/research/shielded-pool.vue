@@ -23,6 +23,9 @@ useReveal()
    Every value below is a live measurement with a recorded source
    (session log / on-chain decode / snarkjs output). No estimates. */
 const STATS = [
+    { value: 'LIVE', label: 'the permanent pool · mainnet · REAL PUSD lifecycle complete', tag: 'measured · 2026-11-27', color: 'text-lime-300' },
+    { value: '3×', label: 'ceremony contributions · Nito → Hush → third · final VK f6b49cc0…', tag: 'measured', color: 'text-white' },
+    { value: '247,120', label: 'constraints · v3 circuit (append proven in-circuit + deposit path)', tag: 'measured', color: 'text-violet-300' },
     { value: '183,472', label: 'constraints · 2-out circuit', tag: 'measured', color: 'text-lime-300' },
     { value: '184,528', label: 'constraints · 3-out circuit (deployed demo)', tag: 'measured', color: 'text-lime-300' },
     { value: '+0.58%', label: '3-out delta vs 2-out', tag: 'measured', color: 'text-cyan-300' },
@@ -128,6 +131,55 @@ const GATES: Gate[] = [
    Setup grade: DEMO — solo 1-of-1 ceremony, entropy published
    (c490ce06a2f364ee1ec87c75b0a8d9138e18df4e0f17b931). NOT the Gate-7 public
    ceremony; production deployment remains gated on it. */
+/* ── The PERMANENT POOL lifecycle (v4h C architecture, mainnet, REAL PUSD — 2026-11-27) ── */
+const V4H_LIFECYCLE = [
+    {
+        stage: 'Deposit',
+        cls: 'stage-lime',
+        dot: '#bef264',
+        network: 'mainnet',
+        kicker: 'the user\'s $1 enters the pool',
+        bullets: [
+            'pv=100 — real 2469acc5… PUSD rides the H-covenant deposit pair (in6)',
+            'previously "frozen" at the H covenant — unfrozen INTO the pool',
+            'balance 0 → 100 · notes 3 · nullSet 2 keys · 46,079 B · fee 1.19 sat/B',
+        ],
+        meta: ['7 inputs · 0 signatures', 'merkle-proof confirmed'],
+        tx: '5b54fb97…',
+        txFull: '5b54fb9783806fca229953dd2b3505e2d0cb5927f795611c45d1715dec48316f',
+    },
+    {
+        stage: 'Transfer',
+        cls: 'stage-cyan',
+        dot: '#67e8f9',
+        network: 'mainnet',
+        kicker: 'the $1 moves shielded',
+        bullets: [
+            'pv=0 — in-notes 2 → out-notes 3, value conserved in-circuit',
+            'ASSET 100 → 100 · holdings line recreated at out2',
+            'nullSet 4 keys · 46,083 B · fee 1.02 sat/B',
+        ],
+        meta: ['append proven in-circuit', 'walkA/walkB nullifier SMT'],
+        tx: '63ccd3db…',
+        txFull: '63ccd3db592c07c7677deb08e297080ca2e26ed356f7ff9d1158e115778add1b',
+    },
+    {
+        stage: 'Unshield',
+        cls: 'stage-violet',
+        dot: '#c4b5fd',
+        network: 'mainnet',
+        kicker: 'real PUSD paid out publicly',
+        bullets: [
+            'pv=10 — 10 units of REAL PUSD to the wallet\'s P2PKH (out3)',
+            'balance 100 → 90 · holdings 90 at out2 · nullSet 6 keys',
+            '46,157 B · fee 1.003 sat/B · every input VM-verified both modes',
+        ],
+        meta: ['public payout on mainnet', 'merkle-proof confirmed'],
+        tx: 'd8a93aa2…',
+        txFull: 'd8a93aa2b6250a8d37d3f9ea587a8ae5a1a61e4f662a4f9f56316bc1d4b8b4f6',
+    },
+]
+
 const MAINNET_LIFECYCLE = [
     {
         stage: 'Prep',
@@ -288,6 +340,48 @@ const NETQ = '?network=chipnet'
 const MAINNET_NETQ = '?network=mainnet'
 const POOLS = [
     {
+        name: 'mainnet-pusd-v4h-permanent',
+        cat: '324b1dbf…5814',
+        catFull: '324b1dbfb05c605937f7e68f62210102beacc8b0ece0537e5bde04e90a875814',
+        locking: 'aa2006d76…c987',
+        lockingFull: 'aa2006d764d4a149900fe8cbe2a0b01753643b21bda74b0fc76018172bfc098dc3c987',
+        root: 'the EMPTY depth-20 tree (genesis)',
+        firstOp: 'DEPLOYED 2026-11-27 · v4h C architecture · born-guarded · REAL PUSD',
+        tx: '61022b8b…f944',
+        txFull: '61022b8b46087f2a5c5b49ae9782d05a316807726cc078995b2291e500efc944',
+        badge: 'badge-done',
+        badgeLabel: 'deployed · current · MAINNET',
+        note: 'THE PERMANENT POOL: the C architecture — a fresh valueless pool category (state NFT + 16 guard blanks) with the ASSET (real 2469acc5… PUSD, a category we do not own) riding the H-covenant holdings/deposit pair. 96-B state commitment [noteRoot ‖ nullSetRoot ‖ balance]. The FULL lifecycle ran on mainnet with REAL PUSD under the three-contribution chain (final VK f6b49cc0…): DEPOSIT 5b54fb97… (pv=100, the previously-frozen $1 unfrozen INTO the pool) → TRANSFER 63ccd3db… (pv=0) → UNSHIELD d8a93aa2… (pv=10 paid out publicly). Every action: 7 signature-free inputs, VM-evaluated in both modes pre-broadcast, merkle-proof confirmed. The chipnet dress rehearsal ran first (deposit 5fca6027… → transfer df6e80c0… → unshield 6c930969…, all confirmed). Proving assets: role2-proving-assets-v3-v1.',
+    },
+    {
+        name: 'chipnet-role2-pool-v4h-rehearsal',
+        cat: '654d3230…87d5',
+        catFull: '654d323009ec4f4af3805257fc281b46f47b3624a86a3a8357cff78a0d5687d5',
+        locking: 'aa206b8a…6887',
+        lockingFull: 'aa206b8a685dcfb83db7c7fa9767e5fdc2ed3ce24ca01a6e2648bbdfd0eafe712b6887',
+        root: 'the EMPTY depth-20 tree (genesis)',
+        firstOp: 'DEPLOYED 2026-11-27 · v4h rehearsal · zero user value',
+        tx: '7648c6ca…6a75b',
+        txFull: '7648c6ca03940c16ea34ebec44b4c4f8faa1c0f9fdc8fc3bb97f1e769926a75b',
+        badge: 'badge-done',
+        badgeLabel: 'rehearsal · passed',
+        note: 'The mandatory chipnet dress rehearsal (the standing user order before mainnet value ops): the identical v4h architecture with the chipnet e56c0a85… FT as the asset — DEPOSIT 5fca6027… (pv=1,000) → TRANSFER df6e80c0… → UNSHIELD 6c930969… (200 paid out publicly), all confirmed with merkle proofs. This is where the lock-tool in5 off-by-one was reproduced and then fixed at the source.',
+    },
+    {
+        name: 'mainnet-pool5-links',
+        cat: '0631da2b…e169',
+        catFull: '0631da2b91b7b04d83eecc9b6d764998f2c5b22495fbd34f896141d30e7ee169',
+        locking: 'aa20c654…d2587',
+        lockingFull: 'aa20c654d3e8e7ac8b4229dec4d0948aa8bafe1baad73edda3dd2aa21ab01bcd9d2587',
+        root: '72936d2a… (the {1,0} honest seed)',
+        firstOp: 'DEPLOYED 2026-11-27 · old-gen demo · the announcement\'s three links',
+        tx: 'd122abab…66fcd',
+        txFull: 'd122ababa767e9b0d878c43f305a13ad891c2099f20890967ae1f49ba6366fcd',
+        badge: 'badge-done',
+        badgeLabel: 'demo · the three links',
+        note: 'The old-gen (Gate-5-form) mainnet pool built in one evening for the bitcoincashresearch announcement\'s three REAL-PUSD links: SHIELD 627013ca… (the user\'s 4 units) → TRANSFER 4fda8a8b… (the confirmed 100-PUSD op from the 11-20 pool) → UNSHIELD 998a0474… (2 PUSD paid out publicly). Built because the 11-20 pool\'s covenant carried vestigial v1 balance arithmetic (pv≠0 impossible) and its terminal pinned TXINPUTCOUNT==7 with fee-starved steps — both measured, both documented in the repo. DEMO ONLY: the old 2-in/2-out circuit (no nullifier set) under the withdrawn F6 verifier and the 1-of-1 solo ceremony.',
+    },
+    {
         name: 'chipnet-role2-pool-v2-tagged',
         cat: '480e30ff…b9d0',
         catFull: '480e30ff1d3f5f0b6fe9dd2dbe363b1776f61566f29a395628d0b50abd01b9d0',
@@ -298,7 +392,7 @@ const POOLS = [
         tx: '2eaeb97f…83b8',
         txFull: '2eaeb97fc85b2ff0fdd6c6afd1d807f8a715bd92a40258fae9f0e6ce50fe83b8',
         badge: 'badge-done',
-        badgeLabel: 'deployed · current',
+        badgeLabel: 'chipnet current · superseded on mainnet by v4h',
         note: 'The current generation: the pool rules run INSIDE the independently reviewed sound verifier as a role-2 hook (program 7,834 B, locking aa203e40…). Signature-free 3-input actions — every pool UTXO spends the one program P2SH32; there is no separate covenant and no step fleet. Deposit tags (checks 4c+4g) bind the fuel to the funded action\'s own nullifiers — the theft replay REJECTS at 4g. Minting guard + permissionless blank vending live (see above). Full lifecycle confirmed: SHIELD 9d9aa97a… → TRANSFER 5262417b… → UNSHIELD 250,000 e54d19fb… (payout executed), each broadcast atomically with its tagged lock. Under OUR solo-ceremony VK (sha256 05250429…). The nito.cash browser acceptance then ran the full lifecycle through the real UI: SHIELD 1ca58773… → TRANSFER 50644d00… → UNSHIELD f52008f4… (state 760,400 FT, 44 leaves; wallet A 19,986,800 + 600 FT). The 400 FT transfer note is undelivered; four failed locks (1,200 FT + 120,000 sats) are stuck, one (3db76294…, 1,000 FT + 30,000 sats) is sweepable. The 3-out v3 is the next generation — see Notes Management.',
     },
     {
@@ -490,6 +584,75 @@ const LIFECYCLE = [
                     <div class="font-display text-2xl font-extrabold sm:text-3xl" :class="s.color">{{ s.value }}</div>
                     <div class="mt-2 text-xs uppercase tracking-widest text-slate-100">{{ s.label }}</div>
                     <div class="mt-1 font-mono text-[0.78rem] text-slate-200">[{{ s.tag }}]</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ── Featured: the PERMANENT POOL (v4h C architecture, mainnet, REAL PUSD) ── -->
+        <section id="permanent-pool" class="relative z-10 mx-auto w-full max-w-6xl px-6 pb-28 sm:pb-36">
+            <div class="reveal text-center">
+                <p class="font-mono text-[0.8rem] uppercase tracking-[0.45em] text-lime-200">live · mainnet · real paryonusd · 2026-11-27</p>
+                <h2 class="mt-5 font-display text-[clamp(1.9rem,5vw,3.4rem)] font-bold leading-[1.08] text-white">
+                    The Permanent Pool:<br />Real Stablecoin, Shielded on Bitcoin
+                </h2>
+                <p class="mx-auto mt-5 max-w-3xl text-base leading-relaxed text-slate-100 sm:text-lg">
+                    The C architecture (<span class="font-mono text-xs text-lime-300">v4h</span>):
+                    the pool keeps a fresh valueless category (state NFT + blanks — our key, no third
+                    party), and the ASSET — real ParyonUSD <span class="font-mono text-xs">2469acc5…</span>, a
+                    category we do NOT own — rides the H-covenant holdings/deposit pair. The state
+                    commitment is 96 B: <span class="font-mono text-xs">[noteRoot ‖ nullSetRoot ‖ balance]</span>.
+                    The full lifecycle ran on MAINNET with REAL PUSD — deposit, transfer, and a public
+                    unshield payout — every action a signature-free 7-input spend with all inputs
+                    VM-evaluated in both consensus and standard mode before broadcast, all confirmed
+                    with merkle proofs. Proofs run under the three-contribution ceremony chain
+                    (Nito → Hush → third; the final VK <span class="font-mono text-xs">f6b49cc0…</span>;
+                    the proving assets are published as
+                    <a href="https://github.com/APECSdev/pusd-shielded-pool/releases/tag/role2-proving-assets-v3-v1" target="_blank" rel="noopener" class="text-lime-300 underline decoration-lime-300/40 underline-offset-4">role2-proving-assets-v3-v1</a>).
+                </p>
+            </div>
+
+            <div class="reveal mt-14 overflow-x-auto">
+                <div class="flex min-w-[680px] items-start px-1">
+                    <template v-for="(s, i) in V4H_LIFECYCLE" :key="s.stage">
+                        <div class="life-stage">
+                            <div class="stage-dot" :class="s.cls" :style="{ animationDelay: (i * 2) + 's' }">
+                                <span class="font-display text-lg font-extrabold">{{ String(i + 1).padStart(2, '0') }}</span>
+                            </div>
+                            <h3 class="mt-5 font-display text-xl font-bold text-white">{{ s.stage }}</h3>
+                            <p class="mt-1 font-mono text-[0.78rem] uppercase tracking-[0.22em] text-slate-200">{{ s.kicker }}</p>
+                            <ul class="life-points" :style="{ '--dot': s.dot }">
+                                <li v-for="b in s.bullets" :key="b">{{ b }}</li>
+                            </ul>
+                            <div class="mt-4 flex flex-wrap justify-center gap-2">
+                                <span v-for="m in s.meta" :key="m" class="life-meta">{{ m }}</span>
+                            </div>
+                            <div class="mt-6 flex justify-center">
+                                <a :href="EXPLORER + s.txFull + MAINNET_NETQ" target="_blank" rel="noopener" class="tx-btn tx-btn-lg">
+                                    <span class="tx-chip">{{ s.network }}</span>
+                                    <span class="tx-id">{{ s.tx }}</span>
+                                    <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="h-3 w-3">
+                                        <path d="M7 17L17 7M9 7h8v8" />
+                                    </svg>
+                                </a>
+                            </div>
+                        </div>
+                        <div v-if="i < V4H_LIFECYCLE.length - 1" class="life-seq" />
+                    </template>
+                </div>
+            </div>
+
+            <div class="reveal mt-12 grid gap-4 md:grid-cols-3">
+                <div class="rounded-2xl border border-white/10 bg-white/[0.03] p-5">
+                    <h3 class="font-display text-base font-bold text-white">The dress rehearsal (chipnet)</h3>
+                    <p class="mt-2 text-sm leading-relaxed text-slate-300">The mandatory chipnet rehearsal ran first — the same v4h architecture, zero user value at risk: DEPOSIT <a href="https://explorer.selene.cash/tx/5fca602751e55a9ed323fb38fe8465cf808f62775dd929617e4744df7c993005?network=chipnet" target="_blank" rel="noopener" class="font-mono text-xs text-lime-300">5fca6027…</a> (pv=1,000) → TRANSFER <a href="https://explorer.selene.cash/tx/df6e80c0a3f7621fabafbd52048e2a5dac76e53ce8e6b065def36f6a43ef3e04?network=chipnet" target="_blank" rel="noopener" class="font-mono text-xs text-lime-300">df6e80c0…</a> → UNSHIELD <a href="https://explorer.selene.cash/tx/6c9309699f86f165f5b8c00240b11c285089ffb221caa4349d11848cab19cac8?network=chipnet" target="_blank" rel="noopener" class="font-mono text-xs text-lime-300">6c930969…</a> (200 paid out publicly) — all confirmed before any mainnet value moved. [measured]</p>
+                </div>
+                <div class="reveal rounded-2xl border border-white/10 bg-white/[0.03] p-5">
+                    <h3 class="font-display text-base font-bold text-white">The bug that wasn't a protocol bug</h3>
+                    <p class="mt-2 text-sm leading-relaxed text-slate-300">The pool was believed "dead" for a day: actions passed the local VM but failed on nodes with OP_EQUALVERIFY. On-chain measurement (probe ladder <span class="font-mono text-xs">mn-ab.mjs</span>) proved both token-commitment introspection ops push raw bytes — then the real cause fell out of the state file: the lock tool recorded the in5 slot one vout off, so the action spent a wallet change output (a tokenless P2PKH source) with a covenant unlocking. Fixed at the tool source; both the mainnet and chipnet deposits then confirmed immediately. A case study in why the builder's source-synthesis trust boundary must be verified against the chain. [measured]</p>
+                </div>
+                <div class="reveal rounded-2xl border border-rose-400/20 bg-rose-400/[0.06] p-5">
+                    <h3 class="font-display text-base font-bold text-rose-200">Posture — read this</h3>
+                    <p class="mt-2 text-sm leading-relaxed text-slate-300">The permanent pool holds REAL PUSD at demo scale (~$0.90 shielded at this writing). The setup is a three-contribution chain — stronger than every prior demo, but the MPC is small and the entropies are unpublished; treat this as Preview v0, not production. The earlier "dead pool" disclosure on this page is superseded by the measured record above: the deployed program was correct; the failure was tooling. The R2/R3/F6 disclosures below remain the governing context for every generation before v4h.</p>
                 </div>
             </div>
         </section>
