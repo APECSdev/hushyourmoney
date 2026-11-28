@@ -14,7 +14,97 @@
 - Make ample use of figures and diagrams when documenting or discussing technical designs and implementations (ASCII/Mermaid in repo docs; rendered diagrams on the site).
 - Published technical claims must satisfy the verification contract (file path, command output, or cited source). Where a quantity has not been measured, mark it UNMEASURED rather than estimating.
 
-## CURRENT HANDOFF — 2026-11-28 SESSION END — THE VENDING MACHINES ARE LIVE ON BOTH NETWORKS, THE FOLLOW-UP pv=2 DEPOSIT IS CONFIRMED (balance 92), NP01 IS ANSWERED BY MEASUREMENT, THE PERMANENT-POOL SITE BUILD IS LIVE ON FLUX, AND THE zkstreet REMINDER IS DELIVERED
+## CURRENT HANDOFF — 2026-11-28 (LATER — the reload session) — THE CHIPNET MACHINE RELOADED SAME-DAY ON THE NITO ASK, THE REGISTRY COMPLETED, AND FIVE NEW MEASURED LANDMINES
+
+**Read this section FIRST.** The one-paragraph state: the Nito team's reload request
+(`docs/BLANK-RELOAD-REQUEST-2026-11-28.md`, committed as received) was verified on chain
+and EXECUTED the same session — the guard batch
+`5d015ed7463fee657b67604803d0c7d77b1c76ebae39d8f3b2e70e2bfd093976` (9,830 B, **h351888**,
+VM-eval ACCEPT consensus 157,733 / standard 178,853 op — the exact K=64 precedent figures;
+64 blanks minted straight to wallet A; the minting-NFT passthrough re-locked at
+`5d015ed7:0`) then the 32-blank machine load
+`76a2776a40ea2ac78b2290a916bfb18b1851583a9ad69d09f57e80e8a88df94a` (7,193 B, **h351891**).
+BOTH of the request's forms were satisfied by the one chain: A's inventory refilled
+directly (the B3 final leg unblocked) AND the visitor path restocked. The Nito side
+immediately ran FOUR more buys through the covenant on the fresh stock (`b9233c3d` +
+`e071457c` @h351893, `a0a2735e` + `1db1ae77` @h351894 — wallet A funding each): machine
+stock **28 blanks / 28,000 sats** (measured 21:11Z), wallet A **35 blanks + 79,728 plain
+sats**. Their M2 is done and live at their commit `cd1cfc6` (verified read-only at their
+tip: "the post-MPC proving trio MIRRORED live + the mainnet v4h gate FLIPPED"); their
+in-wallet buy flow is THEIR next item (the builder live-proven via their `buy-blanks.mjs`).
+The execution record is `docs/BLANK-RELOAD-RESPONSE-2026-11-28.md`.
+
+### 1. THE RELOAD (all confirmed; every figure cited in the response doc)
+
+- The premise verified BEFORE acting: machine 0 UTXOs / 0 sats (history: load `ead5d000`
+  @350676 → the two buys `5c83810f` @350952 + `d7a52c37` @350954 — sold out exactly per
+  the request); wallet A 0 blanks + 163,595 sats / 7 UTXOs (the request's exact figures);
+  the minting NFT intact at `a98ee616:0`.
+- The tooling: `pool-tagbatch-role2.mjs` IS the guard-batch executor (despite its name —
+  it mints K blanks through the guard; K from state.guard; the source-drift pin held at
+  broadcast time). Flags: `--state role2-pool4-state.json --secrets wallet-a-role2-demo.json
+  --electrum chipnet.bch.ninja` (its defaults are the v2 pool + the faucet hot wallet + a
+  MAINNET electrum — all wrong for this pool). The loader: `pool-vend-load-role2.mjs
+  --count 32` (bench copy == committed copy, md5-verified). State backup
+  `role2-pool4-state.pre-reload-20261128.json`; both scripts wrote
+  state.guard/tagBlanks/vending themselves (never by hand).
+- Costs burned from A: the batch fee ~10.4k + the load fee ~7.2k sats (the 65,000 "fixed"
+  = blank floats: 64×1,000 now held at A/in the machine + the guard's 1,000).
+
+### 2. THE SESSION'S COMMITS (all pushed, master)
+
+- `fa16308` — the reload request AS RECEIVED + the response doc (the execution record;
+  §7-§8 carry the landmines + their confirmation note quoted verbatim).
+- `0e9de9b` — the PATH-A/pool5 stray bench copies committed (pool5/ ×9, statecheck.mjs,
+  unshield-probe.mjs) — the untracked-session-records landmine closed.
+- `df8476e` — THE REGISTRY COMPLETED: three new entries (the mainnet PERMANENT POOL with
+  the 4-action lifecycle all block-measured 979249/979266/979269/979305; the chipnet DRESS
+  REHEARSAL with the full lock/action chain 9aaac260/5fca6027 @350517 → 13e639fd/df6e80c0
+  @350525 → 4186a4d5/6c930969 @350530; mainnet pool5 @979236/979237) + the v3.1 entry's
+  vending block (2 guard batches, 2 loads, 6 lifetime buys — all blocks measured).
+  `walletProverCompatible` on the permanent pool = true (their M2 flip, cited).
+
+### 3. THE LANDMINES (all measured this session)
+
+1. **Fulcrum's plain `scripthash.listunspent` HIDES token UTXOs entirely** — the guard
+   looked "0 UTXOs, sold out" until the `include_tokens` string was passed; `get_history`
+   at the same base locking works without it. Any stock/inventory probe of a token-bearing
+   locking (the guard, the machines) MUST pass the filter.
+2. **The chipnet node flake class**: `get_merkle` / `transaction.get` can return "No
+   confirmed transaction" / "No such mempool or blockchain transaction" for txs that ARE
+   confirmed — the rehearsal deposit `5fca6027` failed get_merkle 8/8 and Selene 404'd it,
+   while the pool's scripthash history resolved it at h350517 (46,070 B). The
+   scripthash-history index is the resilient path; retry with reconnects BEFORE declaring
+   a recorded txid wrong.
+3. **The deployed v4h code is CATEGORY-PINNED**: the mainnet pool's code sha is
+   `4f096247…`, the rehearsal's is `65a3f215…` (both per their tool-written state files) —
+   the 2026-11-27 handoff attributed 65a3f215 to BOTH (a copy error, now corrected in the
+   registry). The rehearsal's program locking re-verified as hash256(its 65-B R).
+4. **The Nito buy builder buys ONE blank per distinct tokenless funding UTXO** (their
+   note + the 4-buy run) — buyer throughput is bounded by the buyer's distinct-UTXO
+   count; carry into the buy-flow UX notes.
+5. **Never hand-roll cashaddr** — my decoder failed the checksum AND the padding; libauth
+   on the VM settled it: the doc address `bchtest:qzzu85xn…` IS wallet A (hash160
+   `85c3d0d3…` == the chain operator locking in every machine/batch output).
+
+### 4. THE NEXT SESSION'S MISSION, IN ORDER
+
+1. The Nito B3 final leg + the visitor walkthrough run on the fresh stock (THEIRS; both
+   fully funded — nothing owed on the reload).
+2. Their mainnet-adapter diff → OUR REVIEW → the user's GO for **Preview v0**.
+3. Further mainnet ops — TOP-UP-GATED (~0.0003 BCH + 2 machine blanks per action).
+4. Machine stock on ask: chipnet 28 in the machine + 35 at A (a reload is one cheap load
+   tx from A's reserve); mainnet 14 (K=16 batches, ~26k sats each).
+
+### 5. STANDING RULES — all unchanged
+
+The MPC entropies are NEVER published; the repo scope rule (hushyourmoney +
+pusd-shielded-pool only; nito.cash NEVER — read-only verification is the established
+exception); mainnet runs under the final VK only; Preview v0 naming everywhere; the
+explorer policy (Selene primary, imaginary.cash NEVER); one task = one commit + push;
+builds on the VM only.
+
+## PREVIOUS — 2026-11-28 SESSION END — THE VENDING MACHINES ARE LIVE ON BOTH NETWORKS, THE FOLLOW-UP pv=2 DEPOSIT IS CONFIRMED (balance 92), NP01 IS ANSWERED BY MEASUREMENT, THE PERMANENT-POOL SITE BUILD IS LIVE ON FLUX, AND THE zkstreet REMINDER IS DELIVERED
 
 **Read this section FIRST.** The one-paragraph state: the ordered mission is COMPLETE.
 The G5 vending machines are LIVE on both networks — the chipnet v3.1 machine (loaded
