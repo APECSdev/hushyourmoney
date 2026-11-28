@@ -14,73 +14,184 @@
 - Make ample use of figures and diagrams when documenting or discussing technical designs and implementations (ASCII/Mermaid in repo docs; rendered diagrams on the site).
 - Published technical claims must satisfy the verification contract (file path, command output, or cited source). Where a quantity has not been measured, mark it UNMEASURED rather than estimating.
 
-## CURRENT HANDOFF — 2026-11-27 EVENING (LATEST) — THE POST IS LIVE (topic 2666), M2 GATES PASSED + THE RELEASE UP, THE "DEAD POOL" DIAGNOSIS REFUTED, AND THE USER'S $1 DEPOSIT IS CONFIRMED IN THE PERMANENT POOL
+## CURRENT HANDOFF — 2026-11-27 NIGHT (LATEST) — THE PERMANENT POOL IS LIVE: THE FULL REAL-PUSD LIFECYCLE IS CONFIRMED ON MAINNET, M2 IS PUBLISHED, THE ANNOUNCEMENT POST IS LIVE (topic 2666), NITO IS UPDATED, AND ALL RECORDS ARE COMMITTED
 
-**The arc of this session** (all on-chain verifiable):
+**Read this section FIRST; it supersedes the two 2026-11-27 evening sections that were
+trimmed into it (their content is preserved in git history — commits `0c3c2c4`,
+`125e0ec`, `16cef8e`).** The one-paragraph state: the v4h C-architecture pool — the
+PERMANENT POOL — is live on mainnet and has run its **complete lifecycle with REAL
+PUSD** (deposit $1.00 → transfer → unshield $0.10 publicly paid), all under the
+three-contribution ceremony chain whose proving assets are PUBLISHED (M2), after the
+mandatory chipnet dress rehearsal passed. The prior "dead pool / OUTTOKCOMMIT node
+divergence" diagnosis is REFUTED by measurement — it was our own lock tool writing the
+in5 outpoint one vout off. Everything below is on-chain verifiable.
 
-1. **THE THREE LINKS ARE IN THE POST** (commit `d0e47a7`, pushed): SHIELD `627013ca…`
-(pool5, the user's 4 units, CONFIRMED) · TRANSFER `4fda8a8b…` (the confirmed 100-PUSD
-op) · UNSHIELD `998a0474…` (pool5, 2 PUSD paid out publicly, CONFIRMED). The user
-published: `https://bitcoincashresearch.org/t/hush-your-money-introducing-shielded-stablecoin-payments-for-bitcoin/2666`.
-The old-gen §10 runbook was IMPOSSIBLE (two measured blockers: the pool3b covenant's
-vestigial v1 balance arithmetic kills pv≠0; the 11-13 terminal pins TXINPUTCOUNT==7 and
-the steps are 2,300-sat fee-starved — pool `dd1e3506…`'s 100 PUSD is permanently
-locked). The pool5 solution: the covenant minus the four vestigial lines (fork-compiled)
-+ the terminal pin 7→8 + an honest 1-unit seed ({1,0} notes == 1 FT holdings; 1 of the
-user's 5 units seeded, 4 in the SHIELD, 2 back out, 3 remain shielded). Tooling + record:
-`pusd-shielded-pool/mainnet-pool5/` (commits `e13f2e8`, `b9d76fb`).
+### 1. THE PERMANENT POOL (mainnet v4h, category `324b1dbf…`)
 
-2. **THE M2 GATES PASSED AND THE RELEASE IS UP**: the post-MPC sweep merged — **69
-cases / 0 failed** (`wip-role2-hook/pool-sweep-v3-mpc-report.json`), red team **164/0**
-(`pool-redteam-v3-mpc-report.json`) — both committed (`4bb8d7d`). GitHub release
-`role2-proving-assets-v3-v1` created (draft, 4/5 assets: fixtures `e74555dd…`, wasm
-`a9b4b03d…` UNCHANGED, VK `f6b49cc0…`, SHA256SUMS); the 120.8 MB zkey `de7875e3…`
-upload was still in flight at session end (host upstream ≈ 30-60 KB/s) — **PUBLISH THE
-DRAFT when it lands**.
+- anchor `324b1dbfb05c605937f7e68f62210102beacc8b0ece0537e5bde04e90a875814` (= the
+  category) · mint `f72aec01…` · deploy `61022b8b46087f2a5c5b49ae9782d05a316807726cc078995b2291e500efc944`
+  (state NFT at :0, 96-B genesis commitment) · guard batch `48994625…` (K=16 blanks).
+- Program 8,078 B sha256 `65a3f215…`, locking
+  `aa2006d764d4a149900fe8cbe2a0b01753643b21bda74b0fc76018172bfc098dc3c987`.
+  State file: `/home/apecs/cov/role2-pool4-state.mainnet-v4h.json`
+  (backup `.bak-in5fix`). The witness gen MUST use `--zkey build4/pool4_0003_user.zkey`
+  (the final chain, `de7875e3…`); **`build4/pool4_final.zkey` is the OLD chipnet 1-of-1
+  (`942f8fc5…`) — the witness gen's DEFAULT is wrong for v4h ops.**
+- **THE LIFECYCLE (all CONFIRMED with merkle proofs; every action 7 signature-free
+  inputs, VM-evaluated in BOTH modes pre-broadcast):**
+  - DEPOSIT `5b54fb9783806fca229953dd2b3505e2d0cb5927f795611c45d1715dec48316f` — pv=100
+    of REAL `2469acc5…` PUSD riding the H pair; the user's previously-"frozen" $1
+    unfrozen INTO the pool; balance 0 → 100.
+  - TRANSFER `63ccd3db592c07c7677deb08e297080ca2e26ed356f7ff9d1158e115778add1b` —
+    pv=0, ASSET 100 → 100, fee 1.02 sat/B (lean 21,000-fuel lock).
+  - UNSHIELD `d8a93aa2b6250a8d37d3f9ea587a8ae5a1a61e4f662a4f9f56316bc1d4b8b4f6` —
+    **pv=10 REAL PUSD paid out publicly** (out3 = 1,000 sats + 10 FT, verified);
+    balance → 90; fee 1.003 sat/B.
+- **Final pool state:** balance 90 (~$0.90 of the user's PUSD shielded) · notes 5 ·
+  nullSet 6 keys · state at `d8a93aa2…:1` (float **9,700** — the last action shaved
+  300; the next action's fee budget is 300 sats tighter) · holdings `d8a93aa2…:2`
+  (90 FT) · actionInputs EMPTY — the next op needs a refill lock first.
+- Explorer: `https://explorer.selene.cash/tx/<txid>?network=mainnet`.
 
-3. **THE "DEAD POOL" DIAGNOSIS WAS REFUTED — THE PERMANENT POOL IS ALIVE.** The v4h
-§1 "OUTTOKCOMMIT divergence" was a STATE-FILE OFF-BY-ONE: the in5 slot was recorded at
-lock `ceb9d18e…` **vout 4** — the lock's wallet BCH change (a tokenless P2PKH source,
-later spent) — instead of **vout 5** (the 3,000-sat hLock tokenless). The original
-action spent the P2PKH with an H-covenant unlocking → the node's OP_EQUALVERIFY; the
-local VM rehearsal passed because the builder SYNTHESIZES source outputs from the state
-file (it never saw the real chain outpoint). After vout 4 got spent, rebuilds failed
-"Missing inputs". Fixed (`in5.vout=5`, backup `.bak-in5fix`); the probe ladder (`mn-ab.mjs`)
-then measured BOTH commitment introspection ops pushing the RAW 96 B on mainnet
-(OUTTOKCOMMIT(1) and UTXOTOKCOMMIT(0), both RELAYED) — identical to the bench VM.
+### 2. THE CHIPNET REHEARSAL POOL (v4h, category `654d3230…`)
 
-4. **THE USER'S $1 IS SHIELDED IN THE PERMANENT POOL**: deposit
-`5b54fb9783806fca229953dd2b3505e2d0cb5927f795611c45d1715dec48316f` **CONFIRMED**
-(pv=100, balance 0→100, holdings at `:2` carrying the REAL `2469acc5…` PUSD, root
-`51483175…`, nullSet 2 keys, notes 3). NO check-9 fix, NO redeploy — the deployed v4h
-program is correct. Record: `wip-role2-hook/V4H-DEPOSIT-LIVE-2026-11-27.md`.
+Deploy `7648c6ca…` (program 8,078 B `65a3f215…`, locking
+`aa206b8a685dcfb83db7c7fa9767e5fdc2ed3ce24ca01a6e2648bbdfd0eafe712b6887`), guard
+batch `e787ea5d…` (16 blanks), asset = the chipnet `e56c0a85…` FT, ZERO user value.
+The **mandatory dress rehearsal PASSED**: DEPOSIT `5fca602751e55a9ed323fb38fe8465cf808f62775dd929617e4744df7c993005`
+(pv=1,000) → TRANSFER `df6e80c0a3f7621fabafbd52048e2a5dac76e53ce8e6b065def36f6a43ef3e04` →
+UNSHIELD `6c9309699f86f165f5b8c00240b11c285089ffb221caa4349d11848cab19cac8` (200 paid
+out publicly). Final: balance 800, notes 5, nullSet 6. State file:
+`/home/apecs/cov/role2-pool4-state.v4h.json`. Funded by the chipnet.bch.ninja faucet
+(200k sats to wallet A via its PoW claim API, tx `62d01ca9…`; harness
+`pusd-shielded-pool/mainnet-pool5/faucet-claim.mjs`). Wallet A now: 113,790 plain
+sats, 10 v4h blanks, 99,996,750 e56c0a85 FT.
 
-## SESSION CLOSE — 2026-11-27 LATE EVENING — THE ITEMS BELOW ARE DONE
+### 3. THE "DEAD POOL" REFUTATION — THE session's key discovery
 
-1. **THE CHIPNET REHEARSAL PASSED** (funded via chipnet.bch.ninja's faucet PoW API, 200k sats to wallet A, tx `62d01ca9…`; harness `mainnet-pool5/faucet-claim.mjs`): pool `654d3230…` ran DEPOSIT `5fca6027…` (pv=1,000) → TRANSFER `df6e80c0…` → UNSHIELD `6c930969…` (200 paid out publicly) — ALL CONFIRMED. The rehearsal REPRODUCED the in5 off-by-one (same OP_EQUALVERIFY), enabling the SOURCE fix: `pool-refill-role2-v4h.mjs` L180 wrote in5 at `(NO_SLOT ? 4 : 5)` — the real layout is `(NO_SLOT ? 5 : 6)`. Backup kept.
-2. **THE MAINNET LIFECYCLE IS COMPLETE, REAL PUSD**: DEPOSIT `5b54fb97…` → TRANSFER `63ccd3db…` (fee 1.02 sat/B, lean 21,000-fuel lock) → **UNSHIELD `d8a93aa2…` (pv=10 REAL PUSD paid out publicly)**. Final: balance 90 (~$0.90 shielded), notes 5, nullSet 6.
-3. **M2 PUBLISHED**: release `role2-proving-assets-v3-v1`, 5 assets; the zkey re-downloaded, sha256 byte-exact `de7875e3…`.
-4. **THE SITE RECORD IS IN**: the `#permanent-pool` section + STATS + 3 new POOLS entries (SFC-verified); the engineering record in `pusd-shielded-pool/wip-role2-hook/V4H-DEPOSIT-LIVE-2026-11-27.md` (commit `3312060`).
+The 2026-11-27 marathon handoff said the v4h pool was node-rejected at the hook
+(OP_EQUALVERIFY) and suspected a node-vs-libauth `OUTTOKCOMMIT` divergence on 96-B
+commitments. **ALL REFUTED by measurement:**
 
-**New landmines (measured):** token-bearing P2PKH outputs dust-floor at 1,000 sats (600 died `dust code 64`); the 1 sat/B action floor vs the lock budget — the unshield used `STATE_FLOAT_SATS=9700` (payout sats hook-unpinned; `pool-op-role2-v4h.mjs` now takes `PAYOUT_SATS`/`STATE_FLOAT_SATS`).
+- `wip-role2-hook/mn-ab.mjs` (committed) — the lean on-node probe ladder: **both
+  `OP_OUTTOKCOMMIT` and `OP_UTXOTOKCOMMIT` push the RAW 96-B commitment** on mainnet
+  (probes relayed: size-96 `b3319682…`/`9a53583d…`, utxosize-96 `078ca70c…`).
+- The REAL cause: `pool-refill-role2-v4h.mjs` line 180 wrote the genesis **in5 slot one
+  vout off** — it recorded the lock's BCH change (a tokenless P2PKH source, later
+  spent → then "Missing inputs") instead of the H-locked tokenless slot. The action
+  spent a P2PKH output with an H-covenant unlocking → the node's correct OP_EQUALVERIFY.
+  The local VM rehearsal passed because the op builder synthesizes its evaluation
+  sources FROM THE STATE FILE, never seeing the real chain outpoint.
+- **FIXED AT THE SOURCE** (state-write now `(NO_SLOT ? 5 : 6)` — the change sits BELOW
+  in5 in both lock shapes; backup `pool-refill-role2-v4h.mjs.bak-in5vout`), and both
+  state files were corrected. The chipnet rehearsal REPRODUCED the bug first (the same
+  rejection), proving the fix. **No check-9 fix, no redeploy, no new walks/H/program
+  were ever needed — the deployed v4h program is correct and node-compatible.**
+- The old `ab9.mjs` "divergence" was its own t2 dying at its covenant inputs in a
+  synthetic shape (mis-attributed to the SIZE pin).
 
-**Remaining:** the site IMAGE build+push (VM only) + Flux; the Nito notifications; a possible pv=2 follow-up deposit with the 2 wallet units.
+### 4. THE THREE-LINKS POOL (pool5, old-gen demo) + the 11-20 pool disclosure
 
-**Next session, in order:** (1) publish the M2 draft once the zkey lands (verify
-SHA256SUMS); (2) the chipnet dress rehearsal for TRANSFER/UNSHIELD (the standing user
-order before further mainnet value ops — needs ~30k CHIPNET sats; the faucet hot wallet
-holds 5,917); (3) the mainnet TRANSFER + UNSHIELD of the user's $1 — needs the next
-action lock (fuel 23,000×2 + walks 2,000×2 + in6 3,000 + fees ≈ 0.0006 BCH; the wallet
-is sats-thin); (4) the v4h site record + the Nito notifications (M2 is live; the deposit
-is live). **Landmines added:** the state-file off-by-one class (verify every actionInput
-vout against the chain before building — the builder's source-synthesis trust boundary
-is the state file); "Missing inputs" = a spent/nonexistent outpoint, not a script issue;
-libauth's `outpointTransactionHash` is DISPLAY-order (reversing it again double-flips);
-the genesis-witness layout gate (selector-0 encodes genesis[1] to zero bytes — re-roll
-proofs until the 7,904-B unlocking; Groth16 proving is randomized per run).
+- **pool5** (category `0631da2b…`, deploy `d122abab…`, locking
+  `aa20c654d3e8e7ac8b4229dec4d0948aa8bafe1baad73edda3dd2aa21ab01bcd9d2587`): built in
+  one evening for the announcement's three REAL-PUSD links — SHIELD `627013ca…`
+  (the user's 4 units) · TRANSFER `4fda8a8b…` (the 11-20 100-PUSD op) · UNSHIELD
+  `998a0474…` (2 paid out). The three are IN THE POST (bitcoincashresearch topic
+  **2666** — the user published it). State: notes {2,1}, holdings 3 FT. Tooling +
+  record: `pusd-shielded-pool/mainnet-pool5/` (the covenant minus the vestigial v1
+  balance lines; the bench terminal count pin edited 7→8; the honest {1,0} seed).
+- **The 11-20 pool `dd1e3506…` is dead for pv≠0** (its pool3b covenant's vestigial v1
+  balance arithmetic) AND fee-starved (terminal pins TXINPUTCOUNT==7; steps at 2,300
+  sats) — **its 100 PUSD holdings are permanently locked** (disclosed to the user and
+  in the site record). This is the pool the 11-20 TRANSFER link lives on.
+
+### 5. M2 — PUBLISHED
+
+`github.com/APECSdev/pusd-shielded-pool/releases/tag/role2-proving-assets-v3-v1` — 5
+assets: `pool4_final.zkey` 120,818,827 B sha256 `de7875e3…` (the three-contribution
+chain; round-trip re-downloaded + sha256-verified byte-exact) · `pool4.wasm`
+`a9b4b03d…` UNCHANGED · `verification_key_v3.json` `f6b49cc0…` ·
+`our-v3-user3.fixtures.json` `e74555dd…` (the `{vk, fixtures}` format) · SHA256SUMS.
+The gates are committed: `pool-sweep-v3-mpc-report.json` (**69/0**), `pool-redteam-v3-mpc-report.json`
+(**164/0**), `pool-redteam-v4h-report.json`. Nito mirrors + B4 data-edits are THEIRS.
+
+### 6. THE VALUE LEDGER (verified this session end)
+
+- **User's PUSD (2469acc5…):** 90 shielded in the permanent pool · **12 at the mainnet
+  wallet** (the pool5 payout 2 + the v4h unshield payout 10) · 3 shielded in pool5 ·
+  **100 permanently locked in the dead 11-20 pool** (disclosed).
+- **Mainnet wallet** (`mainnet-demo-cycle.json`, `bitcoincash:qrqj0azr…`): 10,146
+  plain sats + 12 PUSD + 99,999,500 pool-cat FT (`8808e63288:1`) + 1 v4h NFT. **sats-
+  THIN: the next action lock needs ~50k (fuel 21,000×2 + walks 4,000 + in6 1,000 +
+  fees) — ASK THE USER for a top-up first.**
+- **Chipnet wallet A:** 113,790 sats, 10 v4h blanks, 99,996,750 e56c0a85 FT.
+
+### 7. THE TOOLING MAP (all on the VM, `~/zkb/groth16_cashscript/chunked/bn254/bn-native-sound/` unless noted)
+
+- `pool-deploy-role2-v4h.mjs` (--network chipnet|mainnet --asset <cat> --secrets <key>)
+- `role2-op-witness-v3.mjs` (at `~/zkb/pusd-shielded-pool/`; --action deposit|transfer|unshield
+  --amount N --in i,j --state <file> --zkey build4/pool4_0003_user.zkey — the DEFAULT
+  zkey is wrong, see §1) — ~25-60 s per proof.
+- `pool-refill-role2-v4h.mjs` (--network … --fuel-per 21000 for lean locks) — FIXED
+  (the in5 vout); `pool-tagbatch-role2.mjs` (--electrum chipnet.bch.ninja — PATCHED
+  with the --electrum arg, backup `.bak-mainnet-only`).
+- `pool-op-role2-v4h.mjs` (--network …) — now takes `PAYOUT_SATS`/`STATE_FLOAT_SATS`
+  env; VM-evals all inputs both modes then broadcasts + advances the state.
+- `mn-ab.mjs` (the on-node introspection probe ladder), `mnlist/mnstatus/mnbalance/mninspect`.
+- `mainnet-pool5/` (the links-pool tooling + the faucet claim harness).
+
+### 8. THE LANDMINES (new this session — beyond all prior lists)
+
+1. **The state-file off-by-one class**: verify EVERY actionInput vout against the chain
+   (scriptPubKey + token data) before building — the builders' source-synthesis trust
+   boundary is the state file; a wrong vout defeats the entire local VM rehearsal.
+   "Missing inputs" from a node = a spent/nonexistent outpoint, NOT a script issue.
+2. **libauth's `outpointTransactionHash` is DISPLAY-order** — `binToHex(hash)` is the
+   display txid; reversing again double-flips (cost a false alarm this session).
+3. **The genesis-witness layout gate**: the program locates witness data at fixed
+   offsets; Groth16 proving is RANDOMIZED PER RUN and a proof with trimmed minimal
+   numbers (e.g. the genesis selector encoding to zero bytes) shifts them. The old-gen
+   covenant's fixed 1792/1825 offsets need the 7,904-B unlocking — re-roll proofs until
+   the layout matches (the v3.1 sweep's varying layouts were VM-only and never hit a
+   node; the v4h op runner's own layout happened to be fine in all live actions).
+4. **Mainnet dust/fee floors (measured):** token-bearing P2PKH outputs are rejected
+   below **1,000 sats** (`dust, code 64`); the 1 sat/B action floor interacts with the
+   lock budget (the unshield needed `STATE_FLOAT_SATS=9700`); the genesis fee must be
+   ≥ 459 sats (a 300-sat attempt died code 66); electrum BCH-float reads need
+   `Math.round(value × 1e8)`; `Buffer.from(string)` UTF-8 strikes commitment hex.
+5. The chipnet.bch.ninja faucet: POST /api/challenge {address, sats} → PoW
+   (sha256(payload:nonce) ≤ target) → POST /api/claim — trivial in Node.
+
+### 9. THE NEXT SESSION'S MISSION, IN ORDER
+
+1. **The site image build + push** (the `#permanent-pool` source is committed —
+   `web/pages/research/shielded-pool.vue`, SFC-verified; commit `16cef8e`). Build on
+   the apecsdev VM ONLY (never this host): rsync → SFC check → docker build → smoke →
+   push `:latest` → Flux (the queue drains in order; verify live markers).
+2. **The Nito follow-ups** (their side; support on ask): the M2 mirror + B4 data-edits;
+   their chipnet browser acceptance on the EXISTING v3.1 pool (chipnet trio
+   `942f8fc5…/a9b4b03d…/07638f10…`); their mainnet-adapter diff → OUR REVIEW → the
+   user's GO for **Preview v0** (the naming directive). The interim update to them is
+   committed: `docs/NITO-INTERIM-UPDATE-2026-11-27-EVENING.md` (`125e0ec`).
+3. **The follow-up mainnet op(s)** — the user's call: a pv=2 deposit with the wallet's
+   12 units, or further transfers/unshields — **each needs a ~0.0006 BCH top-up first**
+   (the wallet is sats-thin) + the 300-sats-tighter state float noted in §1.
+4. **The zkstreet.com re-check reminder is DUE (2026-11-27, from the 2026-10-27 user
+   request)** — re-run RDAP and remind the user.
+5. The v3.1 chipnet vending load (`pool-vend-load-role2.mjs` with the e56c0a85 blanks)
+   — still not done, from the morning handoff's list.
+6. The full docs: `pusd-shielded-pool/wip-role2-hook/V4H-DEPOSIT-LIVE-2026-11-27.md`
+   (commits `e13f2e8`, `3312060`) + this AGENTS.
+
+### 10. STANDING RULES — all unchanged
+
+The MPC entropies are NEVER published; the repo scope rule (hushyourmoney +
+pusd-shielded-pool only; nito.cash NEVER); mainnet runs under the final VK only;
+Preview v0 naming everywhere; the explorer policy (Selene primary, imaginary.cash
+NEVER); one task = one commit + push; builds on the VM only. The v3.1-era disclosures
+(R2/R3/F6) remain the governing context for every generation before v4h.
 
 ---
-
 ## PREVIOUS — 2026-11-27 SESSION END — M1+M3+M4 DONE, THE MINI-MPC COMPLETE, THE CASCADE ONE GATE FROM M2 — THE NEXT SESSION COLLECTS THE SWEEP, RELEASES M2, AND DRIVES M5
 
 **The overnight mission (the section below, now CONSUMED) is complete.** M1
