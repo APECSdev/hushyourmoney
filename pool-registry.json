@@ -2,8 +2,163 @@
   "$schema": "https://hushyourmoney.com/schemas/pool-registry-v1.json",
   "version": 1,
   "network": "multi",
-  "updated": "2026-11-27",
+  "updated": "2026-11-28",
   "pools": [
+    {
+      "name": "Mainnet role-2 pool v4h - THE PERMANENT POOL (the C architecture, deployed, the full REAL-PUSD lifecycle complete)",
+      "network": "mainnet",
+      "poolCategory": "324b1dbfb05c605937f7e68f62210102beacc8b0ece0537e5bde04e90a875814",
+      "poolLocking": "aa2006d764d4a149900fe8cbe2a0b01753643b21da74b0fc76018172bfc098dc3c987",
+      "treeRootLE": "62c61d227e5c99a892ff881770b948d525bc59b7a7065a0afefa2ef631b8361d",
+      "treeRootLEIs": "the CURRENT root after the four-action lifecycle (deposit 100 -> transfer -> unshield 10 -> deposit 2); the 96-B state commitment = [noteRoot || nullSetRoot || balance] per the v4h architecture",
+      "assetCategory": "2469acc5afa4b10cb5b5c04afb89c3a3ffd61c5da9c01e26d00951cae2a02544",
+      "setupGrade": "the three-contribution ceremony chain (Nito first, Hush second, the user's third slot; all entropies UNPUBLISHED per the standing rule) - final zkey build4/pool4_0003_user.zkey (120,818,827 B, sha256 de7875e3...), VK sha256 f6b49cc0...; the proving assets PUBLISHED as role2-proving-assets-v3-v1",
+      "walletProverCompatible": true,
+      "anchorTxid": "324b1dbfb05c605937f7e68f62210102beacc8b0ece0537e5bde04e90a875814",
+      "mintTxid": "f72aec0114299647454664a5d40ac0e3f853aafa649563f72698218e650be7cc",
+      "deployTxid": "61022b8b46087f2a5c5b49ae9782d05a316807726cc078995b2291e500efc944",
+      "deployBlock": 979219,
+      "program": "code 8,078 B sha256 4f096247c5b56ab682119cb4446289598b48d374bb30d10e9ad43ee23dab4493 (the deployed MAINNET-category build per the state file; the chipnet rehearsal build under 654d3230 hashes 65a3f215... - the code is category-pinned); R 65 B; pieces 4,151/3,927. THE WITNESS-GEN WARNING STANDS: role2-op-witness-v3.mjs MUST run with --zkey build4/pool4_0003_user.zkey (the final chain) - the tool's DEFAULT (pool4_final.zkey, the old chipnet 1-of-1 942f8fc5...) is WRONG for every v4h op",
+      "architecture": "v4h (the C architecture): the pool category is fresh/valueless BY DESIGN; the REAL PUSD (2469acc5...) rides the H-covenant holdings pair (locking aa2006fa0f..., a separate P2SH32 from the program - decoded from the unshield's out2); hook check 6 binds the ASSET category; the 100,000,000 pool-cat FT at the deploy's out2 = the category's mandatory genesis supply at the operator P2PKH - valueless, spendable only by the operator's key, never accepted as pool value (decoded 2026-11-28: 99,999,500 FT at 8808e632...:1, the ~500-FT delta arose in the probe era)",
+      "mintingNFT": "born guarded (deploy out1); guard locking aa20cdbef76ccc03f58dd62ad31f6ca0e233935f8533ea88d43fc0398979f56ec18087 (K=16, redeem 1,359 B); guard batches 4899462528b6d4a43a421520097be1c955ad54545e79245bb65a64279666c9f9 (16 blanks, block 979219) + c9cca1e4c705edff6963cfaca52a722a37776ed311eb8be0921ab588e338adae (16 blanks, block 979285)",
+      "depositTag": "hook checks 4c+4g: the fuel pair carries mutable NFTs whose commitments = SHA256(carrier[0..64]) = SHA256(nf0||nf1) of the funded action",
+      "walkInputs": "the v3.1 walk-input mechanism carried into v4h: walkA/walkB P2SH32-wrapped, 2,000-sat floats each (the pv=2 lock measured fuel 21,000x2 + walks 2,000x2)",
+      "nullifierSet": "hook-level SHA256 SMT (the v3.1 mechanism): walkA proves nf0's slot empty vs the state's nullSetRoot, walkB proves nf1's empty vs midRoot and pins finalNullRoot; 4/4 walks verified on every live action",
+      "gates": "acceptance 42/42 under the deployed mainnet category + the three-contribution fixtures; sweep 69 cases/0 failed; red team 164/0; NP01 MEASURED both ways - an extra chain output, value-carrying AND the literal ~176-B OP_RETURN packet shape, REJECTS at r2:p4c (TXOUTPUTCOUNT == 3+sign is output-type-independent; probe-np01-extra-output.mjs) - off-chain delivery (the Nostr mailbox) is the ONLY note-delivery path",
+      "lifecycle": [
+        {
+          "op": "DEPOSIT pv=100 (REAL 2469acc5 PUSD riding the H pair)",
+          "txid": "5b54fb9783806fca229953dd2b3505e2d0cb5927f795611c45d1715dec48316f",
+          "block": 979249,
+          "note": "the user's previously-frozen $1 unfrozen INTO the pool; balance 0 -> 100"
+        },
+        {
+          "op": "TRANSFER (pv=0)",
+          "txid": "63ccd3db592c07c7677deb08e297080ca2e26ed356f7ff9d1158e115778add1b",
+          "block": 979266,
+          "fee": "1.02 sat/B (lean 21,000-fuel lock)"
+        },
+        {
+          "op": "UNSHIELD pv=10 (REAL PUSD paid out publicly)",
+          "txid": "d8a93aa2b6250a8d37d3f9ea587a8ae5a1a61e4f662a4f9f56316bc1d4b8b4f6",
+          "block": 979269,
+          "fee": "1.003 sat/B",
+          "note": "out3 = 1,000 sats + 10 FT (verified); balance -> 90"
+        },
+        {
+          "op": "DEPOSIT pv=2 (the first v4h deposit on a NON-empty tree)",
+          "lockTxid": "ac4569ad73cbeb773b0cd81f187feeac5753d9dcba3edddca570a90ad46c9c8a",
+          "lockBlock": 979303,
+          "txid": "0e7dbe1d96ecd2a1654ff5befcd9733824c4f4dea885aa1851090577c2fdbf74",
+          "block": 979305,
+          "fee": "46,700 sats (1.014 sat/B; 46,054 B; ASSET 90+2 = 92 conserved; the txid identical to the --no-broadcast dry run)",
+          "note": "3 fresh notes (sum 2) at leaves 9-11, the 5 old notes stay; the 8-FT change returned at ac4569ad:6"
+        }
+      ],
+      "finalState": {
+        "balance": "92",
+        "notes": 8,
+        "nullSet": "8 keys",
+        "stateOutpoint": "0e7dbe1d96ecd2a1654ff5befcd9733824c4f4dea885aa1851090577c2fdbf74:1 (float 10,000)",
+        "holdings": "92 FT of 2469acc5 at 0e7dbe1d...:2",
+        "actionInputs": "[] - the next op needs a refill lock + 2 machine blanks"
+      },
+      "vending": {
+        "status": "LIVE - the machine's first two buys executed (the operator buy-back for the follow-up op)",
+        "locking": "aa2073ad0a1e681fa123d80754164fd34bdcb0f6ea3c26784b36f6d8778a8b0a945087",
+        "redeemLength": 157,
+        "priceSats": 1000,
+        "operatorAddress": "bitcoincash:qrqj0azraqskmsyh8fkaj70p0a8lrw20fcnrhvnvh8",
+        "loadTxid": "5bd644121ad69fbe48bd852c094d2fafad8d34506200404a06fe47af0c3c3c00",
+        "loadBlock": 979287,
+        "blanksLoaded": 16,
+        "buys": [
+          { "txid": "9cbeac1783c516a58297351316a3b75ab3cf851800afe871f75a59e05914fd70", "block": 979301 },
+          { "txid": "15b2fd742c0d5bd166ad185bed217ffe30e28e42da0ecf021ea0336b30bc4643", "block": 979302 }
+        ],
+        "blanksRemaining": 14,
+        "rule": "OUTBYTECODE(0) == UTXOBYTECODE(1): whoever pays receives; the price, the destination, the blank's shape (category + mutable + EMPTY commitment + 0 FT) and the float are all pinned; no CHECKSIG anywhere",
+        "note": "14 blanks = 7 visitor SHIELDs; more stock = more guard batches (K=16 pins the batch size, ~26k sats per batch). UNTOUCHED by the 2026-11-28 chipnet reload per the Nito request - this stock is the mainnet acceptance's, behind the M2 mirror + the gate flip (both DONE on the Nito side: their commit cd1cfc6, verified read-only 2026-11-28)"
+      },
+      "valueLedger": "the user's PUSD (2469acc5...): 92 shielded HERE + 10 at the wallet (the untouched 2-FT 998a0474:7 + the 8-FT change ac4569ad:6) + 3 in pool5 + 100 permanently locked in the dead 11-20 pool (dd1e3506, disclosed). The mainnet wallet: 37,129 plain sats in 5 UTXOs - THE NEXT ACTION LOCK IS NOT FUNDABLE as-is (inSats ~49,400 vs plain[0] 24,983 + 2,000 in buyable blanks); a ~0.0003 BCH top-up gates further ops",
+      "notes": "Deployed 2026-11-27/28 with REAL PUSD under the three-contribution chain, after the mandatory chipnet dress rehearsal PASSED. Every action: 7 signature-free inputs, VM-evaluated BOTH modes pre-broadcast, ASSET conserved, merkle-confirmed. The 2026-11-27 'dead pool' diagnosis was REFUTED - it was our own lock tool writing the in5 outpoint one vout off (fixed at the source; the deployed program was never wrong). Proving assets: role2-proving-assets-v3-v1 (the zkey round-trip re-downloaded + sha256-verified byte-exact). The Nito wallet gate for this pool was flipped by their M2 (their commit cd1cfc6). State file /home/apecs/cov/role2-pool4-state.mainnet-v4h.json (backup .bak-in5fix). The 1 v4h NFT at the operator (8808e632:0) + the probe-era debris at the program locking are inert (disclosed 2026-11-28).",
+      "mainnetDesignation": "Preview v0 (user directive: never 'Release Candidate'/'RC')"
+    },
+    {
+      "name": "Chipnet role-2 pool v4h - THE DRESS REHEARSAL (the C architecture, deployed, PASSED before mainnet value)",
+      "network": "chipnet",
+      "poolCategory": "654d323009ec4f4af3805257fc281b46f47b3624a86a3a8357cff78a0d5687d5",
+      "poolLocking": "aa206b8a685dcfb83db7c7fa9767e5fdc2ed3ce24ca01a6e2648bbdfd0eafe712b6887",
+      "treeRootLE": "0114047f8f4f13abae084f5a19ff27a56808950a40c47d7e19d4d9eb13eced10",
+      "assetCategory": "e56c0a8583e36092f20e54c9247f6b8e5a6afd391027aa70ae109c3c42377930",
+      "setupGrade": "the same three-contribution ceremony chain as the permanent pool (the rehearsal proved the v4h ops end-to-end under the final proving assets)",
+      "anchorTxid": "654d323009ec4f4af3805257fc281b46f47b3624a86a3a8357cff78a0d5687d5",
+      "mintTxid": "ccb16956646845840262d34bcc33d67510585b64fa3b15bbff64f1e79f813449",
+      "deployTxid": "7648c6ca03940c16ea34ebec44b4c4f8faa1c0f9fdc8fc3bb97f1e769926a75b",
+      "deployBlock": 350476,
+      "program": "code 8,078 B sha256 65a3f21586153a21414e8304532a2979ce2a1d6e3e28e4ef986572e2dee1218c (the deployed CHIPNET-category build per the state file); R 65 B (the locking hash256-verified against R 2026-11-28); pieces 4,151/3,927",
+      "mintingNFT": "born guarded (deploy out1); guard locking aa20a27be84d37bfd8066f04b17c938baa8bef13e1d1435a85c664895a364d042fc687 (K=16, redeem 1,359 B); guard batch e787ea5dd7a318e242f1bda263d2b9720481ffdad95dbf27bad99b7f16c1b520 (16 blanks, block 350483); 10 blanks remain at wallet A (e787ea5d:7-16, measured 2026-11-28)",
+      "lifecycle": [
+        {
+          "op": "DEPOSIT pv=1,000 (the chipnet e56c0a85 FT stand-in)",
+          "lockTxid": "9aaac260320be29d646f279791585a47c12fcb4f7a56a294ddc6d847ca4fb995",
+          "lockBlock": 350492,
+          "txid": "5fca602751e55a9ed323fb38fe8465cf808f62775dd929617e4744df7c995005",
+          "block": 350517,
+          "note": "46,070 B; balance 0 -> 1,000"
+        },
+        {
+          "op": "TRANSFER (pv=0)",
+          "lockTxid": "13e639fd5130629710e9b425d7bb78860874489032595856078543e44fd541be",
+          "lockBlock": 350523,
+          "txid": "df6e80c0a3f7621fabafbd52048e2a5dac76e53ce8e6b065def366f6a43ef3e04",
+          "block": 350525,
+          "note": "46,073 B"
+        },
+        {
+          "op": "UNSHIELD pv=200 (200 FT paid out publicly)",
+          "lockTxid": "4186a4d5efd5cc3019340aabcd7addba7f71cae48221445b30ba4826a1b4d34f",
+          "lockBlock": 350528,
+          "txid": "6c9309699f86f165f5b8c00240b11c285089ffb221caa4349d11848cab19cac8",
+          "block": 350530,
+          "note": "46,157 B; balance 800; nullSet 6 keys"
+        }
+      ],
+      "finalState": {
+        "balance": "800",
+        "notes": 5,
+        "nullSet": "6 keys",
+        "stateOutpoint": "6c9309699f86f165f5b8c00240b11c285089ffb221caa4349d11848cab19cac8:1 (10,000 sats)"
+      },
+      "notes": "THE MANDATORY DRESS REHEARSAL (the standing user order before mainnet value ops) - PASSED 2026-11-27. It proved its purpose twice over: it REPRODUCED the lock-tool in5 off-by-one that had produced the 'dead pool' false diagnosis, so the fix was proven at the source before any mainnet value moved. Funded by the chipnet.bch.ninja faucet (200k sats to wallet A via its PoW claim API). ZERO user value. Every input of every action VM-ACCEPTED consensus+standard pre-broadcast. State file /home/apecs/cov/role2-pool4-state.v4h.json."
+    },
+    {
+      "name": "Mainnet pool5 - THE THREE-LINKS POOL (old-gen demo, the announcement links)",
+      "network": "mainnet",
+      "poolCategory": "0631da2b91b7b04d83eecc9b6d764998f2c5b22495fbd34f896141d30e7ee169",
+      "poolLocking": "aa20c654d3e8e7ac8b4229dec4d0948aa8bafe1baad73edda3dd2aa21ab01bcd9d2587",
+      "assetCategory": "2469acc5afa4b10cb5b5c04afb89c3a3ffd61c5da9c01e26d00951cae2a02544",
+      "setupGrade": "old-gen demo (the disclosed 1-of-1 solo-ceremony era circuit) - Gate 7 remains the production gate",
+      "deployTxid": "d122ababa767e9b0d878c43f305a13ad891c2099f20890967ae1f49ba6366fcd",
+      "deployBlock": 979236,
+      "lifecycle": [
+        {
+          "op": "SHIELD 4 (REAL PUSD - the user's 4 units)",
+          "txid": "627013caa09b2e42ae4229bbd15bc2f53561911d1ccb0e09d260af937c012403",
+          "block": 979236
+        },
+        {
+          "op": "UNSHIELD 2 (2 paid out publicly)",
+          "txid": "998a04748b6db7845cd06ef37ab0a51c26b685c0a458a59f7700df873215734d",
+          "block": 979237
+        }
+      ],
+      "finalState": {
+        "notes": "at tree {2,1}",
+        "holdings": "3 FT"
+      },
+      "notes": "Built in one evening (2026-11-27) for the announcement post's three REAL-PUSD links (bitcoincashresearch topic 2666, live): the SHIELD + UNSHIELD here + the TRANSFER link at the 11-20 pool (4fda8a8b..., see the mainnet-pusd-pool entry). The covenant = the old-gen program minus the vestigial v1 balance lines; the bench terminal count pin edited 7->8; the honest {1,0} seed. Tooling + record: pusd-shielded-pool/mainnet-pool5/ (working copies committed at this repo's pool5/)."
+    },
     {
       "name": "Chipnet role-2 pool v3.1 - HOOK-LEVEL NULLIFIER SET + DEPOSIT PATH (demo, deployed, the current generation)",
       "network": "chipnet",
@@ -48,6 +203,32 @@
         }
       ],
       "mainnetDesignation": "Preview v0 (user directive 2026-11-27: never 'Release Candidate'/'RC') - the mainnet pool runs at the asset category 2469acc5afa4b10cb5b5c04afb89c3a3ffd61c5da9c01e26d00951cae2a02544 (confirmed by the user + both teams); mainnet candidate program (v3.1 pins) code 7,998 B sha256 40a9599141686539edd5590ba03fe012701ea0cc2ec4aae6a9fb7749416db012, rebuilt at the post-MPC cascade",
+      "vending": {
+        "status": "RELOADED 2026-11-28 - sold out under the Nito B3 acceptance runs (0 UTXOs measured), restocked same-day",
+        "locking": "aa207bd03b1c57afff2715d61031e82a25dff54a6819b1bc16e545ddcfcd026a8bc987",
+        "redeemLength": 157,
+        "priceSats": 1000,
+        "operatorAddress": "bchtest:qzzu85xnl99u534d9z40yu7c494hknppx5lu29gl8t",
+        "guardBatches": [
+          { "txid": "a98ee616a8cbeecd8e92ac5bd3287c0b65ec5f42d1e16e9d4b65bb8307457579", "block": 349183, "blanks": 64 },
+          { "txid": "5d015ed7463fee657b67604803d0c7d77b1c76ebae39d8f3b2e70e2bfd093976", "block": 351888, "blanks": 64, "vmEval": "ACCEPT consensus 157,733 op / standard 178,853 op of 4,170,400 - the exact K=64 precedent figures" }
+        ],
+        "loads": [
+          { "txid": "ead5d00051ec2aa25a1d93444e185b7f85226d59f60ae89dafb407b2fa36ff46", "block": 350676, "blanks": 2 },
+          { "txid": "76a2776a40ea2ac78b2290a916bfb18b1851583a9ad69d09f57e80e8a88df94a", "block": 351891, "blanks": 32 }
+        ],
+        "buys": [
+          { "txid": "5c83810f1bc8af1936033c01e7085926eb68c77e38934ad350fcda82459fa50d", "block": 350952, "buyer": "wallet A (funding input 1) - the Nito buildBuyBlankTx proof" },
+          { "txid": "d7a52c378a7658c37f26968231e64b874098a537b58d6bbbbcf337f947976baf", "block": 350954, "buyer": "wallet A - the blank-buy.mjs delivery" },
+          { "txid": "b9233c3deb2a4a7aa2b0d3899e1e7678da9a30dd760a9b94da864721fafdf6e4", "block": 351893, "buyer": "wallet A - the Nito buy run on the fresh stock" },
+          { "txid": "e071457c541d7ba7e6f21ce9e67b0b8956ddb62cd69b02812562fbec7c02d211", "block": 351893, "buyer": "wallet A - the Nito buy run on the fresh stock" },
+          { "txid": "a0a2735e024ccdb468ddecb02740ee6e374e69fcfb217483931d631f7be25959", "block": 351894, "buyer": "wallet A - the Nito buy run on the fresh stock" },
+          { "txid": "1db1ae77df64a26a3a7057d7cc898fd7bf735650b954b5c43df5cf09cf38c9d1", "block": 351894, "buyer": "wallet A - the Nito buy run on the fresh stock" }
+        ],
+        "stockMeasured": "28 exact blanks / 28,000 sats at 2026-11-28T21:11:03Z (2 + 32 loaded lifetime - 6 lifetime buys = 28; the reload response doc docs/BLANK-RELOAD-RESPONSE-2026-11-28.md is the execution record)",
+        "rule": "OUTBYTECODE(0) == UTXOBYTECODE(1): whoever pays receives; the price, the destination, the blank's shape (category + mutable + EMPTY commitment + 0 FT) and the float are all pinned; no CHECKSIG anywhere",
+        "note": "The machine record also lives in state.vending of the pool state file; the buyer-throughput fact measured during the 2026-11-28 reload: the Nito builder buys ONE blank per distinct tokenless funding UTXO"
+      },
       "notes": "Every input of every action VM-ACCEPTED consensus+standard pre-broadcast; all txs confirmed. The v3.0 attempt (category 03af2eda..., deploy 89f0829e... confirmed h 349131) was aborted at its first lock - the raw walk lockings were relay-rejected; it never held value. Walk-dust/fuel: 23,000x2 + 2,000x2 per action (defaults; the lifecycle's leaner last two actions at 21,750/21,250 per fuel are recorded in the M4 doc). State file /home/apecs/cov/role2-pool4-state.json on the shared VM.",
       "treeRootLEIs": "the CURRENT root after the lifecycle (deposit->transfer->unshield); the GENESIS commitment was LE32(zh[20]) || EMPTY_NULL_ROOT = 3e1f1922dfb671d3f912f7ea461e0a88ee848fdde12b6c18ab1ad2c56ae73421e579b9be0b8f58daacc4f66c959ed3ec903884d1914e11e7e0c3bbf2a5627b43"
     },
