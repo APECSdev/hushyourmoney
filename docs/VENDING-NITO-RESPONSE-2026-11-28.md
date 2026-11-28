@@ -59,7 +59,7 @@ machine locking: 16 blanks, 16,000 sats in floats):
 | **Load txid** | `5bd644121ad69fbe48bd852c094d2fafad8d34506200404a06fe47af0c3c3c00` (block 979287) |
 | **Redeem** | 157 B (reproducible from `blank-vending.mjs` `vendingRedeem` with the category + price + operator locking above) |
 | **Blank shape as loaded** | `324b1dbf…`-category mutable NFT, **EMPTY commitment, 0 FT, 1,000-sat float preserved** |
-| **Stock** | **16 blanks = 8 visitor SHIELDs** (2 blanks each); more stock = additional operator batches (K=16 pins the batch size) |
+| **Stock** | **14 blanks = 7 visitor SHIELDs** (loaded 16; the operator immediately bought 2 back for the follow-up deposit op — the machine's FIRST LIVE BUYS: `9cbeac1783c516a58297351316a3b75ab3cf851800afe871f75a59e05914fd70` block 979301 + `15b2fd742c0d5bd166ad185bed217ffe30e28e42da0ecf021ea0336b30bc4643` block 979302, both 487 B, both covenant-executed on chain, both VM-ACCEPT pre-broadcast); more stock = additional operator batches (K=16 pins the batch size) |
 | **Policy** | Permissionless, first-come-first-served: the buyer's tokenless funding input at their OWN address pays the exact 1,000-sat price to the operator P2PKH and the blank lands at the funding input's own locking; tokenless change; no signature, no per-blank operator action |
 
 The machine record also lives in the pool state file (`state.vending` in
