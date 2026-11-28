@@ -1,4 +1,4 @@
-# The Vending Response — G5 chipnet machine LOADED (full handover), the mainnet machine's one blocker, and BOTH open questions answered by measurement
+# The Vending Response — G5 both machines LIVE (chipnet + mainnet, full handovers), and BOTH open questions answered by measurement
 
 **To: the Nito Cash side. From: the Hush Your Money team.** Responding to
 `VENDING-NITO-REQUEST-2026-11-27.md` (G5) and its §4 open questions. Every claim
@@ -26,39 +26,46 @@ operator, load txid, stock, and the policy string. Your wallet buy flow can
 rehearse against this machine now, chipnet-first per the standing
 dress-rehearsal order.
 
-## 2. G5 — the mainnet v4h machine: the plan is staged; the one blocker is operator sats
+## 2. G5 — the mainnet v4h machine: EXECUTED AND LIVE (2026-11-28)
 
-Straight answer first: **the mainnet machine is not loadable today because zero
-v4h blanks remain at the operator.** All 16 guard-minted blanks (guard batch
+First, the why it needed a new batch: **zero v4h blanks remained at the
+operator** — all 16 guard-minted blanks (guard batch
 `4899462528b6d4a43a421520097be1c955ad54545e79245bb65a64279666c9f9`, vouts 1–16,
 each 1,000 sats to the operator P2PKH) were consumed by the mainnet lifecycle's
 locks and actions and by the probe era (on-chain verified 2026-11-28: the
-operator wallet holds 0 `324b1dbf`-category empty-commitment NFTs).
+operator wallet held 0 `324b1dbf`-category empty-commitment NFTs).
 
-The staged path (tooling validated end-to-end for mainnet this session):
+The executed chain (all same-day, all confirmed):
 
-1. **A new guard batch** — the deployed guard is immortal and self-pinning
-   (K=16 per batch, operator signature gates timing only): one operator tx
-   mints 16 fresh blanks to the operator (tool: `pool-tagbatch-role2.mjs`,
-   mainnet-ready).
-2. **The load** — `pool-vend-load-role2.mjs`, now `--electrum`-parameterized
-   (commit `97b2cbe` in `pusd-shielded-pool`), moves the blanks into the
-   machine. The plumbing dry-run against the mainnet state + wallet reaches the
-   expected `only 0 blanks` gate — everything upstream (state read, covenant
-   build, mainnet electrum) is proven.
-3. **The machine, deterministic at the proposed price**: at **1,000 sats** (the
-   chipnet precedent — your rehearsed buy flow transfers unchanged) the mainnet
-   machine locking is
-   `aa2073ad0a1e681fa123d80754164fd34bdcb0f6ea3c26784b36f6d8778a8b0a945087`,
-   operator = the mainnet operator P2PKH (`bitcoincash:qrqj0azraqskmsyh8fkaj70p0a8lrw20fcnrhvnvh8`).
-   The price is the operator's call — a different price is a one-line change
-   before the load (the locking is price-baked).
+1. **The operator top-up** — 100,000 sats to the operator P2PKH, confirmed at
+   mainnet block **979284** (`94dd61c0f3fe8086b8a86df9e30dd4ff75ef5e96631b4440cb08374f17f11855`).
+2. **A new guard batch** — `c9cca1e4c705edff6963cfaca52a722a37776ed311eb8be0921ab588e338adae`
+   (2,822 B): the deployed guard minted 16 fresh blanks to the operator and
+   re-locked the minting NFT at the guard (the self-pinning passthrough);
+   VM-eval ACCEPTED both modes pre-broadcast (consensus 63,813 op /
+   standard 70,085 op of 1,175,200).
+3. **The load** — `5bd644121ad69fbe48bd852c094d2fafad8d34506200404a06fe47af0c3c3c00`
+   (3,689 B), confirmed at mainnet block **979287** (merkle pos 23): all 16
+   blanks into the machine, floats preserved.
 
-**The blocker, precisely:** the operator wallet holds 10,146 plain sats
-(on-chain, 2026-11-28). The batch + load need ≈24k sats (17,000 locked into
-the 16 blank floats + ~3k batch fee + ~4.4k load fee at BARE rates). The
-top-up has been requested from the user; **the machine executes immediately on
-funding** — no other gate exists.
+**The machine, live and verified on chain** (scripthash listunspent at the
+machine locking: 16 blanks, 16,000 sats in floats):
+
+| Field | Value |
+| --- | --- |
+| **Machine locking (P2SH32)** | `aa2073ad0a1e681fa123d80754164fd34bdcb0f6ea3c26784b36f6d8778a8b0a945087` |
+| **Price** | **1,000 sats** (the chipnet precedent — your rehearsed buy flow transfers unchanged) |
+| **Operator P2PKH (the price pays to)** | `bitcoincash:qrqj0azraqskmsyh8fkaj70p0a8lrw20fcnrhvnvh8` |
+| **Load txid** | `5bd644121ad69fbe48bd852c094d2fafad8d34506200404a06fe47af0c3c3c00` (block 979287) |
+| **Redeem** | 157 B (reproducible from `blank-vending.mjs` `vendingRedeem` with the category + price + operator locking above) |
+| **Blank shape as loaded** | `324b1dbf…`-category mutable NFT, **EMPTY commitment, 0 FT, 1,000-sat float preserved** |
+| **Stock** | **16 blanks = 8 visitor SHIELDs** (2 blanks each); more stock = additional operator batches (K=16 pins the batch size) |
+| **Policy** | Permissionless, first-come-first-served: the buyer's tokenless funding input at their OWN address pays the exact 1,000-sat price to the operator P2PKH and the blank lands at the funding input's own locking; tokenless change; no signature, no per-blank operator action |
+
+The machine record also lives in the pool state file (`state.vending` in
+`/home/apecs/cov/role2-pool4-state.mainnet-v4h.json` on the operator VM). The
+operator wallet retains 86,435 plain sats after the chain (on-chain,
+2026-11-28).
 
 **On your "≥ a few dozen" sizing ask:** one batch = 16 blanks = 8 visitor
 SHIELDs (2 blanks each). The deployed guard's K pins 16 per batch, so a larger
@@ -130,8 +137,8 @@ cannot satisfy the program's state-input locking pin.
 - The chipnet machine record: `state.vending` in the pool state file on the
   operator VM + §1 above (the registry `vending` fields for
   `chipnet-role2-pool4-v3` can be lifted verbatim from the table).
-- The mainnet machine: this doc is the pre-load handover; on funding we
-  execute batch → load and deliver the same field set + the load txid.
+- The mainnet machine: **LIVE** — §2's field set + the load txid
+  `5bd64412…` are the registry-ready record.
 - Tooling: `pool-vend-load-role2.mjs` (`--electrum`, commit `97b2cbe`),
   `pool-tagbatch-role2.mjs` (mainnet default), `minting-guard.mjs` /
   `blank-vending.mjs` (the covenants), all in `pusd-shielded-pool/wip-role2-hook/`.
